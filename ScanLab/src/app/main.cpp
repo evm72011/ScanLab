@@ -14,5 +14,7 @@ int main(int argc, char *argv[])
         Qt::QueuedConnection);
     engine.loadFromModule("ScanLab", "Main");
 
+    qInfo()    << "Normal info";
+
     return app.exec();
 }

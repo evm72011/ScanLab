@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Controls
-//import HangMan as HM
 
  SwipeView {
     id: swipeView
