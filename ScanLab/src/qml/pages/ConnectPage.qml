@@ -13,7 +13,7 @@ Item {
             width: 200
             height: 50
             anchors.centerIn: parent
-            onClicked: backend.connectDevice()
+            onClicked: backend.connectDevice("192.168.1.11")
 
             Text {
                 text: "Connect..."
