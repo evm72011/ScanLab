@@ -59,7 +59,7 @@ Window {
 
     Timer {
         id: loadDelayTimer
-        interval: 2000
+        interval: 1000
         running: false
         repeat: false
         onTriggered: {

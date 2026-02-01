@@ -18,6 +18,7 @@ qt_add_qml_module(appScanLab
         src/qml/Main.qml
         src/qml/pages/LoadPage.qml
         src/qml/pages/MainPage.qml
+        src/qml/pages/ConnectPage.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
