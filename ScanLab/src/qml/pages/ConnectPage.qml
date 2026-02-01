@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Controls
 
-
 Item {
     width:  SwipeView.view ? SwipeView.view.width  : 0
     height: SwipeView.view ? SwipeView.view.height : 0
@@ -14,10 +13,10 @@ Item {
             width: 200
             height: 50
             anchors.centerIn: parent
-            //onClicked: model.submit()
+            onClicked: backend.connectDevice()
 
             Text {
-                text: "Click me"
+                text: "Connect..."
                 color: "black"
                 anchors.fill: parent
                 horizontalAlignment: Text.AlignHCenter

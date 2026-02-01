@@ -9,7 +9,7 @@ find_package(Qt6 REQUIRED COMPONENTS Quick)
 qt_standard_project_setup(REQUIRES 6.8)
 
 qt_add_executable(appScanLab
-    src/app/main.cpp
+    src/app/src/main.cpp
 )
 
 qt_add_qml_module(appScanLab
@@ -19,6 +19,8 @@ qt_add_qml_module(appScanLab
         src/qml/pages/LoadPage.qml
         src/qml/pages/MainPage.qml
         src/qml/pages/ConnectPage.qml
+        SOURCES src/app/include/backend.h
+        SOURCES src/app/src/backend.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
@@ -34,6 +36,10 @@ set_target_properties(appScanLab PROPERTIES
 
 target_link_libraries(appScanLab
     PRIVATE Qt6::Quick
+)
+
+target_include_directories(appScanLab PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/app/include
 )
 
 include(GNUInstallDirs)
