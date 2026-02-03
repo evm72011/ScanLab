@@ -1,13 +1,13 @@
 {
   "terminal.integrated.profiles.windows": {
-    "VS Dev PowerShell": {
+    "VS Dev PowerShell (x64)": {
       "path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
       "args": [
         "-NoExit",
         "-Command",
-        "Import-Module 'C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\Common7\\Tools\\Microsoft.VisualStudio.DevShell.dll'; Enter-VsDevShell 5a0d8cb2; cd C:\\Work\\Others\\ScanLab\\tester"
+        "Import-Module 'C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\Common7\\Tools\\Microsoft.VisualStudio.DevShell.dll'; Enter-VsDevShell 5a0d8cb2 -DevCmdArguments '-arch=x64 -host_arch=x64'; cd C:\\Work\\Others\\ScanLab\\tester"
       ]
     }
   },
-  "terminal.integrated.defaultProfile.windows": "VS Dev PowerShell"
+  "terminal.integrated.defaultProfile.windows": "VS Dev PowerShell (x64)"
 }

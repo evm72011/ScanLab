@@ -1,4 +1,5 @@
 & "C:\Program Files\Microsoft Visual Studio\18\Enterprise\Common7\Tools\VsDevCmd.bat"
 
-cmake -S . -B build -G Ninja
+rm -r -force build
+cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
 cmake --build build
