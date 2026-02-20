@@ -1,6 +1,13 @@
 #include "backend.h"
 #include <QDebug>
 
+#include "UTDriverOEMPA1.h"
+#include "UTDriverOEMPA2.h"
+#include "UTDriverOEMPAminiMax.h"
+#include "UTDriverOEMMC.h"
+#include "UTDriverOEMPamicro.h"
+#include "CustomizedDriverOEMPA.h"
+
 Backend::Backend(QObject *parent)
     : QObject(parent)
 {
@@ -8,6 +15,8 @@ Backend::Backend(QObject *parent)
 
 bool Backend::ensureDeviceCreated()
 {
+    CHWDeviceOEMPAmax hw;
+
     // TODO: здесь должна быть реальная инициализация OEMPA устройства.
     // Примерно:
     // if (!m_pHWDeviceOEMPA) m_pHWDeviceOEMPA = CreateHwDevice(...);

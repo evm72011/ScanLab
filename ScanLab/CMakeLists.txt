@@ -21,7 +21,7 @@ qt_add_qml_module(appScanLab
         src/qml/pages/ConnectPage.qml
         SOURCES src/app/include/backend.h
         SOURCES src/app/src/backend.cpp
-        RESOURCES external/oempa/include/_read.me
+#        RESOURCES external/third_party/include/_read.me
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
@@ -41,7 +41,7 @@ target_link_libraries(appScanLab
 
 target_include_directories(appScanLab PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src/app/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/oempa/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/third_party/oempa/include
 )
 
 include(GNUInstallDirs)
