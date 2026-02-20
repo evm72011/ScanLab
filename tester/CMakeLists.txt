@@ -6,7 +6,8 @@ add_executable(tester_app main.cpp)
 set(OEMPA_SDK_DIR ${CMAKE_SOURCE_DIR}/third_party/OEMPA)
 
 target_include_directories(tester_app PRIVATE
-    ${OEMPA_SDK_DIR}/include
+    ${OEMPA_SDK_DIR}/include/Common
+#    ${OEMPA_SDK_DIR}/include/UserHeaders
 )
 
 file(GLOB OEMPA_LIBS
