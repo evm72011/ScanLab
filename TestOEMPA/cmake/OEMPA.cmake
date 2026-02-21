@@ -1,6 +1,6 @@
 set(OEMPA_BIN_DIR "${OEMPA_SDK_DIR}/UTKernel/x64/Release")
 
-IF(OEMPA_ENABLE)
+if(OEMPA_ENABLE)
     # copy dlls
     file(GLOB OEMPA_DLLS CONFIGURE_DEPENDS
         "${OEMPA_BIN_DIR}/*.dll"
@@ -30,6 +30,10 @@ function(target_add_oempa)
         return()
     endif()
 
+    if(NOT OEMPA_ENABLE)
+        message(WARNING "OEMPA is disabled")
+        return()
+    endif()
     
     target_include_directories(${TAO_TARGET} PRIVATE
         ${OEMPA_SDK_DIR}/Common
