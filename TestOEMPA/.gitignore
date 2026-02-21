@@ -1,4 +1,1 @@
-*.dll
-*.lib
-third_party/**/*.h
 build
