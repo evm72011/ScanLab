@@ -28,7 +28,7 @@ int main() {
     auto hw = std::make_unique<CHWDeviceOEMPAmax>();
     std::cout << "[2] device created" << std::endl;
 
-    const wchar_t* addr = L"192.168.0.10";      // Ethernet
+    const wchar_t* addr = L"192.168.1.11";      // Ethernet
     // const wchar_t* addr = L"pcie://device=0"; // PCIe
 
     // OEMPA-слой — установка адреса
