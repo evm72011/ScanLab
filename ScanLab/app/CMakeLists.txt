@@ -13,3 +13,5 @@ set_target_properties(${APP_NAME} PROPERTIES
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
 )
+
+target_add_oempa(TARGET ${APP_NAME})
