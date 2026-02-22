@@ -20,13 +20,25 @@ qt_add_qml_module(${APP_NAME}
     URI ScanLab
     QML_FILES
         qml/Main.qml
+        qml/components/IconTabButton.qml
+
+        qml/pages/ConnectPage.qml
         qml/pages/LoadPage.qml
         qml/pages/MainPage.qml
-        qml/pages/ConnectPage.qml
+
     SOURCES
         app/include/backend.h
         app/src/backend.cpp
-#        RESOURCES external/third_party/include/_read.me
+#    RESOURCES
+#        resources/icons/cog.svg
+)
+
+qt_add_resources(${APP_NAME} app_resources
+    PREFIX "/"
+    FILES
+#        resources/icons/home.svg
+        resources/icons/cog.svg
+        resources/icons/cogs.png
 )
 
 include(GNUInstallDirs)

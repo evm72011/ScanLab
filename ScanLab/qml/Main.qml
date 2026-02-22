@@ -3,8 +3,8 @@ import QtQuick.Controls
 import ScanLab as SL
 
 Window {
-    width: 640
-    height: 480
+    width: 1200
+    height: 800
     visible: true
     color: "#2C3E50"
     title: qsTr("ScanLab")
@@ -59,7 +59,7 @@ Window {
 
     Timer {
         id: loadDelayTimer
-        interval: 1000
+        interval: 500
         running: false
         repeat: false
         onTriggered: {
