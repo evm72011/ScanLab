@@ -28,13 +28,13 @@ ColumnLayout {
 
         IconTabButton {
             text: "Settings"
-            iconSource: "qrc:/resources/icons/cog.svg"
+            iconSource: "qrc:/icons/cog.svg"
             width: 96
         }
 
         IconTabButton {
             text: "Scan"
-            iconSource: "qrc:/resources/icons/cog.svg"
+            iconSource: "qrc:/icons/cog.svg"
             width: 96
         }
     }

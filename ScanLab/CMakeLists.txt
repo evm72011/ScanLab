@@ -18,27 +18,9 @@ qt_add_executable(${APP_NAME}
 
 qt_add_qml_module(${APP_NAME}
     URI ScanLab
-    QML_FILES
-        qml/Main.qml
-        qml/components/IconTabButton.qml
-
-        qml/pages/ConnectPage.qml
-        qml/pages/LoadPage.qml
-        qml/pages/MainPage.qml
-
     SOURCES
         app/include/backend.h
         app/src/backend.cpp
-#    RESOURCES
-#        resources/icons/cog.svg
-)
-
-qt_add_resources(${APP_NAME} app_resources
-    PREFIX "/"
-    FILES
-#        resources/icons/home.svg
-        resources/icons/cog.svg
-        resources/icons/cogs.png
 )
 
 include(GNUInstallDirs)
@@ -51,7 +33,6 @@ install(TARGETS ${APP_NAME}
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/")
 include(OEMPA)
 
-#add_subdirectory(libs)
+add_subdirectory(resources)
+add_subdirectory(qml)
 add_subdirectory(app)
-#add_subdirectory(qml)
-
