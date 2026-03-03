@@ -3,6 +3,8 @@ qt_target_qml_sources(${APP_NAME}
         Main.qml
 
         components/IconTabButton.qml
+        components/StatusBar.qml
+        components/StatusChip.qml
 
         pages/ConnectPage.qml
         pages/LoadPage.qml

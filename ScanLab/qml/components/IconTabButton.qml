@@ -4,7 +4,6 @@ import QtQuick.Controls
 TabButton {
     id: root
 
-    // публичные свойства
     property url iconSource: ""
     property int iconSize: 32
     property color normalTextColor: "#D0D7DE"
