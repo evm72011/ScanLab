@@ -11,6 +11,11 @@ ColorTokens {
 
     toolbarBackground: p.gray850
     toolbarIcon: p.blue400
+    toolbarButtonDown: p.gray600
+    toolbarButtonChecked: p.cyan1200
+    toolbarButtonHovered: p.gray700
+    toolbarNormalText: p.gray100
+    toolbarActiveText: p.gray000
 
     statusbarBackground: p.gray850
 

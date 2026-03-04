@@ -3,13 +3,13 @@ import QtQuick
 
 QtObject {
     // https://spectrum.adobe.com/page/color-palette/
-    
+
     readonly property color transparent: "transparent"
     readonly property color black: "#000000"
     readonly property color white: "#ffffff"
 
     // gray
-    readonly property color gray050:"#ffffff"
+    readonly property color gray000:"#ffffff"
     readonly property color gray100:"#f8f8f8"
     readonly property color gray200:"#e6e6e6"
     readonly property color gray300:"#d5d5d5"
@@ -37,8 +37,20 @@ QtObject {
     readonly property color blue1200:"#003571"
     readonly property color blue1300:"#002754"
 
-
-
+    // cyan
+    readonly property color cyan100:"#c5f8ff"
+    readonly property color cyan200:"#a4f0ff"
+    readonly property color cyan300:"#88e7fa"
+    readonly property color cyan400:"#60d8f3"
+    readonly property color cyan500:"#33c5e8"
+    readonly property color cyan600:"#12b0da"
+    readonly property color cyan700:"#019cc8"
+    readonly property color cyan800:"#0086b4"
+    readonly property color cyan900:"#00719f"
+    readonly property color cyan1000:"#005d89"
+    readonly property color cyan1100:"#004a73"
+    readonly property color cyan1200:"#00395d"
+    readonly property color cyan1300:"#002a46"
 
 
 
@@ -199,18 +211,6 @@ QtObject {
     readonly property color teal900:"#134e4a"
     readonly property color teal950:"#042f2e"
 
-    // cyan
-    readonly property color cyan050:"#ecfeff"
-    readonly property color cyan100:"#cffafe"
-    readonly property color cyan200:"#a5f3fc"
-    readonly property color cyan300:"#67e8f9"
-    readonly property color cyan400:"#22d3ee"
-    readonly property color cyan500:"#06b6d4"
-    readonly property color cyan600:"#0891b2"
-    readonly property color cyan700:"#0e7490"
-    readonly property color cyan800:"#155e75"
-    readonly property color cyan900:"#164e63"
-    readonly property color cyan950:"#083344"
 
     // sky
     readonly property color sky050:"#f0f9ff"

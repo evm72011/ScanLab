@@ -8,9 +8,6 @@ TabButton {
 
     property url iconSource: ""
     property int iconSize: 32
-    property color normalTextColor: "#D0D7DE"
-    property color activeTextColor: "white"
-    property color iconColor: SL.Theme.colors.toolbarIcon
 
     width: 96
     hoverEnabled: true
@@ -18,9 +15,9 @@ TabButton {
     background: Rectangle {
         anchors.fill: parent
         radius: 10
-        color: root.down ? "#3B536A"
-             : root.checked ? "#34495E"
-             : root.hovered ? "#3A5068"
+        color: root.down ? SL.Theme.colors.toolbarButtonDown // "#3B536A"
+             : root.checked ? SL.Theme.colors.toolbarButtonChecked // "#34495E"
+             : root.hovered ? SL.Theme.colors.toolbarButtonHovered //"#3A5068"
              : "transparent"
     }
 
@@ -36,7 +33,7 @@ TabButton {
             source: root.iconSource
             fillMode: Image.PreserveAspectFit
             anchors.horizontalCenter: parent.horizontalCenter
-            visible: false                    // важно
+            visible: false
             opacity: root.enabled ? (root.hovered || root.checked ? 1.0 : 0.85) : 0.4
         }
 
@@ -46,15 +43,17 @@ TabButton {
             anchors.horizontalCenter: parent.horizontalCenter
             source: iconImage
             colorization: 1.0
-            colorizationColor: root.iconColor
-            opacity: iconImage.opacity        // переносим твою логику enabled/hover
+            colorizationColor: SL.Theme.colors.toolbarIcon
+            opacity: iconImage.opacity
         }
 
         Text {
             text: root.text
             font.pixelSize: 12
             font.bold: true
-            color: (root.hovered || root.checked) ? root.activeTextColor : root.normalTextColor
+            color: (root.hovered || root.checked)
+                   ? SL.Theme.colors.toolbarActiveText
+                   : SL.Theme.colors.toolbarNormalText
             anchors.horizontalCenter: parent.horizontalCenter
             horizontalAlignment: Text.AlignHCenter
             elide: Text.ElideRight
