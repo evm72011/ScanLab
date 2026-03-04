@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import ScanLab 1.0 as SL
 
 ToolBar {
     id: root
@@ -9,13 +10,13 @@ ToolBar {
     property bool pulsing: false
 
     background: Rectangle {
-        color: "#161616"
+        color: SL.Theme.colors.statusbarBackground
         Rectangle {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.top: parent.top
             height: 1
-            color: "#2a2a2a"
+            color: SL.Theme.colors.statusbarBackground
         }
     }
 

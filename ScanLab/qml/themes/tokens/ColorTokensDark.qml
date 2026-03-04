@@ -3,8 +3,13 @@ import QtQuick
 import ScanLab 1.0 as SL
 
 ColorTokens {
-    windowBackground: SL.Palette.slate800
+    property var p: SL.Palette
 
-    textPrimary: SL.Palette.gray300
-    textSecondary: SL.Palette.gray400
+    loadBackground:         p.slate700
+    windowBackground:       p.gray800
+    toolbarBackground:      p.gray850
+    statusbarBackground:    p.gray850
+
+    textPrimary:    p.gray200
+    textSecondary:  p.gray300
 }

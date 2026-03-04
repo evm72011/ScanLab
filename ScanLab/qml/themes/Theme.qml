@@ -7,8 +7,4 @@ QtObject {
     property int mode: Theme.Dark
 
     readonly property ColorTokens colors: (mode === Theme.Dark) ? SL.ColorTokensDark : SL.ColorTokensLight
-
-    Component.onCompleted: {
-        console.log("Theme singleton created")
-    }
 }

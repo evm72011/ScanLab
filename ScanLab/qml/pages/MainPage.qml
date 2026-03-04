@@ -34,13 +34,21 @@ ColumnLayout {
         currentIndex: tabBar.currentIndex
 
         Rectangle {
-            color: "#202020"
-            Label { anchors.centerIn: parent; text: "Settings"; color: "white" }
+            color: SL.Theme.colors.windowBackground
+            Label {
+                anchors.centerIn: parent;
+                text: "Settings";
+                color: SL.Theme.colors.textPrimary
+            }
         }
 
         Rectangle {
-            color: "#303030"
-            Label { anchors.centerIn: parent; text: "Scan"; color: "white" }
+            color: SL.Theme.colors.windowBackground
+            Label {
+                anchors.centerIn: parent;
+                text: "Scan";
+                color: SL.Theme.colors.textPrimary
+            }
         }
     }
 

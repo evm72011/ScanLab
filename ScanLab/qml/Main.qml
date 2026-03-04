@@ -6,8 +6,8 @@ Window {
     width: 1200
     height: 800
     visible: true
-    color: SL.Theme.colors.windowBackground // "#2C3E50"
-    title: qsTr("ScanLab")
+    color: SL.Theme.colors.loadBackground
+    title: "ScanLab"
 
     Component {
         id: mainPageComponent
@@ -59,7 +59,7 @@ Window {
 
     Timer {
         id: loadDelayTimer
-        interval: 1500
+        interval: 500
         running: false
         repeat: false
         onTriggered: {
@@ -69,8 +69,5 @@ Window {
 
     Component.onCompleted: {
         loadDelayTimer.start()
-        console.log("Theme.mode:", SL.Theme.mode)
-        console.log("Theme.colors.windowBackground:", SL.Theme.colors.windowBackground)
-        console.log("Dark:", typeof SL.ColorTokensDark, SL.ColorTokensDark)
     }
 }

@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import ScanLab 1.0 as SL
 
 Rectangle {
     id: root
@@ -9,11 +10,8 @@ Rectangle {
     property int iconSize: 14
 
     height: 30
-    color: "#161616"
-    //border.color: "#2a2a2a"
-    //border.width: 1
+    color: SL.Theme.colors.statusbarBackground
 
-    // чтобы не было "половина иконки"
     implicitWidth: row.implicitWidth + 12
 
     Row {
@@ -33,7 +31,7 @@ Rectangle {
 
         Text {
             text: root.text
-            color: "#eaeaea"
+            color: SL.Theme.colors.textPrimary
             font.pixelSize: 12
             elide: Text.ElideRight
             verticalAlignment: Text.AlignVCenter

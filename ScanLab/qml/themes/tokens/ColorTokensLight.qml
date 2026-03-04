@@ -1,10 +1,12 @@
 pragma Singleton
 import QtQuick
-import ScanLab 1.0
+import ScanLab 1.0 as SL
 
 ColorTokens {
-    windowBackground: Palette.slate300
+    property var p: SL.Palette
 
-    textPrimary: Palette.gray900
-    textSecondary: Palette.gray800
+    windowBackground: p.slate300
+
+    textPrimary: p.gray900
+    textSecondary: p.gray800
 }
