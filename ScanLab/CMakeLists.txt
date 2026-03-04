@@ -16,36 +16,12 @@ qt_add_executable(${APP_NAME}
     app/main.cpp
 )
 
-set(qml_singletons
-    qml/themes/Theme.qml
-    qml/themes/palette/Palette.qml
-    qml/themes/tokens/ColorTokensDark.qml
-    qml/themes/tokens/ColorTokensLight.qml
-)
-
-set_source_files_properties(
-    ${qml_singletons}
-    PROPERTIES QT_QML_SINGLETON_TYPE TRUE
-)
-
 qt_add_qml_module(${APP_NAME}
     URI ScanLab
     VERSION 1.0
     SOURCES
         app/include/backend.h
         app/src/backend.cpp
-    QML_FILES
-        qml/Main.qml
-        qml/components/IconTabButton.qml
-        qml/components/StatusBar.qml
-        qml/components/StatusChip.qml
-
-        qml/pages/ConnectPage.qml
-        qml/pages/LoadPage.qml
-        qml/pages/MainPage.qml
-
-        qml/themes/tokens/ColorTokens.qml
-        ${qml_singletons}
 )
 
 include(GNUInstallDirs)

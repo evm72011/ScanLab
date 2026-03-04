@@ -6,7 +6,7 @@ ToolBar {
     id: root
     implicitHeight: 30
 
-    property bool connected: true
+    property bool connected: false
     property bool pulsing: false
 
     background: Rectangle {

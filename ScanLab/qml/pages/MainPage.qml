@@ -33,23 +33,9 @@ ColumnLayout {
 
         currentIndex: tabBar.currentIndex
 
-        Rectangle {
-            color: SL.Theme.colors.windowBackground
-            Label {
-                anchors.centerIn: parent;
-                text: qsTr("Settings");
-                color: SL.Theme.colors.textPrimary
-            }
-        }
+        SL.SettingsPage { }
 
-        Rectangle {
-            color: SL.Theme.colors.windowBackground
-            Label {
-                anchors.centerIn: parent;
-                text: qsTr("Scan");
-                color: SL.Theme.colors.textPrimary
-            }
-        }
+        SL.ScanPage { }
     }
 
     SL.StatusBar {
