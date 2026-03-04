@@ -17,6 +17,8 @@ QtObject {
 
     property color statusbarBackground
 
+    property color border
+
     // text
     property color textPrimary
     property color textSecondary

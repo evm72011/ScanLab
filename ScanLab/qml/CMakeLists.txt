@@ -16,6 +16,7 @@ set(QML_MODULE_FILES
     components/StatusChip.qml
 
     pages/ConnectPage.qml
+    pages/HardwarePage.qml
     pages/LoadPage.qml
     pages/MainPage.qml
     pages/ScanPage.qml

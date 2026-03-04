@@ -4,7 +4,8 @@ import QtQuick.Layouts
 import ScanLab 1.0 as SL
 
 ColumnLayout {
-    anchors.fill: parent
+    width: parent ? parent.width : 0
+    height: parent ? parent.height : 0
     spacing: 0
 
     TabBar {
@@ -12,16 +13,20 @@ ColumnLayout {
         Layout.fillWidth: true
 
         SL.IconTabButton {
-            text: "Settings"
+            text: qsTr("Settings")
             iconSource: "qrc:/icons/service.svg"
-            width: 96
         }
 
         SL.IconTabButton {
-            text: "Scan"
+            text: qsTr("Scan")
             iconSource: "qrc:/icons/scan.svg"
-            width: 96
         }
+    }
+
+    Rectangle {
+        Layout.fillWidth: true
+        height: 1
+        color: SL.Theme.colors.border
     }
 
     SwipeView {
@@ -34,7 +39,6 @@ ColumnLayout {
         currentIndex: tabBar.currentIndex
 
         SL.SettingsPage { }
-
         SL.ScanPage { }
     }
 

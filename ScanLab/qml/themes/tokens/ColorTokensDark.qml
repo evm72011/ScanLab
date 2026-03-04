@@ -19,6 +19,8 @@ ColorTokens {
 
     statusbarBackground: p.gray850
 
+    border: p.gray700
+
     textPrimary: p.gray200
     textSecondary: p.gray300
 }
