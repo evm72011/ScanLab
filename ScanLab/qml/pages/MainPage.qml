@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import ScanLab
+import ScanLab 1.0 as SL
 
 ColumnLayout {
     anchors.fill: parent
@@ -11,13 +11,13 @@ ColumnLayout {
         id: tabBar
         Layout.fillWidth: true
 
-        IconTabButton {
+        SL.IconTabButton {
             text: "Settings"
             iconSource: "qrc:/icons/service.svg"
             width: 96
         }
 
-        IconTabButton {
+        SL.IconTabButton {
             text: "Scan"
             iconSource: "qrc:/icons/scan.svg"
             width: 96
@@ -44,7 +44,7 @@ ColumnLayout {
         }
     }
 
-    StatusBar {
+    SL.StatusBar {
         id: statusBar
         Layout.fillWidth: true
         Layout.preferredHeight: 32

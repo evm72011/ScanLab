@@ -1,12 +1,12 @@
 import QtQuick
 import QtQuick.Controls
-import ScanLab as SL
+import ScanLab 1.0 as SL
 
 Window {
     width: 1200
     height: 800
     visible: true
-    color: "#2C3E50"
+    color: SL.Theme.colors.windowBackground // "#2C3E50"
     title: qsTr("ScanLab")
 
     Component {
@@ -59,7 +59,7 @@ Window {
 
     Timer {
         id: loadDelayTimer
-        interval: 500
+        interval: 1500
         running: false
         repeat: false
         onTriggered: {
@@ -69,5 +69,8 @@ Window {
 
     Component.onCompleted: {
         loadDelayTimer.start()
+        console.log("Theme.mode:", SL.Theme.mode)
+        console.log("Theme.colors.windowBackground:", SL.Theme.colors.windowBackground)
+        console.log("Dark:", typeof SL.ColorTokensDark, SL.ColorTokensDark)
     }
 }

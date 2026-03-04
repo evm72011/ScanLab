@@ -1,5 +1,11 @@
-import QtQuick 2.15
+import QtQuick
 
-Item {
+QtObject {
 
+    // surfaces
+    property color windowBackground
+
+    // text
+    property color textPrimary
+    property color textSecondary
 }
