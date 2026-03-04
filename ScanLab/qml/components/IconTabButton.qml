@@ -15,9 +15,9 @@ TabButton {
     background: Rectangle {
         anchors.fill: parent
         radius: 10
-        color: root.down ? SL.Theme.colors.toolbarButtonDown // "#3B536A"
-             : root.checked ? SL.Theme.colors.toolbarButtonChecked // "#34495E"
-             : root.hovered ? SL.Theme.colors.toolbarButtonHovered //"#3A5068"
+        color: root.down ? SL.Theme.colors.toolbarButtonDown
+             : root.checked ? SL.Theme.colors.toolbarButtonChecked
+             : root.hovered ? SL.Theme.colors.toolbarButtonHovered
              : "transparent"
     }
 

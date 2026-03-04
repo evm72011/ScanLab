@@ -37,7 +37,7 @@ ColumnLayout {
             color: SL.Theme.colors.windowBackground
             Label {
                 anchors.centerIn: parent;
-                text: "Settings";
+                text: qsTr("Settings");
                 color: SL.Theme.colors.textPrimary
             }
         }
@@ -46,7 +46,7 @@ ColumnLayout {
             color: SL.Theme.colors.windowBackground
             Label {
                 anchors.centerIn: parent;
-                text: "Scan";
+                text: qsTr("Scan");
                 color: SL.Theme.colors.textPrimary
             }
         }

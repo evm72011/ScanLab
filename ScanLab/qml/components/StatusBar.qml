@@ -30,12 +30,12 @@ ToolBar {
 
             StatusChip {
                 iconSource: root.connected ? "qrc:/icons/connected.svg" : "qrc:/icons/disconnected.svg"
-                text: root.connected ? "Connected" : "Disconnected"
+                text: root.connected ? qsTr("Connected") : qsTr("Disconnected")
             }
 
             StatusChip {
                 iconSource: root.pulsing ? "qrc:/icons/connected.svg" : "qrc:/icons/disconnected.svg"
-                text: root.pulsing ? "Pulsing" : "Not pulsing"
+                text: root.pulsing ? qsTr("Pulsing") : qsTr("Not pulsing")
                 visible: root.connected
             }
         }
