@@ -1,11 +1,14 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QIcon>
 #include "backend.h"
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
+    app.setWindowIcon(QIcon(":/icons/app.svg"));
+
     QQmlApplicationEngine engine;
 
     Backend backend;
