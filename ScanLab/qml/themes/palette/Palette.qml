@@ -2,10 +2,45 @@ pragma Singleton
 import QtQuick
 
 QtObject {
-
+    // https://spectrum.adobe.com/page/color-palette/
+    
     readonly property color transparent: "transparent"
     readonly property color black: "#000000"
     readonly property color white: "#ffffff"
+
+    // gray
+    readonly property color gray050:"#ffffff"
+    readonly property color gray100:"#f8f8f8"
+    readonly property color gray200:"#e6e6e6"
+    readonly property color gray300:"#d5d5d5"
+    readonly property color gray400:"#b1b1b1"
+    readonly property color gray500:"#909090"
+    readonly property color gray600:"#6d6d6d"
+    readonly property color gray700:"#464646"
+    readonly property color gray800:"#222222"
+    readonly property color gray850:"#111111"
+    readonly property color gray900:"#000000"
+
+
+    // blue
+    readonly property color blue100:"#e0f2ff"
+    readonly property color blue200:"#cae8ff"
+    readonly property color blue300:"#b5deff"
+    readonly property color blue400:"#96cefd"
+    readonly property color blue500:"#78bbfa"
+    readonly property color blue600:"#59a7f6"
+    readonly property color blue700:"#3892f3"
+    readonly property color blue800:"#147af3"
+    readonly property color blue900:"#0265dc"
+    readonly property color blue1000:"#0054b6"
+    readonly property color blue1100:"#004491"
+    readonly property color blue1200:"#003571"
+    readonly property color blue1300:"#002754"
+
+
+
+
+
 
     // slate
     readonly property color slate050:"#f8fafc"
@@ -20,18 +55,6 @@ QtObject {
     readonly property color slate900:"#0f172a"
     readonly property color slate950:"#020617"
 
-    // gray
-    readonly property color gray050:"#ffffff"
-    readonly property color gray100:"#f8f8f8"
-    readonly property color gray200:"#e6e6e6"
-    readonly property color gray300:"#d5d5d5"
-    readonly property color gray400:"#b1b1b1"
-    readonly property color gray500:"#909090"
-    readonly property color gray600:"#6d6d6d"
-    readonly property color gray700:"#464646"
-    readonly property color gray800:"#222222"
-    readonly property color gray850:"#111111"
-    readonly property color gray900:"#000000"
 
     // zinc
     readonly property color zinc050:"#fafafa"
@@ -202,18 +225,6 @@ QtObject {
     readonly property color sky900:"#0c4a6e"
     readonly property color sky950:"#082f49"
 
-    // blue
-    readonly property color blue050:"#eff6ff"
-    readonly property color blue100:"#dbeafe"
-    readonly property color blue200:"#bfdbfe"
-    readonly property color blue300:"#93c5fd"
-    readonly property color blue400:"#60a5fa"
-    readonly property color blue500:"#3b82f6"
-    readonly property color blue600:"#2563eb"
-    readonly property color blue700:"#1d4ed8"
-    readonly property color blue800:"#1e40af"
-    readonly property color blue900:"#1e3a8a"
-    readonly property color blue950:"#172554"
 
     // indigo
     readonly property color indigo050:"#eef2ff"

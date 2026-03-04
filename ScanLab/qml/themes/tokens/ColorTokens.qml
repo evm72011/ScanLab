@@ -6,6 +6,7 @@ QtObject {
     property color loadBackground
     property color windowBackground
     property color toolbarBackground
+    property color toolbarIcon
     property color statusbarBackground
 
     // text

@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Effects
+import ScanLab 1.0 as SL
 
 TabButton {
     id: root
@@ -9,7 +10,7 @@ TabButton {
     property int iconSize: 32
     property color normalTextColor: "#D0D7DE"
     property color activeTextColor: "white"
-    property color iconColor: "red" // можешь передавать снаружи
+    property color iconColor: SL.Theme.colors.toolbarIcon
 
     width: 96
     hoverEnabled: true
