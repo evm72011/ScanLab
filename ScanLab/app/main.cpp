@@ -2,12 +2,12 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QIcon>
-//#include <QQuickStyle>
+#include <QQuickStyle>
 #include "backend.h"
 
 int main(int argc, char *argv[])
 {
-//    QQuickStyle::setStyle("FluentWinUI3");
+    QQuickStyle::setStyle("Basic");
     QGuiApplication app(argc, argv);
     app.setWindowIcon(QIcon(":/icons/app.svg"));
 
