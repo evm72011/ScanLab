@@ -22,6 +22,12 @@ Item {
                 width: 96
                 hoverEnabled: true
             }
+
+            TabButton {
+                text: qsTr("Foo")
+                width: 96
+                hoverEnabled: true
+            }
         }
 
         SwipeView {
@@ -36,7 +42,16 @@ Item {
                 color: SL.Theme.colors.windowBackground
                 Label {
                     anchors.centerIn: parent
-                    text: qsTr("Bar")
+                    text: qsTr("Scan")
+                    color: SL.Theme.colors.textPrimary
+                }
+            }
+
+            Rectangle {
+                color: SL.Theme.colors.windowBackground
+                Label {
+                    anchors.centerIn: parent
+                    text: qsTr("Foo")
                     color: SL.Theme.colors.textPrimary
                 }
             }

@@ -15,9 +15,12 @@ Item {
         spacing: 12
 
         SL.DropDown {
-            Layout.preferredWidth: 250
-            Layout.fillWidth: false
-            model: ["foo", "bar", "baz"]
+            label: qsTr("Device")
+            labelWidth: 140
+            fieldWidth: 260
+            showInfo: true
+            infoText: qsTr("Select the connected device")
+            model: ["Dev A", "Dev B", "Dev C"]
             onActivated: console.log("Selected:", currentText)
         }
 
