@@ -50,7 +50,7 @@ TabButton {
         Text {
             text: root.text
             font.pixelSize: SL.Theme.typography.fontSizeMd
-            font.bold: true
+            font.bold: root.checked
             color: (root.hovered || root.checked)
                    ? SL.Theme.colors.controlActiveText
                    : SL.Theme.colors.controlNormalText

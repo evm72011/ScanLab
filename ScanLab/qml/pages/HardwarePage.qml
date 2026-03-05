@@ -18,19 +18,21 @@ Item {
             label: qsTr("Device")
             labelWidth: 140
             fieldWidth: 260
-            showInfo: true
             infoText: qsTr("Select the connected device")
             model: ["Dev A", "Dev B", "Dev C"]
             onActivated: console.log("Selected:", currentText)
         }
 
+        SL.TextField {
+            label: qsTr("Address")
+            labelWidth: 140
+            fieldWidth: 260
+            placeholderText: qsTr("Enter device address")
+            //infoText: qsTr("IP address or device path")
+            onAccepted: console.log("Enter pressed:", text)
+        }
+
         Item { Layout.fillHeight: true }
 
-        Label {
-            text: qsTr("Hardware")
-            color: SL.Theme.colors.textPrimary
-            horizontalAlignment: Text.AlignHCenter
-            Layout.fillWidth: true
-        }
     }
 }
