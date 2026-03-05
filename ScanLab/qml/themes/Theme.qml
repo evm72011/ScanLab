@@ -7,4 +7,5 @@ QtObject {
     property int mode: Theme.Dark
 
     readonly property ColorTokens colors: (mode === Theme.Dark) ? SL.ColorTokensDark : SL.ColorTokensLight
+    readonly property TypographyTokens typography: SL.TypographyTokens
 }

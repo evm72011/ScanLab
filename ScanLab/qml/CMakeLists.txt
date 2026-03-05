@@ -3,6 +3,7 @@ set(QML_SINGLETONS
     themes/palette/Palette.qml
     themes/tokens/ColorTokensDark.qml
     themes/tokens/ColorTokensLight.qml
+    themes/tokens/TypographyTokens.qml
 )
 
 set_source_files_properties(

@@ -2,7 +2,6 @@ import QtQuick
 
 QtObject {
 
-    // surfaces
     property color loadBackground
 
     property color windowBackground
