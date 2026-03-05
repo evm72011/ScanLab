@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Controls
 import ScanLab 1.0 as SL
 
 Rectangle {
@@ -12,9 +11,8 @@ Rectangle {
 
     signal clicked()
 
-    implicitWidth: Math.max(120, textItem.implicitWidth + 32)
-    implicitHeight: 40
-
+    width: 120
+    height: 40
     radius: cornerRadius
 
     color: ma.pressed ? SL.Theme.colors.controlDown
@@ -24,23 +22,27 @@ Rectangle {
     border.width: 1
     border.color: SL.Theme.colors.border
 
+    // текст всегда по центру
     Text {
-        id: textItem
         anchors.centerIn: parent
         text: root.text
         font.pixelSize: SL.Theme.typography.fontSizeMd
         color: SL.Theme.colors.textPrimary
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
     }
 
+    // иконка слева, если задана
     Image {
-        visible: iconSource !== ""
-        source: iconSource
-        width: iconSize
-        height: iconSize
+        visible: root.iconSource !== ""
+        source: root.iconSource
+        width: root.iconSize
+        height: root.iconSize
+        anchors.left: parent.left
+        anchors.leftMargin: 12
         anchors.verticalCenter: parent.verticalCenter
-        anchors.right: textItem.left
-        anchors.rightMargin: 6
         fillMode: Image.PreserveAspectFit
+        smooth: true
     }
 
     MouseArea {

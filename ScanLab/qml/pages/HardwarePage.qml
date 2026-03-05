@@ -33,12 +33,12 @@ Item {
         }
 
         SL.Button {
-            text: qsTr("Connect")
+            text: qsTr("Ping")
             onClicked: device.connect()
         }
 
         SL.Button {
-            text: "Connect"
+            text: qsTr("Connect")
             iconSource: "qrc:/icons/connected.svg"
         }
 

@@ -29,7 +29,7 @@ Item {
     implicitHeight: fieldHeight
     implicitWidth: (label.length > 0 ? labelWidth + 10 : 0)
                    + fieldWidth
-                   + (showInfo ? (infoIconSize + 8) : 0)
+                   + (infoText.length > 0 ? (infoIconSize + 8) : 0)
 
     RowLayout {
         anchors.fill: parent
