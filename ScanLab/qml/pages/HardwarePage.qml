@@ -28,9 +28,20 @@ Item {
             labelWidth: 140
             fieldWidth: 260
             placeholderText: qsTr("Enter device address")
-            //infoText: qsTr("IP address or device path")
+            infoText: qsTr("IP address or device path")
             onAccepted: console.log("Enter pressed:", text)
         }
+
+        SL.Button {
+            text: qsTr("Connect")
+            onClicked: device.connect()
+        }
+
+        SL.Button {
+            text: "Connect"
+            iconSource: "qrc:/icons/connected.svg"
+        }
+
 
         Item { Layout.fillHeight: true }
 
