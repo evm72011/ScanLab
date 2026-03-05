@@ -2,12 +2,23 @@ import QtQuick
 import QtQuick.Controls
 import ScanLab 1.0 as SL
 
-Window {
+ApplicationWindow {
     width: 1200
     height: 800
     visible: true
     color: SL.Theme.colors.loadBackground
     title: "ScanLab"
+
+    palette.window: SL.Theme.colors.windowBackground
+    //palette.base: SL.Theme.colors.windowBackground
+   // palette.button: SL.Theme.colors.windowBackground
+   // palette.text: SL.Theme.colors.textPrimary
+   // palette.buttonText: SL.Theme.colors.textPrimary
+    //palette.highlight: SL.Theme.colors.windowBackground //SL.Theme.colors.selectionBackground
+   // palette.highlightedText: SL.Theme.colors.textPrimary
+
+    //Overlay.modal: Rectangle { color: "transparent" }
+   // Overlay.modeless: Rectangle { color: "transparent" }
 
     Component {
         id: mainPageComponent

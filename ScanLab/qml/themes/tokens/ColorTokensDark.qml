@@ -9,13 +9,16 @@ ColorTokens {
 
     windowBackground: p.gray800
 
-    toolbarBackground: p.gray850
+    controlBackground: p.gray800
+    controlDown: p.gray600
+    controlChecked: p.cyan1200
+    controlHovered: p.gray700
+
+    controlNormalText: p.gray100
+    controlActiveText: p.gray000
+
     toolbarIcon: p.blue400
-    toolbarButtonDown: p.gray600
-    toolbarButtonChecked: p.cyan1200
-    toolbarButtonHovered: p.gray700
-    toolbarNormalText: p.gray100
-    toolbarActiveText: p.gray000
+
 
     statusbarBackground: p.gray850
 

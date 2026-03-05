@@ -7,13 +7,15 @@ QtObject {
 
     property color windowBackground
 
-    property color toolbarBackground
+    property color controlBackground
+    property color controlDown
+    property color controlChecked
+    property color controlHovered
+    property color controlNormalText
+    property color controlActiveText
+
     property color toolbarIcon
-    property color toolbarButtonDown
-    property color toolbarButtonChecked
-    property color toolbarButtonHovered
-    property color toolbarNormalText
-    property color toolbarActiveText
+
 
     property color statusbarBackground
 

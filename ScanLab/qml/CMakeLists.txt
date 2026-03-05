@@ -11,6 +11,7 @@ set_source_files_properties(
 )
 
 set(QML_MODULE_FILES
+    components/DropDown.qml
     components/IconTabButton.qml
     components/StatusBar.qml
     components/StatusChip.qml

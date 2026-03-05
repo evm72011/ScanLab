@@ -4,7 +4,7 @@ project(ScanLab VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Quick)
+find_package(Qt6 REQUIRED COMPONENTS Quick) #  QuickControls2
 
 qt_standard_project_setup(REQUIRES 6.8)
 
@@ -15,6 +15,12 @@ set(OEMPA_ENABLE ON)
 qt_add_executable(${APP_NAME}
     app/main.cpp
 )
+
+#target_link_libraries(${APP_NAME}
+#    PRIVATE
+#        Qt6::Quick
+#        Qt6::QuickControls2
+#)
 
 qt_add_qml_module(${APP_NAME}
     URI ScanLab

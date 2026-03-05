@@ -14,37 +14,11 @@ Item {
         anchors.margins: 12
         spacing: 12
 
-        ComboBox {
-            id: combo
+        SL.DropDown {
             Layout.preferredWidth: 250
             Layout.fillWidth: false
-
-            model: ["Foo", "Bar", "Baz"]
-
-            background: Rectangle {
-                radius: 6
-                color: SL.Theme.colors.windowBackground
-                border.color: SL.Theme.colors.border
-                border.width: 1
-            }
-
-            contentItem: Text {
-                text: combo.displayText
-             ///   color: SL.Theme.colors.textPrimary
-                verticalAlignment: Text.AlignVCenter
-                elide: Text.ElideRight
-                leftPadding: 10
-                rightPadding: 28
-            }
-
-            popup.background: Rectangle {
-                radius: 6
-                color: SL.Theme.colors.windowBackground
-                border.color: SL.Theme.colors.border
-                border.width: 1
-            }
-
-            onCurrentTextChanged: console.log("Selected:", currentText)
+            model: ["foo", "bar", "baz"]
+            onActivated: console.log("Selected:", currentText)
         }
 
         Item { Layout.fillHeight: true }
