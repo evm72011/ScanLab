@@ -40,7 +40,12 @@ Item {
             fieldWidth: 260
             placeholderText: qsTr("Enter device address")
             infoText: qsTr("IP address or device path")
-            onAccepted: console.log("Enter pressed:", text)
+
+            value: backend.device.address
+
+            onValueEdited: function(value) {
+                backend.device.address = value
+            }
         }
 
         SL.Button {
@@ -52,7 +57,8 @@ Item {
             text: qsTr("Connect")
             iconSource: "qrc:/icons/connected.svg"
             onClicked: function(value) {
-                console.log("Backend device type:", backend.device.type)
+                console.log("Device type:", backend.device.type)
+                console.log("Address:", backend.device.address)
             }
         }
 
