@@ -18,6 +18,7 @@ set(QML_MODULE_FILES
     components/InfoIcon.qml
     components/StatusBar.qml
     components/StatusChip.qml
+    components/TabButton.qml
     components/TextField.qml
 
 

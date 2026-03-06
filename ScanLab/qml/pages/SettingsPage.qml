@@ -12,24 +12,17 @@ Item {
         TabBar {
             id: tabBar
             Layout.fillWidth: true
-            TabButton {
+
+            SL.TabButton {
                 text: qsTr("Hardware")
-                font.pixelSize: SL.Theme.typography.fontSizeMd
-                width: 96
-                hoverEnabled: true
-            }
-            TabButton {
-                text: qsTr("Scan")
-                font.pixelSize: SL.Theme.typography.fontSizeMd
-                width: 96
-                hoverEnabled: true
             }
 
-            TabButton {
+            SL.TabButton {
+                text: qsTr("Scan")
+            }
+
+            SL.TabButton {
                 text: qsTr("Foo")
-                font.pixelSize: SL.Theme.typography.fontSizeMd
-                width: 96
-                hoverEnabled: true
             }
         }
 
