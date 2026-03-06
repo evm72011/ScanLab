@@ -70,24 +70,12 @@ Item {
 
             model: root.model
             textRole: "text"
-
-            Component.onCompleted: {
-                combo.currentIndex = root.currentIndex
-            }
+            currentIndex: root.currentIndex
 
             onActivated: function(index) {
                 if (index >= 0 && index < root.model.length) {
                     root.currentValue = root.model[index].value
                     root.activated(root.currentValue)
-                }
-            }
-
-            Connections {
-                target: root
-                function onCurrentValueChanged() {
-                    const idx = root.indexOfValue(root.currentValue)
-                    if (combo.currentIndex !== idx)
-                        combo.currentIndex = idx
                 }
             }
 
@@ -144,7 +132,7 @@ Item {
                     id: list
                     clip: true
                     implicitHeight: contentHeight
-                    model: combo.popup.visible ? combo.delegateModel : null
+                    model: combo.popup.visible ? root.model : null
 
                     ScrollBar.vertical: ScrollBar { policy: ScrollBar.AsNeeded }
 
@@ -152,7 +140,7 @@ Item {
                         width: ListView.view.width
                         height: root.rowHeight
 
-                        readonly property bool isSelected: index === combo.currentIndex
+                        readonly property bool isSelected: index === root.currentIndex
 
                         Rectangle {
                             anchors.fill: parent
@@ -170,7 +158,7 @@ Item {
                             anchors.rightMargin: 10
                             elide: Text.ElideRight
 
-                            text: (modelData && modelData.text) ? modelData.text : ""
+                            text: modelData && modelData.text ? modelData.text : ""
                             color: SL.Theme.colors.textPrimary
                             font.pixelSize: SL.Theme.typography.fontSizeMd
                         }
@@ -181,7 +169,6 @@ Item {
                             hoverEnabled: true
                             cursorShape: Qt.PointingHandCursor
                             onClicked: {
-                                combo.currentIndex = index
                                 root.currentValue = root.model[index].value
                                 root.activated(root.currentValue)
                                 combo.popup.close()
