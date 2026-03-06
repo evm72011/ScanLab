@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import ScanLab 1.0 as SL
+import "." as App
 
 Item {
     id: root
@@ -14,10 +15,18 @@ Item {
     property alias infoIconSize: infoIcon.size
 
     property var model: []
-    property int currentIndex: combo.currentIndex
-    readonly property string currentText: combo.currentText
 
-    signal activated(int index)
+    // наружу отдаём именно enum value
+    property int currentValue: -1
+
+    // индекс вычисляем из currentValue
+    readonly property int currentIndex: indexOfValue(currentValue)
+    readonly property string currentText:
+        currentIndex >= 0 && currentIndex < model.length
+            ? model[currentIndex].text
+            : ""
+
+    signal activated(int value)
 
     property int fieldWidth: 280
     property int fieldHeight: 36
@@ -27,15 +36,19 @@ Item {
     property int maxPopupHeight: 240
 
     implicitHeight: fieldHeight
-    implicitWidth: (label.length > 0 ? labelWidth + 10 : 0)
-                   + fieldWidth
-                   + (infoText.length > 0 ? (infoIconSize + 8) : 0)
+
+    function indexOfValue(value) {
+        for (let i = 0; i < model.length; ++i) {
+            if (model[i].value === value)
+                return i
+        }
+        return -1
+    }
 
     RowLayout {
         anchors.fill: parent
         spacing: 10
 
-        // === Left label ===
         Label {
             visible: root.label.length > 0
             text: root.label
@@ -48,7 +61,6 @@ Item {
             Layout.alignment: Qt.AlignVCenter
         }
 
-        // === ComboBox Field ===
         ComboBox {
             id: combo
 
@@ -57,48 +69,44 @@ Item {
             Layout.alignment: Qt.AlignVCenter
 
             model: root.model
+            textRole: "text"
 
-            // синхронизация currentIndex наружу/внутрь
-            // (чтобы root.currentIndex можно было задавать извне)
-            onCurrentIndexChanged: {
-                if (root.currentIndex !== combo.currentIndex)
-                    root.currentIndex = combo.currentIndex
-                root.activated(combo.currentIndex)
-            }
             Component.onCompleted: {
-                if (root.currentIndex !== combo.currentIndex)
-                    combo.currentIndex = root.currentIndex
+                combo.currentIndex = root.currentIndex
             }
-            Connections {
-                target: root
-                function onCurrentIndexChanged() {
-                    if (combo.currentIndex !== root.currentIndex)
-                        combo.currentIndex = root.currentIndex
+
+            onActivated: function(index) {
+                if (index >= 0 && index < root.model.length) {
+                    root.currentValue = root.model[index].value
+                    root.activated(root.currentValue)
                 }
             }
 
-            // ====== Look & feel ======
+            Connections {
+                target: root
+                function onCurrentValueChanged() {
+                    const idx = root.indexOfValue(root.currentValue)
+                    if (combo.currentIndex !== idx)
+                        combo.currentIndex = idx
+                }
+            }
+
             hoverEnabled: true
             implicitHeight: root.fieldHeight
 
-            // фон поля
             background: Rectangle {
-                id: bg
                 radius: root.radius
                 color: SL.Theme.colors.controlBackground
                 border.width: 1
                 border.color: combo.hovered
                               ? (SL.Theme.colors.borderStrong ?? SL.Theme.colors.border)
                               : SL.Theme.colors.border
-
-                // лёгкая "pressed" индикация
                 opacity: combo.down ? 0.92 : 1.0
             }
 
-            // текст в поле
             contentItem: Text {
                 leftPadding: 12
-                rightPadding: 28 // место под стрелку
+                rightPadding: 28
                 verticalAlignment: Text.AlignVCenter
                 elide: Text.ElideRight
 
@@ -107,9 +115,8 @@ Item {
                 font.pixelSize: SL.Theme.typography.fontSizeMd
             }
 
-            // стрелка справа (indicator)
             indicator: Text {
-                text: "\u25BE" // ▾
+                text: "\u25BE"
                 color: SL.Theme.colors.textPrimary
                 opacity: 0.9
                 anchors.verticalCenter: parent.verticalCenter
@@ -117,7 +124,6 @@ Item {
                 anchors.rightMargin: 12
             }
 
-            // ====== Popup со списком ======
             popup: Popup {
                 y: combo.height + 6
                 width: combo.width
@@ -125,8 +131,6 @@ Item {
                 modal: false
                 focus: true
                 closePolicy: Popup.CloseOnPressOutside | Popup.CloseOnEscape
-
-                // ограничение по высоте
                 implicitHeight: Math.min(list.contentHeight + padding * 2, root.maxPopupHeight)
 
                 background: Rectangle {
@@ -144,12 +148,11 @@ Item {
 
                     ScrollBar.vertical: ScrollBar { policy: ScrollBar.AsNeeded }
 
-                    // используем стандартный delegate ComboBox, но рисуем свой
                     delegate: Item {
                         width: ListView.view.width
                         height: root.rowHeight
 
-                        readonly property bool isSelected: (index === combo.currentIndex)
+                        readonly property bool isSelected: index === combo.currentIndex
 
                         Rectangle {
                             anchors.fill: parent
@@ -167,9 +170,7 @@ Item {
                             anchors.rightMargin: 10
                             elide: Text.ElideRight
 
-                            // modelData будет работать для массива строк;
-                            // для ListModel можно использовать display/textRole (см. ниже)
-                            text: (typeof modelData === "string") ? modelData : (modelData.display ?? modelData.text ?? "")
+                            text: (modelData && modelData.text) ? modelData.text : ""
                             color: SL.Theme.colors.textPrimary
                             font.pixelSize: SL.Theme.typography.fontSizeMd
                         }
@@ -181,6 +182,8 @@ Item {
                             cursorShape: Qt.PointingHandCursor
                             onClicked: {
                                 combo.currentIndex = index
+                                root.currentValue = root.model[index].value
+                                root.activated(root.currentValue)
                                 combo.popup.close()
                             }
                         }
@@ -189,7 +192,6 @@ Item {
             }
         }
 
-        // === Right info icon ===
         SL.InfoIcon {
             id: infoIcon
             visible: root.infoText.length > 0

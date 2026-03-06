@@ -4,12 +4,15 @@
 #include <QIcon>
 #include <QQuickStyle>
 #include "backend.h"
+//#include "enums.h"
 
 int main(int argc, char *argv[])
 {
     QQuickStyle::setStyle("Basic");
     QGuiApplication app(argc, argv);
     app.setWindowIcon(QIcon(":/icons/app.svg"));
+
+    //qmlRegisterUncreatableType<Enums>("App.Enums",1,0,"Enums","Enums");
 
     QQmlApplicationEngine engine;
 

@@ -27,6 +27,9 @@ qt_add_qml_module(${APP_NAME}
     VERSION 1.0
     SOURCES
         app/include/backend.h
+        app/include/devicetype.h
+        app/include/device.h
+
         app/src/backend.cpp
 )
 

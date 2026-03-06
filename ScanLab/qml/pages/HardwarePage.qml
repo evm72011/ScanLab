@@ -19,8 +19,19 @@ Item {
             labelWidth: 140
             fieldWidth: 260
             infoText: qsTr("Select the connected device")
-            model: ["Dev A", "Dev B", "Dev C"]
-            onActivated: console.log("Selected:", currentText)
+
+            model: [
+                { value: SL.DeviceType.OEMPAMax, text: "OEMPA Max" },
+                { value: SL.DeviceType.OEMPAMini, text: "OEMPA Mini" }
+            ]
+
+            currentValue: backend.device.type
+
+            onActivated: function(value) {
+                console.log("Selected enum:", value)
+                console.log("Selected text:", currentText)
+                backend.device.type = value
+            }
         }
 
         SL.TextField {
@@ -40,6 +51,9 @@ Item {
         SL.Button {
             text: qsTr("Connect")
             iconSource: "qrc:/icons/connected.svg"
+            onClicked: function(value) {
+                console.log("Backend device type:", backend.device.type)
+            }
         }
 
 
