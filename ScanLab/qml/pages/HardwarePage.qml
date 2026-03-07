@@ -28,8 +28,6 @@ Item {
             currentValue: backend?.device?.type ?? SL.DeviceType.None
 
             onActivated: function(value) {
-                console.log("Selected enum:", value)
-                console.log("Selected text:", currentText)
                 backend.device.type = value
             }
         }
@@ -59,14 +57,16 @@ Item {
             onClicked: function(value) {
                 const result = backend.device.connect();
                 if (result !== 0) {
-                    SL.ErrorDialog {
-                        
-                    }
-                    console.log(backend.device.lastConnectStatusText);
+                    errorDialog.shortText = qsTr("Connection error");
+                    errorDialog.detailsText = backend.device.lastConnectStatusText;
+                    errorDialog.open();
                 }
             }
         }
 
+        SL.ErrorDialog {
+            id: errorDialog
+        }
 
         Item { Layout.fillHeight: true }
 

@@ -22,7 +22,6 @@ Rectangle {
     border.width: 1
     border.color: SL.Theme.colors.border
 
-    // текст всегда по центру
     Text {
         anchors.centerIn: parent
         text: root.text
@@ -32,7 +31,6 @@ Rectangle {
         verticalAlignment: Text.AlignVCenter
     }
 
-    // иконка слева, если задана
     Image {
         visible: root.iconSource !== ""
         source: root.iconSource

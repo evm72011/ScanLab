@@ -4,6 +4,7 @@ qt_add_resources(${APP_NAME} app_resources
         icons/app.svg
         icons/connected.svg
         icons/disconnected.svg
+        icons/error.svg
         icons/info.svg
         icons/scan.svg
         icons/service.svg

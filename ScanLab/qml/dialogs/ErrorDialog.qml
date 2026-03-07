@@ -1,13 +1,14 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import ScanLab 1.0 as SL
 
 Dialog {
     id: root
 
     property string shortText: ""
     property string detailsText: ""
-    property url iconSource: "qrc:/qml/icons/error.svg"
+    property url iconSource: "qrc:/icons/error.svg"
 
     modal: true
     focus: true
@@ -19,9 +20,9 @@ Dialog {
 
     background: Rectangle {
         radius: 12
-        color: "white"
+        color: SL.Theme.colors.windowBackground
         border.width: 1
-        border.color: "#d6d6d6"
+        border.color: SL.Theme.colors.border
     }
 
     contentItem: Item {
@@ -61,7 +62,7 @@ Dialog {
                     wrapMode: Text.Wrap
                     font.pixelSize: 18
                     font.bold: true
-                    color: "#202020"
+                    color: SL.Theme.colors.textPrimary
                 }
 
                 Text {
@@ -69,7 +70,7 @@ Dialog {
                     text: root.detailsText
                     wrapMode: Text.Wrap
                     font.pixelSize: 14
-                    color: "#505050"
+                    color: SL.Theme.colors.textPrimary
                 }
 
                 Item {
@@ -81,7 +82,7 @@ Dialog {
                     Layout.alignment: Qt.AlignRight
                     spacing: 8
 
-                    Button {
+                    SL.Button {
                         text: "OK"
                         onClicked: root.close()
                     }
