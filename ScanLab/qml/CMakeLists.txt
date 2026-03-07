@@ -21,8 +21,6 @@ set(QML_MODULE_FILES
     components/TabButton.qml
     components/TextField.qml
 
-
-    pages/ConnectPage.qml
     pages/HardwarePage.qml
     pages/LoadPage.qml
     pages/MainPage.qml

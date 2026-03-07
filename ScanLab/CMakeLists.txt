@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
+set(QT_CREATOR_SKIP_CONAN_SETUP ON CACHE BOOL "" FORCE)
+
 project(ScanLab VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 23)
@@ -25,6 +27,8 @@ option(ENABLE_SANITIZE_ADDR "Enable address sanitize." OFF)
 option(ENABLE_SANITIZE_UNDEF "Enable undefined sanitize." OFF)
 option(ENABLE_SANITIZE_LEAK "Enable leak sanitize (Gcc/Clang only)." OFF)
 option(ENABLE_SANITIZE_THREAD "Enable thread sanitize (Gcc/Clang only)." OFF)
+
+#include(${CMAKE_BINARY_DIR}/conan_toolchain.cmake)
 
 qt_add_executable(${APP_NAME}
     app/main.cpp

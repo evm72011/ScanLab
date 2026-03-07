@@ -3,6 +3,7 @@
 #include <QObject>
 #include <QString>
 #include <qqmlintegration.h>
+#include <QDebug>
 
 #include "device_type_mapper.h"
 #include "scanlab/hardware/device.h"
@@ -56,9 +57,10 @@ public:
 
     Q_INVOKABLE bool connect()
     {
-        const bool ok = hw_.connect(address_.toStdWString());
+        const auto result = hw_.connect(address_.toStdWString());
+        qInfo() << static_cast<int>(result);
         emit connectedChanged();
-        return ok;
+        return true;
     }
 
     Q_INVOKABLE void disconnect()
