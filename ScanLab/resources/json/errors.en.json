@@ -1,0 +1,10 @@
+{
+    "ConnectResult": {
+        "DeviceNotSet": "Device Not Set",
+        "AlreadyConnected": "Already Connected",
+        "OempaInterfaceUnavailable": "OempaInterfaceUnavailable",
+        "SetAddressFailed": "Unable to set address",
+        "BaseInterfaceUnavailable": "BaseInterfaceUnavailable",
+        "ConnectFailed": "Connect failed"
+    }
+}

@@ -17,7 +17,7 @@ class Device : public QObject
     Q_PROPERTY(DeviceType::Type type READ type WRITE setType NOTIFY typeChanged)
     Q_PROPERTY(QString address READ address WRITE setAddress NOTIFY addressChanged)
     Q_PROPERTY(bool connected READ connected NOTIFY connectedChanged)
-    Q_PROPERTY(QString lastConnectStatusText READ lastConnectStatusText NOTIFY lastConnectStatusTextChanged)
+    Q_PROPERTY(QString lastConnectStatusCode READ lastConnectStatusCode NOTIFY lastConnectStatusCodeChanged)
 
 public:
     explicit Device(QObject *parent = nullptr)
@@ -43,9 +43,9 @@ public:
         return address_;
     }
 
-    QString lastConnectStatusText() const
+    QString lastConnectStatusCode() const
     {
-        return lastConnectStatusText_;
+        return lastConnectStatusCode_;
     }
 
     void setAddress(const QString &value)
@@ -66,11 +66,11 @@ public:
         hw_.setDevice(toHardware(type_));
         const auto result = hw_.connect(address_.toStdWString());
 
-        lastConnectStatusText_ =
+        lastConnectStatusCode_ =
             QString::fromUtf8(magic_enum::enum_name(result).data());
 
         emit connectedChanged();
-        emit lastConnectStatusTextChanged();
+        emit lastConnectStatusCodeChanged();
 
         return static_cast<int>(result);
     }
@@ -88,11 +88,11 @@ signals:
     void typeChanged();
     void addressChanged();
     void connectedChanged();
-    void lastConnectStatusTextChanged();
+    void lastConnectStatusCodeChanged();
 
 private:
     DeviceType::Type type_ = DeviceType::OEMPAMax;
     QString address_ { "192.168.1.11" };
-    QString lastConnectStatusText_;
+    QString lastConnectStatusCode_;
     scanlab::hardware::Device hw_;
 };

@@ -4,6 +4,8 @@ set(QML_SINGLETONS
     themes/tokens/ColorTokensDark.qml
     themes/tokens/ColorTokensLight.qml
     themes/tokens/TypographyTokens.qml
+
+    utils/ErrorTextStore.qml
 )
 
 set_source_files_properties(
