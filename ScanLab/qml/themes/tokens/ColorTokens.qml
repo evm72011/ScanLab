@@ -15,6 +15,8 @@ QtObject {
 
     property color toolbarIcon
 
+    property color tabChecked
+    property color tabDefault
 
     property color statusbarBackground
 

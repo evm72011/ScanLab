@@ -19,6 +19,8 @@ ColorTokens {
 
     toolbarIcon: p.blue400
 
+    tabChecked: p.gray800
+    tabDefault: p.gray650
 
     statusbarBackground: p.gray850
 
