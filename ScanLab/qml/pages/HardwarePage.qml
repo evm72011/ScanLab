@@ -25,7 +25,7 @@ Item {
                 { value: SL.DeviceType.OEMPAMini, text: "OEMPA Mini" }
             ]
 
-            currentValue: backend.device.type
+            currentValue: backend?.device?.type ?? SL.DeviceType.None
 
             onActivated: function(value) {
                 console.log("Selected enum:", value)
@@ -41,7 +41,7 @@ Item {
             placeholderText: qsTr("Enter device address")
             infoText: qsTr("IP address or device path")
 
-            value: backend.device.address
+            value: backend?.device?.address ?? ""
 
             onValueEdited: function(value) {
                 backend.device.address = value
@@ -58,8 +58,6 @@ Item {
             iconSource: "qrc:/icons/connected.svg"
             onClicked: function(value) {
                 backend.device.connect();
-//                console.log("Device type:", backend.device.type)
-//                console.log("Address:", backend.device.address)
             }
         }
 

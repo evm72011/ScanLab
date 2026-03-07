@@ -38,6 +38,7 @@ bool Device::setDevice(DeviceType type)
 
 bool Device::connect(const std::wstring& address)
 {
+    connected_ = true;
     return true;
 
     if (!device_) {
