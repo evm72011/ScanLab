@@ -9,6 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 find_package(Qt6 REQUIRED COMPONENTS Quick QuickControls2)
+find_package(magic_enum REQUIRED)
 
 qt_standard_project_setup(REQUIRES 6.8)
 
@@ -38,6 +39,7 @@ target_link_libraries(${APP_NAME}
     PRIVATE
         Qt6::Quick
         Qt6::QuickControls2
+        magic_enum::magic_enum
 )
 
 qt_add_qml_module(${APP_NAME}

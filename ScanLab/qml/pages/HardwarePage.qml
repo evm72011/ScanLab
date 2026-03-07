@@ -57,7 +57,13 @@ Item {
             text: qsTr("Connect")
             iconSource: "qrc:/icons/connected.svg"
             onClicked: function(value) {
-                backend.device.connect();
+                const result = backend.device.connect();
+                if (result !== 0) {
+                    SL.ErrorDialog {
+                        
+                    }
+                    console.log(backend.device.lastConnectStatusText);
+                }
             }
         }
 

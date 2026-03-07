@@ -7,6 +7,7 @@
 
 #include "device_type_mapper.h"
 #include "scanlab/hardware/device.h"
+#include <magic_enum/magic_enum.hpp>
 
 class Device : public QObject
 {
@@ -16,6 +17,7 @@ class Device : public QObject
     Q_PROPERTY(DeviceType::Type type READ type WRITE setType NOTIFY typeChanged)
     Q_PROPERTY(QString address READ address WRITE setAddress NOTIFY addressChanged)
     Q_PROPERTY(bool connected READ connected NOTIFY connectedChanged)
+    Q_PROPERTY(QString lastConnectStatusText READ lastConnectStatusText NOTIFY lastConnectStatusTextChanged)
 
 public:
     explicit Device(QObject *parent = nullptr)
@@ -33,13 +35,17 @@ public:
         if (type_ == value)
             return;
         type_ = value;
-        hw_.setDevice(toHardware(type_));
         emit typeChanged();
     }
 
     QString address() const
     {
         return address_;
+    }
+
+    QString lastConnectStatusText() const
+    {
+        return lastConnectStatusText_;
     }
 
     void setAddress(const QString &value)
@@ -55,12 +61,18 @@ public:
         return hw_.isConnected();
     }
 
-    Q_INVOKABLE bool connect()
+    Q_INVOKABLE int connect()
     {
+        hw_.setDevice(toHardware(type_));
         const auto result = hw_.connect(address_.toStdWString());
-        qInfo() << static_cast<int>(result);
+
+        lastConnectStatusText_ =
+            QString::fromUtf8(magic_enum::enum_name(result).data());
+
         emit connectedChanged();
-        return true;
+        emit lastConnectStatusTextChanged();
+
+        return static_cast<int>(result);
     }
 
     Q_INVOKABLE void disconnect()
@@ -76,9 +88,11 @@ signals:
     void typeChanged();
     void addressChanged();
     void connectedChanged();
+    void lastConnectStatusTextChanged();
 
 private:
     DeviceType::Type type_ = DeviceType::OEMPAMax;
     QString address_ { "192.168.1.11" };
+    QString lastConnectStatusText_;
     scanlab::hardware::Device hw_;
 };
