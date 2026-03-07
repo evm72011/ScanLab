@@ -6,7 +6,7 @@ ToolBar {
     id: root
     implicitHeight: 30
 
-    property bool connected: false
+    property bool connected: backend.device.connected
     property bool pulsing: false
 
     background: Rectangle {

@@ -13,7 +13,6 @@ Backend::Backend(QObject *parent)
     : QObject(parent)
 {
     device_.setType(DeviceType::OEMPAMax);
-    device_.setAddress("192.168.1.11");
 }
 
 void Backend::setConnected(bool value)

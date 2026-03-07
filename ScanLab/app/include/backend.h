@@ -30,7 +30,4 @@ private:
 private:
     bool connected_ = false;
     Device device_{this};
-
-    // TODO: реальный указатель на девайс
-    // std::unique_ptr<CHWDeviceOEMPAmax> hw_;
 };

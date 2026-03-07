@@ -57,8 +57,9 @@ Item {
             text: qsTr("Connect")
             iconSource: "qrc:/icons/connected.svg"
             onClicked: function(value) {
-                console.log("Device type:", backend.device.type)
-                console.log("Address:", backend.device.address)
+                backend.device.connect();
+//                console.log("Device type:", backend.device.type)
+//                console.log("Address:", backend.device.address)
             }
         }
 

@@ -2,7 +2,6 @@ set(OEMPA_BIN_DIR "${OEMPA_SDK_DIR}/UTKernel/x64/Release")
 
 if(OEMPA_ENABLE)
 
-    # --- ПРОВЕРКИ ---
     if(NOT DEFINED OEMPA_SDK_DIR OR OEMPA_SDK_DIR STREQUAL "")
         message(FATAL_ERROR "OEMPA_ENABLE=ON, but OEMPA_SDK_DIR is not set.")
     endif()
@@ -53,7 +52,7 @@ function(target_add_oempa)
         return()
     endif()
     
-    target_include_directories(${TAO_TARGET} PRIVATE
+    target_include_directories(${TAO_TARGET} SYSTEM PRIVATE
         ${OEMPA_SDK_DIR}/Common
         ${OEMPA_SDK_DIR}/UserHeaders/x64
     )

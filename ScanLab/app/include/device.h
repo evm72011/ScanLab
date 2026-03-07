@@ -4,7 +4,8 @@
 #include <QString>
 #include <qqmlintegration.h>
 
-#include "devicetype.h"
+#include "device_type_mapper.h"
+#include "scanlab/hardware/device.h"
 
 class Device : public QObject
 {
@@ -13,6 +14,7 @@ class Device : public QObject
 
     Q_PROPERTY(DeviceType::Type type READ type WRITE setType NOTIFY typeChanged)
     Q_PROPERTY(QString address READ address WRITE setAddress NOTIFY addressChanged)
+    Q_PROPERTY(bool connected READ connected NOTIFY connectedChanged)
 
 public:
     explicit Device(QObject *parent = nullptr)
@@ -30,6 +32,7 @@ public:
         if (type_ == value)
             return;
         type_ = value;
+        hw_.setDevice(toHardware(type_));
         emit typeChanged();
     }
 
@@ -46,11 +49,34 @@ public:
         emit addressChanged();
     }
 
+    bool connected() const
+    {
+        return hw_.isConnected();
+    }
+
+    Q_INVOKABLE bool connect()
+    {
+        const bool ok = hw_.connect(address_.toStdWString());
+        emit connectedChanged();
+        return ok;
+    }
+
+    Q_INVOKABLE void disconnect()
+    {
+        const bool wasConnected = connected();
+        hw_.disconnect();
+
+        if (wasConnected != connected())
+            emit connectedChanged();
+    }
+
 signals:
     void typeChanged();
     void addressChanged();
+    void connectedChanged();
 
 private:
     DeviceType::Type type_ = DeviceType::OEMPAMax;
-    QString address_;
+    QString address_ { "192.168.1.11" };
+    scanlab::hardware::Device hw_;
 };

@@ -11,7 +11,8 @@ class DeviceType : public QObject
 
 public:
     enum Type {
-        OEMPAMax = 0,
+        None = 0,
+        OEMPAMax,
         OEMPAMini
     };
     Q_ENUM(Type)
