@@ -6,6 +6,7 @@
 #include <UTDriverOEMPA.h>
 
 #include "scanlab/hardware/device_type.h"
+#include "scanlab/hardware/connect_result.h"
 
 namespace scanlab::hardware {
 
@@ -24,7 +25,7 @@ public:
     Device& operator=(Device&&) noexcept;
 
     bool setDevice(DeviceType type);
-    bool connect(const std::wstring& address);
+    ConnectResult connect(const std::wstring& address);
     void disconnect();
 
     bool hasDevice() const;
@@ -37,4 +38,5 @@ private:
     std::unique_ptr<CHWDeviceOEMPA> device_;
     bool connected_ = false;
 };
-}
+
+} // namespace scanlab::hardware

@@ -36,29 +36,36 @@ bool Device::setDevice(DeviceType type)
     return true;
 }
 
-bool Device::connect(const std::wstring& address)
+ConnectResult Device::connect(const std::wstring& address)
 {
-    connected_ = true;
-    return true;
-
     if (!device_) {
-        return false;
+        return ConnectResult::DeviceNotSet;
+    }
+
+    if (connected_) {
+        return ConnectResult::AlreadyConnected;
     }
 
     auto* swOempa = device_->GetSWDeviceOEMPA();
-    if (!swOempa || !swOempa->SetAddress(address.c_str())) {
-        connected_ = false;
-        return false;
+    if (!swOempa) {
+        return ConnectResult::OempaInterfaceUnavailable;
+    }
+
+    if (!swOempa->SetAddress(address.c_str())) {
+        return ConnectResult::SetAddressFailed;
     }
 
     auto* swBase = device_->GetSWDevice();
-    if (!swBase || !swBase->SetConnectionState(eConnected, true)) {
-        connected_ = false;
-        return false;
+    if (!swBase) {
+        return ConnectResult::BaseInterfaceUnavailable;
+    }
+
+    if (!swBase->SetConnectionState(eConnected, true)) {
+        return ConnectResult::ConnectFailed;
     }
 
     connected_ = true;
-    return true;
+    return ConnectResult::Success;
 }
 
 void Device::disconnect()
@@ -91,4 +98,5 @@ const CHWDeviceOEMPA* Device::get() const
 {
     return device_.get();
 }
-}
+
+} // namespace scanlab::hardware

@@ -10,4 +10,4 @@ enum class DeviceType: uint8_t
     OEMPAMini
 };
 
-}
+} // namespace scanlab::hardware
