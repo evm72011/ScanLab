@@ -1,4 +1,5 @@
 .vscode
 .qtcreator
+.venv
 build
 external
