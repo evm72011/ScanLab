@@ -34,6 +34,7 @@ Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
             currentIndex: tabBar.currentIndex
+            interactive: false
 
             SL.ScanAPage {
                 active: root.active && stack.currentIndex === 0

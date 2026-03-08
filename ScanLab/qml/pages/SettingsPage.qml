@@ -33,6 +33,7 @@ Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
             currentIndex: tabBar.currentIndex
+            interactive: false
 
             SL.HardwarePage {}
 
