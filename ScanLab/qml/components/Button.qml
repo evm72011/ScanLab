@@ -8,6 +8,7 @@ Rectangle {
     property url iconSource: ""
     property int iconSize: 16
     property int cornerRadius: 10
+    property bool busy: false
 
     signal clicked()
 
@@ -38,24 +39,41 @@ Rectangle {
     }
 
     Image {
-        visible: root.iconSource !== ""
-        source: root.iconSource
+        id: icon
+
+        visible: root.iconSource !== "" || root.busy
+        source: root.busy ? "qrc:/icons/update.svg" : root.iconSource
+
         width: root.iconSize
         height: root.iconSize
+
         anchors.left: parent.left
         anchors.leftMargin: 12
         anchors.verticalCenter: parent.verticalCenter
+
         fillMode: Image.PreserveAspectFit
         smooth: true
         opacity: root.enabled ? 1.0 : 0.35
+
+        transformOrigin: Item.Center
+
+        RotationAnimator on rotation {
+            running: root.busy
+            from: 0
+            to: 360
+            duration: 900
+            loops: Animation.Infinite
+        }
     }
 
     MouseArea {
         id: ma
         anchors.fill: parent
-        enabled: root.enabled
-        hoverEnabled: root.enabled
-        cursorShape: root.enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
+        enabled: root.enabled && !root.busy
+        hoverEnabled: root.enabled && !root.busy
+        cursorShape: (root.enabled && !root.busy)
+            ? Qt.PointingHandCursor
+            : Qt.ArrowCursor
 
         onClicked: root.clicked()
     }

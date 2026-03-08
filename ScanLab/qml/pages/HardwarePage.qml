@@ -64,6 +64,7 @@ Item {
             text: backend?.device?.connecting ? qsTr("Connecting...") : qsTr("Connect")
             iconSource: "qrc:/icons/connected.svg"
             enabled: !backend?.device?.connecting
+            busy: !!backend?.device?.connecting
 
             width: 160
 
@@ -73,7 +74,7 @@ Item {
         }
 
         Connections {
-            target: backend?.device
+            target: backend?.device ?? {}
 
             function onConnectFinished(result) {
                 if (result !== 0) {
