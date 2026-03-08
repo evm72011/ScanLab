@@ -50,8 +50,10 @@ qt_add_qml_module(${APP_NAME}
         app/include/backend.h
         app/include/device_type.h
         app/include/device.h
+        app/include/device_worker.h
 
         app/src/backend.cpp
+        app/src/device.cpp
 )
 
 include(GNUInstallDirs)

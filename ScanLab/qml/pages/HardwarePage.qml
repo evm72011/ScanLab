@@ -53,18 +53,31 @@ Item {
 
         SL.Button {
             text: qsTr("Ping")
+            width: 160
+
             onClicked: {
                 notImplementedDialog.open();
             }
         }
 
         SL.Button {
-            text: qsTr("Connect")
+            text: backend.device.connecting ? qsTr("Connecting...") : qsTr("Connect")
             iconSource: "qrc:/icons/connected.svg"
-            onClicked: function(value) {
-                const result = backend.device.connect(); // TODO: remove from the UI thread
+            enabled: !backend.device.connecting
+
+            width: 160
+
+            onClicked: {
+                backend.device.connectDevice()
+            }
+        }
+
+        Connections {
+            target: backend.device
+
+            function onConnectFinished(result) {
                 if (result !== 0) {
-                    connectionErrorDialog.open();
+                    connectionErrorDialog.open()
                 }
             }
         }
@@ -73,7 +86,7 @@ Item {
             id: connectionErrorDialog
             messageType: MessageDialog.Type.Error
             shortText: qsTr("Connection error")
-            detailsText: String(backend.device.lastConnectStatusCode)
+            detailsText: `Error Code: ${backend.device.lastConnectStatusCode}`
         }
 
         SL.MessageDialog {

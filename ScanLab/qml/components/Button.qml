@@ -15,12 +15,18 @@ Rectangle {
     height: 40
     radius: cornerRadius
 
-    color: ma.pressed ? SL.Theme.colors.controlDown
-         : ma.containsMouse ? SL.Theme.colors.controlHovered
-         : SL.Theme.colors.controlBackground
+    color: !root.enabled
+         ? SL.Theme.colors.controlBackground
+         : ma.pressed
+            ? SL.Theme.colors.controlDown
+            : ma.containsMouse
+                ? SL.Theme.colors.controlHovered
+                : SL.Theme.colors.controlBackground
 
     border.width: 1
     border.color: SL.Theme.colors.border
+
+    opacity: root.enabled ? 1.0 : 0.55
 
     Text {
         anchors.centerIn: parent
@@ -41,13 +47,16 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         fillMode: Image.PreserveAspectFit
         smooth: true
+        opacity: root.enabled ? 1.0 : 0.35
     }
 
     MouseArea {
         id: ma
         anchors.fill: parent
-        hoverEnabled: true
-        cursorShape: Qt.PointingHandCursor
+        enabled: root.enabled
+        hoverEnabled: root.enabled
+        cursorShape: root.enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
+
         onClicked: root.clicked()
     }
 }
