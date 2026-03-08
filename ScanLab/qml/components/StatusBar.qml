@@ -7,10 +7,12 @@ ToolBar {
     implicitHeight: 30
 
     property bool connected: backend?.device?.connected ?? false
+    property bool connecting: backend?.device?.connecting ?? false
     property bool pulsing: false
 
     background: Rectangle {
         color: SL.Theme.colors.statusbarBackground
+
         Rectangle {
             anchors.left: parent.left
             anchors.right: parent.right
@@ -29,14 +31,35 @@ ToolBar {
             spacing: 8
 
             StatusChip {
-                iconSource: root.connected ? "qrc:/icons/connected.svg" : "qrc:/icons/disconnected.svg"
-                text: root.connected ? qsTr("Connected") : qsTr("Disconnected")
+                visible: root.connecting
+                iconSource: "qrc:/icons/update.svg"
+                iconOpacity: 0.8
+                rotateIcon: true
+                text: qsTr("Connecting")
             }
 
             StatusChip {
-                iconSource: root.pulsing ? "qrc:/icons/connected.svg" : "qrc:/icons/disconnected.svg"
-                text: root.pulsing ? qsTr("Pulsing") : qsTr("Not pulsing")
-                visible: root.connected
+                visible: !root.connecting && root.connected
+                iconSource: "qrc:/icons/connected.svg"
+                text: qsTr("Connected")
+            }
+
+            StatusChip {
+                visible: !root.connecting && !root.connected
+                iconSource: "qrc:/icons/disconnected.svg"
+                text: qsTr("Disconnected")
+            }
+
+            StatusChip {
+                iconSource: root.pulsing
+                    ? "qrc:/icons/connected.svg"
+                    : "qrc:/icons/disconnected.svg"
+
+                text: root.pulsing
+                    ? qsTr("Pulsing")
+                    : qsTr("Not pulsing")
+
+                visible: root.connected && !root.connecting
             }
         }
     }

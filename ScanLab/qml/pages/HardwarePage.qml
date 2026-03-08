@@ -61,9 +61,9 @@ Item {
         }
 
         SL.Button {
-            text: backend.device.connecting ? qsTr("Connecting...") : qsTr("Connect")
+            text: backend?.device?.connecting ? qsTr("Connecting...") : qsTr("Connect")
             iconSource: "qrc:/icons/connected.svg"
-            enabled: !backend.device.connecting
+            enabled: !backend?.device?.connecting
 
             width: 160
 
@@ -73,7 +73,7 @@ Item {
         }
 
         Connections {
-            target: backend.device
+            target: backend?.device
 
             function onConnectFinished(result) {
                 if (result !== 0) {
@@ -86,7 +86,7 @@ Item {
             id: connectionErrorDialog
             messageType: MessageDialog.Type.Error
             shortText: qsTr("Connection error")
-            detailsText: `Error Code: ${backend.device.lastConnectStatusCode}`
+            detailsText: `Error Code: ${backend?.device?.lastConnectStatusCode ?? ''}`
         }
 
         SL.MessageDialog {
