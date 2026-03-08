@@ -53,7 +53,7 @@ Item {
 
         SL.Button {
             text: qsTr("Ping")
-            width: 160
+            width: 150
 
             onClicked: {
                 notImplementedDialog.open();
@@ -66,7 +66,7 @@ Item {
             enabled: !backend?.device?.connecting
             busy: !!backend?.device?.connecting
 
-            width: 160
+            width: 150
 
             onClicked: {
                 backend.device.connectDevice()
@@ -74,7 +74,7 @@ Item {
         }
 
         Connections {
-            target: backend?.device ?? {}
+            target: backend?.device ?? null
 
             function onConnectFinished(result) {
                 if (result !== 0) {
