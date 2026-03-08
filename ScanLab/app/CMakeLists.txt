@@ -1,5 +1,9 @@
 find_package(Qt6 REQUIRED COMPONENTS Quick QuickControls2 Svg)
 
+set_target_properties(${APP_NAME} PROPERTIES
+    OUTPUT_NAME ScanLab
+)
+
 target_include_directories(${APP_NAME} PRIVATE
     include
 )
