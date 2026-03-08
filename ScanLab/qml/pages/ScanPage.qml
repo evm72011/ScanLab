@@ -4,6 +4,9 @@ import QtQuick.Layouts
 import ScanLab 1.0 as SL
 
 Item {
+    id: root
+    property bool active: false
+
     ColumnLayout {
         width: parent ? parent.width : 0
         height: parent ? parent.height : 0
@@ -22,7 +25,7 @@ Item {
             }
 
             SL.TabButton {
-                text: qsTr("C-Scyn")
+                text: qsTr("C-Scan")
             }
         }
 
@@ -32,11 +35,17 @@ Item {
             Layout.fillHeight: true
             currentIndex: tabBar.currentIndex
 
-            SL.ScanAPage {}
+            SL.ScanAPage {
+                active: root.active && stack.currentIndex === 0
+            }
 
-            SL.ScanBPage {}
+            SL.ScanBPage {
+                active: root.active && stack.currentIndex === 1
+            }
 
-            SL.ScanCPage {}
+            SL.ScanCPage {
+                active: root.active && stack.currentIndex === 2
+            }
         }
     }
 }

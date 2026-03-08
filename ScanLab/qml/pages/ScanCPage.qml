@@ -4,6 +4,8 @@ import QtQuick.Layouts
 import ScanLab 1.0 as SL
 
 Item {
+    property bool active: false
+
     Rectangle {
         anchors.fill: parent
         color: SL.Theme.colors.windowBackground

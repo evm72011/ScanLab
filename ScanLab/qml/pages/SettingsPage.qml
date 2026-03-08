@@ -4,6 +4,8 @@ import QtQuick.Layouts
 import ScanLab 1.0 as SL
 
 Item {
+    property bool active: false
+
     ColumnLayout {
         width: parent ? parent.width : 0
         height: parent ? parent.height : 0

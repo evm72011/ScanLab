@@ -30,7 +30,7 @@ ColumnLayout {
     }
 
     SwipeView {
-        id: swipeView
+        id: stack
         Layout.fillWidth: true
         Layout.fillHeight: true
 
@@ -38,8 +38,13 @@ ColumnLayout {
 
         currentIndex: tabBar.currentIndex
 
-        SL.SettingsPage { }
-        SL.ScanPage { }
+        SL.SettingsPage {
+            active: stack.currentIndex === 0
+        }
+
+        SL.ScanPage {
+            active: stack.currentIndex === 1
+        }
     }
 
     SL.StatusBar {
