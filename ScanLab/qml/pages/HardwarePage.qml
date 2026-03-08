@@ -54,7 +54,7 @@ Item {
         SL.Button {
             text: qsTr("Ping")
             onClicked: {
-                connectionErrorDialog.open();
+                notImplementedDialog.open();
             }
         }
 
@@ -71,10 +71,16 @@ Item {
 
         SL.MessageDialog {
             id: connectionErrorDialog
-            type: ErrorDialog.Error
+            messageType: error
+            shortText: qsTr("Connection error")
+            detailsText: String(backend.device.lastConnectStatusCode)
+        }
 
-            shortText: qsTr("Connection error");
-            detailsText: backend.device.lastConnectStatusCode
+        SL.MessageDialog {
+            id: notImplementedDialog
+            messageType: warning
+            shortText: qsTr("Not implemented")
+            detailsText: qsTr("The feature is under the construction")
         }
 
         Item { Layout.fillHeight: true }
