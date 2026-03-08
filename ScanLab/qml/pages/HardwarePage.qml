@@ -2,7 +2,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import ScanLab 1.0 as SL
-import "../utils" as Utils
 
 Item {
     Rectangle {
@@ -57,11 +56,10 @@ Item {
             iconSource: "qrc:/icons/connected.svg"
             onClicked: function(value) {
                 const result = backend.device.connect();
+                console.log(result);
                 if (result !== 0) {
                     errorDialog.shortText = qsTr("Connection error");
-                    const lastConnectStatusText = backend.device.lastConnectStatusText;
-                    const detailsText = Utils.ErrorTextStore.get("ConnectResult", lastConnectStatusText)
-                    errorDialog.detailsText = detailsText; //backend.device.lastConnectStatusText;
+                    errorDialog.detailsText = backend.device.lastConnectStatusCode;
                     errorDialog.open();
                 }
             }

@@ -8,6 +8,4 @@ qt_add_resources(${APP_NAME} app_resources
         icons/info.svg
         icons/scan.svg
         icons/service.svg
-
-        utils/ErrorTextUtil.js
 )
