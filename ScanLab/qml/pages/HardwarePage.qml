@@ -60,7 +60,7 @@ Item {
             text: qsTr("Connect")
             iconSource: "qrc:/icons/connected.svg"
             onClicked: function(value) {
-                const result = backend.device.connect();
+                const result = backend.device.connect(); // TODO: remove from the UI thread
                 if (result !== 0) {
                     errorDialog.shortText = qsTr("Connection error");
                     errorDialog.detailsText = backend.device.lastConnectStatusCode;

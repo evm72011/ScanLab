@@ -27,6 +27,9 @@ set(QML_MODULE_FILES
     pages/LoadPage.qml
     pages/MainPage.qml
     pages/ScanPage.qml
+    pages/ScanAPage.qml
+    pages/ScanBPage.qml
+    pages/ScanCPage.qml
     pages/SettingsPage.qml
 
     Main.qml
