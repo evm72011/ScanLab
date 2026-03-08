@@ -71,14 +71,14 @@ Item {
 
         SL.MessageDialog {
             id: connectionErrorDialog
-            messageType: error
+            messageType: MessageDialog.Type.Error
             shortText: qsTr("Connection error")
             detailsText: String(backend.device.lastConnectStatusCode)
         }
 
         SL.MessageDialog {
             id: notImplementedDialog
-            messageType: warning
+            messageType: MessageDialog.Type.Info
             shortText: qsTr("Not implemented")
             detailsText: qsTr("The feature is under the construction")
         }
