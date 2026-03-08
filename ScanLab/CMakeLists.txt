@@ -46,12 +46,16 @@ qt_add_qml_module(${APP_NAME}
     URI ScanLab
     VERSION 1.0
     SOURCES
+        app/include/a_scan_view.h
+        app/include/a_scan_worker.h
         app/include/app_settings.h
         app/include/backend.h
         app/include/device_type.h
         app/include/device.h
         app/include/device_worker.h
 
+        app/src/a_scan_view.cpp
+        app/src/a_scan_worker.cpp
         app/src/backend.cpp
         app/src/device.cpp
 )
