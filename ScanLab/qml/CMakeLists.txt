@@ -21,7 +21,7 @@ set(QML_MODULE_FILES
     components/TabButton.qml
     components/TextField.qml
 
-    dialogs/ErrorDialog.qml
+    dialogs/MessageDialog.qml
 
     pages/HardwarePage.qml
     pages/LoadPage.qml

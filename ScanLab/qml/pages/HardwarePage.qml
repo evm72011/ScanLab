@@ -53,7 +53,9 @@ Item {
 
         SL.Button {
             text: qsTr("Ping")
-            onClicked: device.connect()
+            onClicked: {
+                connectionErrorDialog.open();
+            }
         }
 
         SL.Button {
@@ -62,15 +64,17 @@ Item {
             onClicked: function(value) {
                 const result = backend.device.connect(); // TODO: remove from the UI thread
                 if (result !== 0) {
-                    errorDialog.shortText = qsTr("Connection error");
-                    errorDialog.detailsText = backend.device.lastConnectStatusCode;
-                    errorDialog.open();
+                    connectionErrorDialog.open();
                 }
             }
         }
 
-        SL.ErrorDialog {
-            id: errorDialog
+        SL.MessageDialog {
+            id: connectionErrorDialog
+            type: ErrorDialog.Error
+
+            shortText: qsTr("Connection error");
+            detailsText: backend.device.lastConnectStatusCode
         }
 
         Item { Layout.fillHeight: true }

@@ -6,9 +6,28 @@ import ScanLab 1.0 as SL
 Dialog {
     id: root
 
+    enum Type {
+        Info,
+        Warning,
+        Error
+    }
+
+    property int type: Error
+
     property string shortText: ""
     property string detailsText: ""
-    property url iconSource: "qrc:/icons/error.svg"
+
+    property url iconSource: {
+        switch (root.type) {
+        case root.Type.Info:
+            return "qrc:/icons/information.svg"
+        case root.Type.Warning:
+            return "qrc:/icons/warning.svg"
+        case root.Type.Error:
+        default:
+            return "qrc:/icons/error.svg"
+        }
+    }
 
     modal: true
     focus: true
