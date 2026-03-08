@@ -29,6 +29,7 @@ Item {
 
             onActivated: function(value) {
                 backend.device.type = value
+                SL.AppSettings.setValue("Hardware/type", value)
             }
         }
 
@@ -39,10 +40,14 @@ Item {
             placeholderText: qsTr("Enter device address")
             infoText: qsTr("IP address or device path")
 
-            value: backend?.device?.address ?? ""
+            value:  backend?.device?.address ?? "" // SL.AppSettings.value("Hardware/address", backend?.device?.address ?? "")
 
             onValueEdited: function(value) {
-                backend.device.address = value
+                backend.device.address = value;
+            }
+
+            onEditingFinished: function(value) {
+                SL.AppSettings.setValue("Hardware/address", value)
             }
         }
 
@@ -56,7 +61,6 @@ Item {
             iconSource: "qrc:/icons/connected.svg"
             onClicked: function(value) {
                 const result = backend.device.connect();
-                console.log(result);
                 if (result !== 0) {
                     errorDialog.shortText = qsTr("Connection error");
                     errorDialog.detailsText = backend.device.lastConnectStatusCode;
@@ -70,6 +74,17 @@ Item {
         }
 
         Item { Layout.fillHeight: true }
+
+        Component.onCompleted: {
+            backend.device.address = SL.AppSettings.value(
+                "Hardware/address",
+                backend.device.address
+            )
+
+            backend.device.type = Number(
+                SL.AppSettings.value("Hardware/type", backend.device.type)
+            )
+        }
 
     }
 }
