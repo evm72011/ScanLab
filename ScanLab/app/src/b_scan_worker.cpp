@@ -44,7 +44,7 @@ void BScanWorker::stop()
     }
 
     timer_->stop();
-    timer_->deleteLater();
+    delete timer_;
     timer_ = nullptr;
 }
 
@@ -73,14 +73,13 @@ void BScanWorker::generate()
         return;
     }
 
-    phase_ += 0.15f;
-
+    // сдвиг вниз (новая строка сверху)
     std::memmove(
         buffer_.data() + width_,
         buffer_.data(),
         sizeof(float) * static_cast<size_t>(width_) * static_cast<size_t>(height_ - 1));
 
-    fillLine(buffer_.data(), 0);
+    fillLine(buffer_.data());
 
     emit frameReady(toImage());
 }
@@ -92,40 +91,45 @@ void BScanWorker::initializeFrame()
     }
 
     for (int y = 0; y < height_; ++y) {
-        fillLine(buffer_.data() + y * width_, y);
-        phase_ += 0.15f;
+        fillLine(buffer_.data() + y * width_);
     }
 
     emit frameReady(toImage());
 }
 
-void BScanWorker::fillLine(float* line, int lineIndex)
+void BScanWorker::fillLine(float* line)
 {
-    const float scanPos = height_ > 1
-                              ? static_cast<float>(lineIndex) / static_cast<float>(height_ - 1)
-                              : 0.0f;
+    // фиксированные отражатели (вертикальные линии)
+    const float c1 = 0.20f;
+    const float c2 = 0.50f;
+    const float c3 = 0.78f;
 
-    const float c1 = 0.20f + 0.015f * std::sin(phase_ * 0.7f + scanPos * 3.0f);
-    const float c2 = 0.50f + 0.030f * std::sin(phase_ * 0.5f + scanPos * 5.0f);
-    const float c3 = 0.78f + 0.020f * std::cos(phase_ * 0.9f + scanPos * 4.0f);
-
-    const float a1 = 0.80f;
-    const float a2 = 0.45f * (0.9f + 0.1f * std::sin(phase_));
-    const float a3 = 0.60f * (0.9f + 0.1f * std::cos(phase_ * 0.7f));
+    const float a1 = 0.9f;
+    const float a2 = 0.6f;
+    const float a3 = 0.75f;
 
     for (int x = 0; x < width_; ++x) {
         const float t = static_cast<float>(x) / static_cast<float>(width_ - 1);
 
-        float v = 0.02f * static_cast<float>(QRandomGenerator::global()->generateDouble() - 0.5);
+        // небольшой шум
+        float v = 0.03f * static_cast<float>(QRandomGenerator::global()->generateDouble() - 0.5);
 
-        v += pulse(t, c1, 0.010f, a1);
-        v += pulse(t, c2, 0.018f, a2);
-        v += pulse(t, c3, 0.025f, a3);
+        // отражатели
+        v += pulse(t, c1, 0.008f, a1);
+        v += pulse(t, c2, 0.012f, a2);
+        v += pulse(t, c3, 0.020f, a3);
 
-        v += 0.05f * std::sin(50.0f * t + phase_) * std::exp(-2.5f * t);
+        // экспоненциальное затухание по глубине (как в реальном ультразвуке)
+        v *= std::exp(-1.5f * t);
 
         line[x] = v;
     }
+}
+
+float BScanWorker::pulse(float t, float center, float width, float amplitude) const
+{
+    const float x = (t - center) / width;
+    return amplitude * std::exp(-x * x);
 }
 
 QImage BScanWorker::toImage() const
@@ -136,9 +140,10 @@ QImage BScanWorker::toImage() const
         uchar* row = image.scanLine(y);
 
         for (int x = 0; x < width_; ++x) {
-            const float v = buffer_[y * width_ + x];
+            float v = buffer_[y * width_ + x];
 
-            int gray = static_cast<int>((v + 1.0f) * 0.5f * 255.0f);
+            // нормализация (envelope)
+            int gray = static_cast<int>(v * 255.0f);
             gray = std::clamp(gray, 0, 255);
 
             row[x] = static_cast<uchar>(gray);
@@ -146,10 +151,4 @@ QImage BScanWorker::toImage() const
     }
 
     return image;
-}
-
-float BScanWorker::pulse(float t, float center, float width, float amplitude) const
-{
-    const float x = (t - center) / width;
-    return amplitude * std::exp(-x * x) * std::sin(16.0f * x);
 }

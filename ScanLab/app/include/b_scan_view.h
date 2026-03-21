@@ -1,13 +1,15 @@
 #pragma once
 
 #include <QImage>
-#include <QQuickItem>
+#include <QMutex>
+#include <QPainter>
+#include <QQuickPaintedItem>
 #include <QThread>
 #include <qqmlintegration.h>
 
 class BScanWorker;
 
-class BScanView : public QQuickItem
+class BScanView : public QQuickPaintedItem
 {
     Q_OBJECT
     QML_ELEMENT
@@ -21,6 +23,8 @@ public:
     bool active() const;
     void setActive(bool value);
 
+    void paint(QPainter* painter) override;
+
 signals:
     void activeChanged();
 
@@ -28,17 +32,12 @@ signals:
     void requestStop();
     void requestResize(int width, int height);
 
-protected:
-    QSGNode* updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData* updatePaintNodeData) override;
-    void releaseResources() override;
-
 private slots:
     void onFrameReady(const QImage& image);
-    void invalidateSceneGraph();
 
 private:
+    QMutex imageMutex_;
     QImage image_;
-    bool imageDirty_ = false;
     bool active_ = false;
 
     QThread workerThread_;

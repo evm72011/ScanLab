@@ -1,35 +1,12 @@
 #include "b_scan_view.h"
 #include "b_scan_worker.h"
 
-#include <QQuickWindow>
-#include <QSGSimpleTextureNode>
-#include <QSGTexture>
-#include <QRunnable>
-
-namespace
-{
-class TextureCleanupJob final : public QRunnable
-{
-public:
-    explicit TextureCleanupJob(QSGTexture* texture)
-        : texture_(texture)
-    {
-    }
-
-    void run() override
-    {
-        delete texture_;
-    }
-
-private:
-    QSGTexture* texture_ = nullptr;
-};
-}
+#include <QMutexLocker>
 
 BScanView::BScanView(QQuickItem* parent)
-    : QQuickItem(parent)
+    : QQuickPaintedItem(parent)
 {
-    setFlag(ItemHasContents, true);
+    setRenderTarget(QQuickPaintedItem::Image);
 
     worker_ = new BScanWorker();
     worker_->moveToThread(&workerThread_);
@@ -87,58 +64,26 @@ void BScanView::setActive(bool value)
 
 void BScanView::onFrameReady(const QImage& image)
 {
-    image_ = image;
-    imageDirty_ = true;
+    {
+        QMutexLocker locker(&imageMutex_);
+        image_ = image.copy();
+    }
+
     update();
 }
 
-QSGNode* BScanView::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData*)
+void BScanView::paint(QPainter* painter)
 {
-    if (window() == nullptr || image_.isNull()) {
-        delete oldNode;
-        return nullptr;
+    QImage imageCopy;
+
+    {
+        QMutexLocker locker(&imageMutex_);
+        imageCopy = image_;
     }
 
-    auto* node = static_cast<QSGSimpleTextureNode*>(oldNode);
-    if (node == nullptr) {
-        node = new QSGSimpleTextureNode();
-        node->setOwnsTexture(true);
+    if (imageCopy.isNull()) {
+        return;
     }
 
-    if (imageDirty_) {
-        QSGTexture* newTexture = window()->createTextureFromImage(
-            image_,
-            QQuickWindow::TextureIsOpaque);
-
-        if (newTexture == nullptr) {
-            delete node;
-            return nullptr;
-        }
-
-        if (node->texture() != nullptr) {
-            delete node->texture();
-        }
-
-        node->setTexture(newTexture);
-        node->setRect(boundingRect());
-
-        imageDirty_ = false;
-    } else {
-        node->setRect(boundingRect());
-    }
-
-    return node;
-}
-
-void BScanView::releaseResources()
-{
-    if (window() != nullptr) {
-        window()->scheduleRenderJob(
-            new TextureCleanupJob(nullptr),
-            QQuickWindow::BeforeSynchronizingStage);
-    }
-}
-
-void BScanView::invalidateSceneGraph()
-{
+    painter->drawImage(boundingRect(), imageCopy);
 }
