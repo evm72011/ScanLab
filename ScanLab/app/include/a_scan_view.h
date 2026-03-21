@@ -1,14 +1,15 @@
 #pragma once
 
 #include <QMutex>
+#include <QQuickItem>
 #include <QThread>
 #include <QVector>
-#include <QQuickPaintedItem>
 #include <qqmlintegration.h>
 
+class QSGNode;
 class AScanWorker;
 
-class AScanView : public QQuickPaintedItem
+class AScanView : public QQuickItem
 {
     Q_OBJECT
     QML_ELEMENT
@@ -21,8 +22,6 @@ class AScanView : public QQuickPaintedItem
 public:
     explicit AScanView(QQuickItem* parent = nullptr);
     ~AScanView() override;
-
-    void paint(QPainter* painter) override;
 
     int sampleCount() const;
     void setSampleCount(int value);
@@ -46,14 +45,16 @@ signals:
     void requestStop();
     void requestSampleCount(int value);
 
+protected:
+    QSGNode* updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData* updatePaintNodeData) override;
+
 private slots:
     void onSamplesReady(const QVector<float>& samples);
 
 private:
-    void drawGrid(QPainter& p, const QRectF& r);
-    void drawAxes(QPainter& p, const QRectF& r);
-    void drawSignal(QPainter& p, const QRectF& r);
     qreal mapY(float v, qreal h) const;
+    void markGridDirty();
+    void markSignalDirty();
 
 private:
     QVector<float> samples_;
@@ -63,6 +64,9 @@ private:
     qreal minY_ = -1.0;
     qreal maxY_ = 1.0;
     bool active_ = false;
+
+    bool gridDirty_ = true;
+    bool signalDirty_ = true;
 
     QThread workerThread_;
     AScanWorker* worker_ = nullptr;

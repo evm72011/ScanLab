@@ -1,15 +1,91 @@
 #include "a_scan_view.h"
 #include "a_scan_worker.h"
 
-#include <QPainter>
-#include <QPainterPath>
-#include <QPen>
+#include <QColor>
 #include <QMetaType>
+#include <QSGFlatColorMaterial>
+#include <QSGGeometry>
+#include <QSGGeometryNode>
+#include <QSGNode>
+
+namespace
+{
+constexpr int GridNodeIndex = 0;
+constexpr int AxisNodeIndex = 1;
+constexpr int SignalNodeIndex = 2;
+
+QSGGeometryNode* createLineNode(const QColor& color, float lineWidth)
+{
+    auto* node = new QSGGeometryNode();
+
+    auto* geometry = new QSGGeometry(QSGGeometry::defaultAttributes_Point2D(), 0);
+    geometry->setDrawingMode(QSGGeometry::DrawLines);
+    geometry->setLineWidth(lineWidth);
+
+    node->setGeometry(geometry);
+    node->setFlag(QSGNode::OwnsGeometry);
+
+    auto* material = new QSGFlatColorMaterial();
+    material->setColor(color);
+
+    node->setMaterial(material);
+    node->setFlag(QSGNode::OwnsMaterial);
+
+    return node;
+}
+
+QSGGeometryNode* createLineStripNode(const QColor& color, float lineWidth)
+{
+    auto* node = new QSGGeometryNode();
+
+    auto* geometry = new QSGGeometry(QSGGeometry::defaultAttributes_Point2D(), 0);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    geometry->setDrawingMode(QSGGeometry::DrawLineStrip);
+#else
+    geometry->setDrawingMode(GL_LINE_STRIP);
+#endif
+    geometry->setLineWidth(lineWidth);
+
+    node->setGeometry(geometry);
+    node->setFlag(QSGNode::OwnsGeometry);
+
+    auto* material = new QSGFlatColorMaterial();
+    material->setColor(color);
+
+    node->setMaterial(material);
+    node->setFlag(QSGNode::OwnsMaterial);
+
+    return node;
+}
+
+QSGNode* ensureRootNode(QSGNode* oldNode)
+{
+    if (oldNode != nullptr) {
+        return oldNode;
+    }
+
+    auto* root = new QSGNode();
+    root->appendChildNode(createLineNode(QColor(255, 255, 255, 25), 1.0f));
+    root->appendChildNode(createLineNode(QColor(255, 255, 255, 56), 1.0f));
+    root->appendChildNode(createLineStripNode(QColor("#6aa9ff"), 1.0f));
+    return root;
+}
+
+QSGGeometryNode* childGeometryNode(QSGNode* root, int index)
+{
+    QSGNode* child = root->firstChild();
+    for (int i = 0; child != nullptr && i < index; ++i) {
+        child = child->nextSibling();
+    }
+
+    return static_cast<QSGGeometryNode*>(child);
+}
+}
 
 AScanView::AScanView(QQuickItem* parent)
-    : QQuickPaintedItem(parent)
+    : QQuickItem(parent)
 {
-    setAntialiasing(true);
+    setFlag(ItemHasContents, true);
 
     qRegisterMetaType<QVector<float>>("QVector<float>");
 
@@ -26,6 +102,18 @@ AScanView::AScanView(QQuickItem* parent)
             this, &AScanView::onSamplesReady,
             Qt::QueuedConnection);
 
+    connect(this, &QQuickItem::widthChanged, this, [this]() {
+        markGridDirty();
+        markSignalDirty();
+        update();
+    });
+
+    connect(this, &QQuickItem::heightChanged, this, [this]() {
+        markGridDirty();
+        markSignalDirty();
+        update();
+    });
+
     workerThread_.start();
     emit requestSampleCount(sampleCount_);
 }
@@ -35,19 +123,6 @@ AScanView::~AScanView()
     emit requestStop();
     workerThread_.quit();
     workerThread_.wait();
-}
-
-void AScanView::paint(QPainter* painter)
-{
-    painter->setRenderHint(QPainter::Antialiasing, true);
-
-    const QRectF r = boundingRect();
-
-    painter->fillRect(r, QColor("#1e1e1e"));
-
-    drawGrid(*painter, r);
-    drawAxes(*painter, r);
-    drawSignal(*painter, r);
 }
 
 int AScanView::sampleCount() const
@@ -78,6 +153,8 @@ void AScanView::setMinY(qreal value)
     }
 
     minY_ = value;
+    markGridDirty();
+    markSignalDirty();
     update();
     emit minYChanged();
 }
@@ -94,6 +171,8 @@ void AScanView::setMaxY(qreal value)
     }
 
     maxY_ = value;
+    markGridDirty();
+    markSignalDirty();
     update();
     emit maxYChanged();
 }
@@ -127,83 +206,117 @@ void AScanView::onSamplesReady(const QVector<float>& samples)
         samples_ = samples;
     }
 
+    markSignalDirty();
     update();
 }
 
-void AScanView::drawGrid(QPainter& p, const QRectF& r)
+QSGNode* AScanView::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData*)
 {
-    p.save();
+    QSGNode* root = ensureRootNode(oldNode);
 
-    QPen pen(QColor(255, 255, 255, 25));
-    pen.setWidth(1);
-    p.setPen(pen);
+    auto* gridNode = childGeometryNode(root, GridNodeIndex);
+    auto* axisNode = childGeometryNode(root, AxisNodeIndex);
+    auto* signalNode = childGeometryNode(root, SignalNodeIndex);
 
-    constexpr int vSteps = 10;
-    constexpr int hSteps = 8;
+    const float w = static_cast<float>(width());
+    const float h = static_cast<float>(height());
 
-    for (int i = 0; i <= vSteps; ++i) {
-        const qreal x = r.left() + i * r.width() / vSteps;
-        p.drawLine(QPointF(x, r.top()), QPointF(x, r.bottom()));
+    if (w <= 0.0f || h <= 0.0f) {
+        return root;
     }
 
-    for (int i = 0; i <= hSteps; ++i) {
-        const qreal y = r.top() + i * r.height() / hSteps;
-        p.drawLine(QPointF(r.left(), y), QPointF(r.right(), y));
-    }
+    if (gridDirty_) {
+        constexpr int vSteps = 10;
+        constexpr int hSteps = 8;
+        constexpr int lineCount = (vSteps + 1) + (hSteps + 1);
+        constexpr int vertexCount = lineCount * 2;
 
-    p.restore();
-}
+        auto* geometry = gridNode->geometry();
+        geometry->allocate(vertexCount);
 
-void AScanView::drawAxes(QPainter& p, const QRectF& r)
-{
-    p.save();
+        auto* vertices = geometry->vertexDataAsPoint2D();
+        int index = 0;
 
-    QPen pen(QColor(255, 255, 255, 56));
-    pen.setWidth(1);
-    p.setPen(pen);
-
-    const qreal zeroY = r.top() + mapY(0.0f, r.height());
-    p.drawLine(QPointF(r.left(), zeroY), QPointF(r.right(), zeroY));
-
-    p.restore();
-}
-
-void AScanView::drawSignal(QPainter& p, const QRectF& r)
-{
-    QVector<float> data;
-    {
-        QMutexLocker locker(&samplesMutex_);
-        data = samples_;
-    }
-
-    if (data.size() < 2) {
-        return;
-    }
-
-    QPainterPath path;
-    for (int i = 0; i < data.size(); ++i) {
-        const qreal x = r.left() + i * (r.width() / (data.size() - 1));
-        const qreal y = r.top() + mapY(data[i], r.height());
-
-        if (i == 0) {
-            path.moveTo(x, y);
-        } else {
-            path.lineTo(x, y);
+        for (int i = 0; i <= vSteps; ++i) {
+            const float x = w * static_cast<float>(i) / static_cast<float>(vSteps);
+            vertices[index++].set(x, 0.0f);
+            vertices[index++].set(x, h);
         }
+
+        for (int i = 0; i <= hSteps; ++i) {
+            const float y = h * static_cast<float>(i) / static_cast<float>(hSteps);
+            vertices[index++].set(0.0f, y);
+            vertices[index++].set(w, y);
+        }
+
+        gridNode->markDirty(QSGNode::DirtyGeometry);
+        gridDirty_ = false;
     }
 
-    p.save();
+    if (gridDirty_ || axisNode->geometry()->vertexCount() == 0) {
+        // no-op, axis is handled below
+    }
 
-    QPen pen(QColor("#6aa9ff"));
-    pen.setWidthF(1.5);
-    p.setPen(pen);
-    p.drawPath(path);
+    if (axisNode != nullptr) {
+        auto* geometry = axisNode->geometry();
+        geometry->allocate(2);
 
-    p.restore();
+        auto* vertices = geometry->vertexDataAsPoint2D();
+        const float zeroY = static_cast<float>(mapY(0.0f, h));
+
+        vertices[0].set(0.0f, zeroY);
+        vertices[1].set(w, zeroY);
+
+        axisNode->markDirty(QSGNode::DirtyGeometry);
+    }
+
+    if (signalDirty_) {
+        QVector<float> data;
+        {
+            QMutexLocker locker(&samplesMutex_);
+            data = samples_;
+        }
+
+        auto* geometry = signalNode->geometry();
+
+        if (data.size() < 2) {
+            geometry->allocate(0);
+        } else {
+            geometry->allocate(data.size());
+            auto* vertices = geometry->vertexDataAsPoint2D();
+
+            const int last = data.size() - 1;
+            for (int i = 0; i < data.size(); ++i) {
+                const float x = w * static_cast<float>(i) / static_cast<float>(last);
+                const float y = static_cast<float>(mapY(data[i], h));
+                vertices[i].set(x, y);
+            }
+        }
+
+        signalNode->markDirty(QSGNode::DirtyGeometry);
+        signalDirty_ = false;
+    }
+
+    return root;
 }
 
 qreal AScanView::mapY(float v, qreal h) const
 {
-    const qreal t = (v - minY_) / (maxY_ - minY_);
+    const qreal range = maxY_ - minY_;
+    if (qFuzzyIsNull(range)) {
+        return h * 0.5;
+    }
+
+    const qreal t = (v - minY_) / range;
     return h * (1.0 - t);
+}
+
+void AScanView::markGridDirty()
+{
+    gridDirty_ = true;
+}
+
+void AScanView::markSignalDirty()
+{
+    signalDirty_ = true;
 }

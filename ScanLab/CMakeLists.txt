@@ -48,6 +48,9 @@ qt_add_qml_module(${APP_NAME}
     SOURCES
         app/include/a_scan_view.h
         app/include/a_scan_worker.h
+        app/include/b_scan_view.h
+        app/include/b_scan_worker.h
+
         app/include/app_settings.h
         app/include/backend.h
         app/include/device_type.h
@@ -56,6 +59,8 @@ qt_add_qml_module(${APP_NAME}
 
         app/src/a_scan_view.cpp
         app/src/a_scan_worker.cpp
+        app/src/b_scan_view.cpp
+        app/src/b_scan_worker.cpp
         app/src/backend.cpp
         app/src/device.cpp
 )

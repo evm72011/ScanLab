@@ -10,6 +10,7 @@ Rectangle {
     color: SL.Theme.colors.windowBackground
     border.width: 1
     border.color: SL.Theme.colors.border
+    clip: true
 
     SL.AScanView {
         anchors.fill: parent
