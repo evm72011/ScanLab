@@ -23,10 +23,8 @@ signals:
 private:
     void generate();
     void initializeFrame();
-    void fillLine(float* line);
+    void fillLine(float* line, int lineIndex);
     QImage toImage() const;
-
-    float pulse(float t, float center, float width, float amplitude) const;
 
 private:
     QTimer* timer_ = nullptr;
@@ -35,4 +33,5 @@ private:
     int height_ = 256;
 
     QVector<float> buffer_;
+    float phase_ = 0.0f;
 };

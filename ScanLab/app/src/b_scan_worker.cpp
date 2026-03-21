@@ -17,13 +17,8 @@ void BScanWorker::start()
         return;
     }
 
-    if (width_ < 2) {
-        width_ = 2;
-    }
-
-    if (height_ < 2) {
-        height_ = 2;
-    }
+    width_ = std::max(width_, 2);
+    height_ = std::max(height_, 2);
 
     buffer_.resize(width_ * height_);
     buffer_.fill(0.0f);
@@ -69,67 +64,83 @@ void BScanWorker::setSize(int width, int height)
 
 void BScanWorker::generate()
 {
-    if (width_ < 2 || height_ < 2 || buffer_.isEmpty()) {
+    if (buffer_.isEmpty()) {
         return;
     }
 
-    // сдвиг вниз (новая строка сверху)
+    phase_ += 0.04f;
+
     std::memmove(
         buffer_.data() + width_,
         buffer_.data(),
         sizeof(float) * static_cast<size_t>(width_) * static_cast<size_t>(height_ - 1));
 
-    fillLine(buffer_.data());
+    fillLine(buffer_.data(), 0);
 
     emit frameReady(toImage());
 }
 
 void BScanWorker::initializeFrame()
 {
-    if (width_ < 2 || height_ < 2) {
+    if (buffer_.isEmpty()) {
         return;
     }
 
     for (int y = 0; y < height_; ++y) {
-        fillLine(buffer_.data() + y * width_);
+        fillLine(buffer_.data() + y * width_, y);
+        phase_ += 0.02f;
     }
 
     emit frameReady(toImage());
 }
 
-void BScanWorker::fillLine(float* line)
+void BScanWorker::fillLine(float* line, int lineIndex)
 {
-    // фиксированные отражатели (вертикальные линии)
-    const float c1 = 0.20f;
-    const float c2 = 0.50f;
-    const float c3 = 0.78f;
+    const float scanPos = height_ > 1
+                              ? static_cast<float>(lineIndex) / static_cast<float>(height_ - 1)
+                              : 0.0f;
 
-    const float a1 = 0.9f;
-    const float a2 = 0.6f;
-    const float a3 = 0.75f;
+    const float entryCenter = 0.05f;
+
+    const float defectCenter =
+        0.38f + 0.025f * std::sin(scanPos * 8.0f + phase_);
+
+    const float backwallCenter =
+        0.82f + 0.020f * std::sin(scanPos * 5.0f + phase_ * 0.7f);
+
+    const float defectWindow =
+        std::exp(-std::pow((scanPos - 0.45f) / 0.16f, 2.0f));
 
     for (int x = 0; x < width_; ++x) {
         const float t = static_cast<float>(x) / static_cast<float>(width_ - 1);
 
-        // небольшой шум
-        float v = 0.03f * static_cast<float>(QRandomGenerator::global()->generateDouble() - 0.5);
+        float v = 0.0f;
 
-        // отражатели
-        v += pulse(t, c1, 0.008f, a1);
-        v += pulse(t, c2, 0.012f, a2);
-        v += pulse(t, c3, 0.020f, a3);
+        // Небольшой шум
+        v += 0.02f * static_cast<float>(QRandomGenerator::global()->generateDouble());
 
-        // экспоненциальное затухание по глубине (как в реальном ультразвуке)
-        v *= std::exp(-1.5f * t);
+        // Entry echo
+        v += 0.85f * std::exp(-std::pow((t - entryCenter) / 0.010f, 2.0f));
+
+        // Дефект
+        v += 0.55f * defectWindow * std::exp(-std::pow((t - defectCenter) / 0.014f, 2.0f));
+
+        // Backwall
+        float backwall = 0.45f * std::exp(-std::pow((t - backwallCenter) / 0.018f, 2.0f));
+
+        // Небольшая тень от дефекта на backwall
+        const float shadow =
+            1.0f - 0.35f * defectWindow * std::exp(-std::pow((t - backwallCenter) / 0.035f, 2.0f));
+
+        backwall *= std::max(shadow, 0.0f);
+
+        v += backwall;
+
+        // Затухание по глубине
+        v *= std::exp(-0.9f * t);
 
         line[x] = v;
     }
-}
-
-float BScanWorker::pulse(float t, float center, float width, float amplitude) const
-{
-    const float x = (t - center) / width;
-    return amplitude * std::exp(-x * x);
 }
 
 QImage BScanWorker::toImage() const
@@ -141,12 +152,12 @@ QImage BScanWorker::toImage() const
 
         for (int x = 0; x < width_; ++x) {
             float v = buffer_[y * width_ + x];
+            v = std::clamp(v, 0.0f, 1.0f);
 
-            // нормализация (envelope)
-            int gray = static_cast<int>(v * 255.0f);
-            gray = std::clamp(gray, 0, 255);
+            // Немного подсветить слабые сигналы
+            v = std::sqrt(v);
 
-            row[x] = static_cast<uchar>(gray);
+            row[x] = static_cast<uchar>(v * 255.0f);
         }
     }
 
