@@ -108,14 +108,31 @@ void CScanWorker::generate()
 
 QImage CScanWorker::toImage() const
 {
-    QImage image(width_, height_, QImage::Format_Grayscale8);
+    QImage image(width_, height_, QImage::Format_RGB32);
+
+    auto colorMap = [](float v) -> QRgb {
+        v = std::clamp(v, 0.0f, 1.0f);
+
+        float r = std::clamp(1.5f - std::fabs(4.0f * v - 3.0f), 0.0f, 1.0f);
+        float g = std::clamp(1.5f - std::fabs(4.0f * v - 2.0f), 0.0f, 1.0f);
+        float b = std::clamp(1.5f - std::fabs(4.0f * v - 1.0f), 0.0f, 1.0f);
+
+        return qRgb(
+            static_cast<int>(r * 255),
+            static_cast<int>(g * 255),
+            static_cast<int>(b * 255));
+    };
 
     for (int y = 0; y < height_; ++y) {
-        uchar* row = image.scanLine(y);
+        QRgb* row = reinterpret_cast<QRgb*>(image.scanLine(y));
 
         for (int x = 0; x < width_; ++x) {
-            float v = std::sqrt(buffer_[y * width_ + x]);
-            row[x] = static_cast<uchar>(255.0f * std::clamp(v, 0.0f, 1.0f));
+            float v = buffer_[y * width_ + x];
+
+            // немного усилить слабые сигналы
+            v = std::sqrt(std::clamp(v, 0.0f, 1.0f));
+
+            row[x] = colorMap(v);
         }
     }
 
