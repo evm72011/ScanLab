@@ -1,6 +1,6 @@
 pragma Singleton
 import QtQuick
-import ScanLab 1.0 as SL
+import ScanLab as SL
 
 QtObject {
     enum Mode { Dark, Light }

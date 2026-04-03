@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import ScanLab 1.0 as SL
+import ScanLab as SL
 
 Item {
     Rectangle {
@@ -69,15 +69,25 @@ Item {
         }
 
         SL.Button {
-            text: backend?.device?.connecting ? qsTr("Connecting...") : qsTr("Connect")
-            iconSource: "qrc:/icons/connected.svg"
+            text: backend?.device?.connecting
+                  ? qsTr("Connecting...")
+                  : backend?.device?.connected
+                    ? qsTr("Disconnect")
+                    : qsTr("Connect")
+            iconSource: backend?.device?.connected
+                        ? "qrc:/icons/disconnected.svg"
+                        : "qrc:/icons/connected.svg"
             enabled: !backend?.device?.connecting
             busy: !!backend?.device?.connecting
 
             width: 150
 
             onClicked: {
-                backend.device.connectDevice()
+                if (backend?.device?.connected) {
+                    backend.device.disconnectDevice();
+                } else {
+                    backend.device.connectDevice()
+                }
             }
         }
 

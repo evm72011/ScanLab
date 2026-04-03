@@ -1,5 +1,5 @@
 import QtQuick
-import ScanLab 1.0 as SL
+import ScanLab as SL
 
 Rectangle {
     id: root

@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Controls
-import ScanLab 1.0 as SL
+import ScanLab as SL
 
 ApplicationWindow {
     width: 1200

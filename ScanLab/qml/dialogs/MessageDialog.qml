@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import ScanLab 1.0 as SL
+import ScanLab as SL
 
 Dialog {
     id: root
