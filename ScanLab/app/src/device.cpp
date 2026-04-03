@@ -60,12 +60,10 @@ Device::Device(QObject* parent)
 Device::~Device()
 {
     if (worker_ && workerThread_.isRunning()) {
-        const bool ok = QMetaObject::invokeMethod(
+        QMetaObject::invokeMethod(
             worker_,
             "resetDevice",
             Qt::BlockingQueuedConnection);
-
-        qDebug() << "shutdown invoke ok =" << ok;
     }
 
     workerThread_.quit();

@@ -1,5 +1,69 @@
 #include "a_scan_worker.h"
 
+#include "scanlab/hardware/a_scan_acquisition.h"
+#include "scanlab/hardware/device.h"
+
+#include <QMetaObject>
+
+#include <memory>
+#include <utility>
+
+class AScanWorker::Impl
+{
+public:
+    scanlab::hardware::AScanAcquisition acquisition;
+};
+
+AScanWorker::AScanWorker(QObject* parent)
+    : QObject(parent)
+    , impl_(new Impl())
+{
+    impl_->acquisition.setSamplesHandler(
+        [this](scanlab::hardware::AScanAcquisition::Samples samples) {
+            QVector<float> qsamples;
+            qsamples.reserve(static_cast<qsizetype>(samples.size()));
+
+            for (float value : samples) {
+                qsamples.push_back(value);
+            }
+
+            QMetaObject::invokeMethod(
+                this,
+                [this, qsamples = std::move(qsamples)]() {
+                    emit samplesReady(qsamples);
+                },
+                Qt::QueuedConnection);
+        });
+}
+
+AScanWorker::~AScanWorker()
+{
+    impl_->acquisition.stop();
+    delete impl_;
+}
+
+void AScanWorker::setDevice(scanlab::hardware::Device* device)
+{
+    impl_->acquisition.setDevice(device);
+}
+
+void AScanWorker::start()
+{
+    impl_->acquisition.start();
+}
+
+void AScanWorker::stop()
+{
+    impl_->acquisition.stop();
+}
+
+void AScanWorker::setSampleCount(int value)
+{
+    impl_->acquisition.setTargetSampleCount(value);
+}
+/*
+#include "a_scan_worker.h"
+
 #include <QtMath>
 #include <QRandomGenerator>
 
@@ -68,3 +132,4 @@ float AScanWorker::pulse(float t, float center, float width, float amplitude)
     const float x = (t - center) / width;
     return amplitude * std::exp(-x * x) * std::sin(18.0f * x);
 }
+*/
