@@ -1,8 +1,9 @@
 #include "device.h"
 #include "device_worker.h"
+#include "scanlab/hardware/device.h"
 
 Device::Device(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), device_(std::make_unique<::scanlab::hardware::Device>())
 {
     worker_ = new DeviceWorker();
     worker_->moveToThread(&workerThread_);
@@ -90,4 +91,14 @@ void Device::disconnectDevice()
         return;
 
     emit requestDisconnect();
+}
+
+::scanlab::hardware::Device* Device::hardwareDevice()
+{
+    return device_.get();
+}
+
+const ::scanlab::hardware::Device* Device::hardwareDevice() const
+{
+    return device_.get();
 }

@@ -7,6 +7,7 @@
 #include <limits>
 #include <mutex>
 #include <utility>
+#include <iostream>
 
 #ifdef min
 #undef min
@@ -254,17 +255,22 @@ bool AScanAcquisition::start()
 {
     auto* native = impl_->nativeDevice();
     if (!native) {
+        std::cout << "AScan: no native device\n" << std::boolalpha;
         return false;
     }
 
+    std::cout << "AScan: registering callbacks\n";
     impl_->registerCallbacks();
 
     if (!native->LockDevice()) {
+        std::cout << "AScan: LockDevice failed\n";
         impl_->unregisterCallbacks();
         return false;
     }
 
     const bool ok = native->UnlockDevice(eAcqOn);
+    std::cout << "AScan: UnlockDevice(eAcqOn)=" << ok << '\n';
+
     if (!ok) {
         impl_->unregisterCallbacks();
         return false;
@@ -275,6 +281,7 @@ bool AScanAcquisition::start()
         impl_->running = true;
     }
 
+    std::cout << "AScan: started\n";
     return true;
 }
 

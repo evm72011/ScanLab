@@ -1,7 +1,7 @@
 #include "a_scan_worker.h"
 
+#include "device.h"
 #include "scanlab/hardware/a_scan_acquisition.h"
-#include "scanlab/hardware/device.h"
 
 #include <QMetaObject>
 
@@ -20,17 +20,17 @@ AScanWorker::AScanWorker(QObject* parent)
 {
     impl_->acquisition.setSamplesHandler(
         [this](scanlab::hardware::AScanAcquisition::Samples samples) {
-            QVector<float> qsamples;
-            qsamples.reserve(static_cast<qsizetype>(samples.size()));
+            QVector<float> qSamples;
+            qSamples.reserve(static_cast<qsizetype>(samples.size()));
 
             for (float value : samples) {
-                qsamples.push_back(value);
+                qSamples.push_back(value);
             }
 
             QMetaObject::invokeMethod(
                 this,
-                [this, qsamples = std::move(qsamples)]() {
-                    emit samplesReady(qsamples);
+                [this, qSamples = std::move(qSamples)]() {
+                    emit samplesReady(qSamples);
                 },
                 Qt::QueuedConnection);
         });
@@ -42,9 +42,16 @@ AScanWorker::~AScanWorker()
     delete impl_;
 }
 
-void AScanWorker::setDevice(scanlab::hardware::Device* device)
+void AScanWorker::setDevice(Device* device)
 {
-    impl_->acquisition.setDevice(device);
+    impl_->acquisition.stop();
+
+    if (device == nullptr) {
+        impl_->acquisition.setDevice(nullptr);
+        return;
+    }
+
+    impl_->acquisition.setDevice(device->hardwareDevice());
 }
 
 void AScanWorker::start()

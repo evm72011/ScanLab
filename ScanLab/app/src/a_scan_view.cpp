@@ -1,7 +1,10 @@
 #include "a_scan_view.h"
+
 #include "a_scan_worker.h"
+#include "device.h"
 
 #include <QColor>
+#include <QMetaObject>
 #include <QMetaType>
 #include <QSGFlatColorMaterial>
 #include <QSGGeometry>
@@ -98,9 +101,12 @@ AScanView::AScanView(QQuickItem* parent)
     connect(this, &AScanView::requestStop, worker_, &AScanWorker::stop, Qt::QueuedConnection);
     connect(this, &AScanView::requestSampleCount, worker_, &AScanWorker::setSampleCount, Qt::QueuedConnection);
 
-    connect(worker_, &AScanWorker::samplesReady,
-            this, &AScanView::onSamplesReady,
-            Qt::QueuedConnection);
+    connect(
+        worker_,
+        &AScanWorker::samplesReady,
+        this,
+        &AScanView::onSamplesReady,
+        Qt::QueuedConnection);
 
     connect(this, &QQuickItem::widthChanged, this, [this]() {
         markGridDirty();
@@ -123,6 +129,59 @@ AScanView::~AScanView()
     emit requestStop();
     workerThread_.quit();
     workerThread_.wait();
+}
+
+QObject* AScanView::device() const
+{
+    return device_;
+}
+
+void AScanView::setDevice(QObject* value)
+{
+    auto* typedDevice = qobject_cast<Device*>(value);
+    if (device_ == typedDevice) {
+        return;
+    }
+
+    if (device_ != nullptr) {
+        disconnect(device_, nullptr, this, nullptr);
+    }
+
+    device_ = typedDevice;
+
+    if (device_ != nullptr) {
+        connect(device_, &QObject::destroyed, this, [this]() {
+            device_ = nullptr;
+
+            QMetaObject::invokeMethod(
+                worker_,
+                [this]() {
+                    worker_->setDevice(nullptr);
+                },
+                Qt::QueuedConnection);
+
+            if (active_) {
+                emit requestStop();
+            }
+
+            emit deviceChanged();
+        });
+    }
+
+    const bool shouldStart = active_;
+
+    QMetaObject::invokeMethod(
+        worker_,
+        [this, typedDevice, shouldStart]() {
+            worker_->setDevice(typedDevice);
+
+            if (shouldStart) {
+                worker_->start();
+            }
+        },
+        Qt::QueuedConnection);
+
+    emit deviceChanged();
 }
 
 int AScanView::sampleCount() const
@@ -251,10 +310,6 @@ QSGNode* AScanView::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData*)
 
         gridNode->markDirty(QSGNode::DirtyGeometry);
         gridDirty_ = false;
-    }
-
-    if (gridDirty_ || axisNode->geometry()->vertexCount() == 0) {
-        // no-op, axis is handled below
     }
 
     if (axisNode != nullptr) {

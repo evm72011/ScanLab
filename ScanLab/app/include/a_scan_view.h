@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QMutex>
+#include <QPointer>
 #include <QQuickItem>
 #include <QThread>
 #include <QVector>
@@ -8,12 +9,14 @@
 
 class QSGNode;
 class AScanWorker;
+class Device;
 
 class AScanView : public QQuickItem
 {
     Q_OBJECT
     QML_ELEMENT
 
+    Q_PROPERTY(QObject* device READ device WRITE setDevice NOTIFY deviceChanged)
     Q_PROPERTY(int sampleCount READ sampleCount WRITE setSampleCount NOTIFY sampleCountChanged)
     Q_PROPERTY(qreal minY READ minY WRITE setMinY NOTIFY minYChanged)
     Q_PROPERTY(qreal maxY READ maxY WRITE setMaxY NOTIFY maxYChanged)
@@ -22,6 +25,9 @@ class AScanView : public QQuickItem
 public:
     explicit AScanView(QQuickItem* parent = nullptr);
     ~AScanView() override;
+
+    QObject* device() const;
+    void setDevice(QObject* value);
 
     int sampleCount() const;
     void setSampleCount(int value);
@@ -36,6 +42,7 @@ public:
     void setActive(bool value);
 
 signals:
+    void deviceChanged();
     void sampleCountChanged();
     void minYChanged();
     void maxYChanged();
@@ -60,8 +67,10 @@ private:
     QVector<float> samples_;
     mutable QMutex samplesMutex_;
 
+    QPointer<Device> device_;
+
     int sampleCount_ = 512;
-    qreal minY_ = -1.0;
+    qreal minY_ = 0.0;
     qreal maxY_ = 1.0;
     bool active_ = false;
 

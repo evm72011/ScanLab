@@ -4,10 +4,16 @@
 #include <QString>
 #include <QThread>
 #include <qqmlintegration.h>
-#include <QDebug>
+
+#include <memory>
+
 #include "device_type.h"
 
 class DeviceWorker;
+
+namespace scanlab::hardware {
+class Device;
+}
 
 class Device : public QObject
 {
@@ -70,6 +76,10 @@ public:
     Q_INVOKABLE void connectDevice();
     Q_INVOKABLE void disconnectDevice();
     Q_INVOKABLE void resetDevice();
+
+    ::scanlab::hardware::Device* hardwareDevice();
+    const ::scanlab::hardware::Device* hardwareDevice() const;
+
 signals:
     void typeChanged();
     void addressChanged();
@@ -113,7 +123,7 @@ private:
 
 private:
     DeviceType::Type type_ = DeviceType::OEMPA_Max;
-    QString address_ { "192.168.1.11" };
+    QString address_{"192.168.1.11"};
 
     bool connected_ = false;
     bool connecting_ = false;
@@ -121,4 +131,6 @@ private:
 
     QThread workerThread_;
     DeviceWorker* worker_ = nullptr;
+
+    std::unique_ptr<::scanlab::hardware::Device> device_;
 };

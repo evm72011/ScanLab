@@ -3,10 +3,11 @@
 #include <QObject>
 #include <QVector>
 
-namespace scanlab::hardware {
 class Device;
+
+namespace scanlab::hardware {
 class AScanAcquisition;
-} // namespace scanlab::hardware
+}
 
 class AScanWorker : public QObject
 {
@@ -17,7 +18,7 @@ public:
     ~AScanWorker() override;
 
 public slots:
-    void setDevice(scanlab::hardware::Device* device);
+    void setDevice(Device* device);
     void start();
     void stop();
     void setSampleCount(int value);
