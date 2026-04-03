@@ -112,7 +112,7 @@ private:
     }
 
 private:
-    DeviceType::Type type_ = DeviceType::OEMPAMax;
+    DeviceType::Type type_ = DeviceType::OEMPA_Max;
     QString address_ { "192.168.1.11" };
 
     bool connected_ = false;

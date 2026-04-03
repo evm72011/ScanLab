@@ -2,8 +2,13 @@
 
 #include <memory>
 
+#include <UTDriverOEMPA1.h>
+#include <UTDriverOEMPA2.h>
+
 #include <UTDriverOEMPA.h>
 #include <UTDriverOEMPAmax.h>
+#include <UTDriverOEMMC.h>
+#include <UTDriverOEMPAmicro.h>
 
 namespace scanlab::hardware {
 
@@ -19,12 +24,40 @@ bool Device::setDevice(DeviceType type)
     disconnect();
 
     switch (type) {
-    case DeviceType::OEMPAMax:
+    case DeviceType::OEMPA_1:
+        device_ = std::make_unique<CHWDeviceOEMPA1>();
+        break;
+
+    case DeviceType::OEMPA_2:
+        device_ = std::make_unique<CHWDeviceOEMPA2>();
+        break;
+
+    case DeviceType::OEMPA_Mini:
+        device_ = std::make_unique<CHWDeviceOEMPAmini>();
+        break;
+
+    case DeviceType::OEMPA_Max:
         device_ = std::make_unique<CHWDeviceOEMPAmax>();
         break;
 
-    case DeviceType::OEMPAMini:
-        device_ = std::make_unique<CHWDeviceOEMPAmini>();
+    case DeviceType::OEMPA_MC1:
+        device_ = std::make_unique<CHWDeviceOEMPA1>();
+        break;
+
+    case DeviceType::OEMPA_MC2:
+        device_ = std::make_unique<CHWDeviceOEMMC2>();
+        break;
+
+    case DeviceType::OEMPA_MCmu:
+        device_ = std::make_unique<CHWDeviceOEMMCu>();
+        break;
+
+    case DeviceType::OEMPA_MCmuF:
+        device_ = std::make_unique<CHWDeviceOEMMCuF>();
+        break;
+
+    case DeviceType::OEMPA_Micro:
+        device_ = std::make_unique<CHWDeviceOEMPAmicro>();
         break;
 
     default:
@@ -100,3 +133,40 @@ const CHWDeviceOEMPA* Device::get() const
 }
 
 } // namespace scanlab::hardware
+
+
+/*
+ *	if (m_pHWDeviceOEMPA)
+        delete m_pHWDeviceOEMPA;
+
+    switch (m_iComboDeviceType)
+    {
+    case 0:
+    case 1:
+        m_pHWDeviceOEMPA = new CHWDeviceOEMPA1;
+        break;
+    case 2:
+        m_pHWDeviceOEMPA = new CHWDeviceOEMPA2;
+        break;
+    case 3:
+        m_pHWDeviceOEMPA = new CHWDeviceOEMPAmini;
+        break;
+    case 4:
+        m_pHWDeviceOEMPA = new CHWDeviceOEMPAmax;
+        break;
+    case 5:
+        m_pHWDeviceOEMPA = new CHWDeviceOEMMC2;
+        break;
+    case 6:
+        m_pHWDeviceOEMPA = new CHWDeviceOEMMCu;
+        break;
+    case 7:
+        m_pHWDeviceOEMPA = new CHWDeviceOEMMCuF;
+        break;
+    case 8:
+        m_pHWDeviceOEMPA = new CHWDeviceOEMPAmicro;
+        break;
+    }
+    InitHardware();
+    UpdateDialog();
+ */

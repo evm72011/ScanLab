@@ -21,8 +21,16 @@ Item {
             infoText: qsTr("Select the connected device")
 
             model: [
-                { value: SL.DeviceType.OEMPAMax, text: "OEMPA Max" },
-                { value: SL.DeviceType.OEMPAMini, text: "OEMPA Mini" }
+                { value: SL.DeviceType.None, text: "None" },
+                { value: SL.DeviceType.OEMPA_1, text: "OEMPA 1" },
+                { value: SL.DeviceType.OEMPA_2, text: "OEMPA 2" },
+                { value: SL.DeviceType.OEMPA_Max, text: "OEMPA Max" },
+                { value: SL.DeviceType.OEMPA_Mini, text: "OEMPA Mini" },
+                { value: SL.DeviceType.OEMPA_MC1, text: "OEMPA MC1" },
+                { value: SL.DeviceType.OEMPA_MC2, text: "OEMPA MC2" },
+                { value: SL.DeviceType.OEMPA_MCmu, text: "OEMPA MCμ" },
+                { value: SL.DeviceType.OEMPA_MCmuF, text: "OEMPA MCμF" },
+                { value: SL.DeviceType.OEMPA_Micro, text: "OEMPA Micro" }
             ]
 
             currentValue: backend?.device?.type ?? SL.DeviceType.None
