@@ -20,6 +20,7 @@ Device::Device(Device&&) noexcept = default;
 Device& Device::operator=(Device&&) noexcept = default;
 
 void Device::resetDevice() {
+    disconnect();
     if (device_) {
         device_.reset();
     }
@@ -28,7 +29,6 @@ void Device::resetDevice() {
 bool Device::setDevice(DeviceType type)
 {
     disconnect();
-    resetDevice();
 
     switch (type) {
     case DeviceType::OEMPA_1:

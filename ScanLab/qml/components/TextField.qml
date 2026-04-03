@@ -18,7 +18,6 @@ Item {
 
     property string placeholderText: ""
     property bool readOnly: false
-    property bool enabled: true
 
     property int fieldWidth: 280
     property int fieldHeight: 36
@@ -80,10 +79,13 @@ Item {
                 border.color: field.hovered
                               ? (SL.Theme.colors.borderStrong ?? SL.Theme.colors.border)
                               : SL.Theme.colors.border
+                opacity: root.enabled ? 1.0 : 0.6
             }
 
             font.pixelSize: SL.Theme.typography.fontSizeMd
-            color: SL.Theme.colors.textPrimary
+            color: root.enabled
+                   ? SL.Theme.colors.textPrimary
+                   : SL.Theme.colors.textDisabled
             leftPadding: 12
             rightPadding: 12
             verticalAlignment: Text.AlignVCenter

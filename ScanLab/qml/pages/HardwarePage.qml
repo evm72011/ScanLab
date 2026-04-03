@@ -34,6 +34,7 @@ Item {
             ]
 
             currentValue: backend?.device?.type ?? SL.DeviceType.None
+            enabled: !backend?.device?.connected && !backend?.device?.connecting
 
             onActivated: function(value) {
                 backend.device.type = value
@@ -49,7 +50,8 @@ Item {
             placeholderText: qsTr("Enter device address")
             infoText: qsTr("IP address or device path")
 
-            value:  backend?.device?.address ?? "" // SL.AppSettings.value("Hardware/address", backend?.device?.address ?? "")
+            value:  backend?.device?.address ?? ""
+            enabled: !backend?.device?.connected && !backend?.device?.connecting
 
             onValueEdited: function(value) {
                 backend.device.address = value;

@@ -16,10 +16,8 @@ Item {
 
     property var model: []
 
-    // наружу отдаём именно enum value
     property int currentValue: -1
 
-    // индекс вычисляем из currentValue
     readonly property int currentIndex: indexOfValue(currentValue)
     readonly property string currentText:
         currentIndex >= 0 && currentIndex < model.length
@@ -64,6 +62,8 @@ Item {
         ComboBox {
             id: combo
 
+            enabled: root.enabled
+
             Layout.preferredWidth: root.fieldWidth
             Layout.preferredHeight: root.fieldHeight
             Layout.alignment: Qt.AlignVCenter
@@ -89,7 +89,7 @@ Item {
                 border.color: combo.hovered
                               ? (SL.Theme.colors.borderStrong ?? SL.Theme.colors.border)
                               : SL.Theme.colors.border
-                opacity: combo.down ? 0.92 : 1.0
+                opacity: root.enabled ? (combo.down ? 0.92 : 1.0) : 0.6
             }
 
             contentItem: Text {
@@ -99,7 +99,9 @@ Item {
                 elide: Text.ElideRight
 
                 text: combo.currentText
-                color: SL.Theme.colors.textPrimary
+                color: root.enabled
+                    ? SL.Theme.colors.textPrimary
+                    : SL.Theme.colors.textDisabled
                 font.pixelSize: SL.Theme.typography.fontSizeMd
             }
 

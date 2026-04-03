@@ -25,4 +25,5 @@ QtObject {
     // text
     property color textPrimary
     property color textSecondary
+    property color textDisabled
 }

@@ -28,4 +28,5 @@ ColorTokens {
 
     textPrimary: p.gray200
     textSecondary: p.gray300
+    textDisabled: p.gray500
 }

@@ -5,8 +5,7 @@
 #include <QThread>
 #include <qqmlintegration.h>
 #include <QDebug>
-
-#include "device_type_mapper.h"
+#include "device_type.h"
 
 class DeviceWorker;
 
@@ -71,7 +70,6 @@ public:
     Q_INVOKABLE void connectDevice();
     Q_INVOKABLE void disconnectDevice();
     Q_INVOKABLE void resetDevice();
-
 signals:
     void typeChanged();
     void addressChanged();
