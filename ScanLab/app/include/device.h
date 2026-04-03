@@ -70,6 +70,7 @@ public:
 
     Q_INVOKABLE void connectDevice();
     Q_INVOKABLE void disconnectDevice();
+    Q_INVOKABLE void resetDevice();
 
 signals:
     void typeChanged();
@@ -80,6 +81,7 @@ signals:
 
     void requestConnect(DeviceType::Type type, QString address);
     void requestDisconnect();
+    void requestReset();
 
     void connectFinished(int result);
 

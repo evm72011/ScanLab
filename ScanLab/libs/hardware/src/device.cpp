@@ -19,9 +19,16 @@ Device::~Device() = default;
 Device::Device(Device&&) noexcept = default;
 Device& Device::operator=(Device&&) noexcept = default;
 
+void Device::resetDevice() {
+    if (device_) {
+        device_.reset();
+    }
+}
+
 bool Device::setDevice(DeviceType type)
 {
     disconnect();
+    resetDevice();
 
     switch (type) {
     case DeviceType::OEMPA_1:
@@ -64,8 +71,6 @@ bool Device::setDevice(DeviceType type)
         device_.reset();
         return false;
     }
-
-    connected_ = false;
     return true;
 }
 
@@ -75,7 +80,7 @@ ConnectResult Device::connect(const std::wstring& address)
         return ConnectResult::DeviceNotSet;
     }
 
-    if (connected_) {
+    if (isConnected()) {
         return ConnectResult::AlreadyConnected;
     }
 
@@ -97,19 +102,21 @@ ConnectResult Device::connect(const std::wstring& address)
         return ConnectResult::ConnectFailed;
     }
 
-    connected_ = true;
     return ConnectResult::Success;
 }
 
-void Device::disconnect()
+bool Device::disconnect()
 {
-    if (device_) {
-        if (auto* swBase = device_->GetSWDevice()) {
-            swBase->SetConnectionState(eConnected, false);
-        }
+    if (!device_) {
+        return true;
     }
 
-    connected_ = false;
+    auto* swBase = device_->GetSWDevice();
+    if (!swBase) {
+        return false;
+    }
+
+    return swBase->SetConnectionState(eDisconnected, true);
 }
 
 bool Device::hasDevice() const
@@ -119,7 +126,12 @@ bool Device::hasDevice() const
 
 bool Device::isConnected() const
 {
-    return connected_;
+    if (!device_) {
+        return false;
+    }
+
+    auto* swBase = device_->GetSWDevice();
+    return swBase && swBase->IsConnected();
 }
 
 CHWDeviceOEMPA* Device::get()

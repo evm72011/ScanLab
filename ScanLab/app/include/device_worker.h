@@ -18,9 +18,16 @@ public:
     }
 
 public slots:
+    void resetDevice()
+    {
+        hw_.resetDevice();
+    }
+
     void connectDevice(DeviceType::Type type, const QString& address)
     {
-        hw_.setDevice(toHardware(type));
+        if (!hw_.hasDevice()) {
+            hw_.setDevice(toHardware(type));
+        }
         const auto result = hw_.connect(address.toStdWString());
 
         const QString statusCode =

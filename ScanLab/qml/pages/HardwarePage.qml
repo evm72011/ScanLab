@@ -37,6 +37,7 @@ Item {
 
             onActivated: function(value) {
                 backend.device.type = value
+                backend.device.resetDevice();
                 SL.AppSettings.setValue("Hardware/type", value)
             }
         }

@@ -24,9 +24,11 @@ public:
     Device(Device&&) noexcept;
     Device& operator=(Device&&) noexcept;
 
+    void resetDevice();
     bool setDevice(DeviceType type);
+
     ConnectResult connect(const std::wstring& address);
-    void disconnect();
+    bool disconnect();
 
     bool hasDevice() const;
     bool isConnected() const;
@@ -36,7 +38,6 @@ public:
 
 private:
     std::unique_ptr<CHWDeviceOEMPA> device_;
-    bool connected_ = false;
 };
 
 } // namespace scanlab::hardware

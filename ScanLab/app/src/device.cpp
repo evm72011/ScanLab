@@ -11,6 +11,13 @@ Device::Device(QObject* parent)
 
     connect(
         this,
+        &Device::requestReset,
+        worker_,
+        &DeviceWorker::resetDevice,
+        Qt::QueuedConnection);
+
+    connect(
+        this,
         &Device::requestConnect,
         worker_,
         &DeviceWorker::connectDevice,
@@ -54,6 +61,11 @@ Device::~Device()
 {
     workerThread_.quit();
     workerThread_.wait();
+}
+
+void Device::resetDevice()
+{
+    emit requestReset();
 }
 
 void Device::connectDevice()
