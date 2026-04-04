@@ -2,12 +2,8 @@
 
 #include <QObject>
 #include <QVector>
-
-class Device;
-
-namespace scanlab::hardware {
-class AScanAcquisition;
-}
+#include "device.h"
+#include "scanlab/hardware/a_scan_acquisition.h"
 
 class AScanWorker : public QObject
 {
@@ -27,8 +23,9 @@ signals:
     void samplesReady(const QVector<float>& samples);
 
 private:
-    class Impl;
-    Impl* impl_;
+    Device* device_ = nullptr;
+    scanlab::hardware::AScanAcquisition acquisition_;
+    int sampleCount_ = 512;
 };
 
 /*

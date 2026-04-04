@@ -132,15 +132,14 @@ AScanView::~AScanView()
     workerThread_.wait();
 }
 
-QObject* AScanView::device() const
+Device* AScanView::device() const
 {
     return device_;
 }
 
-void AScanView::setDevice(QObject* value)
+void AScanView::setDevice(Device* value)
 {
-    auto* typedDevice = qobject_cast<Device*>(value);
-    if (device_ == typedDevice) {
+    if (device_ == value) {
         return;
     }
 
@@ -148,16 +147,14 @@ void AScanView::setDevice(QObject* value)
         disconnect(device_, nullptr, this, nullptr);
     }
 
-    device_ = typedDevice;
+    device_ = value;
 
     if (device_ != nullptr) {
         connect(device_, &QObject::destroyed, this, [this]() {
-            device_ = nullptr;
-
             QMetaObject::invokeMethod(
                 worker_,
-                [this]() {
-                    worker_->setDevice(nullptr);
+                [worker = worker_]() {
+                    worker->setDevice(nullptr);
                 },
                 Qt::QueuedConnection);
 
@@ -170,14 +167,16 @@ void AScanView::setDevice(QObject* value)
     }
 
     const bool shouldStart = active_;
+    AScanWorker* worker = worker_;
+    Device* newDevice = value;
 
     QMetaObject::invokeMethod(
-        worker_,
-        [this, typedDevice, shouldStart]() {
-            worker_->setDevice(typedDevice);
+        worker,
+        [worker, newDevice, shouldStart]() {
+            worker->setDevice(newDevice);
 
             if (shouldStart) {
-                worker_->start();
+                worker->start();
             }
         },
         Qt::QueuedConnection);

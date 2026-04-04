@@ -1,24 +1,15 @@
 #include "a_scan_worker.h"
 
 #include "device.h"
-#include "scanlab/hardware/a_scan_acquisition.h"
 
 #include <QMetaObject>
-
-#include <memory>
+#include <QDebug>
 #include <utility>
-
-class AScanWorker::Impl
-{
-public:
-    scanlab::hardware::AScanAcquisition acquisition;
-};
 
 AScanWorker::AScanWorker(QObject* parent)
     : QObject(parent)
-    , impl_(new Impl())
 {
-    impl_->acquisition.setSamplesHandler(
+    acquisition_.setSamplesHandler(
         [this](scanlab::hardware::AScanAcquisition::Samples samples) {
             QVector<float> qSamples;
             qSamples.reserve(static_cast<qsizetype>(samples.size()));
@@ -38,35 +29,44 @@ AScanWorker::AScanWorker(QObject* parent)
 
 AScanWorker::~AScanWorker()
 {
-    impl_->acquisition.stop();
-    delete impl_;
+    acquisition_.stop();
 }
 
 void AScanWorker::setDevice(Device* device)
 {
-    impl_->acquisition.stop();
-
-    if (device == nullptr) {
-        impl_->acquisition.setDevice(nullptr);
-        return;
-    }
-
-    impl_->acquisition.setDevice(device->hardwareDevice());
+    acquisition_.stop();
+    device_ = device;
 }
 
 void AScanWorker::start()
 {
-    impl_->acquisition.start();
+    if (device_ == nullptr) {
+        return;
+    }
+
+    auto* hardwareDevice = device_->hardwareDevice();
+    if (hardwareDevice == nullptr) {
+        return;
+    }
+
+    acquisition_.setDevice(hardwareDevice);
+    acquisition_.setTargetSampleCount(sampleCount_);
+    acquisition_.start();
 }
 
 void AScanWorker::stop()
 {
-    impl_->acquisition.stop();
+    acquisition_.stop();
 }
 
 void AScanWorker::setSampleCount(int value)
 {
-    impl_->acquisition.setTargetSampleCount(value);
+    if (value < 2) {
+        return;
+    }
+
+    sampleCount_ = value;
+    acquisition_.setTargetSampleCount(sampleCount_);
 }
 /*
 #include "a_scan_worker.h"

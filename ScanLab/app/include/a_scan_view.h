@@ -16,7 +16,7 @@ class AScanView : public QQuickItem
     Q_OBJECT
     QML_ELEMENT
 
-    Q_PROPERTY(QObject* device READ device WRITE setDevice NOTIFY deviceChanged)
+    Q_PROPERTY(Device* device READ device WRITE setDevice NOTIFY deviceChanged)
     Q_PROPERTY(int sampleCount READ sampleCount WRITE setSampleCount NOTIFY sampleCountChanged)
     Q_PROPERTY(qreal minY READ minY WRITE setMinY NOTIFY minYChanged)
     Q_PROPERTY(qreal maxY READ maxY WRITE setMaxY NOTIFY maxYChanged)
@@ -26,8 +26,8 @@ public:
     explicit AScanView(QQuickItem* parent = nullptr);
     ~AScanView() override;
 
-    QObject* device() const;
-    void setDevice(QObject* value);
+    Device* device() const;
+    void setDevice(Device* value);
 
     int sampleCount() const;
     void setSampleCount(int value);
