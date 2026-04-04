@@ -10,15 +10,6 @@ ApplicationWindow {
     title: "ScanLab"
 
     palette.window: SL.Theme.colors.windowBackground
-    //palette.base: SL.Theme.colors.windowBackground
-   // palette.button: SL.Theme.colors.windowBackground
-   // palette.text: SL.Theme.colors.textPrimary
-   // palette.buttonText: SL.Theme.colors.textPrimary
-    //palette.highlight: SL.Theme.colors.windowBackground //SL.Theme.colors.selectionBackground
-   // palette.highlightedText: SL.Theme.colors.textPrimary
-
-    //Overlay.modal: Rectangle { color: "transparent" }
-   // Overlay.modeless: Rectangle { color: "transparent" }
 
     Component {
         id: mainPageComponent

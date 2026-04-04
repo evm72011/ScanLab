@@ -8,7 +8,11 @@ Device::Device(QObject* parent)
     worker_ = new DeviceWorker();
     worker_->moveToThread(&workerThread_);
 
-    connect(&workerThread_, &QThread::finished, worker_, &QObject::deleteLater);
+    connect(
+        &workerThread_,
+        &QThread::finished,
+        worker_,
+        &QObject::deleteLater);
 
     connect(
         this,

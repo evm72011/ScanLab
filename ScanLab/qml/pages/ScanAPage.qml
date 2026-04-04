@@ -13,11 +13,6 @@ Rectangle {
     border.color: SL.Theme.colors.border
     clip: true
 
-    Button {
-        text: "Start A-Scan"
-        //onClicked: aScanView.start()
-    }
-
     SL.AScanView {
       id: aScanView
 
