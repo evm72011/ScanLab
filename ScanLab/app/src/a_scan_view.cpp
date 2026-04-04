@@ -88,6 +88,7 @@ QSGGeometryNode* childGeometryNode(QSGNode* root, int index)
 AScanView::AScanView(QQuickItem* parent)
     : QQuickItem(parent)
 {
+    qDebug() << "AScanView";
     setFlag(ItemHasContents, true);
 
     qRegisterMetaType<QVector<float>>("QVector<float>");
@@ -243,6 +244,7 @@ bool AScanView::active() const
 
 void AScanView::setActive(bool value)
 {
+    qDebug() << "setActive: " << value;
     if (active_ == value) {
         return;
     }

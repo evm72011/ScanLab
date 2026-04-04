@@ -4,6 +4,15 @@ import QtQuick.Layouts
 import ScanLab as SL
 
 Item {
+    id: root
+
+    property int connectionState: backend?.device?.connectionState ??
+                                  SL.ConnectionState.Disconnected
+
+    readonly property bool disconnected: connectionState === SL.ConnectionState.Disconnected
+    readonly property bool connecting: connectionState === SL.ConnectionState.Connecting
+    readonly property bool connected: connectionState === SL.ConnectionState.Connected
+
     Rectangle {
         anchors.fill: parent
         color: SL.Theme.colors.windowBackground
@@ -34,7 +43,7 @@ Item {
             ]
 
             currentValue: backend?.device?.type ?? SL.DeviceType.None
-            enabled: !backend?.device?.connected && !backend?.device?.connecting
+            enabled: root.disconnected
 
             onActivated: function(value) {
                 backend.device.type = value
@@ -51,7 +60,7 @@ Item {
             infoText: qsTr("IP address or device path")
 
             value:  backend?.device?.address ?? ""
-            enabled: !backend?.device?.connected && !backend?.device?.connecting
+            enabled: root.disconnected
 
             onValueEdited: function(value) {
                 backend.device.address = value;
@@ -72,21 +81,21 @@ Item {
         }
 
         SL.Button {
-            text: backend?.device?.connecting
-                  ? qsTr("Connecting...")
-                  : backend?.device?.connected
-                    ? qsTr("Disconnect")
-                    : qsTr("Connect")
-            iconSource: backend?.device?.connected
+            text: root.connecting
+                    ? qsTr("Connecting...")
+                    : root.connected
+                      ? qsTr("Disconnect")
+                      : qsTr("Connect")
+            iconSource: root.connected
                         ? "qrc:/icons/disconnected.svg"
                         : "qrc:/icons/connected.svg"
-            enabled: !backend?.device?.connecting
-            busy: !!backend?.device?.connecting
+            enabled: !root.connecting
+            busy: root.connecting
 
             width: 150
 
             onClicked: {
-                if (backend?.device?.connected) {
+                if (root.connected) {
                     backend.device.disconnectDevice();
                 } else {
                     backend.device.connectDevice()

@@ -6,8 +6,13 @@ ToolBar {
     id: root
     implicitHeight: 30
 
-    property bool connected: backend?.device?.connected ?? false
-    property bool connecting: backend?.device?.connecting ?? false
+    property int connectionState: backend?.device?.connectionState ??
+                                  SL.ConnectionState.Disconnected
+
+    readonly property bool disconnected: connectionState === SL.ConnectionState.Disconnected
+    readonly property bool connecting: connectionState === SL.ConnectionState.Connecting
+    readonly property bool connected: connectionState === SL.ConnectionState.Connected
+
     property bool pulsing: false
 
     background: Rectangle {
@@ -31,6 +36,12 @@ ToolBar {
             spacing: 8
 
             StatusChip {
+                visible: root.disconnected
+                iconSource: "qrc:/icons/disconnected.svg"
+                text: qsTr("Disconnected")
+            }
+
+            StatusChip {
                 visible: root.connecting
                 iconSource: "qrc:/icons/update.svg"
                 iconOpacity: 0.8
@@ -39,27 +50,21 @@ ToolBar {
             }
 
             StatusChip {
-                visible: !root.connecting && root.connected
+                visible: root.connected
                 iconSource: "qrc:/icons/connected.svg"
                 text: qsTr("Connected")
             }
 
             StatusChip {
-                visible: !root.connecting && !root.connected
+                visible: root.connected && !root.pulsing
                 iconSource: "qrc:/icons/disconnected.svg"
-                text: qsTr("Disconnected")
+                text: qsTr("Not pulsing")
             }
 
             StatusChip {
-                iconSource: root.pulsing
-                    ? "qrc:/icons/connected.svg"
-                    : "qrc:/icons/disconnected.svg"
-
-                text: root.pulsing
-                    ? qsTr("Pulsing")
-                    : qsTr("Not pulsing")
-
-                visible: root.connected && !root.connecting
+                visible: root.pulsing
+                iconSource: "qrc:/icons/connected.svg"
+                text: qsTr("Pulsing")
             }
         }
     }

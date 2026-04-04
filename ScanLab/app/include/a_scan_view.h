@@ -6,10 +6,10 @@
 #include <QThread>
 #include <QVector>
 #include <qqmlintegration.h>
+#include "device.h"
 
 class QSGNode;
 class AScanWorker;
-class Device;
 
 class AScanView : public QQuickItem
 {

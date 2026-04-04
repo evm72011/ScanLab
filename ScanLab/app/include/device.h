@@ -8,6 +8,7 @@
 #include <memory>
 
 #include "device_type.h"
+#include "connection_state.h"
 
 class DeviceWorker;
 
@@ -22,8 +23,7 @@ class Device : public QObject
 
     Q_PROPERTY(DeviceType::Type type READ type WRITE setType NOTIFY typeChanged)
     Q_PROPERTY(QString address READ address WRITE setAddress NOTIFY addressChanged)
-    Q_PROPERTY(bool connected READ connected NOTIFY connectedChanged)
-    Q_PROPERTY(bool connecting READ connecting NOTIFY connectingChanged)
+    Q_PROPERTY(ConnectionState::State connectionState READ connectionState NOTIFY connectionStateChanged)
     Q_PROPERTY(QString lastConnectStatusCode READ lastConnectStatusCode NOTIFY lastConnectStatusCodeChanged)
 
 public:
@@ -58,14 +58,9 @@ public:
         emit addressChanged();
     }
 
-    bool connected() const
+    ConnectionState::State connectionState() const
     {
-        return connected_;
-    }
-
-    bool connecting() const
-    {
-        return connecting_;
+        return connectionState_;
     }
 
     QString lastConnectStatusCode() const
@@ -83,8 +78,7 @@ public:
 signals:
     void typeChanged();
     void addressChanged();
-    void connectedChanged();
-    void connectingChanged();
+    void connectionStateChanged();
     void lastConnectStatusCodeChanged();
 
     void requestConnect(DeviceType::Type type, QString address);
@@ -94,22 +88,13 @@ signals:
     void connectFinished(int result);
 
 private:
-    void setConnected(bool value)
+    void setConnectionState(ConnectionState::State value)
     {
-        if (connected_ == value)
+        if (connectionState_ == value)
             return;
 
-        connected_ = value;
-        emit connectedChanged();
-    }
-
-    void setConnecting(bool value)
-    {
-        if (connecting_ == value)
-            return;
-
-        connecting_ = value;
-        emit connectingChanged();
+        connectionState_ = value;
+        emit connectionStateChanged();
     }
 
     void setLastConnectStatusCode(const QString& value)
@@ -124,9 +109,8 @@ private:
 private:
     DeviceType::Type type_ = DeviceType::OEMPA_Max;
     QString address_{"192.168.1.11"};
-
-    bool connected_ = false;
-    bool connecting_ = false;
+    
+    ConnectionState::State connectionState_ = ConnectionState::Disconnected;
     QString lastConnectStatusCode_;
 
     QThread workerThread_;

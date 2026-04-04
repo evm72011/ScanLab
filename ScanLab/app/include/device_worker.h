@@ -17,6 +17,14 @@ public:
     {
     }
 
+    scanlab::hardware::Device& hardwareDevice() {
+        return hw_;
+    }
+
+    const scanlab::hardware::Device& hardwareDevice() const {
+        return hw_;
+    }
+
 public slots:
     void resetDevice()
     {

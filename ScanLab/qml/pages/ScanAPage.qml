@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Controls
 import ScanLab as SL
 
 Rectangle {
@@ -12,13 +13,20 @@ Rectangle {
     border.color: SL.Theme.colors.border
     clip: true
 
+    Button {
+        text: "Start A-Scan"
+        //onClicked: aScanView.start()
+    }
+
     SL.AScanView {
-        anchors.fill: parent
-        anchors.margins: 8
-        sampleCount: 512
+      id: aScanView
+
+      anchors.fill: parent
+      anchors.margins: 8
+      sampleCount: 512
   //      minY: -1.0
   //      maxY: 1.0
-        active: true //root.active
-        device: backend ? backend.device : null
+      active: root.active
+      device: backend ? backend.device : null
     }
 }

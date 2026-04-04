@@ -55,6 +55,7 @@ qt_add_qml_module(${APP_NAME}
 
         app/include/app_settings.h
         app/include/backend.h
+        app/include/connection_state.h
         app/include/device_type.h
         app/include/device.h
         app/include/device_worker.h

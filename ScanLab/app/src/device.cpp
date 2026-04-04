@@ -37,10 +37,8 @@ Device::Device(QObject* parent)
         this,
         [this](int result, bool isConnected, const QString& statusCode)
         {
-            setConnecting(false);
-            setConnected(isConnected);
+            setConnectionState(ConnectionState::Connected);
             setLastConnectStatusCode(statusCode);
-
             emit connectFinished(result);
         },
         Qt::QueuedConnection);
@@ -51,8 +49,12 @@ Device::Device(QObject* parent)
         this,
         [this](bool stillConnected)
         {
-            setConnected(stillConnected);
-        },
+            if (stillConnected) {
+                // what else ??
+                return;
+            }
+            setConnectionState(ConnectionState::Disconnected);
+          },
         Qt::QueuedConnection);
 
     workerThread_.start();
@@ -78,18 +80,17 @@ void Device::resetDevice()
 
 void Device::connectDevice()
 {
-    if (connecting_)
+    if (connectionState_ == ConnectionState::State::Connecting)
         return;
 
-    setConnecting(true);
+    setConnectionState(ConnectionState::State::Connecting);
     emit requestConnect(type_, address_);
 }
 
 void Device::disconnectDevice()
 {
-    if (connecting_)
+    if (connectionState_ == ConnectionState::State::Connecting)
         return;
-
     emit requestDisconnect();
 }
 
