@@ -68,11 +68,11 @@ public:
         const CStream_0x0001*,
         const CSubStreamAscan_0x0103* pAscanHeader,
         const void* pBufferMax,
-        const void*,
+        const void* pBufferMin,
         const void*)
     {
         auto* self = static_cast<Impl*>(pAcquisitionParameter);
-        if (!self || !pAscanHeader || !pBufferMax) {
+        if (!self || !pAscanHeader) {
             return 0;
         }
 
@@ -81,6 +81,7 @@ public:
             static_cast<int>(pAscanHeader->dataCount),
             pBufferMax);
 
+        // временно можно отдельно залогировать pBufferMin
         return 0;
     }
 

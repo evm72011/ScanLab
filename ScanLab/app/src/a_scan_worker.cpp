@@ -1,6 +1,6 @@
 #include "a_scan_worker.h"
 
-#include "device.h"
+#include "device_controller.h"
 
 #include <QMetaObject>
 #include <QDebug>
@@ -32,7 +32,7 @@ AScanWorker::~AScanWorker()
     acquisition_.stop();
 }
 
-void AScanWorker::setDevice(Device* device)
+void AScanWorker::setDevice(DeviceController* device)
 {
     acquisition_.stop();
     device_ = device;

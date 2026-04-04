@@ -6,7 +6,7 @@
 #include <QThread>
 #include <QVector>
 #include <qqmlintegration.h>
-#include "device.h"
+#include "device_controller.h"
 
 class QSGNode;
 class AScanWorker;
@@ -16,7 +16,7 @@ class AScanView : public QQuickItem
     Q_OBJECT
     QML_ELEMENT
 
-    Q_PROPERTY(Device* device READ device WRITE setDevice NOTIFY deviceChanged)
+    Q_PROPERTY(DeviceController* device READ device WRITE setDevice NOTIFY deviceChanged)
     Q_PROPERTY(int sampleCount READ sampleCount WRITE setSampleCount NOTIFY sampleCountChanged)
     Q_PROPERTY(qreal minY READ minY WRITE setMinY NOTIFY minYChanged)
     Q_PROPERTY(qreal maxY READ maxY WRITE setMaxY NOTIFY maxYChanged)
@@ -26,8 +26,8 @@ public:
     explicit AScanView(QQuickItem* parent = nullptr);
     ~AScanView() override;
 
-    Device* device() const;
-    void setDevice(Device* value);
+    DeviceController* device() const;
+    void setDevice(DeviceController* value);
 
     int sampleCount() const;
     void setSampleCount(int value);
@@ -67,10 +67,10 @@ private:
     QVector<float> samples_;
     mutable QMutex samplesMutex_;
 
-    QPointer<Device> device_;
+    QPointer<DeviceController> device_;
 
     int sampleCount_ = 512;
-    qreal minY_ = 0.0;
+    qreal minY_ = -1.0;
     qreal maxY_ = 1.0;
     bool active_ = false;
 

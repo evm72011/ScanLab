@@ -3,14 +3,14 @@
 #include <QObject>
 #include <QString>
 
-#include "device.h"
+#include "device_controller.h"
 
 class Backend : public QObject
 {
     Q_OBJECT
 
     Q_PROPERTY(bool connected READ connected NOTIFY connectedChanged)
-    Q_PROPERTY(Device* device READ device CONSTANT)
+    Q_PROPERTY(DeviceController* device READ device CONSTANT)
 
 public:
     explicit Backend(QObject *parent = nullptr);
@@ -18,7 +18,7 @@ public:
     Q_INVOKABLE bool connectDevice();
     bool connected() const { return connected_; }
 
-    Device* device() { return &device_; }
+    DeviceController* device() { return &device_; }
 
 signals:
     void connectedChanged();
@@ -29,5 +29,5 @@ private:
 
 private:
     bool connected_ = false;
-    Device device_{this};
+    DeviceController device_{this};
 };

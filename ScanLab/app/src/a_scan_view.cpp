@@ -1,7 +1,6 @@
 #include "a_scan_view.h"
 
 #include "a_scan_worker.h"
-#include "device.h"
 
 #include <QColor>
 #include <QMetaObject>
@@ -10,6 +9,14 @@
 #include <QSGGeometry>
 #include <QSGGeometryNode>
 #include <QSGNode>
+
+#ifdef min
+#undef min
+#endif
+
+#ifdef max
+#undef max
+#endif
 
 namespace
 {
@@ -132,12 +139,12 @@ AScanView::~AScanView()
     workerThread_.wait();
 }
 
-Device* AScanView::device() const
+DeviceController* AScanView::device() const
 {
     return device_;
 }
 
-void AScanView::setDevice(Device* value)
+void AScanView::setDevice(DeviceController* value)
 {
     if (device_ == value) {
         return;
@@ -168,7 +175,7 @@ void AScanView::setDevice(Device* value)
 
     const bool shouldStart = active_;
     AScanWorker* worker = worker_;
-    Device* newDevice = value;
+    DeviceController* newDevice = value;
 
     QMetaObject::invokeMethod(
         worker,
@@ -258,9 +265,54 @@ void AScanView::setActive(bool value)
 
     emit activeChanged();
 }
+/*
+void AScanView::onSamplesReady(const QVector<float>& samples)
+{
+    {
+        QMutexLocker locker(&samplesMutex_);
+        samples_ = samples;
+    }
+
+    markSignalDirty();
+    update();
+}
+*/
 
 void AScanView::onSamplesReady(const QVector<float>& samples)
 {
+    if (!samples.isEmpty()) {
+        int nearZero = 0;
+        int nearOne = 0;
+
+        QStringList firstVals;
+        QStringList lastVals;
+
+        const int firstCount = std::min(20, (int)samples.size());
+        for (int i = 0; i < firstCount; ++i) {
+            firstVals << QString::number(samples[i]);
+        }
+
+        const int startLast = std::max(0, (int)samples.size() - 20);
+        for (int i = startLast; i < samples.size(); ++i) {
+            lastVals << QString::number(samples[i]);
+        }
+
+        for (float v : samples) {
+            if (v < 0.01f) {
+                ++nearZero;
+            }
+            if (v > 0.99f) {
+                ++nearOne;
+            }
+        }
+
+        qDebug() << "first:" << firstVals.join(", ");
+        qDebug() << "last :" << lastVals.join(", ");
+        qDebug() << "size:" << samples.size()
+                 << " nearZero:" << nearZero
+                 << " nearOne:" << nearOne;
+    }
+
     {
         QMutexLocker locker(&samplesMutex_);
         samples_ = samples;
