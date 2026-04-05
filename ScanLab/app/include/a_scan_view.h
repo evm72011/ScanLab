@@ -6,6 +6,7 @@
 #include <QThread>
 #include <QVector>
 #include <qqmlintegration.h>
+
 #include "device_controller.h"
 
 class QSGNode;
@@ -59,7 +60,7 @@ private slots:
     void onSamplesReady(const QVector<float>& samples);
 
 private:
-    qreal mapY(float v, qreal h) const;
+    qreal mapY(float value, qreal height) const;
     void markGridDirty();
     void markSignalDirty();
 

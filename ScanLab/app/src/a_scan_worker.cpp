@@ -1,27 +1,35 @@
 #include "a_scan_worker.h"
 
-#include "device_controller.h"
-
 #include <QMetaObject>
-#include <QDebug>
 #include <utility>
 
 AScanWorker::AScanWorker(QObject* parent)
     : QObject(parent)
 {
     acquisition_.setSamplesHandler(
-        [this](scanlab::hardware::AScanAcquisition::Samples samples) {
+        [this](scanlab::hardware::AScanAcquisition::Frame frame)
+        {
             QVector<float> qSamples;
-            qSamples.reserve(static_cast<qsizetype>(samples.size()));
+            qSamples.reserve(static_cast<qsizetype>(frame.samples.size()));
 
-            for (float value : samples) {
-                qSamples.push_back(value);
+            for (float v : frame.samples) {
+                qSamples.push_back(v);
             }
 
             QMetaObject::invokeMethod(
                 this,
-                [this, qSamples = std::move(qSamples)]() {
-                    emit samplesReady(qSamples);
+                [this, cycle = frame.cycle, qSamples = std::move(qSamples)]() mutable
+                {
+                    frames_[cycle] = qSamples;
+
+                    if (!frames_.contains(selectedCycle_)) {
+                        selectedCycle_ = cycle;
+                    }
+
+                    const auto it = frames_.find(selectedCycle_);
+                    if (it != frames_.end()) {
+                        emit samplesReady(it.value());
+                    }
                 },
                 Qt::QueuedConnection);
         });
@@ -36,6 +44,7 @@ void AScanWorker::setDevice(DeviceController* device)
 {
     acquisition_.stop();
     device_ = device;
+    frames_.clear();
 }
 
 void AScanWorker::start()

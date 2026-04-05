@@ -11,8 +11,16 @@ namespace scanlab::hardware {
 class AScanAcquisition
 {
 public:
-    using Samples = std::vector<float>;
-    using SamplesHandler = std::function<void(Samples)>;
+    struct Frame
+    {
+        std::vector<float> samples;
+        int cycle = 0;
+        int dataSize = 0;
+        int bitSize = 0;
+        bool sign = false;
+    };
+
+    using SamplesHandler = std::function<void(Frame)>;
 
     AScanAcquisition();
     ~AScanAcquisition();

@@ -1,7 +1,9 @@
 #pragma once
 
 #include <QObject>
+#include <QHash>
 #include <QVector>
+
 #include "device_controller.h"
 #include "scanlab/hardware/a_scan_acquisition.h"
 
@@ -26,6 +28,9 @@ private:
     DeviceController* device_ = nullptr;
     scanlab::hardware::AScanAcquisition acquisition_;
     int sampleCount_ = 512;
+
+    QHash<int, QVector<float>> frames_;
+    int selectedCycle_ = 0;
 };
 
 /*

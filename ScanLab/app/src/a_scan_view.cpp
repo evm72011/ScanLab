@@ -5,10 +5,13 @@
 #include <QColor>
 #include <QMetaObject>
 #include <QMetaType>
+#include <QMutexLocker>
 #include <QSGFlatColorMaterial>
 #include <QSGGeometry>
 #include <QSGGeometryNode>
 #include <QSGNode>
+
+#include <algorithm>
 
 #ifdef min
 #undef min
@@ -84,6 +87,7 @@ QSGNode* ensureRootNode(QSGNode* oldNode)
 QSGGeometryNode* childGeometryNode(QSGNode* root, int index)
 {
     QSGNode* child = root->firstChild();
+
     for (int i = 0; child != nullptr && i < index; ++i) {
         child = child->nextSibling();
     }
@@ -95,7 +99,6 @@ QSGGeometryNode* childGeometryNode(QSGNode* root, int index)
 AScanView::AScanView(QQuickItem* parent)
     : QQuickItem(parent)
 {
-    qDebug() << "AScanView";
     setFlag(ItemHasContents, true);
 
     qRegisterMetaType<QVector<float>>("QVector<float>");
@@ -107,7 +110,12 @@ AScanView::AScanView(QQuickItem* parent)
 
     connect(this, &AScanView::requestStart, worker_, &AScanWorker::start, Qt::QueuedConnection);
     connect(this, &AScanView::requestStop, worker_, &AScanWorker::stop, Qt::QueuedConnection);
-    connect(this, &AScanView::requestSampleCount, worker_, &AScanWorker::setSampleCount, Qt::QueuedConnection);
+    connect(
+        this,
+        &AScanView::requestSampleCount,
+        worker_,
+        &AScanWorker::setSampleCount,
+        Qt::QueuedConnection);
 
     connect(
         worker_,
@@ -154,6 +162,10 @@ void AScanView::setDevice(DeviceController* value)
         disconnect(device_, nullptr, this, nullptr);
     }
 
+    if (active_) {
+        emit requestStop();
+    }
+
     device_ = value;
 
     if (device_ != nullptr) {
@@ -168,6 +180,14 @@ void AScanView::setDevice(DeviceController* value)
             if (active_) {
                 emit requestStop();
             }
+
+            {
+                QMutexLocker locker(&samplesMutex_);
+                samples_.clear();
+            }
+
+            markSignalDirty();
+            update();
 
             emit deviceChanged();
         });
@@ -188,6 +208,14 @@ void AScanView::setDevice(DeviceController* value)
         },
         Qt::QueuedConnection);
 
+    {
+        QMutexLocker locker(&samplesMutex_);
+        samples_.clear();
+    }
+
+    markSignalDirty();
+    update();
+
     emit deviceChanged();
 }
 
@@ -204,6 +232,10 @@ void AScanView::setSampleCount(int value)
 
     sampleCount_ = value;
     emit requestSampleCount(sampleCount_);
+
+    markSignalDirty();
+    update();
+
     emit sampleCountChanged();
 }
 
@@ -222,6 +254,7 @@ void AScanView::setMinY(qreal value)
     markGridDirty();
     markSignalDirty();
     update();
+
     emit minYChanged();
 }
 
@@ -240,6 +273,7 @@ void AScanView::setMaxY(qreal value)
     markGridDirty();
     markSignalDirty();
     update();
+
     emit maxYChanged();
 }
 
@@ -250,7 +284,6 @@ bool AScanView::active() const
 
 void AScanView::setActive(bool value)
 {
-    qDebug() << "setActive: " << value;
     if (active_ == value) {
         return;
     }
@@ -265,54 +298,9 @@ void AScanView::setActive(bool value)
 
     emit activeChanged();
 }
-/*
-void AScanView::onSamplesReady(const QVector<float>& samples)
-{
-    {
-        QMutexLocker locker(&samplesMutex_);
-        samples_ = samples;
-    }
-
-    markSignalDirty();
-    update();
-}
-*/
 
 void AScanView::onSamplesReady(const QVector<float>& samples)
 {
-    if (!samples.isEmpty()) {
-        int nearZero = 0;
-        int nearOne = 0;
-
-        QStringList firstVals;
-        QStringList lastVals;
-
-        const int firstCount = std::min(20, (int)samples.size());
-        for (int i = 0; i < firstCount; ++i) {
-            firstVals << QString::number(samples[i]);
-        }
-
-        const int startLast = std::max(0, (int)samples.size() - 20);
-        for (int i = startLast; i < samples.size(); ++i) {
-            lastVals << QString::number(samples[i]);
-        }
-
-        for (float v : samples) {
-            if (v < 0.01f) {
-                ++nearZero;
-            }
-            if (v > 0.99f) {
-                ++nearOne;
-            }
-        }
-
-        qDebug() << "first:" << firstVals.join(", ");
-        qDebug() << "last :" << lastVals.join(", ");
-        qDebug() << "size:" << samples.size()
-                 << " nearZero:" << nearZero
-                 << " nearOne:" << nearOne;
-    }
-
     {
         QMutexLocker locker(&samplesMutex_);
         samples_ = samples;
@@ -408,15 +396,16 @@ QSGNode* AScanView::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData*)
     return root;
 }
 
-qreal AScanView::mapY(float v, qreal h) const
+qreal AScanView::mapY(float value, qreal height) const
 {
     const qreal range = maxY_ - minY_;
     if (qFuzzyIsNull(range)) {
-        return h * 0.5;
+        return height * 0.5;
     }
 
-    const qreal t = (v - minY_) / range;
-    return h * (1.0 - t);
+    const qreal clampedValue = std::clamp<qreal>(value, minY_, maxY_);
+    const qreal t = (clampedValue - minY_) / range;
+    return height * (1.0 - t);
 }
 
 void AScanView::markGridDirty()
