@@ -1,7 +1,5 @@
 #include <Windows.h>
 
-//#include <memory>
-
 #include <UTDriverOEMPA.h>
 #include <UTDriverOEMPAExport.h>
 #include <UTDriverOEMPAmax.h>
@@ -42,30 +40,6 @@ bool Backend::connectDevice()
     const auto address = device_.address();
 
     qInfo() << "[connectDevice] type =" << type << ", address =" << address;
-
-    /*
-    if (type == DeviceType::OEMPAMax) {
-        auto hw = std::make_unique<CHWDeviceOEMPAmax>();
-
-        std::wstring wAddress = address.toStdWString();
-
-        auto* swOempa = hw->GetSWDeviceOEMPA();
-        if (!swOempa || !swOempa->SetAddress(wAddress.c_str())) {
-            qWarning() << "[E] SetAddress failed";
-            setConnected(false);
-            return false;
-        }
-
-        auto* swBase = hw->GetSWDevice();
-        if (!swBase || !swBase->SetConnectionState(eConnected, true)) {
-            qWarning() << "[E] Connect failed";
-            setConnected(false);
-            return false;
-        }
-
-        // hw_ = std::move(hw);
-    }
-    */
 
     setConnected(true);
     return true;

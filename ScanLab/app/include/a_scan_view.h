@@ -10,6 +10,7 @@
 #include "device_controller.h"
 
 class AScanWorker;
+class QHoverEvent;
 
 class AScanView : public QQuickPaintedItem
 {
@@ -24,6 +25,7 @@ class AScanView : public QQuickPaintedItem
 
     Q_PROPERTY(qreal soundVelocity READ soundVelocity WRITE setSoundVelocity NOTIFY soundVelocityChanged)
     Q_PROPERTY(qreal timeRangeUs READ timeRangeUs WRITE setTimeRangeUs NOTIFY timeRangeUsChanged)
+    Q_PROPERTY(qreal timeStartUs READ timeStartUs WRITE setTimeStartUs NOTIFY timeStartUsChanged)
 
     Q_PROPERTY(int xDivisions READ xDivisions WRITE setXDivisions NOTIFY xDivisionsChanged)
 
@@ -52,6 +54,9 @@ public:
     qreal timeRangeUs() const;
     void setTimeRangeUs(qreal value);
 
+    qreal timeStartUs() const;
+    void setTimeStartUs(qreal value);
+
     int xDivisions() const;
     void setXDivisions(int value);
 
@@ -66,6 +71,7 @@ signals:
 
     void soundVelocityChanged();
     void timeRangeUsChanged();
+    void timeStartUsChanged();
     void xDivisionsChanged();
 
     void requestStart();
@@ -75,6 +81,10 @@ signals:
 private slots:
     void onSamplesReady(const QVector<float>& samples);
 
+protected:
+    void hoverMoveEvent(QHoverEvent* event) override;
+    void hoverLeaveEvent(QHoverEvent* event) override;
+
 private:
     QRectF plotRect() const;
 
@@ -83,6 +93,8 @@ private:
 
     bool hasPhysicalScale() const;
     qreal relativeToThicknessMm(qreal t) const;
+    qreal cursorRelativeX(const QRectF& plotRect) const;
+    QString cursorText(const QRectF& plotRect) const;
 
 private:
     QVector<float> samples_;
@@ -95,10 +107,14 @@ private:
     qreal maxY_ = 1.0;
     bool active_ = false;
 
-    qreal soundVelocity_ = 0.0;   // m/s
-    qreal timeRangeUs_ = 0.0;     // microseconds
+    qreal soundVelocity_ = 0.0;
+    qreal timeRangeUs_ = 0.0;
+    qreal timeStartUs_ = 0.0;
 
     int xDivisions_ = 10;
+
+    bool cursorVisible_ = false;
+    qreal cursorX_ = 0.0;
 
     QThread workerThread_;
     AScanWorker* worker_ = nullptr;

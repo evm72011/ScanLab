@@ -21,7 +21,8 @@ Rectangle {
       sampleCount: 512
 
       soundVelocity: 5900     // сталь
-      timeRangeUs: 28.55       // ← ВАЖНО: это нужно подобрать/взять из прибора
+      timeRangeUs: 29       // ← ВАЖНО: это нужно подобрать/взять из прибора
+      timeStartUs: 0.0
 
       active: root.active
       device: backend ? backend.device : null
