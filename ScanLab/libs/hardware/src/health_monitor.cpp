@@ -1,8 +1,10 @@
 #include "scanlab/hardware/health_monitor.h"
 
 #include <UTDriverOEMPA.h>
+#include <UTDriverOEMMC.h>
 
 #include <algorithm>
+#include <iostream>
 
 namespace scanlab::hardware {
 
@@ -47,7 +49,13 @@ HealthMonitor::readTemperatureSnapshot() const
         return std::nullopt;
     }
 
-    auto* sw = native->GetSWDeviceOEMPA();
+    auto* hw = dynamic_cast<CHWDeviceOEMMC2*>(native); // TODO other types
+    if (hw == nullptr) {
+        std::cout << "[TEMP] cast to CHWDeviceOEMMC failed" << std::endl;
+        return std::nullopt;
+    }
+
+    auto* sw = hw->GetSWDeviceOEMPA();
     if (sw == nullptr) {
         return std::nullopt;
     }
@@ -58,11 +66,16 @@ HealthMonitor::readTemperatureSnapshot() const
         return std::nullopt;
     }
 
+    std::cout << "[TEMP] boardCount=" << boardCount
+              << " sensorCountMax=" << sensorCountMax
+              << std::endl;
+
     if (boardCount <= 0) {
         return TemperatureSnapshot{};
     }
 
-    if (!native->LockDevice(eAcqContinue)) {
+    if (!hw->LockDevice(eAcqContinue)) {
+        std::cout << "[TEMP] LockDevice failed" << std::endl;
         return std::nullopt;
     }
 
@@ -72,13 +85,29 @@ HealthMonitor::readTemperatureSnapshot() const
     for (int board = 0; board < boardCount; ++board) {
         int sensorCount = 0;
         if (!sw->GetTemperatureSensorCount(board, sensorCount)) {
+            std::cout << "[TEMP] GetTemperatureSensorCount failed"
+                      << " board=" << board
+                      << std::endl;
             ok = false;
             break;
         }
 
+        std::cout << "[TEMP] board=" << board
+                  << " sensorCount=" << sensorCount
+                  << std::endl;
+
         for (int sensor = 0; sensor < sensorCount; ++sensor) {
-            short value = 0;
-            if (!native->GetTemperatureSensor(board, sensor, &value)) {
+            short value = -999;
+            const bool okSensor =
+                hw->GetTemperatureSensor(board, sensor, &value);
+
+            std::cout << "[TEMP] board=" << board
+                      << " sensor=" << sensor
+                      << " ok=" << okSensor
+                      << " value=" << value
+                      << std::endl;
+
+            if (!okSensor) {
                 ok = false;
                 break;
             }
@@ -94,8 +123,16 @@ HealthMonitor::readTemperatureSnapshot() const
             break;
         }
 
-        short maxValue = 0;
-        if (!native->GetTemperatureMaxHW(board, &maxValue)) {
+        short maxValue = -999;
+        const bool okMax =
+            hw->GetTemperatureMaxHW(board, &maxValue);
+
+        std::cout << "[TEMP_MAX] board=" << board
+                  << " ok=" << okMax
+                  << " value=" << maxValue
+                  << std::endl;
+
+        if (!okMax) {
             ok = false;
             break;
         }
@@ -103,7 +140,9 @@ HealthMonitor::readTemperatureSnapshot() const
         snapshot.maxPerBoardCelsius.push_back(static_cast<int>(maxValue));
     }
 
-    const bool unlockOk = native->UnlockDevice();
+    const bool unlockOk = hw->UnlockDevice();
+
+    std::cout << "[TEMP] UnlockDevice ok=" << unlockOk << std::endl;
 
     if (!ok || !unlockOk) {
         return std::nullopt;

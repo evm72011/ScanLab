@@ -71,6 +71,8 @@ void HealthWorker::poll()
         item.insert(QStringLiteral("sensor"), sensor.sensor);
         item.insert(QStringLiteral("valueCelsius"), sensor.valueCelsius);
         items.push_back(item);
+
+        qDebug() << "[TEMP]" << sensor.board << sensor.sensor << sensor.valueCelsius;
     }
 
     int maxTemperature = -1;
