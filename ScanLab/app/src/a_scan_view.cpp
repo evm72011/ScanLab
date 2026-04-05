@@ -12,6 +12,7 @@
 #include <QSGNode>
 
 #include <algorithm>
+#include <cmath>
 
 #ifdef min
 #undef min
@@ -26,6 +27,10 @@ namespace
 constexpr int GridNodeIndex = 0;
 constexpr int AxisNodeIndex = 1;
 constexpr int SignalNodeIndex = 2;
+
+constexpr float GridLineWidth = 1.0f;
+constexpr float AxisLineWidth = 1.0f;
+constexpr float SignalThickness = 2.0f;
 
 QSGGeometryNode* createLineNode(const QColor& color, float lineWidth)
 {
@@ -47,17 +52,12 @@ QSGGeometryNode* createLineNode(const QColor& color, float lineWidth)
     return node;
 }
 
-QSGGeometryNode* createLineStripNode(const QColor& color, float lineWidth)
+QSGGeometryNode* createSignalNode(const QColor& color)
 {
     auto* node = new QSGGeometryNode();
 
     auto* geometry = new QSGGeometry(QSGGeometry::defaultAttributes_Point2D(), 0);
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    geometry->setDrawingMode(QSGGeometry::DrawLineStrip);
-#else
-    geometry->setDrawingMode(GL_LINE_STRIP);
-#endif
-    geometry->setLineWidth(lineWidth);
+    geometry->setDrawingMode(QSGGeometry::DrawTriangles);
 
     node->setGeometry(geometry);
     node->setFlag(QSGNode::OwnsGeometry);
@@ -78,9 +78,9 @@ QSGNode* ensureRootNode(QSGNode* oldNode)
     }
 
     auto* root = new QSGNode();
-    root->appendChildNode(createLineNode(QColor(255, 255, 255, 25), 1.0f));
-    root->appendChildNode(createLineNode(QColor(255, 255, 255, 56), 1.0f));
-    root->appendChildNode(createLineStripNode(QColor("#6aa9ff"), 1.0f));
+    root->appendChildNode(createLineNode(QColor(255, 255, 255, 25), GridLineWidth));
+    root->appendChildNode(createLineNode(QColor(255, 255, 255, 56), AxisLineWidth));
+    root->appendChildNode(createSignalNode(QColor("#6aa9ff")));
     return root;
 }
 
@@ -93,6 +93,11 @@ QSGGeometryNode* childGeometryNode(QSGNode* root, int index)
     }
 
     return static_cast<QSGGeometryNode*>(child);
+}
+
+void setVertex(QSGGeometry::Point2D& v, float x, float y)
+{
+    v.set(x, y);
 }
 }
 
@@ -378,15 +383,58 @@ QSGNode* AScanView::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData*)
         if (data.size() < 2) {
             geometry->allocate(0);
         } else {
-            geometry->allocate(data.size());
+            const int segmentCount = data.size() - 1;
+            const int vertexCount = segmentCount * 6;
+
+            geometry->allocate(vertexCount);
             auto* vertices = geometry->vertexDataAsPoint2D();
 
             const int last = data.size() - 1;
-            for (int i = 0; i < data.size(); ++i) {
-                const float x = w * static_cast<float>(i) / static_cast<float>(last);
-                const float y = static_cast<float>(mapY(data[i], h));
-                vertices[i].set(x, y);
+            int out = 0;
+
+            for (int i = 0; i < last; ++i) {
+                const float x1 = w * static_cast<float>(i) / static_cast<float>(last);
+                const float y1 = static_cast<float>(mapY(data[i], h));
+
+                const float x2 = w * static_cast<float>(i + 1) / static_cast<float>(last);
+                const float y2 = static_cast<float>(mapY(data[i + 1], h));
+
+                float dx = x2 - x1;
+                float dy = y2 - y1;
+                const float len = std::sqrt(dx * dx + dy * dy);
+
+                if (len <= 0.0001f) {
+                    continue;
+                }
+
+                dx /= len;
+                dy /= len;
+
+                const float nx = -dy * (SignalThickness * 0.5f);
+                const float ny =  dx * (SignalThickness * 0.5f);
+
+                const float ax = x1 + nx;
+                const float ay = y1 + ny;
+
+                const float bx = x1 - nx;
+                const float by = y1 - ny;
+
+                const float cx = x2 + nx;
+                const float cy = y2 + ny;
+
+                const float dx2 = x2 - nx;
+                const float dy2 = y2 - ny;
+
+                setVertex(vertices[out++], ax, ay);
+                setVertex(vertices[out++], bx, by);
+                setVertex(vertices[out++], cx, cy);
+
+                setVertex(vertices[out++], cx, cy);
+                setVertex(vertices[out++], bx, by);
+                setVertex(vertices[out++], dx2, dy2);
             }
+
+            geometry->allocate(out);
         }
 
         signalNode->markDirty(QSGNode::DirtyGeometry);
