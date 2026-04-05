@@ -2,17 +2,16 @@
 
 #include <QMutex>
 #include <QPointer>
-#include <QQuickItem>
+#include <QQuickPaintedItem>
 #include <QThread>
 #include <QVector>
 #include <qqmlintegration.h>
 
 #include "device_controller.h"
 
-class QSGNode;
 class AScanWorker;
 
-class AScanView : public QQuickItem
+class AScanView : public QQuickPaintedItem
 {
     Q_OBJECT
     QML_ELEMENT
@@ -22,6 +21,11 @@ class AScanView : public QQuickItem
     Q_PROPERTY(qreal minY READ minY WRITE setMinY NOTIFY minYChanged)
     Q_PROPERTY(qreal maxY READ maxY WRITE setMaxY NOTIFY maxYChanged)
     Q_PROPERTY(bool active READ active WRITE setActive NOTIFY activeChanged)
+
+    Q_PROPERTY(qreal soundVelocity READ soundVelocity WRITE setSoundVelocity NOTIFY soundVelocityChanged)
+    Q_PROPERTY(qreal timeRangeUs READ timeRangeUs WRITE setTimeRangeUs NOTIFY timeRangeUsChanged)
+
+    Q_PROPERTY(int xDivisions READ xDivisions WRITE setXDivisions NOTIFY xDivisionsChanged)
 
 public:
     explicit AScanView(QQuickItem* parent = nullptr);
@@ -42,6 +46,17 @@ public:
     bool active() const;
     void setActive(bool value);
 
+    qreal soundVelocity() const;
+    void setSoundVelocity(qreal value);
+
+    qreal timeRangeUs() const;
+    void setTimeRangeUs(qreal value);
+
+    int xDivisions() const;
+    void setXDivisions(int value);
+
+    void paint(QPainter* painter) override;
+
 signals:
     void deviceChanged();
     void sampleCountChanged();
@@ -49,20 +64,25 @@ signals:
     void maxYChanged();
     void activeChanged();
 
+    void soundVelocityChanged();
+    void timeRangeUsChanged();
+    void xDivisionsChanged();
+
     void requestStart();
     void requestStop();
     void requestSampleCount(int value);
-
-protected:
-    QSGNode* updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData* updatePaintNodeData) override;
 
 private slots:
     void onSamplesReady(const QVector<float>& samples);
 
 private:
-    qreal mapY(float value, qreal height) const;
-    void markGridDirty();
-    void markSignalDirty();
+    QRectF plotRect() const;
+
+    qreal mapY(float value, const QRectF& plotRect) const;
+    qreal mapX(qreal t, const QRectF& plotRect) const;
+
+    bool hasPhysicalScale() const;
+    qreal relativeToThicknessMm(qreal t) const;
 
 private:
     QVector<float> samples_;
@@ -75,8 +95,10 @@ private:
     qreal maxY_ = 1.0;
     bool active_ = false;
 
-    bool gridDirty_ = true;
-    bool signalDirty_ = true;
+    qreal soundVelocity_ = 0.0;   // m/s
+    qreal timeRangeUs_ = 0.0;     // microseconds
+
+    int xDivisions_ = 10;
 
     QThread workerThread_;
     AScanWorker* worker_ = nullptr;

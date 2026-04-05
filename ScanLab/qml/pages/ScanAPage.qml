@@ -19,8 +19,10 @@ Rectangle {
       anchors.fill: parent
       anchors.margins: 8
       sampleCount: 512
-  //      minY: -1.0
-  //      maxY: 1.0
+
+      soundVelocity: 5900     // сталь
+      timeRangeUs: 28.55       // ← ВАЖНО: это нужно подобрать/взять из прибора
+
       active: root.active
       device: backend ? backend.device : null
     }

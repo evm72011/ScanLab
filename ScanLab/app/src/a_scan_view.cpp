@@ -1,21 +1,22 @@
 #include "a_scan_view.h"
-
 #include "a_scan_worker.h"
 
 #include <QColor>
 #include <QMetaObject>
 #include <QMetaType>
 #include <QMutexLocker>
-#include <QSGFlatColorMaterial>
-#include <QSGGeometry>
-#include <QSGGeometryNode>
-#include <QSGNode>
+#include <QPainter>
+#include <QPainterPath>
+#include <QPen>
 
 #include <algorithm>
-#include <cmath>
 
-#ifdef min
-#undef min
+#ifdef SIGNAL
+#undef SIGNAL
+#endif
+
+#ifdef TEXT
+#undef TEXT
 #endif
 
 #ifdef max
@@ -24,122 +25,40 @@
 
 namespace
 {
-constexpr int GridNodeIndex = 0;
-constexpr int AxisNodeIndex = 1;
-constexpr int SignalNodeIndex = 2;
+constexpr qreal L = 8;
+constexpr qreal R = 8;
+constexpr qreal T = 8;
+constexpr qreal B_NO_LABEL = 8;
+constexpr qreal B_LABEL = 28;
 
-constexpr float GridLineWidth = 1.0f;
-constexpr float AxisLineWidth = 1.0f;
-constexpr float SignalThickness = 2.0f;
+constexpr int H_GRID = 8;
 
-QSGGeometryNode* createLineNode(const QColor& color, float lineWidth)
-{
-    auto* node = new QSGGeometryNode();
+const QColor GRID(255,255,255,25);
+const QColor AXIS(255,255,255,56);
+const QColor SIGNAL("#6aa9ff");
+const QColor TEXT("#a0a0a0");
 
-    auto* geometry = new QSGGeometry(QSGGeometry::defaultAttributes_Point2D(), 0);
-    geometry->setDrawingMode(QSGGeometry::DrawLines);
-    geometry->setLineWidth(lineWidth);
-
-    node->setGeometry(geometry);
-    node->setFlag(QSGNode::OwnsGeometry);
-
-    auto* material = new QSGFlatColorMaterial();
-    material->setColor(color);
-
-    node->setMaterial(material);
-    node->setFlag(QSGNode::OwnsMaterial);
-
-    return node;
-}
-
-QSGGeometryNode* createSignalNode(const QColor& color)
-{
-    auto* node = new QSGGeometryNode();
-
-    auto* geometry = new QSGGeometry(QSGGeometry::defaultAttributes_Point2D(), 0);
-    geometry->setDrawingMode(QSGGeometry::DrawTriangles);
-
-    node->setGeometry(geometry);
-    node->setFlag(QSGNode::OwnsGeometry);
-
-    auto* material = new QSGFlatColorMaterial();
-    material->setColor(color);
-
-    node->setMaterial(material);
-    node->setFlag(QSGNode::OwnsMaterial);
-
-    return node;
-}
-
-QSGNode* ensureRootNode(QSGNode* oldNode)
-{
-    if (oldNode != nullptr) {
-        return oldNode;
-    }
-
-    auto* root = new QSGNode();
-    root->appendChildNode(createLineNode(QColor(255, 255, 255, 25), GridLineWidth));
-    root->appendChildNode(createLineNode(QColor(255, 255, 255, 56), AxisLineWidth));
-    root->appendChildNode(createSignalNode(QColor("#6aa9ff")));
-    return root;
-}
-
-QSGGeometryNode* childGeometryNode(QSGNode* root, int index)
-{
-    QSGNode* child = root->firstChild();
-
-    for (int i = 0; child != nullptr && i < index; ++i) {
-        child = child->nextSibling();
-    }
-
-    return static_cast<QSGGeometryNode*>(child);
-}
-
-void setVertex(QSGGeometry::Point2D& v, float x, float y)
-{
-    v.set(x, y);
-}
+constexpr qreal SIGNAL_W = 3.0;
 }
 
 AScanView::AScanView(QQuickItem* parent)
-    : QQuickItem(parent)
+    : QQuickPaintedItem(parent)
 {
-    setFlag(ItemHasContents, true);
+    setAntialiasing(true);
 
-    qRegisterMetaType<QVector<float>>("QVector<float>");
+    qRegisterMetaType<QVector<float>>();
 
     worker_ = new AScanWorker();
     worker_->moveToThread(&workerThread_);
 
     connect(&workerThread_, &QThread::finished, worker_, &QObject::deleteLater);
 
-    connect(this, &AScanView::requestStart, worker_, &AScanWorker::start, Qt::QueuedConnection);
-    connect(this, &AScanView::requestStop, worker_, &AScanWorker::stop, Qt::QueuedConnection);
-    connect(
-        this,
-        &AScanView::requestSampleCount,
-        worker_,
-        &AScanWorker::setSampleCount,
-        Qt::QueuedConnection);
+    connect(this, &AScanView::requestStart, worker_, &AScanWorker::start);
+    connect(this, &AScanView::requestStop, worker_, &AScanWorker::stop);
+    connect(this, &AScanView::requestSampleCount, worker_, &AScanWorker::setSampleCount);
 
-    connect(
-        worker_,
-        &AScanWorker::samplesReady,
-        this,
-        &AScanView::onSamplesReady,
-        Qt::QueuedConnection);
-
-    connect(this, &QQuickItem::widthChanged, this, [this]() {
-        markGridDirty();
-        markSignalDirty();
-        update();
-    });
-
-    connect(this, &QQuickItem::heightChanged, this, [this]() {
-        markGridDirty();
-        markSignalDirty();
-        update();
-    });
+    connect(worker_, &AScanWorker::samplesReady,
+            this, &AScanView::onSamplesReady);
 
     workerThread_.start();
     emit requestSampleCount(sampleCount_);
@@ -152,316 +71,200 @@ AScanView::~AScanView()
     workerThread_.wait();
 }
 
-DeviceController* AScanView::device() const
+// --- properties ---
+
+DeviceController* AScanView::device() const { return device_; }
+
+void AScanView::setDevice(DeviceController* v)
 {
-    return device_;
-}
+    if (device_ == v) return;
 
-void AScanView::setDevice(DeviceController* value)
-{
-    if (device_ == value) {
-        return;
-    }
+    if (active_) emit requestStop();
 
-    if (device_ != nullptr) {
-        disconnect(device_, nullptr, this, nullptr);
-    }
+    device_ = v;
 
-    if (active_) {
-        emit requestStop();
-    }
+    QMetaObject::invokeMethod(worker_,
+                              [=]() {
+                                  worker_->setDevice(v);
+                                  if (active_) worker_->start();
+                              });
 
-    device_ = value;
-
-    if (device_ != nullptr) {
-        connect(device_, &QObject::destroyed, this, [this]() {
-            QMetaObject::invokeMethod(
-                worker_,
-                [worker = worker_]() {
-                    worker->setDevice(nullptr);
-                },
-                Qt::QueuedConnection);
-
-            if (active_) {
-                emit requestStop();
-            }
-
-            {
-                QMutexLocker locker(&samplesMutex_);
-                samples_.clear();
-            }
-
-            markSignalDirty();
-            update();
-
-            emit deviceChanged();
-        });
-    }
-
-    const bool shouldStart = active_;
-    AScanWorker* worker = worker_;
-    DeviceController* newDevice = value;
-
-    QMetaObject::invokeMethod(
-        worker,
-        [worker, newDevice, shouldStart]() {
-            worker->setDevice(newDevice);
-
-            if (shouldStart) {
-                worker->start();
-            }
-        },
-        Qt::QueuedConnection);
-
-    {
-        QMutexLocker locker(&samplesMutex_);
-        samples_.clear();
-    }
-
-    markSignalDirty();
     update();
-
     emit deviceChanged();
 }
 
-int AScanView::sampleCount() const
+int AScanView::sampleCount() const { return sampleCount_; }
+
+void AScanView::setSampleCount(int v)
 {
-    return sampleCount_;
-}
+    if (v < 2 || v == sampleCount_) return;
 
-void AScanView::setSampleCount(int value)
-{
-    if (sampleCount_ == value || value < 2) {
-        return;
-    }
-
-    sampleCount_ = value;
-    emit requestSampleCount(sampleCount_);
-
-    markSignalDirty();
+    sampleCount_ = v;
+    emit requestSampleCount(v);
     update();
-
     emit sampleCountChanged();
 }
 
-qreal AScanView::minY() const
+qreal AScanView::minY() const { return minY_; }
+void AScanView::setMinY(qreal v){ minY_=v; update(); emit minYChanged(); }
+
+qreal AScanView::maxY() const { return maxY_; }
+void AScanView::setMaxY(qreal v){ maxY_=v; update(); emit maxYChanged(); }
+
+bool AScanView::active() const { return active_; }
+
+void AScanView::setActive(bool v)
 {
-    return minY_;
-}
-
-void AScanView::setMinY(qreal value)
-{
-    if (qFuzzyCompare(minY_, value)) {
-        return;
-    }
-
-    minY_ = value;
-    markGridDirty();
-    markSignalDirty();
-    update();
-
-    emit minYChanged();
-}
-
-qreal AScanView::maxY() const
-{
-    return maxY_;
-}
-
-void AScanView::setMaxY(qreal value)
-{
-    if (qFuzzyCompare(maxY_, value)) {
-        return;
-    }
-
-    maxY_ = value;
-    markGridDirty();
-    markSignalDirty();
-    update();
-
-    emit maxYChanged();
-}
-
-bool AScanView::active() const
-{
-    return active_;
-}
-
-void AScanView::setActive(bool value)
-{
-    if (active_ == value) {
-        return;
-    }
-
-    active_ = value;
-
-    if (active_) {
-        emit requestStart();
-    } else {
-        emit requestStop();
-    }
-
+    if (v == active_) return;
+    active_ = v;
+    if (v) emit requestStart();
+    else emit requestStop();
     emit activeChanged();
 }
 
-void AScanView::onSamplesReady(const QVector<float>& samples)
+qreal AScanView::soundVelocity() const { return soundVelocity_; }
+void AScanView::setSoundVelocity(qreal v)
 {
-    {
-        QMutexLocker locker(&samplesMutex_);
-        samples_ = samples;
-    }
+    v = std::max<qreal>(0, v);
+    if (qFuzzyCompare(v, soundVelocity_)) return;
+    soundVelocity_ = v;
+    update();
+    emit soundVelocityChanged();
+}
 
-    markSignalDirty();
+qreal AScanView::timeRangeUs() const { return timeRangeUs_; }
+void AScanView::setTimeRangeUs(qreal v)
+{
+    v = std::max<qreal>(0, v);
+    if (qFuzzyCompare(v, timeRangeUs_)) return;
+    timeRangeUs_ = v;
+    update();
+    emit timeRangeUsChanged();
+}
+
+int AScanView::xDivisions() const { return xDivisions_; }
+void AScanView::setXDivisions(int v)
+{
+    v = std::max(1, v);
+    if (v == xDivisions_) return;
+    xDivisions_ = v;
+    update();
+    emit xDivisionsChanged();
+}
+
+// --- data ---
+
+void AScanView::onSamplesReady(const QVector<float>& s)
+{
+    QMutexLocker l(&samplesMutex_);
+    samples_ = s;
     update();
 }
 
-QSGNode* AScanView::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData*)
+// --- math ---
+
+bool AScanView::hasPhysicalScale() const
 {
-    QSGNode* root = ensureRootNode(oldNode);
-
-    auto* gridNode = childGeometryNode(root, GridNodeIndex);
-    auto* axisNode = childGeometryNode(root, AxisNodeIndex);
-    auto* signalNode = childGeometryNode(root, SignalNodeIndex);
-
-    const float w = static_cast<float>(width());
-    const float h = static_cast<float>(height());
-
-    if (w <= 0.0f || h <= 0.0f) {
-        return root;
-    }
-
-    if (gridDirty_) {
-        constexpr int vSteps = 10;
-        constexpr int hSteps = 8;
-        constexpr int lineCount = (vSteps + 1) + (hSteps + 1);
-        constexpr int vertexCount = lineCount * 2;
-
-        auto* geometry = gridNode->geometry();
-        geometry->allocate(vertexCount);
-
-        auto* vertices = geometry->vertexDataAsPoint2D();
-        int index = 0;
-
-        for (int i = 0; i <= vSteps; ++i) {
-            const float x = w * static_cast<float>(i) / static_cast<float>(vSteps);
-            vertices[index++].set(x, 0.0f);
-            vertices[index++].set(x, h);
-        }
-
-        for (int i = 0; i <= hSteps; ++i) {
-            const float y = h * static_cast<float>(i) / static_cast<float>(hSteps);
-            vertices[index++].set(0.0f, y);
-            vertices[index++].set(w, y);
-        }
-
-        gridNode->markDirty(QSGNode::DirtyGeometry);
-        gridDirty_ = false;
-    }
-
-    if (axisNode != nullptr) {
-        auto* geometry = axisNode->geometry();
-        geometry->allocate(2);
-
-        auto* vertices = geometry->vertexDataAsPoint2D();
-        const float zeroY = static_cast<float>(mapY(0.0f, h));
-
-        vertices[0].set(0.0f, zeroY);
-        vertices[1].set(w, zeroY);
-
-        axisNode->markDirty(QSGNode::DirtyGeometry);
-    }
-
-    if (signalDirty_) {
-        QVector<float> data;
-        {
-            QMutexLocker locker(&samplesMutex_);
-            data = samples_;
-        }
-
-        auto* geometry = signalNode->geometry();
-
-        if (data.size() < 2) {
-            geometry->allocate(0);
-        } else {
-            const int segmentCount = data.size() - 1;
-            const int vertexCount = segmentCount * 6;
-
-            geometry->allocate(vertexCount);
-            auto* vertices = geometry->vertexDataAsPoint2D();
-
-            const int last = data.size() - 1;
-            int out = 0;
-
-            for (int i = 0; i < last; ++i) {
-                const float x1 = w * static_cast<float>(i) / static_cast<float>(last);
-                const float y1 = static_cast<float>(mapY(data[i], h));
-
-                const float x2 = w * static_cast<float>(i + 1) / static_cast<float>(last);
-                const float y2 = static_cast<float>(mapY(data[i + 1], h));
-
-                float dx = x2 - x1;
-                float dy = y2 - y1;
-                const float len = std::sqrt(dx * dx + dy * dy);
-
-                if (len <= 0.0001f) {
-                    continue;
-                }
-
-                dx /= len;
-                dy /= len;
-
-                const float nx = -dy * (SignalThickness * 0.5f);
-                const float ny =  dx * (SignalThickness * 0.5f);
-
-                const float ax = x1 + nx;
-                const float ay = y1 + ny;
-
-                const float bx = x1 - nx;
-                const float by = y1 - ny;
-
-                const float cx = x2 + nx;
-                const float cy = y2 + ny;
-
-                const float dx2 = x2 - nx;
-                const float dy2 = y2 - ny;
-
-                setVertex(vertices[out++], ax, ay);
-                setVertex(vertices[out++], bx, by);
-                setVertex(vertices[out++], cx, cy);
-
-                setVertex(vertices[out++], cx, cy);
-                setVertex(vertices[out++], bx, by);
-                setVertex(vertices[out++], dx2, dy2);
-            }
-
-            geometry->allocate(out);
-        }
-
-        signalNode->markDirty(QSGNode::DirtyGeometry);
-        signalDirty_ = false;
-    }
-
-    return root;
+    return soundVelocity_ > 0 && timeRangeUs_ > 0;
 }
 
-qreal AScanView::mapY(float value, qreal height) const
+qreal AScanView::relativeToThicknessMm(qreal t) const
 {
-    const qreal range = maxY_ - minY_;
-    if (qFuzzyIsNull(range)) {
-        return height * 0.5;
+    // t in [0..1]
+    qreal timeSec = t * timeRangeUs_ * 1e-6;
+    qreal meters = soundVelocity_ * timeSec * 0.5;
+    return meters * 1000.0;
+}
+
+QRectF AScanView::plotRect() const
+{
+    qreal bottom = hasPhysicalScale() ? B_LABEL : B_NO_LABEL;
+
+    return QRectF(
+        L, T,
+        width() - L - R,
+        height() - T - bottom
+        );
+}
+
+qreal AScanView::mapY(float v, const QRectF& r) const
+{
+    qreal t = (std::clamp<qreal>(v, minY_, maxY_) - minY_) / (maxY_ - minY_);
+    return r.top() + r.height() * (1.0 - t);
+}
+
+qreal AScanView::mapX(qreal t, const QRectF& r) const
+{
+    return r.left() + r.width() * t;
+}
+
+// --- paint ---
+
+void AScanView::paint(QPainter* p)
+{
+    p->setRenderHint(QPainter::Antialiasing);
+
+    QRectF r = plotRect();
+    if (r.width() <= 0 || r.height() <= 0) return;
+
+    QVector<float> data;
+    {
+        QMutexLocker l(&samplesMutex_);
+        data = samples_;
     }
 
-    const qreal clampedValue = std::clamp<qreal>(value, minY_, maxY_);
-    const qreal t = (clampedValue - minY_) / range;
-    return height * (1.0 - t);
-}
+    // grid
+    p->setPen(QPen(GRID, 1));
 
-void AScanView::markGridDirty()
-{
-    gridDirty_ = true;
-}
+    for (int i=0;i<=xDivisions_;++i) {
+        qreal x = mapX((qreal)i/xDivisions_, r);
+        p->drawLine(QPointF(x,r.top()), QPointF(x,r.bottom()));
+    }
 
-void AScanView::markSignalDirty()
-{
-    signalDirty_ = true;
+    for (int i=0;i<=H_GRID;++i) {
+        qreal y = r.top()+r.height()*i/H_GRID;
+        p->drawLine(QPointF(r.left(),y), QPointF(r.right(),y));
+    }
+
+    // axis 0
+    p->setPen(QPen(AXIS,1));
+    p->drawLine(QPointF(r.left(), mapY(0,r)), QPointF(r.right(), mapY(0,r)));
+
+    // signal
+    if (data.size()>1) {
+        QPainterPath path;
+        int last = data.size()-1;
+
+        path.moveTo(mapX(0,r), mapY(data[0],r));
+
+        for(int i=1;i<=last;++i){
+            qreal t = (qreal)i/last;
+            path.lineTo(mapX(t,r), mapY(data[i],r));
+        }
+
+        p->setPen(QPen(SIGNAL, SIGNAL_W, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+        p->drawPath(path);
+    }
+
+    // labels (physical)
+    if (hasPhysicalScale()) {
+        p->setPen(TEXT);
+
+        int last = std::max(1, sampleCount_-1);
+
+        for (int i=0;i<=xDivisions_;++i){
+            qreal t = (qreal)i/xDivisions_;
+            qreal x = mapX(t,r);
+
+            qreal mm = relativeToThicknessMm(t);
+
+            QString text = QString::number(mm,'f',2)+" mm";
+
+            p->drawText(
+                QRectF(x-30, r.bottom()+5, 60, 20),
+                Qt::AlignHCenter,
+                text
+                );
+        }
+    }
 }
