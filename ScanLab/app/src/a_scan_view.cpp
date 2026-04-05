@@ -62,12 +62,12 @@ AScanView::~AScanView()
     workerThread_.wait();
 }
 
-DeviceController* AScanView::device() const
+DeviceFacade* AScanView::device() const
 {
     return device_;
 }
 
-void AScanView::setDevice(DeviceController* v)
+void AScanView::setDevice(DeviceFacade* v)
 {
     if (device_ == v) {
         return;

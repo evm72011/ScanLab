@@ -1,11 +1,11 @@
-#include "device_controller.h"
+#include "device_facade.h"
 
 #include "connection_worker.h"
 #include "scanlab/hardware/device.h"
 
 #include <QMetaObject>
 
-DeviceController::DeviceController(QObject* parent)
+DeviceFacade::DeviceFacade(QObject* parent)
     : QObject(parent)
     , hardwareDevice_(std::make_unique<scanlab::hardware::Device>())
 {
@@ -20,21 +20,21 @@ DeviceController::DeviceController(QObject* parent)
 
     connect(
         this,
-        &DeviceController::requestConnect,
+        &DeviceFacade::requestConnect,
         connectionWorker_,
         &ConnectionWorker::connectDevice,
         Qt::QueuedConnection);
 
     connect(
         this,
-        &DeviceController::requestDisconnect,
+        &DeviceFacade::requestDisconnect,
         connectionWorker_,
         &ConnectionWorker::disconnectDevice,
         Qt::QueuedConnection);
 
     connect(
         this,
-        &DeviceController::requestReset,
+        &DeviceFacade::requestReset,
         connectionWorker_,
         &ConnectionWorker::resetDevice,
         Qt::QueuedConnection);
@@ -77,7 +77,7 @@ DeviceController::DeviceController(QObject* parent)
     workerThread_.start();
 }
 
-DeviceController::~DeviceController()
+DeviceFacade::~DeviceFacade()
 {
     if (connectionWorker_ != nullptr && workerThread_.isRunning()) {
         QMetaObject::invokeMethod(
@@ -90,12 +90,12 @@ DeviceController::~DeviceController()
     workerThread_.wait();
 }
 
-DeviceType::Type DeviceController::type() const
+DeviceType::Type DeviceFacade::type() const
 {
     return type_;
 }
 
-void DeviceController::setType(DeviceType::Type value)
+void DeviceFacade::setType(DeviceType::Type value)
 {
     if (type_ == value) {
         return;
@@ -105,12 +105,12 @@ void DeviceController::setType(DeviceType::Type value)
     emit typeChanged();
 }
 
-QString DeviceController::address() const
+QString DeviceFacade::address() const
 {
     return address_;
 }
 
-void DeviceController::setAddress(const QString& value)
+void DeviceFacade::setAddress(const QString& value)
 {
     if (address_ == value) {
         return;
@@ -120,17 +120,17 @@ void DeviceController::setAddress(const QString& value)
     emit addressChanged();
 }
 
-ConnectionState::State DeviceController::connectionState() const
+ConnectionState::State DeviceFacade::connectionState() const
 {
     return connectionState_;
 }
 
-QString DeviceController::lastConnectStatusCode() const
+QString DeviceFacade::lastConnectStatusCode() const
 {
     return lastConnectStatusCode_;
 }
 
-void DeviceController::connectDevice()
+void DeviceFacade::connectDevice()
 {
     if (connectionState_ == ConnectionState::Connecting) {
         return;
@@ -140,7 +140,7 @@ void DeviceController::connectDevice()
     emit requestConnect(type_, address_);
 }
 
-void DeviceController::disconnectDevice()
+void DeviceFacade::disconnectDevice()
 {
     if (connectionState_ == ConnectionState::Connecting) {
         return;
@@ -149,22 +149,22 @@ void DeviceController::disconnectDevice()
     emit requestDisconnect();
 }
 
-void DeviceController::resetDevice()
+void DeviceFacade::resetDevice()
 {
     emit requestReset();
 }
 
-scanlab::hardware::Device* DeviceController::hardwareDevice()
+scanlab::hardware::Device* DeviceFacade::hardwareDevice()
 {
     return hardwareDevice_.get();
 }
 
-const scanlab::hardware::Device* DeviceController::hardwareDevice() const
+const scanlab::hardware::Device* DeviceFacade::hardwareDevice() const
 {
     return hardwareDevice_.get();
 }
 
-void DeviceController::setConnectionState(ConnectionState::State value)
+void DeviceFacade::setConnectionState(ConnectionState::State value)
 {
     if (connectionState_ == value) {
         return;
@@ -174,7 +174,7 @@ void DeviceController::setConnectionState(ConnectionState::State value)
     emit connectionStateChanged();
 }
 
-void DeviceController::setLastConnectStatusCode(const QString& value)
+void DeviceFacade::setLastConnectStatusCode(const QString& value)
 {
     if (lastConnectStatusCode_ == value) {
         return;

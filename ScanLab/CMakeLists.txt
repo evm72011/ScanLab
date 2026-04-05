@@ -61,7 +61,7 @@ qt_add_qml_module(${APP_NAME}
         app/include/c_scan_worker.h
         app/include/connection_state.h
         app/include/connection_worker.h
-        app/include/device_controller.h
+        app/include/device_facade.h
         app/include/device_type.h
         app/include/device_type_mapper.h
 
@@ -73,7 +73,7 @@ qt_add_qml_module(${APP_NAME}
         app/src/c_scan_view.cpp
         app/src/c_scan_worker.cpp
         app/src/connection_worker.cpp
-        app/src/device_controller.cpp
+        app/src/device_facade.cpp
 )
 
 include(GNUInstallDirs)

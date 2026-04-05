@@ -4,7 +4,7 @@
 #include <QHash>
 #include <QVector>
 
-#include "device_controller.h"
+#include "device_facade.h"
 #include "scanlab/hardware/a_scan_acquisition.h"
 
 class AScanWorker : public QObject
@@ -16,7 +16,7 @@ public:
     ~AScanWorker() override;
 
 public slots:
-    void setDevice(DeviceController* device);
+    void setDevice(DeviceFacade* device);
     void start();
     void stop();
     void setSampleCount(int value);
@@ -25,7 +25,7 @@ signals:
     void samplesReady(const QVector<float>& samples);
 
 private:
-    DeviceController* device_ = nullptr;
+    DeviceFacade* device_ = nullptr;
     scanlab::hardware::AScanAcquisition acquisition_;
     int sampleCount_ = 512;
 

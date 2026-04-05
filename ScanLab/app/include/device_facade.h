@@ -17,7 +17,7 @@ namespace scanlab::hardware {
 class Device;
 }
 
-class DeviceController : public QObject
+class DeviceFacade : public QObject
 {
     Q_OBJECT
     QML_ELEMENT
@@ -28,8 +28,8 @@ class DeviceController : public QObject
     Q_PROPERTY(QString lastConnectStatusCode READ lastConnectStatusCode NOTIFY lastConnectStatusCodeChanged)
 
 public:
-    explicit DeviceController(QObject* parent = nullptr);
-    ~DeviceController() override;
+    explicit DeviceFacade(QObject* parent = nullptr);
+    ~DeviceFacade() override;
 
     DeviceType::Type type() const;
     void setType(DeviceType::Type value);

@@ -7,7 +7,7 @@
 #include <QVector>
 #include <qqmlintegration.h>
 
-#include "device_controller.h"
+#include "device_facade.h"
 
 class AScanWorker;
 class QHoverEvent;
@@ -17,7 +17,7 @@ class AScanView : public QQuickPaintedItem
     Q_OBJECT
     QML_ELEMENT
 
-    Q_PROPERTY(DeviceController* device READ device WRITE setDevice NOTIFY deviceChanged)
+    Q_PROPERTY(DeviceFacade* device READ device WRITE setDevice NOTIFY deviceChanged)
     Q_PROPERTY(int sampleCount READ sampleCount WRITE setSampleCount NOTIFY sampleCountChanged)
     Q_PROPERTY(qreal minY READ minY WRITE setMinY NOTIFY minYChanged)
     Q_PROPERTY(qreal maxY READ maxY WRITE setMaxY NOTIFY maxYChanged)
@@ -33,8 +33,8 @@ public:
     explicit AScanView(QQuickItem* parent = nullptr);
     ~AScanView() override;
 
-    DeviceController* device() const;
-    void setDevice(DeviceController* value);
+    DeviceFacade* device() const;
+    void setDevice(DeviceFacade* value);
 
     int sampleCount() const;
     void setSampleCount(int value);
@@ -100,7 +100,7 @@ private:
     QVector<float> samples_;
     mutable QMutex samplesMutex_;
 
-    QPointer<DeviceController> device_;
+    QPointer<DeviceFacade> device_;
 
     int sampleCount_ = 512;
     qreal minY_ = -1.0;

@@ -40,7 +40,7 @@ AScanWorker::~AScanWorker()
     acquisition_.stop();
 }
 
-void AScanWorker::setDevice(DeviceController* device)
+void AScanWorker::setDevice(DeviceFacade* device)
 {
     acquisition_.stop();
     device_ = device;
