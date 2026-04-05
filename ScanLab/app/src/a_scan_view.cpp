@@ -10,18 +10,6 @@
 
 #include <algorithm>
 
-#ifdef SIGNAL
-#undef SIGNAL
-#endif
-
-#ifdef TEXT
-#undef TEXT
-#endif
-
-#ifdef max
-#undef max
-#endif
-
 namespace
 {
 constexpr qreal L = 8.0;
@@ -34,8 +22,8 @@ constexpr int H_GRID = 8;
 
 const QColor GRID(255, 255, 255, 25);
 const QColor AXIS(255, 255, 255, 56);
-const QColor SIGNAL(0x6a, 0xa9, 0xff);
-const QColor TEXT(0xa0, 0xa0, 0xa0);
+const QColor SIGNAL_COLOR(0x6a, 0xa9, 0xff);
+const QColor TEXT_COLOR(0xa0, 0xa0, 0xa0);
 const QColor CURSOR_LINE(255, 210, 80, 180);
 const QColor CURSOR_TEXT_BG(20, 20, 20, 210);
 const QColor CURSOR_TEXT_FG(255, 240, 190);
@@ -92,7 +80,7 @@ void AScanView::setDevice(DeviceController* v)
     device_ = v;
 
     QMetaObject::invokeMethod(worker_,
-                              [=]() {
+                              [=, this]() {
                                   worker_->setDevice(v);
                                   if (active_) {
                                       worker_->start();
@@ -378,12 +366,12 @@ void AScanView::paint(QPainter* p)
             path.lineTo(mapX(t, r), mapY(data[i], r));
         }
 
-        p->setPen(QPen(SIGNAL, SIGNAL_W, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+        p->setPen(QPen(SIGNAL_COLOR, SIGNAL_W, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
         p->drawPath(path);
     }
 
     if (hasPhysicalScale()) {
-        p->setPen(TEXT);
+        p->setPen(TEXT_COLOR);
 
         for (int i = 0; i <= xDivisions_; ++i) {
             const qreal t = static_cast<qreal>(i) / xDivisions_;
