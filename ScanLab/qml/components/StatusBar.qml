@@ -13,7 +13,7 @@ ToolBar {
     readonly property bool connecting: connectionState === SL.ConnectionState.Connecting
     readonly property bool connected: connectionState === SL.ConnectionState.Connected
 
-    property bool pulsing: false
+    readonly property bool pulsing: backend?.device?.pulsing ?? false
 
     background: Rectangle {
         color: SL.Theme.colors.statusbarBackground
@@ -56,16 +56,11 @@ ToolBar {
             }
 
             StatusChip {
-                visible: root.connected && !root.pulsing
-                iconSource: "qrc:/icons/disconnected.svg"
-                text: qsTr("Not pulsing")
+                visible: root.connected
+                iconSource: "qrc:/icons/pulsation.svg"
+                text: root.pulsing ? qsTr("Pulsing") : qsTr("Not pulsing")
             }
 
-            StatusChip {
-                visible: root.pulsing
-                iconSource: "qrc:/icons/connected.svg"
-                text: qsTr("Pulsing")
-            }
         }
     }
 }

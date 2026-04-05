@@ -25,6 +25,7 @@ class DeviceFacade : public QObject
     Q_PROPERTY(DeviceType::Type type READ type WRITE setType NOTIFY typeChanged)
     Q_PROPERTY(QString address READ address WRITE setAddress NOTIFY addressChanged)
     Q_PROPERTY(ConnectionState::State connectionState READ connectionState NOTIFY connectionStateChanged)
+    Q_PROPERTY(bool pulsing READ pulsing NOTIFY pulsingChanged)
     Q_PROPERTY(QString lastConnectStatusCode READ lastConnectStatusCode NOTIFY lastConnectStatusCodeChanged)
 
 public:
@@ -39,6 +40,7 @@ public:
 
     ConnectionState::State connectionState() const;
     QString lastConnectStatusCode() const;
+    bool pulsing() const;
 
     Q_INVOKABLE void connectDevice();
     Q_INVOKABLE void disconnectDevice();
@@ -47,11 +49,13 @@ public:
     scanlab::hardware::Device* hardwareDevice();
     const scanlab::hardware::Device* hardwareDevice() const;
 
+    void setPulsing(bool value);
 signals:
     void typeChanged();
     void addressChanged();
     void connectionStateChanged();
     void lastConnectStatusCodeChanged();
+    void pulsingChanged();
 
     void requestConnect(DeviceType::Type type, QString address);
     void requestDisconnect();
@@ -69,6 +73,7 @@ private:
 
     ConnectionState::State connectionState_ = ConnectionState::Disconnected;
     QString lastConnectStatusCode_;
+    bool pulsing_ = false;
 
     std::unique_ptr<scanlab::hardware::Device> hardwareDevice_;
 

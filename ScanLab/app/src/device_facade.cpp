@@ -130,6 +130,11 @@ QString DeviceFacade::lastConnectStatusCode() const
     return lastConnectStatusCode_;
 }
 
+bool DeviceFacade::pulsing() const
+{
+    return pulsing_;
+}
+
 void DeviceFacade::connectDevice()
 {
     if (connectionState_ == ConnectionState::Connecting) {
@@ -182,4 +187,14 @@ void DeviceFacade::setLastConnectStatusCode(const QString& value)
 
     lastConnectStatusCode_ = value;
     emit lastConnectStatusCodeChanged();
+}
+
+void DeviceFacade::setPulsing(bool value)
+{
+    if (pulsing_ == value) {
+        return;
+    }
+
+    pulsing_ = value;
+    emit pulsingChanged();
 }
