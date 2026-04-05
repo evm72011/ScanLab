@@ -64,6 +64,8 @@ qt_add_qml_module(${APP_NAME}
         app/include/device_facade.h
         app/include/device_type.h
         app/include/device_type_mapper.h
+        app/include/health_monitor.h
+        app/include/health_worker.h
 
         app/src/a_scan_view.cpp
         app/src/a_scan_worker.cpp
@@ -74,6 +76,8 @@ qt_add_qml_module(${APP_NAME}
         app/src/c_scan_worker.cpp
         app/src/connection_worker.cpp
         app/src/device_facade.cpp
+        app/src/health_monitor.cpp
+        app/src/health_worker.cpp
 )
 
 include(GNUInstallDirs)

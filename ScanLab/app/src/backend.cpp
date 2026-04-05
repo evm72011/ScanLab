@@ -5,18 +5,29 @@
 #include <UTDriverOEMPAmax.h>
 
 #include "backend.h"
+
 #include <QDebug>
 
-Backend::Backend(QObject *parent)
+Backend::Backend(QObject* parent)
     : QObject(parent)
 {
     device_.setType(DeviceType::OEMPA_Max);
+    healthMonitor_.setDevice(&device_);
+
+    connect(&device_,
+            &DeviceFacade::connectionStateChanged,
+            this,
+            [this]() {
+                setConnected(
+                    device_.connectionState() == ConnectionState::Connected);
+            });
 }
 
 void Backend::setConnected(bool value)
 {
-    if (connected_ == value)
+    if (connected_ == value) {
         return;
+    }
 
     connected_ = value;
     emit connectedChanged();
@@ -24,7 +35,6 @@ void Backend::setConnected(bool value)
 
 bool Backend::ensureDeviceCreated()
 {
-    // пока заглушка
     return true;
 }
 
@@ -41,6 +51,6 @@ bool Backend::connectDevice()
 
     qInfo() << "[connectDevice] type =" << type << ", address =" << address;
 
-    setConnected(true);
+    device_.connectDevice();
     return true;
 }

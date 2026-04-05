@@ -64,6 +64,9 @@ ToolBar {
                 text: root.pulsing ? qsTr("Pulsing") : qsTr("Not pulsing")
             }
 
+            TemperatureStatusChip {
+                visible: root.connected
+            }
         }
     }
 }

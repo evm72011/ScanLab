@@ -10,6 +10,9 @@ qt_add_resources(${APP_NAME} app_resources
         icons/pulsing.svg
         icons/scan.svg
         icons/service.svg
+        icons/temperature-high.svg
+        icons/temperature-low.svg
+        icons/temperature-medium.svg
         icons/update.svg
         icons/warning.svg
 )

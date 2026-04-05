@@ -19,6 +19,7 @@ set(QML_MODULE_FILES
     components/StatusBar.qml
     components/StatusChip.qml
     components/TabButton.qml
+    components/TemperatureStatusChip.qml
     components/TextField.qml
 
     dialogs/MessageDialog.qml
