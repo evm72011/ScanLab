@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Layouts
 import ScanLab as SL
 
 ToolBar {
@@ -27,46 +28,48 @@ ToolBar {
         }
     }
 
-    contentItem: Item {
+    contentItem: RowLayout {
         anchors.fill: parent
+        anchors.leftMargin: 10
+        anchors.rightMargin: 10
+        spacing: 8
 
-        Row {
-            anchors.verticalCenter: parent.verticalCenter
-            x: 10
-            spacing: 8
+        StatusChip {
+            visible: root.disconnected
+            iconSource: "qrc:/icons/disconnected.svg"
+            text: qsTr("Disconnected")
+        }
 
-            StatusChip {
-                visible: root.disconnected
-                iconSource: "qrc:/icons/disconnected.svg"
-                text: qsTr("Disconnected")
-            }
+        StatusChip {
+            visible: root.connecting
+            iconSource: "qrc:/icons/update.svg"
+            iconOpacity: 0.8
+            rotateIcon: true
+            text: qsTr("Connecting")
+        }
 
-            StatusChip {
-                visible: root.connecting
-                iconSource: "qrc:/icons/update.svg"
-                iconOpacity: 0.8
-                rotateIcon: true
-                text: qsTr("Connecting")
-            }
+        StatusChip {
+            visible: root.connected
+            iconSource: "qrc:/icons/connected.svg"
+            text: qsTr("Connected")
+        }
 
-            StatusChip {
-                visible: root.connected
-                iconSource: "qrc:/icons/connected.svg"
-                text: qsTr("Connected")
-            }
+        StatusChip {
+            visible: root.connected
+            iconSource: "qrc:/icons/pulsing.svg"
+            iconSize: 18
+            iconOpacity: root.pulsing ? 1 : 0.7
+            pulseBackground: root.pulsing
+            text: root.pulsing ? qsTr("Pulsing") : qsTr("Not pulsing")
+        }
 
-            StatusChip {
-                visible: root.connected
-                iconSource: "qrc:/icons/pulsing.svg"
-                iconSize: 18
-                iconOpacity: root.pulsing ? 1 : 0.7
-                pulseBackground: root.pulsing
-                text: root.pulsing ? qsTr("Pulsing") : qsTr("Not pulsing")
-            }
+        Item {
+            Layout.fillWidth: true
+        }
 
-            TemperatureStatusChip {
-                visible: root.connected
-            }
+        TemperatureStatusChip {
+            visible: root.connected
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
         }
     }
 }
