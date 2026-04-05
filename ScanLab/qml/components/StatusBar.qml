@@ -57,7 +57,10 @@ ToolBar {
 
             StatusChip {
                 visible: root.connected
-                iconSource: "qrc:/icons/pulsation.svg"
+                iconSource: "qrc:/icons/pulsing.svg"
+                iconSize: 18
+                iconOpacity: root.pulsing ? 1 : 0.7
+                pulseBackground: root.pulsing
                 text: root.pulsing ? qsTr("Pulsing") : qsTr("Not pulsing")
             }
 

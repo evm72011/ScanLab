@@ -10,11 +10,30 @@ Rectangle {
     property int iconSize: 14
     property real iconOpacity: 1
     property bool rotateIcon: false
+    property bool pulseBackground: false
 
     height: 30
-    color: SL.Theme.colors.statusbarBackground
-
+    color: "transparent"
     implicitWidth: row.implicitWidth + 12
+
+    Rectangle {
+        id: pulseGlow
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        width: row.width + 10
+        height: parent.height - 8
+        radius: 3
+        color: Qt.rgba(1, 1, 1, 0.16)
+        opacity: 0
+
+        SequentialAnimation on opacity {
+            running: root.pulseBackground
+            loops: Animation.Infinite
+
+            NumberAnimation { from: 0.0; to: 0.4; duration: 500 }
+            NumberAnimation { from: 0.4; to: 0.0; duration: 500 }
+        }
+    }
 
     Row {
         id: row
