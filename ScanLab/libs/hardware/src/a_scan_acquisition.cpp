@@ -68,11 +68,11 @@ public:
         const CStream_0x0001*,
         const CSubStreamAscan_0x0103* pAscanHeader,
         const void* pBufferMax,
-        const void* pBufferMin,
+        const void*,
         const void*)
     {
         auto* self = static_cast<Impl*>(pAcquisitionParameter);
-        if (!self || !pAscanHeader) {
+        if (!self || !pAscanHeader || !pBufferMax) {
             return 0;
         }
 
@@ -81,7 +81,6 @@ public:
             static_cast<int>(pAscanHeader->dataCount),
             pBufferMax);
 
-        // временно можно отдельно залогировать pBufferMin
         return 0;
     }
 
@@ -99,13 +98,11 @@ public:
     void handleBuffer(int dataSize, int dataCount, const void* buffer)
     {
         SamplesHandler localHandler;
-        int localTargetSampleCount = 0;
         bool localRunning = false;
 
         {
             std::lock_guard<std::mutex> lock(mutex);
             localHandler = handler;
-            localTargetSampleCount = targetSampleCount;
             localRunning = running;
         }
 
@@ -116,10 +113,6 @@ public:
         Samples samples = convertBufferToSamples(buffer, dataSize, dataCount);
         if (samples.empty()) {
             return;
-        }
-
-        if (localTargetSampleCount > 1 && static_cast<int>(samples.size()) != localTargetSampleCount) {
-            samples = resample(samples, localTargetSampleCount);
         }
 
         localHandler(std::move(samples));
