@@ -6,8 +6,6 @@ import ScanLab as SL
 Rectangle {
     id: root
 
-    //property var backendRef: backend
-
     readonly property var device: backend?.device ?? null
     readonly property var healthMonitor: backend?.healthMonitor ?? null
 

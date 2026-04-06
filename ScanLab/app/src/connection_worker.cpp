@@ -14,33 +14,30 @@ ConnectionWorker::ConnectionWorker(scanlab::hardware::Device* hardwareDevice, QO
 
 void ConnectionWorker::connectDevice(DeviceType::Type type, const QString& address)
 {
-    if (hardwareDevice_ == nullptr) {
+    auto emitResult = [this](scanlab::hardware::ConnectResult result, bool isConnected)
+    {
+        const auto statusCode =
+            QString::fromUtf8(magic_enum::enum_name(result).data());
+
         emit connectCompleted(
-            static_cast<int>(scanlab::hardware::ConnectResult::DeviceNotSet),
-            false,
-            QStringLiteral("DeviceNotSet"));
+            static_cast<int>(result),
+            isConnected,
+            statusCode);
+    };
+
+    if (hardwareDevice_ == nullptr) {
+        emitResult(scanlab::hardware::ConnectResult::DeviceNotSet, false);
         return;
     }
 
     hardwareDevice_->resetDevice();
-
     if (!hardwareDevice_->setDevice(toHardware(type))) {
-        emit connectCompleted(
-            static_cast<int>(scanlab::hardware::ConnectResult::DeviceNotSet),
-            false,
-            QStringLiteral("DeviceNotSet"));
+        emitResult(scanlab::hardware::ConnectResult::DeviceNotSet, false);
         return;
     }
 
     const auto result = hardwareDevice_->connect(address.toStdWString());
-
-    const QString statusCode =
-        QString::fromUtf8(magic_enum::enum_name(result).data());
-
-    emit connectCompleted(
-        static_cast<int>(result),
-        hardwareDevice_->isConnected(),
-        statusCode);
+    emitResult(result, hardwareDevice_->isConnected());
 }
 
 void ConnectionWorker::disconnectDevice()
