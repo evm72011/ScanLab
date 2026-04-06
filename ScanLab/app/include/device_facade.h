@@ -24,10 +24,11 @@ class DeviceFacade : public QObject
 
     Q_PROPERTY(DeviceType::Type type READ type WRITE setType NOTIFY typeChanged)
     Q_PROPERTY(QString address READ address WRITE setAddress NOTIFY addressChanged)
+
     Q_PROPERTY(ConnectionState::State connectionState READ connectionState NOTIFY connectionStateChanged)
-    Q_PROPERTY(bool pulsing READ pulsing NOTIFY pulsingChanged)
     Q_PROPERTY(QString lastConnectStatusCode READ lastConnectStatusCode NOTIFY lastConnectStatusCodeChanged)
 
+    Q_PROPERTY(bool pulsing READ pulsing NOTIFY pulsingChanged)
 public:
     explicit DeviceFacade(QObject* parent = nullptr);
     ~DeviceFacade() override;

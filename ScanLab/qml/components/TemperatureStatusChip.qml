@@ -6,10 +6,10 @@ import ScanLab as SL
 Rectangle {
     id: root
 
-    property var backendRef: backend
+    //property var backendRef: backend
 
-    readonly property var device: backendRef?.device ?? null
-    readonly property var healthMonitor: backendRef?.healthMonitor ?? null
+    readonly property var device: backend?.device ?? null
+    readonly property var healthMonitor: backend?.healthMonitor ?? null
 
     readonly property bool connected:
         device?.connectionState === SL.ConnectionState.Connected
