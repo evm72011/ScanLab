@@ -51,6 +51,16 @@ qt_add_qml_module(${APP_NAME}
     URI ScanLab
     VERSION 1.0
     SOURCES
+        app/include/runtime/device/device_context.h
+        app/include/runtime/device/device_type.h
+        app/include/runtime/device/device_type_mapper.h
+        app/include/runtime/connection/connection_result.h
+        app/include/runtime/connection/connection_service.h
+        app/include/runtime/connection/connection_worker.h
+
+        app/include/ui/connection/connection_facade.h
+        app/include/ui/connection/connection_state.h
+
         app/include/a_scan_view.h
         app/include/a_scan_worker.h
         app/include/app_settings.h
@@ -66,6 +76,12 @@ qt_add_qml_module(${APP_NAME}
         app/include/device_type_mapper.h
         app/include/health_monitor.h
         app/include/health_worker.h
+
+        app/src/runtime/device/device_context.cpp
+        app/src/runtime/connection/connection_service.cpp
+        app/src/runtime/connection/connection_worker.cpp
+
+        app/src/ui/connection/connection_facade.cpp
 
         app/src/a_scan_view.cpp
         app/src/a_scan_worker.cpp

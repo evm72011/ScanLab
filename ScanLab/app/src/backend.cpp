@@ -11,10 +11,11 @@
 Backend::Backend(QObject* parent)
     : QObject(parent)
 {
-    device_.setType(DeviceType::OEMPA_Max);
+    device_.setType(DeviceType::OEMPA_Max);     // remove
     healthMonitor_.setDevice(&device_);
 }
 
+/*
 bool Backend::ensureDeviceCreated()
 {
     return true;
@@ -35,3 +36,4 @@ bool Backend::connectDevice()
     device_.connectDevice();
     return true;
 }
+*/
