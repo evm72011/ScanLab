@@ -19,7 +19,7 @@ public:
     scanlab::hardware::Device* device();
     const scanlab::hardware::Device* device() const;
 
-    void setDevice(std::unique_ptr<scanlab::hardware::Device> device);
+    //void setDevice(std::unique_ptr<scanlab::hardware::Device> device);
 
     bool hasDevice() const;
     void reset();

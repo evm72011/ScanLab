@@ -5,7 +5,7 @@
 #include <QThread>
 
 #include "runtime/device/device_type.h"
-#include "ui/connection/connection_state.h"
+#include "ui/connection/connection_state2.h"
 
 class DeviceContext;
 class ConnectionWorker2;
@@ -16,7 +16,7 @@ class ConnectionFacade : public QObject
 
     Q_PROPERTY(DeviceType2 deviceType READ deviceType WRITE setDeviceType NOTIFY deviceTypeChanged)
     Q_PROPERTY(QString address READ address WRITE setAddress NOTIFY addressChanged)
-    Q_PROPERTY(SL::ConnectionState2 connectionState READ connectionState NOTIFY connectionStateChanged)
+    Q_PROPERTY(ConnectionState2::State connectionState READ connectionState NOTIFY connectionStateChanged)
     Q_PROPERTY(QString lastConnectStatusCode READ lastConnectStatusCode NOTIFY lastConnectStatusCodeChanged)
 
 public:
@@ -29,7 +29,7 @@ public:
     QString address() const;
     void setAddress(const QString& value);
 
-    SL::ConnectionState2 connectionState() const;
+    ConnectionState2::State connectionState() const;
     QString lastConnectStatusCode() const;
 
     Q_INVOKABLE void connectDevice();
@@ -41,13 +41,14 @@ signals:
     void addressChanged();
     void connectionStateChanged();
     void lastConnectStatusCodeChanged();
+    void connectFinished(int result); // ← вот это
 
     void requestConnect(DeviceType2 type, const QString& address);
     void requestDisconnect();
     void requestReset();
 
 private:
-    void setConnectionState(SL::ConnectionState2 value);
+    void setConnectionState(ConnectionState2::State value);
     void setLastConnectStatusCode(const QString& value);
 
 private:
@@ -56,6 +57,6 @@ private:
 
     DeviceType2 deviceType_ = DeviceType2::None;
     QString address_;
-    SL::ConnectionState2 connectionState_ = SL::ConnectionState2::Disconnected;
+    ConnectionState2::State connectionState_ = ConnectionState2::State::Disconnected;
     QString lastConnectStatusCode_;
 };

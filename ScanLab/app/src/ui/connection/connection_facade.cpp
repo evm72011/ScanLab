@@ -5,6 +5,7 @@
 #include "runtime/device/device_context.h"
 
 #include <QMetaObject>
+#include <QDebug>
 
 ConnectionFacade::ConnectionFacade(DeviceContext& context, QObject* parent)
     : QObject(parent)
@@ -46,10 +47,11 @@ ConnectionFacade::ConnectionFacade(DeviceContext& context, QObject* parent)
         [this](const ConnectionResult& result) {
             setConnectionState(
                 result.isConnected
-                    ? SL::ConnectionState2::Connected
-                    : SL::ConnectionState2::Disconnected);
+                    ? ConnectionState2::State::Connected
+                    : ConnectionState2::State::Disconnected);
 
             setLastConnectStatusCode(QString::fromStdString(result.statusCode));
+            emit connectFinished(result.isConnected ? 0 : 1);  // TODO connectFailure bool ??
         },
         Qt::QueuedConnection);
 
@@ -59,7 +61,7 @@ ConnectionFacade::ConnectionFacade(DeviceContext& context, QObject* parent)
         this,
         [this](bool stillConnected) {
             if (!stillConnected) {
-                setConnectionState(SL::ConnectionState2::Disconnected);
+                setConnectionState(ConnectionState2::State::Disconnected);
             }
         },
         Qt::QueuedConnection);
@@ -69,7 +71,7 @@ ConnectionFacade::ConnectionFacade(DeviceContext& context, QObject* parent)
         &ConnectionWorker2::resetCompleted,
         this,
         [this]() {
-            setConnectionState(SL::ConnectionState2::Disconnected);
+            setConnectionState(ConnectionState2::State::Disconnected);
         },
         Qt::QueuedConnection);
 
@@ -96,6 +98,7 @@ DeviceType2 ConnectionFacade::deviceType() const
 
 void ConnectionFacade::setDeviceType(DeviceType2 value)
 {
+    qDebug() << "ConnectionFacade::setDeviceType " << (int)value;
     if (deviceType_ == value) {
         return;
     }
@@ -119,7 +122,7 @@ void ConnectionFacade::setAddress(const QString& value)
     emit addressChanged();
 }
 
-SL::ConnectionState2 ConnectionFacade::connectionState() const
+ConnectionState2::State ConnectionFacade::connectionState() const
 {
     return connectionState_;
 }
@@ -131,17 +134,18 @@ QString ConnectionFacade::lastConnectStatusCode() const
 
 void ConnectionFacade::connectDevice()
 {
-    if (connectionState_ == SL::ConnectionState2::Connecting) {
+    if (connectionState_ == ConnectionState2::State::Connecting) {
         return;
     }
 
-    setConnectionState(SL::ConnectionState2::Connecting);
+    setConnectionState(ConnectionState2::State::Connecting);
+    qDebug() << "ConnectionFacade::connectDevice: " << (int)deviceType_;
     emit requestConnect(deviceType_, address_);
 }
 
 void ConnectionFacade::disconnectDevice()
 {
-    if (connectionState_ == SL::ConnectionState2::Connecting) {
+    if (connectionState_ == ConnectionState2::State::Connecting) {
         return;
     }
 
@@ -153,7 +157,7 @@ void ConnectionFacade::resetDevice()
     emit requestReset();
 }
 
-void ConnectionFacade::setConnectionState(SL::ConnectionState2 value)
+void ConnectionFacade::setConnectionState(ConnectionState2::State value)
 {
     if (connectionState_ == value) {
         return;

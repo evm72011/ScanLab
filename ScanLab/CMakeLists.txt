@@ -53,13 +53,17 @@ qt_add_qml_module(${APP_NAME}
     SOURCES
         app/include/runtime/device/device_context.h
         app/include/runtime/device/device_type.h
+        app/include/runtime/device/device_type_def.h
         app/include/runtime/device/device_type_mapper.h
+
         app/include/runtime/connection/connection_result.h
         app/include/runtime/connection/connection_service.h
         app/include/runtime/connection/connection_worker.h
 
         app/include/ui/connection/connection_facade.h
-        app/include/ui/connection/connection_state.h
+        app/include/ui/connection/connection_state2.h
+
+        app/include/ui/device/device_type2.h
 
         app/include/a_scan_view.h
         app/include/a_scan_worker.h

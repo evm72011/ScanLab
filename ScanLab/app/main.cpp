@@ -3,6 +3,7 @@
 #include <QQmlContext>
 #include <QIcon>
 #include <QQuickStyle>
+
 #include "backend.h"
 
 int main(int argc, char *argv[])

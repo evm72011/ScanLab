@@ -2,7 +2,10 @@
 
 #include "scanlab/hardware/device.h"
 
-DeviceContext::DeviceContext() = default;
+DeviceContext::DeviceContext()
+    : device_(std::make_unique<scanlab::hardware::Device>())
+{
+}
 
 DeviceContext::~DeviceContext() = default;
 
@@ -16,10 +19,10 @@ const scanlab::hardware::Device* DeviceContext::device() const
     return device_.get();
 }
 
-void DeviceContext::setDevice(std::unique_ptr<scanlab::hardware::Device> device)
-{
-    device_ = std::move(device);
-}
+//void DeviceContext::setDevice(std::unique_ptr<scanlab::hardware::Device> device)
+//{
+//    device_ = std::move(device);
+//}
 
 bool DeviceContext::hasDevice() const
 {

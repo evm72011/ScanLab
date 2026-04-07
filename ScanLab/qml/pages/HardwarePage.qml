@@ -6,12 +6,12 @@ import ScanLab as SL
 Item {
     id: root
 
-    property int connectionState: backend?.device?.connectionState ??
-                                  SL.ConnectionState.Disconnected
+    property int connectionState: backend?.connection?.connectionState ??
+                                  SL.ConnectionState2.Disconnected
 
-    readonly property bool disconnected: connectionState === SL.ConnectionState.Disconnected
-    readonly property bool connecting: connectionState === SL.ConnectionState.Connecting
-    readonly property bool connected: connectionState === SL.ConnectionState.Connected
+    readonly property bool disconnected: connectionState === SL.ConnectionState2.Disconnected
+    readonly property bool connecting: connectionState === SL.ConnectionState2.Connecting
+    readonly property bool connected: connectionState === SL.ConnectionState2.Connected
 
     Rectangle {
         anchors.fill: parent
@@ -30,24 +30,24 @@ Item {
             infoText: qsTr("Select the connected device")
 
             model: [
-                { value: SL.DeviceType.None, text: "None" },
-                { value: SL.DeviceType.OEMPA_1, text: "OEMPA 1" },
-                { value: SL.DeviceType.OEMPA_2, text: "OEMPA 2" },
-                { value: SL.DeviceType.OEMPA_Max, text: "OEMPA Max" },
-                { value: SL.DeviceType.OEMPA_Mini, text: "OEMPA Mini" },
-                { value: SL.DeviceType.OEMPA_MC1, text: "OEMPA MC1" },
-                { value: SL.DeviceType.OEMPA_MC2, text: "OEMPA MC2" },
-                { value: SL.DeviceType.OEMPA_MCmu, text: "OEMPA MCμ" },
-                { value: SL.DeviceType.OEMPA_MCmuF, text: "OEMPA MCμF" },
-                { value: SL.DeviceType.OEMPA_Micro, text: "OEMPA Micro" }
+                { value: SL.DeviceType2Qml.None, text: "None" },
+                { value: SL.DeviceType2Qml.OEMPA_1, text: "OEMPA 1" },
+                { value: SL.DeviceType2Qml.OEMPA_2, text: "OEMPA 2" },
+                { value: SL.DeviceType2Qml.OEMPA_Max, text: "OEMPA Max" },
+                { value: SL.DeviceType2Qml.OEMPA_Mini, text: "OEMPA Mini" },
+                { value: SL.DeviceType2Qml.OEMPA_MC1, text: "OEMPA MC1" },
+                { value: SL.DeviceType2Qml.OEMPA_MC2, text: "OEMPA MC2" },
+                { value: SL.DeviceType2Qml.OEMPA_MCmu, text: "OEMPA MCμ" },
+                { value: SL.DeviceType2Qml.OEMPA_MCmuF, text: "OEMPA MCμF" },
+                { value: SL.DeviceType2Qml.OEMPA_Micro, text: "OEMPA Micro" }
             ]
 
-            currentValue: backend?.device?.type ?? SL.DeviceType.None
+            currentValue: backend?.connection?.deviceType ?? SL.DeviceType2Qml.None
             enabled: root.disconnected
 
             onActivated: function(value) {
-                backend.device.type = value
-                backend.device.resetDevice();
+                backend.connection.deviceType = value
+                backend.connection.resetDevice();
                 SL.AppSettings.setValue("Hardware/type", value)
             }
         }
@@ -59,11 +59,11 @@ Item {
             placeholderText: qsTr("Enter device address")
             infoText: qsTr("IP address or device path")
 
-            value:  backend?.device?.address ?? ""
+            value:  backend?.connection?.address ?? ""
             enabled: root.disconnected
 
             onValueEdited: function(value) {
-                backend.device.address = value;
+                backend.connection.address = value;
             }
 
             onEditingFinished: function(value) {
@@ -96,15 +96,15 @@ Item {
 
             onClicked: {
                 if (root.connected) {
-                    backend.device.disconnectDevice();
+                    backend.connection.disconnectDevice();
                 } else {
-                    backend.device.connectDevice()
+                    backend.connection.connectDevice()
                 }
             }
         }
 
         Connections {
-            target: backend?.device ?? null
+            target: backend?.connection ?? null
 
             function onConnectFinished(result) {
                 if (result !== 0) {
@@ -117,7 +117,7 @@ Item {
             id: connectionErrorDialog
             messageType: MessageDialog.Type.Error
             shortText: qsTr("Connection error")
-            detailsText: `Error Code: ${backend?.device?.lastConnectStatusCode ?? ''}`
+            detailsText: `Error Code: ${backend?.connection?.lastConnectStatusCode ?? ''}`
         }
 
         SL.MessageDialog {
@@ -130,15 +130,14 @@ Item {
         Item { Layout.fillHeight: true }
 
         Component.onCompleted: {
-            backend.device.address = SL.AppSettings.value(
+            backend.connection.address = SL.AppSettings.value(
                 "Hardware/address",
                 backend.device.address
             )
 
-            backend.device.type = Number(
-                SL.AppSettings.value("Hardware/type", backend.device.type)
+            backend.connection.deviceType = Number(
+                SL.AppSettings.value("Hardware/type", backend.connection.deviceType)
             )
         }
-
     }
 }
