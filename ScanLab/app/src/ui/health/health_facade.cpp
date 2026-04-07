@@ -14,6 +14,13 @@ HealthFacade::HealthFacade(DeviceContext& context, QObject* parent)
 
 HealthFacade::~HealthFacade()
 {
+    if (worker_ != nullptr && workerThread_.isRunning()) {
+    // Stop health acquisition
+    //    QMetaObject::invokeMethod(
+    //        worker_,
+    //        &ConnectionWorker2::resetDevice,
+    //        Qt::BlockingQueuedConnection);
+    }
     workerThread_.quit();
     workerThread_.wait();
 }

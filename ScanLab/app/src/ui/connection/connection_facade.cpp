@@ -5,7 +5,6 @@
 #include "runtime/connection/connection_worker.h"
 
 #include <QMetaObject>
-#include <QDebug>
 
 ConnectionFacade::ConnectionFacade(DeviceContext& context, QObject* parent)
     : QObject(parent)
@@ -98,7 +97,6 @@ DeviceType2 ConnectionFacade::deviceType() const
 
 void ConnectionFacade::setDeviceType(DeviceType2 value)
 {
-    qDebug() << "ConnectionFacade::setDeviceType " << (int)value;
     if (deviceType_ == value) {
         return;
     }
@@ -139,7 +137,6 @@ void ConnectionFacade::connectDevice()
     }
 
     setConnectionState(ConnectionState2::State::Connecting);
-    qDebug() << "ConnectionFacade::connectDevice: " << (int)deviceType_;
     emit requestConnect(deviceType_, address_);
 }
 
