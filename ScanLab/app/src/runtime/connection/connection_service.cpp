@@ -25,7 +25,7 @@ ConnectionResult ConnectionService::connect(DeviceType2 type, const std::wstring
         return {false, "DeviceNotSet"};
     }
 
-    const auto result = device->connect(address); //address.toStdWString()
+    const auto result = device->connect(address);
     return {
         device->isConnected(),
         magic_enum::enum_name(result).data()

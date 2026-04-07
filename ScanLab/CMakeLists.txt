@@ -65,6 +65,8 @@ qt_add_qml_module(${APP_NAME}
 
         app/include/ui/device/device_type2.h
 
+        app/include/ui/health/health_facade.h
+
         app/include/a_scan_view.h
         app/include/a_scan_worker.h
         app/include/app_settings.h
@@ -86,6 +88,9 @@ qt_add_qml_module(${APP_NAME}
         app/src/runtime/connection/connection_worker.cpp
 
         app/src/ui/connection/connection_facade.cpp
+
+        app/src/ui/health/health_facade.cpp
+
 
         app/src/a_scan_view.cpp
         app/src/a_scan_worker.cpp
