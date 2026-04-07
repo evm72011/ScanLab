@@ -1,8 +1,8 @@
 #include "ui/connection/connection_facade.h"
 
+#include "runtime/device/device_context.h"
 #include "runtime/connection/connection_result.h"
 #include "runtime/connection/connection_worker.h"
-#include "runtime/device/device_context.h"
 
 #include <QMetaObject>
 #include <QDebug>

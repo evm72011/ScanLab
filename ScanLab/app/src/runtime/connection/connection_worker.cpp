@@ -2,7 +2,6 @@
 
 #include "runtime/device/device_context.h"
 #include "runtime/connection/connection_service.h"
-#include <iostream>
 
 ConnectionWorker2::ConnectionWorker2(DeviceContext& context, QObject* parent)
     : QObject(parent)
@@ -12,7 +11,6 @@ ConnectionWorker2::ConnectionWorker2(DeviceContext& context, QObject* parent)
 
 void ConnectionWorker2::connectDevice(DeviceType2 type, const QString& address)
 {
-    std::cout << "ConnectionWorker2::connectDevice: " << (int)type << '\n';
     const auto result = service_.connect(type, address.toStdWString());
     emit connectCompleted(result);
 }
