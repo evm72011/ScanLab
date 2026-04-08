@@ -61,7 +61,7 @@ ApplicationWindow {
 
     Timer {
         id: loadDelayTimer
-        interval: 500
+        interval: 1000
         running: false
         repeat: false
         onTriggered: {

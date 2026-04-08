@@ -20,11 +20,3 @@ void ConnectionWorker2::disconnectDevice()
     service_.disconnect();
     emit disconnected(service_.isConnected());
 }
-
-/*
-void ConnectionWorker2::resetDevice()
-{
-    service_.disconnect();
-    emit resetCompleted();
-}
-*/
