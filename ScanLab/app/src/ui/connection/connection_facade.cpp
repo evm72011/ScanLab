@@ -132,7 +132,7 @@ QString ConnectionFacade::lastConnectStatusCode() const
 
 void ConnectionFacade::connectDevice()
 {
-    if (connectionState_ == ConnectionState2::State::Connecting) {
+    if (connectionState_ != ConnectionState2::State::Disconnected) {
         return;
     }
 
@@ -142,10 +142,11 @@ void ConnectionFacade::connectDevice()
 
 void ConnectionFacade::disconnectDevice()
 {
-    if (connectionState_ == ConnectionState2::State::Connecting) {
+    if (connectionState_ != ConnectionState2::State::Connected) {
         return;
     }
 
+    setConnectionState(ConnectionState2::State::Disconnecting);
     emit requestDisconnect();
 }
 

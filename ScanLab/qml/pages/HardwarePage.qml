@@ -12,6 +12,7 @@ Item {
     readonly property bool disconnected: connectionState === SL.ConnectionState2.Disconnected
     readonly property bool connecting: connectionState === SL.ConnectionState2.Connecting
     readonly property bool connected: connectionState === SL.ConnectionState2.Connected
+    readonly property bool disconnecting: connectionState === SL.ConnectionState2.Disconnecting
 
     Rectangle {
         anchors.fill: parent
@@ -85,12 +86,14 @@ Item {
                     ? qsTr("Connecting...")
                     : root.connected
                       ? qsTr("Disconnect")
-                      : qsTr("Connect")
+                      : root.disconnecting
+                        ? qsTr("Disconnecting")
+                        : qsTr("Connect")
             iconSource: root.connected
                         ? "qrc:/icons/disconnected.svg"
                         : "qrc:/icons/connected.svg"
-            enabled: !root.connecting
-            busy: root.connecting
+            enabled: root.connected || root.disconnected
+            busy: root.connecting || root.disconnecting
 
             width: 150
 

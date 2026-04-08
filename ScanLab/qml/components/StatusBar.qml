@@ -10,9 +10,10 @@ ToolBar {
     property int connectionState: backend?.connection?.connectionState ??
                                   SL.ConnectionState.Disconnected
 
-    readonly property bool disconnected: connectionState === SL.ConnectionState.Disconnected
-    readonly property bool connecting: connectionState === SL.ConnectionState.Connecting
-    readonly property bool connected: connectionState === SL.ConnectionState.Connected
+    readonly property bool disconnected: connectionState === SL.ConnectionState2.Disconnected
+    readonly property bool connecting: connectionState === SL.ConnectionState2.Connecting
+    readonly property bool connected: connectionState === SL.ConnectionState2.Connected
+    readonly property bool disconnecting: connectionState === SL.ConnectionState2.Disconnecting
 
     readonly property bool pulsing: backend?.device?.pulsing ?? false
 
@@ -41,11 +42,11 @@ ToolBar {
         }
 
         StatusChip {
-            visible: root.connecting
+            visible: root.connecting || root.disconnecting
             iconSource: "qrc:/icons/update.svg"
             iconOpacity: 0.8
             rotateIcon: true
-            text: qsTr("Connecting")
+            text: root.connecting ? qsTr("Connecting") : qsTr("Disonnecting")
         }
 
         StatusChip {

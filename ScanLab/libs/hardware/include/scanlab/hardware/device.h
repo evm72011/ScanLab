@@ -3,6 +3,7 @@
 #include <Windows.h>
 #include <memory>
 #include <string>
+#include <optional>
 #include <UTDriverOEMPA.h>
 
 #include "scanlab/hardware/device_type.h"
@@ -24,8 +25,10 @@ public:
     Device(Device&&) noexcept;
     Device& operator=(Device&&) noexcept;
 
+    bool ensureDevice(DeviceType type);
     void resetDevice();
-    bool setDevice(DeviceType type);
+
+    //bool setDevice(DeviceType type);
 
     ConnectResult connect(const std::wstring& address);
     bool disconnect();
@@ -38,6 +41,7 @@ public:
 
 private:
     std::unique_ptr<CHWDeviceOEMPA> device_;
+    std::optional<DeviceType> type_;
 };
 
 } // namespace scanlab::hardware

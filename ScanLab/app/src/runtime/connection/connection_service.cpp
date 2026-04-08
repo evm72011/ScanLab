@@ -19,16 +19,15 @@ ConnectionResult ConnectionService::connect(DeviceType2 type, const std::wstring
         return {false, "DeviceNotSet"};
     }
 
-    device->resetDevice();
-
-    if (!device->setDevice(toHardware(type))) {
-        return {false, "DeviceNotSet"};
+    if (!device->ensureDevice(toHardware(type))) {
+        return {false, "DeviceCreateFailed"};
     }
 
     const auto result = device->connect(address);
+
     return {
         device->isConnected(),
-        magic_enum::enum_name(result).data()
+        std::string(magic_enum::enum_name(result))
     };
 }
 

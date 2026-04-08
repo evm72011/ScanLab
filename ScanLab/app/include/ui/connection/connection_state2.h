@@ -32,7 +32,8 @@ public:
     enum State {
         Disconnected = 0,
         Connecting,
-        Connected
+        Connected,
+        Disconnecting
     };
     Q_ENUM(State)
 };

@@ -26,54 +26,6 @@ void Device::resetDevice() {
     }
 }
 
-bool Device::setDevice(DeviceType type)
-{
-    disconnect();
-
-    switch (type) {
-    case DeviceType::OEMPA_1:
-        device_ = std::make_unique<CHWDeviceOEMPA1>();
-        break;
-
-    case DeviceType::OEMPA_2:
-        device_ = std::make_unique<CHWDeviceOEMPA2>();
-        break;
-
-    case DeviceType::OEMPA_Mini:
-        device_ = std::make_unique<CHWDeviceOEMPAmini>();
-        break;
-
-    case DeviceType::OEMPA_Max:
-        device_ = std::make_unique<CHWDeviceOEMPAmax>();
-        break;
-
-    case DeviceType::OEMPA_MC1:
-        device_ = std::make_unique<CHWDeviceOEMPA1>();
-        break;
-
-    case DeviceType::OEMPA_MC2:
-        device_ = std::make_unique<CHWDeviceOEMMC2>();
-        break;
-
-    case DeviceType::OEMPA_MCmu:
-        device_ = std::make_unique<CHWDeviceOEMMCu>();
-        break;
-
-    case DeviceType::OEMPA_MCmuF:
-        device_ = std::make_unique<CHWDeviceOEMMCuF>();
-        break;
-
-    case DeviceType::OEMPA_Micro:
-        device_ = std::make_unique<CHWDeviceOEMPAmicro>();
-        break;
-
-    default:
-        device_.reset();
-        return false;
-    }
-    return true;
-}
-
 ConnectResult Device::connect(const std::wstring& address)
 {
     if (!device_) {
@@ -107,7 +59,7 @@ ConnectResult Device::connect(const std::wstring& address)
 
 bool Device::disconnect()
 {
-    if (!device_) {
+    if(!isConnected()) {
         return true;
     }
 
@@ -116,7 +68,57 @@ bool Device::disconnect()
         return false;
     }
 
-    return swBase->SetConnectionState(eDisconnected, true);
+    auto result = swBase->SetConnectionState(eDisconnected, true);
+    return result;
+}
+
+bool Device::ensureDevice(DeviceType type) {
+    if (device_ && type_ == type) {
+        return true;
+    }
+
+    if (isConnected()) {
+        disconnect();
+    }
+
+    device_.reset();
+
+    switch (type) {
+    case DeviceType::OEMPA_1:
+        device_ = std::make_unique<CHWDeviceOEMPA1>();
+        break;
+    case DeviceType::OEMPA_2:
+        device_ = std::make_unique<CHWDeviceOEMPA2>();
+        break;
+    case DeviceType::OEMPA_Mini:
+        device_ = std::make_unique<CHWDeviceOEMPAmini>();
+        break;
+    case DeviceType::OEMPA_Max:
+        device_ = std::make_unique<CHWDeviceOEMPAmax>();
+        break;
+    case DeviceType::OEMPA_MC1:
+        device_ = std::make_unique<CHWDeviceOEMPA1>();
+        break;
+    case DeviceType::OEMPA_MC2:
+        device_ = std::make_unique<CHWDeviceOEMMC2>();
+        break;
+    case DeviceType::OEMPA_MCmu:
+        device_ = std::make_unique<CHWDeviceOEMMCu>();
+        break;
+    case DeviceType::OEMPA_MCmuF:
+        device_ = std::make_unique<CHWDeviceOEMMCuF>();
+        break;
+    case DeviceType::OEMPA_Micro:
+        device_ = std::make_unique<CHWDeviceOEMPAmicro>();
+        break;
+    default:
+        device_.reset();
+        type_.reset();
+        return false;
+    }
+
+    type_ = type;
+    return true;
 }
 
 bool Device::hasDevice() const
@@ -145,40 +147,3 @@ const CHWDeviceOEMPA* Device::get() const
 }
 
 } // namespace scanlab::hardware
-
-
-/*
- *	if (m_pHWDeviceOEMPA)
-        delete m_pHWDeviceOEMPA;
-
-    switch (m_iComboDeviceType)
-    {
-    case 0:
-    case 1:
-        m_pHWDeviceOEMPA = new CHWDeviceOEMPA1;
-        break;
-    case 2:
-        m_pHWDeviceOEMPA = new CHWDeviceOEMPA2;
-        break;
-    case 3:
-        m_pHWDeviceOEMPA = new CHWDeviceOEMPAmini;
-        break;
-    case 4:
-        m_pHWDeviceOEMPA = new CHWDeviceOEMPAmax;
-        break;
-    case 5:
-        m_pHWDeviceOEMPA = new CHWDeviceOEMMC2;
-        break;
-    case 6:
-        m_pHWDeviceOEMPA = new CHWDeviceOEMMCu;
-        break;
-    case 7:
-        m_pHWDeviceOEMPA = new CHWDeviceOEMMCuF;
-        break;
-    case 8:
-        m_pHWDeviceOEMPA = new CHWDeviceOEMPAmicro;
-        break;
-    }
-    InitHardware();
-    UpdateDialog();
- */
