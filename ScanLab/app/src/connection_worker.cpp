@@ -30,11 +30,11 @@ void ConnectionWorker::connectDevice(DeviceType::Type type, const QString& addre
         return;
     }
 
-    hardwareDevice_->resetDevice();
-    if (!hardwareDevice_->setDevice(toHardware(type))) {
-        emitResult(scanlab::hardware::ConnectResult::DeviceNotSet, false);
-        return;
-    }
+    //hardwareDevice_->resetDevice();
+    //if (!hardwareDevice_->setDevice(toHardware(type))) {
+    //    emitResult(scanlab::hardware::ConnectResult::DeviceNotSet, false);
+    //    return;
+    //}
 
     const auto result = hardwareDevice_->connect(address.toStdWString());
     emitResult(result, hardwareDevice_->isConnected());
@@ -53,9 +53,11 @@ void ConnectionWorker::disconnectDevice()
 
 void ConnectionWorker::resetDevice()
 {
+    /*
     if (hardwareDevice_ != nullptr) {
         hardwareDevice_->resetDevice();
     }
 
     emit resetCompleted();
+*/
 }

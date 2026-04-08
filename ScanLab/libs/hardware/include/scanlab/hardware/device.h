@@ -26,9 +26,6 @@ public:
     Device& operator=(Device&&) noexcept;
 
     bool ensureDevice(DeviceType type);
-    void resetDevice();
-
-    //bool setDevice(DeviceType type);
 
     ConnectResult connect(const std::wstring& address);
     bool disconnect();

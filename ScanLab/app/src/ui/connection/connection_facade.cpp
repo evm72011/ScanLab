@@ -33,13 +33,6 @@ ConnectionFacade::ConnectionFacade(DeviceContext& context, QObject* parent)
         Qt::QueuedConnection);
 
     connect(
-        this,
-        &ConnectionFacade::requestReset,
-        worker_,
-        &ConnectionWorker2::resetDevice,
-        Qt::QueuedConnection);
-
-    connect(
         worker_,
         &ConnectionWorker2::connectCompleted,
         this,
@@ -65,15 +58,6 @@ ConnectionFacade::ConnectionFacade(DeviceContext& context, QObject* parent)
         },
         Qt::QueuedConnection);
 
-    connect(
-        worker_,
-        &ConnectionWorker2::resetCompleted,
-        this,
-        [this]() {
-            setConnectionState(ConnectionState2::State::Disconnected);
-        },
-        Qt::QueuedConnection);
-
     workerThread_.start();
 }
 
@@ -82,7 +66,7 @@ ConnectionFacade::~ConnectionFacade()
     if (worker_ != nullptr && workerThread_.isRunning()) {
         QMetaObject::invokeMethod(
             worker_,
-            &ConnectionWorker2::resetDevice,
+            &ConnectionWorker2::disconnectDevice,
             Qt::BlockingQueuedConnection);
     }
 

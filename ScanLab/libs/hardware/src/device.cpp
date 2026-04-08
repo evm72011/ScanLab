@@ -19,13 +19,6 @@ Device::~Device() = default;
 Device::Device(Device&&) noexcept = default;
 Device& Device::operator=(Device&&) noexcept = default;
 
-void Device::resetDevice() {
-    disconnect();
-    if (device_) {
-        device_.reset();
-    }
-}
-
 ConnectResult Device::connect(const std::wstring& address)
 {
     if (!device_) {

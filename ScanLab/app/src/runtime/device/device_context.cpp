@@ -18,18 +18,3 @@ const scanlab::hardware::Device* DeviceContext::device() const
 {
     return device_.get();
 }
-
-//void DeviceContext::setDevice(std::unique_ptr<scanlab::hardware::Device> device)
-//{
-//    device_ = std::move(device);
-//}
-
-bool DeviceContext::hasDevice() const
-{
-    return device_ != nullptr;
-}
-
-void DeviceContext::reset()
-{
-    device_.reset();
-}

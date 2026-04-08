@@ -14,26 +14,3 @@ Backend::Backend(QObject* parent)
     device_.setType(DeviceType::OEMPA_Max);     // remove
     healthMonitor_.setDevice(&device_);
 }
-
-/*
-bool Backend::ensureDeviceCreated()
-{
-    return true;
-}
-
-bool Backend::connectDevice()
-{
-    if (!ensureDeviceCreated()) {
-        qWarning() << "[E] device creation failed";
-        return false;
-    }
-
-    const auto type = device_.type();
-    const auto address = device_.address();
-
-    qInfo() << "[connectDevice] type =" << type << ", address =" << address;
-
-    device_.connectDevice();
-    return true;
-}
-*/
