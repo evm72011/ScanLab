@@ -2,6 +2,9 @@ set(LIB_NAME ${HARDWARE_LIB_NAME})
 
 add_library(${LIB_NAME} STATIC src/a_scan_acquisition.cpp
                                src/device.cpp
+                               src/temperature_reader.cpp
+
+
                                src/health_monitor.cpp)
 
 target_include_directories(${LIB_NAME}

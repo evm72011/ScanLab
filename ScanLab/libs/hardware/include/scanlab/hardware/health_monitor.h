@@ -7,7 +7,7 @@
 
 namespace scanlab::hardware {
 
-class HealthMonitor
+class [[deprecated("Use TemperatureReader")]] HealthMonitor
 {
 public:
     struct TemperatureSensor

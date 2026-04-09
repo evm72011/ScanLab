@@ -12,6 +12,14 @@ class HealthWorker2 : public QObject
 
 public:
     explicit HealthWorker2(DeviceContext& context, QObject* parent = nullptr);
+
+public slots:
+    void poll();
+
+signals:
+    void temperatureUpdated(const scanlab::hardware::TemperatureSnapshot& snapshot);
+    void temperatureUnavailable();
+
 private:
     HealthService service_;
 };

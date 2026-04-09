@@ -15,7 +15,7 @@ class Backend : public QObject
     Q_OBJECT
 
     Q_PROPERTY(ConnectionFacade* connection READ connection CONSTANT)
-    Q_PROPERTY(HealthFacade* health READ health CONSTANT)
+    Q_PROPERTY(HealthFacade* healthFacade READ healthFacade CONSTANT)
 
     // Deprecated
     Q_PROPERTY(DeviceFacade* device READ device CONSTANT)
@@ -25,14 +25,11 @@ public:
     explicit Backend(QObject* parent = nullptr);
 
     ConnectionFacade* connection() { return &connectionFacade_; }
-    HealthFacade* health() { return &healthFacade_; }
-    //Q_INVOKABLE bool connectDevice();
+    HealthFacade* healthFacade() { return &healthFacade_; }
 
     DeviceFacade* device() { return &device_; }
     HealthMonitor* healthMonitor() { return &healthMonitor_; }
 
-//private:
-  //  bool ensureDeviceCreated();
 
 private:
     DeviceContext context_;

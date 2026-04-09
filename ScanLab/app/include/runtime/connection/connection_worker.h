@@ -19,12 +19,10 @@ public:
 public slots:
     void connectDevice(DeviceType2 type, const QString& address);
     void disconnectDevice();
-    //void resetDevice();
 
 signals:
     void connectCompleted(ConnectionResult result);
     void disconnected(bool stillConnected);
-    //void resetCompleted();
 
 private:
     ConnectionService service_;

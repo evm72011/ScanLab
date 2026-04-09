@@ -8,6 +8,7 @@ target_include_directories(${APP_NAME} PRIVATE
     include
     include/ui/connection
     include/ui/device
+    include/ui/health
 )
 
 target_link_libraries(${APP_NAME}

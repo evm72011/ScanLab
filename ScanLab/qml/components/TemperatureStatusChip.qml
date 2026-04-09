@@ -6,20 +6,25 @@ import ScanLab as SL
 Rectangle {
     id: root
 
-    readonly property var device: backend?.device ?? null
-    readonly property var healthMonitor: backend?.healthMonitor ?? null
+    property int connectionState: backend?.connection?.connectionState ??
+                                  SL.ConnectionState.Disconnected
 
     readonly property bool connected:
-        device?.connectionState === SL.ConnectionState.Connected
+        connectionState === SL.ConnectionState2.Connected
+
+    readonly property var healthFacade: backend?.healthFacade ?? null
+
+    readonly property bool temperatureUnavailable:
+        healthFacade?.temperatureUnavailable ?? true
 
     readonly property int maxTemperature:
-        healthMonitor?.maxTemperature ?? -1
+        healthFacade?.maxTemperature ?? -1
 
     readonly property var temperatures:
-        healthMonitor?.temperatures ?? []
+        healthFacade?.temperatures ?? []
 
     readonly property bool hasTemperature:
-        healthMonitor?.hasTemperature ?? false
+        healthFacade?.hasTemperature ?? false
 
     height: 30
     radius: 4
@@ -42,6 +47,18 @@ Rectangle {
         }
 
         return "#9ad27a"
+    }
+
+    function updatePolling() {
+        if (!healthFacade) {
+            return
+        }
+
+        if (connected) {
+            healthFacade.startPolling()
+        } else {
+            healthFacade.stopPolling()
+        }
     }
 
     HoverHandler {
@@ -73,6 +90,10 @@ Rectangle {
             text: {
                 if (!root.connected) {
                     return qsTr("Temperature: n/a")
+                }
+
+                if (root.temperatureUnavailable) {
+                    return qsTr("Temperature: --")
                 }
 
                 if (!root.hasTemperature) {
@@ -144,5 +165,13 @@ Rectangle {
         rightPadding: 10
         topPadding: 8
         bottomPadding: 8
+    }
+
+    Component.onCompleted: updatePolling()
+    onConnectedChanged: updatePolling()
+    onHealthFacadeChanged: updatePolling()
+
+    Component.onDestruction: {
+        healthFacade?.stopPolling()
     }
 }
