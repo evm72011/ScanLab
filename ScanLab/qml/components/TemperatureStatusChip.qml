@@ -31,7 +31,7 @@ Rectangle {
         }
 
         if (maxTemperatureUnavailable) {
-            return "#ff6b6b"   // 🔴 всегда красный для Err
+            return "#ff6b6b"   // всегда красный для Err
         }
 
         if (maxTemperature >= 50) {
@@ -81,7 +81,11 @@ Rectangle {
         spacing: 6
 
         Image {
-            source: "qrc:/icons/temperature-low.svg"
+            source: (maxTemperature >= 50)
+                        ? "qrc:/icons/temperature-hight.svg"
+                        : (maxTemperature >= 40)
+                            ? "qrc:/icons/temperature-medium.svg"
+                            : "qrc:/icons/temperature-low.svg"
             width: 16
             height: 16
             fillMode: Image.PreserveAspectFit
