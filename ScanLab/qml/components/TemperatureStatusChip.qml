@@ -14,17 +14,9 @@ Rectangle {
 
     readonly property var healthFacade: backend?.healthFacade ?? null
 
-    readonly property bool temperatureUnavailable:
-        healthFacade?.temperatureUnavailable ?? true
-
-    readonly property int maxTemperature:
-        healthFacade?.maxTemperature ?? -1
-
-    readonly property var temperatures:
-        healthFacade?.temperatures ?? []
-
-    readonly property bool hasTemperature:
-        healthFacade?.hasTemperature ?? false
+    readonly property bool maxTemperatureUnavailable: healthFacade?.maxTemperatureUnavailable ?? true
+    readonly property string maxTemperatureErrorCode: healthFacade?.maxTemperatureErrorCode ?? ""
+    readonly property int maxTemperature: healthFacade?.maxTemperature ?? 0
 
     height: 30
     radius: 4
@@ -34,8 +26,12 @@ Rectangle {
     readonly property color textColor: SL.Theme.colors.textPrimary
 
     readonly property color tempColor: {
-        if (!hasTemperature) {
+        if (!connected) {
             return Qt.rgba(1, 1, 1, 0.55)
+        }
+
+        if (maxTemperatureUnavailable) {
+            return "#ff6b6b"   // 🔴 всегда красный для Err
         }
 
         if (maxTemperature >= 50) {
@@ -55,14 +51,21 @@ Rectangle {
         }
 
         if (connected) {
-            healthFacade.startPolling()
+            healthFacade.startMaxTemperaturePolling()
         } else {
-            healthFacade.stopPolling()
+            healthFacade.stopMaxTemperaturePolling()
         }
     }
 
     HoverHandler {
         id: hoverHandler
+    }
+
+    StyledToolTip {
+        id: errorTip
+        text: qsTr("Unable to read temperature!\nErrorCode: %1")
+                .arg(root.maxTemperatureErrorCode)
+        visible: hoverHandler.hovered && root.maxTemperatureUnavailable && root.connected
     }
 
     Rectangle {
@@ -83,7 +86,7 @@ Rectangle {
             height: 16
             fillMode: Image.PreserveAspectFit
             smooth: true
-            opacity: root.hasTemperature ? 1.0 : 0.65
+            opacity: root.connected && !root.maxTemperatureUnavailable ? 1.0 : 0.65
         }
 
         Text {
@@ -92,79 +95,18 @@ Rectangle {
                     return qsTr("Temperature: n/a")
                 }
 
-                if (root.temperatureUnavailable) {
-                    return qsTr("Temperature: --")
-                }
-
-                if (!root.hasTemperature) {
-                    return qsTr("Temperature: --")
+                if (root.maxTemperatureUnavailable) {
+                    return qsTr("Temperature: Err")
                 }
 
                 return qsTr("Temp: %1 °C").arg(root.maxTemperature)
             }
 
-            color: root.hasTemperature ? root.tempColor : root.textColor
+            color: root.tempColor
             font.pixelSize: 12
-            font.weight: root.hasTemperature ? Font.Medium : Font.Normal
+            font.weight: !root.maxTemperatureUnavailable ? Font.Medium : Font.Normal
             verticalAlignment: Text.AlignVCenter
         }
-    }
-
-    ToolTip {
-        id: tooltip
-        visible: hoverHandler.hovered && root.connected && root.temperatures.length > 0
-        delay: 300
-        timeout: -1
-
-        contentItem: Column {
-            spacing: 6
-
-            Text {
-                text: qsTr("Temperature sensors")
-                color: SL.Theme.colors.textPrimary
-                font.pixelSize: 12
-                font.weight: Font.DemiBold
-            }
-
-            Repeater {
-                model: root.temperatures
-
-                delegate: Row {
-                    spacing: 10
-
-                    Text {
-                        text: qsTr("Board %1").arg(modelData.board)
-                        color: SL.Theme.colors.textPrimary
-                        font.pixelSize: 12
-                    }
-
-                    Text {
-                        text: qsTr("Sensor %1").arg(modelData.sensor)
-                        color: SL.Theme.colors.textPrimary
-                        font.pixelSize: 12
-                    }
-
-                    Text {
-                        text: qsTr("%1 °C").arg(modelData.valueCelsius)
-                        color: SL.Theme.colors.textPrimary
-                        font.pixelSize: 12
-                        font.weight: Font.Medium
-                    }
-                }
-            }
-        }
-
-        background: Rectangle {
-            radius: 6
-            color: Qt.rgba(0.08, 0.08, 0.08, 0.96)
-            border.width: 1
-            border.color: Qt.rgba(1, 1, 1, 0.10)
-        }
-
-        leftPadding: 10
-        rightPadding: 10
-        topPadding: 8
-        bottomPadding: 8
     }
 
     Component.onCompleted: updatePolling()

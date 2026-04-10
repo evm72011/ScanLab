@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QObject>
+#include <QString>
 
 #include "runtime/health/health_service.h"
 
@@ -14,11 +15,12 @@ public:
     explicit HealthWorker2(DeviceContext& context, QObject* parent = nullptr);
 
 public slots:
-    void poll();
+    void pollMaxTemperature();
 
 signals:
-    void temperatureUpdated(const scanlab::hardware::TemperatureSnapshot& snapshot);
-    void temperatureUnavailable();
+    void maxTemperatureUpdated(int value);
+    void maxTemperatureUnavailable();
+    void maxTemperatureErrorCode(const QString& value);
 
 private:
     HealthService service_;

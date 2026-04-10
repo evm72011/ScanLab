@@ -2,7 +2,7 @@
 
 #include "runtime/device/device_context.h"
 
-#include <QDebug>
+#include <magic_enum/magic_enum.hpp>
 
 HealthWorker2::HealthWorker2(DeviceContext& context, QObject* parent)
     : QObject(parent)
@@ -10,14 +10,16 @@ HealthWorker2::HealthWorker2(DeviceContext& context, QObject* parent)
 {
 }
 
-void HealthWorker2::poll()
+void HealthWorker2::pollMaxTemperature()
 {
-    qDebug() << "HealthWorker2::poll";
-    const auto snapshot = service_.readTemperature();
-    if (!snapshot) {
-        emit temperatureUnavailable();
+    const auto maxTemperature = service_.readMax();
+    if (!maxTemperature.has_value()) {
+        const auto error = maxTemperature.error();
+        const auto errorCode = QString::fromUtf8(magic_enum::enum_name(error).data());
+        emit maxTemperatureErrorCode(errorCode);
+        emit maxTemperatureUnavailable();
         return;
     }
 
-    emit temperatureUpdated(*snapshot);
+    emit maxTemperatureUpdated(*maxTemperature);
 }

@@ -13,6 +13,7 @@ TemperatureReader::TemperatureReader(Device& device)
 {
 }
 
+/*
 bool TemperatureSnapshot::empty() const
 {
     return sensors.empty() && boardMaxCelsius.empty();
@@ -26,6 +27,7 @@ std::optional<int> TemperatureSnapshot::overallMaxCelsius() const
 
     return *std::max_element(boardMaxCelsius.begin(), boardMaxCelsius.end());
 }
+*/
 
 bool TemperatureReader::Topology::empty() const
 {
@@ -37,35 +39,35 @@ void TemperatureReader::invalidateTopology() const
     topology_.reset();
 }
 
-bool TemperatureReader::ensureTopology() const
+std::expected<void, TemperatureErrorCodes> TemperatureReader::ensureTopology() const
 {
     std::cout << "TemperatureReader::ensureTopology::start\n";
     auto* hw = device_.get();
     if (hw == nullptr) {
         invalidateTopology();
-        return false;
+        return std::unexpected(TemperatureErrorCodes::DeviceNotSet);
     }
 
     if (topology_.has_value() && topology_->hw == hw) {
-        return true;
+        return {};
     }
 
     auto* sw = hw->GetSWDeviceOEMPA();
     if (sw == nullptr) {
         invalidateTopology();
-        return false;
+        return std::unexpected(TemperatureErrorCodes::OempaInterfaceUnavailable);;
     }
 
     int boardCount = 0;
     int sensorCountMax = 0;
     if (!sw->GetTemperatureCount(boardCount, sensorCountMax)) {
         invalidateTopology();
-        return false;
+        return std::unexpected(TemperatureErrorCodes::BoardToppologyUnavailable);
     }
 
     if (boardCount < 0) {
         invalidateTopology();
-        return false;
+        return std::unexpected(TemperatureErrorCodes::BoardTopologyErrors);
     }
 
     Topology topology;
@@ -79,12 +81,12 @@ bool TemperatureReader::ensureTopology() const
         int sensorCount = 0;
         if (!sw->GetTemperatureSensorCount(board, sensorCount)) {
             invalidateTopology();
-            return false;
+            return std::unexpected(TemperatureErrorCodes::SensorTopologyUnavailable);
         }
 
         if (sensorCount < 0) {
             invalidateTopology();
-            return false;
+            return std::unexpected(TemperatureErrorCodes::SensorTopologyErrors);
         }
 
         topology.sensorCountPerBoard.push_back(sensorCount);
@@ -95,9 +97,53 @@ bool TemperatureReader::ensureTopology() const
     topology_ = std::move(topology);
     std::cout << "TemperatureReader::ensureTopology::success\n";
 
-    return true;
+    return {};
 }
 
+std::expected<int, TemperatureErrorCodes> TemperatureReader::readMax() const {
+    const auto topologyResult = ensureTopology();
+    if (!topologyResult) {
+        return std::unexpected(topologyResult.error());
+    }
+
+    auto* hw = device_.get();
+    if (hw == nullptr) {
+        invalidateTopology();
+        return std::unexpected(TemperatureErrorCodes::DeviceNotSet);
+    }
+
+    auto* sw = hw->GetSWDeviceOEMPA();
+    if (sw == nullptr) {
+        return std::unexpected(TemperatureErrorCodes::OempaInterfaceUnavailable);
+    }
+
+    if (!hw->LockDevice(eAcqContinue)) {
+        return std::unexpected(TemperatureErrorCodes::DeviceLockFailed);
+    }
+
+    bool ok = true;
+    std::vector<short> values(static_cast<std::size_t>(topology_->boardCount), 0);
+    for (int board = 0; board < topology_->boardCount && ok; ++board) {
+        if (!hw->GetTemperatureMaxHW(board, &values[static_cast<std::size_t>(board)])) {
+            ok = false;
+            break;
+        }
+    }
+
+    const bool unlockOk = hw->UnlockDevice(eAcqContinue);
+    if (!ok || !unlockOk || values.empty()) {
+        return std::unexpected(TemperatureErrorCodes::MaxBoardTemperatureUnavailable);
+    }
+
+    short result = values[0];
+    for (short value : values) {
+        result = std::max(result, value);
+    }
+
+    return static_cast<int>(result);
+}
+
+/*
 std::optional<TemperatureSnapshot> TemperatureReader::read() const
 {
     if (!ensureTopology()) {
@@ -166,6 +212,7 @@ std::optional<TemperatureSnapshot> TemperatureReader::read() const
         snapshot.boardMaxCelsius.push_back(static_cast<int>(maxValue));
     }
 
+
     const bool unlockOk = hw->UnlockDevice(eAcqContinue);
     if (!ok || !unlockOk) {
         return std::nullopt;
@@ -173,5 +220,7 @@ std::optional<TemperatureSnapshot> TemperatureReader::read() const
 
     return snapshot;
 }
+*/
+
 
 } // namespace scanlab::hardware

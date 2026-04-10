@@ -4,9 +4,8 @@
 #include <QThread>
 #include <QTimer>
 #include <QVariantList>
+#include <QString>
 #include <qqmlintegration.h>
-
-#include "scanlab/hardware/temperature_types.h"
 
 class DeviceContext;
 class HealthWorker2;
@@ -14,41 +13,41 @@ class HealthWorker2;
 class HealthFacade : public QObject
 {
     Q_OBJECT
-    // QML_ELEMENT
 
-    Q_PROPERTY(bool temperatureUnavailable READ temperatureUnavailable NOTIFY temperatureUnavailableChanged)
-    Q_PROPERTY(int maxTemperature READ maxTemperature NOTIFY temperatureSnapshotChanged)
-    Q_PROPERTY(bool hasTemperature READ hasTemperature NOTIFY temperatureSnapshotChanged)
-    Q_PROPERTY(QVariantList temperatures READ temperatures NOTIFY temperatureSnapshotChanged)
+    Q_PROPERTY(int maxTemperature READ maxTemperature NOTIFY maxTemperatureChanged)
+    Q_PROPERTY(bool maxTemperatureUnavailable READ maxTemperatureUnavailable NOTIFY maxTemperatureUnavailableChanged)
+    Q_PROPERTY(QString maxTemperatureErrorCode READ maxTemperatureErrorCode NOTIFY maxTemperatureErrorCodeChanged)
 
 public:
     explicit HealthFacade(DeviceContext& context, QObject* parent = nullptr);
     ~HealthFacade() override;
 
-    bool temperatureUnavailable() const;
+    bool maxTemperatureUnavailable() const;
     int maxTemperature() const;
-    bool hasTemperature() const;
-    QVariantList temperatures() const;
+    QString maxTemperatureErrorCode() const;
 
-    Q_INVOKABLE void startPolling();
-    Q_INVOKABLE void stopPolling();
+    Q_INVOKABLE void startMaxTemperaturePolling();
+    Q_INVOKABLE void stopMaxTemperaturePolling();
 
 signals:
-    void requestPoll();
-    void temperatureUnavailableChanged();
-    void temperatureSnapshotChanged();
+    void requestPollMaxTemperature();
+    void maxTemperatureUnavailableChanged();
+    void maxTemperatureChanged();
+    void maxTemperatureErrorCodeChanged();
 
 private:
-    void poll();
-    void setTemperatureSnapshot(scanlab::hardware::TemperatureSnapshot value);
-    void setTemperatureUnavailable(bool value);
+    void pollMaxTemperature();
+    void setMaxTemperature(int value);
+    void setMaxTemperatureUnavailable(bool value);
+    void setMaxTemperatureErrorCode(const QString& value);
 
 private:
     QTimer timer_;
-    int interval_ = 2000;
+    int interval_ = 60'000;
 
-    scanlab::hardware::TemperatureSnapshot temperatureSnapshot_;
-    bool temperatureUnavailable_ = true;
+    int maxTemperature_ = 0;
+    bool maxTemperatureUnavailable_ = true;
+    QString maxTemperatureErrorCode_;
 
     HealthWorker2* worker_ = nullptr;
     QThread workerThread_;

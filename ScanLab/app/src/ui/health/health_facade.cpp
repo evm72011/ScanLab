@@ -21,35 +21,42 @@ HealthFacade::HealthFacade(DeviceContext& context, QObject* parent)
 
     connect(
         this,
-        &HealthFacade::requestPoll,
+        &HealthFacade::requestPollMaxTemperature,
         worker_,
-        &HealthWorker2::poll,
+        &HealthWorker2::pollMaxTemperature,
         Qt::QueuedConnection);
 
     connect(
         &timer_,
         &QTimer::timeout,
         this,
-        &HealthFacade::poll);
+        &HealthFacade::pollMaxTemperature);
 
     connect(
         worker_,
-        &HealthWorker2::temperatureUpdated,
+        &HealthWorker2::maxTemperatureUpdated,
         this,
-        [this](scanlab::hardware::TemperatureSnapshot snapshot) {
-            qDebug() << "HealthFacade: temperature updated";
-            setTemperatureSnapshot(std::move(snapshot));
-            setTemperatureUnavailable(false);
+        [this](int value) {
+            setMaxTemperature(value);
+            setMaxTemperatureUnavailable(false);
         },
         Qt::QueuedConnection);
 
     connect(
         worker_,
-        &HealthWorker2::temperatureUnavailable,
+        &HealthWorker2::maxTemperatureUnavailable,
         this,
         [this]() {
-            qDebug() << "HealthFacade: temperature unavailable";
-            setTemperatureUnavailable(true);
+            setMaxTemperatureUnavailable(true);
+        },
+        Qt::QueuedConnection);
+
+    connect(
+        worker_,
+        &HealthWorker2::maxTemperatureErrorCode,
+        this,
+        [this](QString value) {
+            setMaxTemperatureErrorCode(value);
         },
         Qt::QueuedConnection);
 
@@ -68,41 +75,22 @@ HealthFacade::~HealthFacade()
     }
 }
 
-bool HealthFacade::temperatureUnavailable() const
+bool HealthFacade::maxTemperatureUnavailable() const
 {
-    return temperatureUnavailable_;
+    return maxTemperatureUnavailable_;
 }
 
 int HealthFacade::maxTemperature() const
 {
-    const auto overall = temperatureSnapshot_.overallMaxCelsius();
-    return overall.has_value() ? *overall : -1;
+    return maxTemperature_;
 }
 
-bool HealthFacade::hasTemperature() const
+QString HealthFacade::maxTemperatureErrorCode() const
 {
-    return !temperatureUnavailable_
-           && !temperatureSnapshot_.sensors.empty()
-           && maxTemperature() >= 0;
+    return maxTemperatureErrorCode_;
 }
 
-QVariantList HealthFacade::temperatures() const
-{
-    QVariantList result;
-    result.reserve(static_cast<qsizetype>(temperatureSnapshot_.sensors.size()));
-
-    for (const auto& sensor : temperatureSnapshot_.sensors) {
-        QVariantMap item;
-        item.insert("board", sensor.board);
-        item.insert("sensor", sensor.sensor);
-        item.insert("valueCelsius", sensor.valueCelsius);
-        result.push_back(item);
-    }
-
-    return result;
-}
-
-void HealthFacade::startPolling()
+void HealthFacade::startMaxTemperaturePolling()
 {
     if (timer_.isActive()) {
         return;
@@ -111,10 +99,10 @@ void HealthFacade::startPolling()
     timer_.setInterval(interval_);
     timer_.start();
 
-    poll();
+    pollMaxTemperature();
 }
 
-void HealthFacade::stopPolling()
+void HealthFacade::stopMaxTemperaturePolling()
 {
     if (!timer_.isActive()) {
         return;
@@ -123,23 +111,36 @@ void HealthFacade::stopPolling()
     timer_.stop();
 }
 
-void HealthFacade::poll()
+void HealthFacade::pollMaxTemperature()
 {
-    emit requestPoll();
+    emit requestPollMaxTemperature();
 }
 
-void HealthFacade::setTemperatureSnapshot(scanlab::hardware::TemperatureSnapshot value)
+void HealthFacade::setMaxTemperature(int value)
 {
-    temperatureSnapshot_ = std::move(value);
-    emit temperatureSnapshotChanged();
+    if (maxTemperature_ == value) {
+        return;
+    }
+    maxTemperature_ = value;
+    emit maxTemperatureChanged();
 }
 
-void HealthFacade::setTemperatureUnavailable(bool value)
+void HealthFacade::setMaxTemperatureUnavailable(bool value)
 {
-    if (temperatureUnavailable_ == value) {
+    if (maxTemperatureUnavailable_ == value) {
         return;
     }
 
-    temperatureUnavailable_ = value;
-    emit temperatureUnavailableChanged();
+    maxTemperatureUnavailable_ = value;
+    emit maxTemperatureUnavailableChanged();
+}
+
+void HealthFacade::setMaxTemperatureErrorCode(const QString& value)
+{
+    if (maxTemperatureErrorCode_ == value) {
+        return;
+    }
+
+    maxTemperatureErrorCode_ = value;
+    emit maxTemperatureErrorCodeChanged();
 }

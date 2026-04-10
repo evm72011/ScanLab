@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include <optional>
+#include <expected>
 #include "scanlab/hardware/temperature_types.h"
 
 class DeviceContext;
@@ -15,7 +15,7 @@ class HealthService
 public:
     explicit HealthService(DeviceContext& context);
 
-    std::optional<scanlab::hardware::TemperatureSnapshot> readTemperature() const;
+    std::expected<int, scanlab::hardware::TemperatureErrorCodes> readMax() const;
 
     ~HealthService();
 private:

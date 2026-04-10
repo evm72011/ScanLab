@@ -9,8 +9,8 @@ HealthService::HealthService(DeviceContext& context)
 {
 }
 
-std::optional<scanlab::hardware::TemperatureSnapshot> HealthService::readTemperature() const {
-    return temperatureReader_->read();
+std::expected<int, scanlab::hardware::TemperatureErrorCodes> HealthService::readMax() const {
+    return temperatureReader_->readMax();
 }
 
 HealthService::~HealthService() = default;

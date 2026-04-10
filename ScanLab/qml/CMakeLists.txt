@@ -18,6 +18,7 @@ set(QML_MODULE_FILES
     components/InfoIcon.qml
     components/StatusBar.qml
     components/StatusChip.qml
+    components/StyledToolTip.qml
     components/TabButton.qml
     components/TemperatureStatusChip.qml
     components/TextField.qml

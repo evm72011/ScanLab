@@ -1,10 +1,11 @@
 #pragma once
 
-#include <optional>
-#include <vector>
+//#include <optional>
+//#include <vector>
 
 namespace scanlab::hardware {
 
+/*
 struct TemperatureSensorReading
 {
     int board = 0;
@@ -20,4 +21,17 @@ struct TemperatureSnapshot
     [[nodiscard]] bool empty() const;
     [[nodiscard]] std::optional<int> overallMaxCelsius() const;
 };
+*/
+
+enum class TemperatureErrorCodes {
+    DeviceNotSet,
+    OempaInterfaceUnavailable,
+    BoardToppologyUnavailable,
+    BoardTopologyErrors,
+    SensorTopologyUnavailable,
+    SensorTopologyErrors,
+    DeviceLockFailed,
+    MaxBoardTemperatureUnavailable
+};
+
 }// namespace scanlab::hardware

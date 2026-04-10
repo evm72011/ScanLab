@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <optional>
+#include <expected>
 #include <vector>
 
 #include "scanlab/hardware/device.h"
@@ -14,7 +15,8 @@ class TemperatureReader
 public:
     explicit TemperatureReader(Device& device);
 
-    [[nodiscard]] std::optional<TemperatureSnapshot> read() const;
+    //[[nodiscard]] std::optional<TemperatureSnapshot> read() const;
+    [[nodiscard]] std::expected<int, TemperatureErrorCodes> readMax() const;
 
 private:
     struct Topology
@@ -28,7 +30,7 @@ private:
     };
 
 private:
-    [[nodiscard]] bool ensureTopology() const;
+    [[nodiscard]] std::expected<void, TemperatureErrorCodes> ensureTopology() const;
     void invalidateTopology() const;
 
 private:
