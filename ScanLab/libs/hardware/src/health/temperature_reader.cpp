@@ -4,7 +4,6 @@
 
 #include <algorithm>
 #include <utility>
-#include <iostream>
 
 namespace scanlab::hardware {
 
@@ -25,7 +24,6 @@ void TemperatureReader::invalidateTopology() const
 
 std::expected<void, TemperatureErrorCodes> TemperatureReader::ensureTopology() const
 {
-    std::cout << "TemperatureReader::ensureTopology::start\n";
     auto* hw = device_.get();
     if (hw == nullptr) {
         invalidateTopology();
@@ -79,8 +77,6 @@ std::expected<void, TemperatureErrorCodes> TemperatureReader::ensureTopology() c
 
     topology.totalSensorCount = totalSensorCount;
     topology_ = std::move(topology);
-    std::cout << "TemperatureReader::ensureTopology::success\n";
-
     return {};
 }
 
