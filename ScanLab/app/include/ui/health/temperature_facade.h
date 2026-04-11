@@ -8,7 +8,7 @@
 #include <qqmlintegration.h>
 
 class DeviceContext;
-class HealthWorker2;
+class TemperatureWorker;
 
 class TemperatureFacade : public QObject
 {
@@ -49,6 +49,6 @@ private:
     bool maxTemperatureUnavailable_ = true;
     QString maxTemperatureErrorCode_;
 
-    HealthWorker2* worker_ = nullptr;
+    TemperatureWorker* worker_ = nullptr;
     QThread workerThread_;
 };

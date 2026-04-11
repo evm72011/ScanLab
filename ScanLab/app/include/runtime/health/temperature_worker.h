@@ -7,12 +7,12 @@
 
 class DeviceContext;
 
-class HealthWorker2 : public QObject
+class TemperatureWorker : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit HealthWorker2(DeviceContext& context, QObject* parent = nullptr);
+    explicit TemperatureWorker(DeviceContext& context, QObject* parent = nullptr);
 
 public slots:
     void pollMaxTemperature();

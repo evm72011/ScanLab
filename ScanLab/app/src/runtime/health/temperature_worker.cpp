@@ -1,16 +1,16 @@
-#include "runtime/health/health_worker.h"
+#include "runtime/health/temperature_worker.h"
 
 #include "runtime/device/device_context.h"
 
 #include <magic_enum/magic_enum.hpp>
 
-HealthWorker2::HealthWorker2(DeviceContext& context, QObject* parent)
+TemperatureWorker::TemperatureWorker(DeviceContext& context, QObject* parent)
     : QObject(parent)
     , service_(context)
 {
 }
 
-void HealthWorker2::pollMaxTemperature()
+void TemperatureWorker::pollMaxTemperature()
 {
     const auto maxTemperature = service_.readMax();
     if (!maxTemperature.has_value()) {

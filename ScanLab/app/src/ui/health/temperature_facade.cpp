@@ -1,7 +1,7 @@
 #include "ui/health/temperature_facade.h"
 
 #include "runtime/device/device_context.h"
-#include "runtime/health/health_worker.h"
+#include "runtime/health/temperature_worker.h"
 
 #include <QDebug>
 #include <QVariantMap>
@@ -10,7 +10,7 @@ TemperatureFacade::TemperatureFacade(DeviceContext& context, QObject* parent)
     : QObject(parent)
     , timer_(this)
 {
-    worker_ = new HealthWorker2(context);
+    worker_ = new TemperatureWorker(context);
     worker_->moveToThread(&workerThread_);
 
     connect(
@@ -23,7 +23,7 @@ TemperatureFacade::TemperatureFacade(DeviceContext& context, QObject* parent)
         this,
         &TemperatureFacade::requestPollMaxTemperature,
         worker_,
-        &HealthWorker2::pollMaxTemperature,
+        &TemperatureWorker::pollMaxTemperature,
         Qt::QueuedConnection);
 
     connect(
@@ -34,7 +34,7 @@ TemperatureFacade::TemperatureFacade(DeviceContext& context, QObject* parent)
 
     connect(
         worker_,
-        &HealthWorker2::maxTemperatureUpdated,
+        &TemperatureWorker::maxTemperatureUpdated,
         this,
         [this](int value) {
             setMaxTemperature(value);
@@ -44,7 +44,7 @@ TemperatureFacade::TemperatureFacade(DeviceContext& context, QObject* parent)
 
     connect(
         worker_,
-        &HealthWorker2::maxTemperatureUnavailable,
+        &TemperatureWorker::maxTemperatureUnavailable,
         this,
         [this]() {
             setMaxTemperatureUnavailable(true);
@@ -53,7 +53,7 @@ TemperatureFacade::TemperatureFacade(DeviceContext& context, QObject* parent)
 
     connect(
         worker_,
-        &HealthWorker2::maxTemperatureErrorCode,
+        &TemperatureWorker::maxTemperatureErrorCode,
         this,
         [this](QString value) {
             setMaxTemperatureErrorCode(value);
