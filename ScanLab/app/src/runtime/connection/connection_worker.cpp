@@ -4,13 +4,13 @@
 #include "runtime/connection/connection_service.h"
 #include <magic_enum/magic_enum.hpp>
 
-ConnectionWorker2::ConnectionWorker2(DeviceContext& context, QObject* parent)
+ConnectionWorker::ConnectionWorker(DeviceContext& context, QObject* parent)
     : QObject(parent)
     , service_(context)
 {
 }
 
-void ConnectionWorker2::connect(DeviceType2 type, const QString& address)
+void ConnectionWorker::connect(DeviceType2 type, const QString& address)
 {
     const auto connectionResult = service_.connect(type, address.toStdWString());
     if (!connectionResult.has_value()) {
@@ -23,7 +23,7 @@ void ConnectionWorker2::connect(DeviceType2 type, const QString& address)
     emit connectionSucces();
 }
 
-void ConnectionWorker2::disconnect()
+void ConnectionWorker::disconnect()
 {
     service_.disconnect();
     const auto stillConnected = service_.isConnected();

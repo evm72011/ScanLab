@@ -12,16 +12,16 @@ Backend
             void addressChanged();
         
         connectors in constructor (in both directions facade <-> worker):
-            worker_ = new ConnectionWorker2(context);
+            worker_ = new ConnectionWorker(context);
             connect(
                 this,
                 &ConnectionFacade::requestConnect,
                 worker_,
-                &ConnectionWorker2::connectDevice,
+                &ConnectionWorker::connectDevice,
                 Qt::QueuedConnection);              <- 
 
         
-        ConnectionWorker2                                           // API for ConnectionFacade
+        ConnectionWorker                                           // API for ConnectionFacade
             void connectDevice(DeviceType2 type, const QString& address)
             {
                 const auto result = service_.connect(type, address.toStdWString());

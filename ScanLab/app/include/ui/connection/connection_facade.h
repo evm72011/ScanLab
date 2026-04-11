@@ -8,7 +8,7 @@
 #include "ui/connection/connection_state.h"
 
 class DeviceContext;
-class ConnectionWorker2;
+class ConnectionWorker;
 
 class ConnectionFacade : public QObject
 {
@@ -51,7 +51,7 @@ private:
     void setConnectionErrorCode(const QString& value);
 
 private:
-    ConnectionWorker2* worker_ = nullptr;
+    ConnectionWorker* worker_ = nullptr;
     QThread workerThread_;
 
     DeviceType2 deviceType_ = DeviceType2::None;

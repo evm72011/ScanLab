@@ -8,7 +8,7 @@
 ConnectionFacade::ConnectionFacade(DeviceContext& context, QObject* parent)
     : QObject(parent)
 {
-    worker_ = new ConnectionWorker2(context);
+    worker_ = new ConnectionWorker(context);
     worker_->moveToThread(&workerThread_);
 
     connect(
@@ -21,19 +21,19 @@ ConnectionFacade::ConnectionFacade(DeviceContext& context, QObject* parent)
         this,
         &ConnectionFacade::requestConnect,
         worker_,
-        &ConnectionWorker2::connect,
+        &ConnectionWorker::connect,
         Qt::QueuedConnection);
 
     connect(
         this,
         &ConnectionFacade::requestDisconnect,
         worker_,
-        &ConnectionWorker2::disconnect,
+        &ConnectionWorker::disconnect,
         Qt::QueuedConnection);
 
     connect(
         worker_,
-        &ConnectionWorker2::connectionSucces,
+        &ConnectionWorker::connectionSucces,
         this,
         [this]() {
             setConnectionState(ConnectionState::State::Connected);
@@ -42,7 +42,7 @@ ConnectionFacade::ConnectionFacade(DeviceContext& context, QObject* parent)
 
     connect(
         worker_,
-        &ConnectionWorker2::connectionFailure,
+        &ConnectionWorker::connectionFailure,
         this,
         [this]() {
             setConnectionState(ConnectionState::State::Disconnected);      // bug if already connected error
@@ -52,7 +52,7 @@ ConnectionFacade::ConnectionFacade(DeviceContext& context, QObject* parent)
 
     connect(
         worker_,
-        &ConnectionWorker2::connectionErrorCode,
+        &ConnectionWorker::connectionErrorCode,
         this,
         [this](const QString& code) {
             setConnectionErrorCode(code);      // bug if already connected error
@@ -61,7 +61,7 @@ ConnectionFacade::ConnectionFacade(DeviceContext& context, QObject* parent)
 
     connect(
         worker_,
-        &ConnectionWorker2::disconnectCompleted,
+        &ConnectionWorker::disconnectCompleted,
         this,
         [this](bool stillConnected) {
             if (!stillConnected) {
@@ -78,7 +78,7 @@ ConnectionFacade::~ConnectionFacade()
     if (worker_ != nullptr && workerThread_.isRunning()) {
         QMetaObject::invokeMethod(
             worker_,
-            &ConnectionWorker2::disconnect,
+            &ConnectionWorker::disconnect,
             Qt::BlockingQueuedConnection);
     }
 

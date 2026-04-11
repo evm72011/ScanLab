@@ -8,12 +8,12 @@
 
 class DeviceContext;
 
-class ConnectionWorker2 : public QObject
+class ConnectionWorker : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit ConnectionWorker2(DeviceContext& context, QObject* parent = nullptr);
+    explicit ConnectionWorker(DeviceContext& context, QObject* parent = nullptr);
 
 public slots:
     void connect(DeviceType2 type, const QString& address);
