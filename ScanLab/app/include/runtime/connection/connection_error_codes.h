@@ -1,6 +1,6 @@
 #pragma once
 
-#include "scanlab/hardware/connection_error_codes.h"
+#include "scanlab/hardware/device/connection_error_codes.h"
 
 namespace hw = scanlab::hardware;
 

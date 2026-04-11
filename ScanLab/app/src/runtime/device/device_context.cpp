@@ -1,6 +1,6 @@
 #include "runtime/device/device_context.h"
 
-#include "scanlab/hardware/device.h"
+#include "scanlab/hardware/device/device.h"
 
 DeviceContext::DeviceContext()
     : device_(std::make_unique<scanlab::hardware::Device>())

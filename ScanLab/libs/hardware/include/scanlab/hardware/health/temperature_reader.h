@@ -5,7 +5,7 @@
 #include <expected>
 #include <vector>
 
-#include "scanlab/hardware/device.h"
+#include "scanlab/hardware/device/device.h"
 #include "scanlab/hardware/health/temperature_types.h"
 
 namespace scanlab::hardware {

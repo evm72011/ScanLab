@@ -1,4 +1,4 @@
-#include "scanlab/hardware/device.h"
+#include "scanlab/hardware/device/device.h"
 
 #include <memory>
 
@@ -138,5 +138,4 @@ const CHWDeviceOEMPA* Device::get() const
 {
     return device_.get();
 }
-
 } // namespace scanlab::hardware
