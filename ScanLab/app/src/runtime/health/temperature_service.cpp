@@ -1,7 +1,7 @@
 #include "runtime/health/temperature_service.h"
 #include "runtime/device/device_context.h"
 
-#include "scanlab/hardware/temperature_reader.h"
+#include "scanlab/hardware/health/temperature_reader.h"
 
 TemperatureService::TemperatureService(DeviceContext& context)
     : context_(context)

@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "scanlab/hardware/device.h"
-#include "scanlab/hardware/temperature_types.h"
+#include "scanlab/hardware/health/temperature_types.h"
 
 namespace scanlab::hardware {
 
@@ -14,8 +14,6 @@ class TemperatureReader
 {
 public:
     explicit TemperatureReader(Device& device);
-
-    //[[nodiscard]] std::optional<TemperatureSnapshot> read() const;
     [[nodiscard]] std::expected<int, TemperatureErrorCodes> readMax() const;
 
 private:

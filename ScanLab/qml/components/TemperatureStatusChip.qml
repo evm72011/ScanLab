@@ -103,7 +103,7 @@ Rectangle {
                     return qsTr("Temperature: Err")
                 }
 
-                return qsTr("Temp: %1 °C").arg(root.maxTemperature)
+                return qsTr("%1 °C").arg(root.maxTemperature)
             }
 
             color: root.tempColor

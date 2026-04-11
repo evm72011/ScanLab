@@ -2,7 +2,7 @@
 
 #include <memory>
 #include <expected>
-#include "scanlab/hardware/temperature_types.h"
+#include "scanlab/hardware/health/temperature_types.h"
 
 class DeviceContext;
 
