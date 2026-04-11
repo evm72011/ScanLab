@@ -26,4 +26,8 @@ QtObject {
     property color textPrimary
     property color textSecondary
     property color textDisabled
+
+    property color textSuccess
+    property color textWarning
+    property color textError
 }

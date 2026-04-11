@@ -30,19 +30,15 @@ Rectangle {
             return Qt.rgba(1, 1, 1, 0.55)
         }
 
-        if (maxTemperatureUnavailable) {
-            return "#ff6b6b"   // всегда красный для Err
-        }
-
-        if (maxTemperature >= 50) {
-            return "#ff6b6b"
+        if (maxTemperature >= 50 || maxTemperatureUnavailable) {
+            return SL.Theme.colors.textError //"#ff6b6b"
         }
 
         if (maxTemperature >= 40) {
-            return "#ffb347"
+            return SL.Theme.colors.textWarning //"#ffb347"
         }
 
-        return "#9ad27a"
+        return SL.Theme.colors.textSuccess //"#9ad27a"//
     }
 
     function updatePolling() {
@@ -63,9 +59,10 @@ Rectangle {
 
     StyledToolTip {
         id: errorTip
-        text: qsTr("Unable to read temperature!\nErrorCode: %1")
-                .arg(root.maxTemperatureErrorCode)
-        visible: hoverHandler.hovered && root.maxTemperatureUnavailable && root.connected
+        text: root.maxTemperatureUnavailable
+            ? qsTr("Unable to read temperature!\nErrorCode: %1").arg(root.maxTemperatureErrorCode)
+            : qsTr("Temperature")
+        //visible: hoverHandler.hovered && root.maxTemperatureUnavailable && root.connected
     }
 
     Rectangle {

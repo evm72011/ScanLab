@@ -29,4 +29,8 @@ ColorTokens {
     textPrimary: p.gray200
     textSecondary: p.gray300
     textDisabled: p.gray500
+
+    textSuccess: p.green300
+    textWarning: p.yellow600
+    textError: p.red700
 }
