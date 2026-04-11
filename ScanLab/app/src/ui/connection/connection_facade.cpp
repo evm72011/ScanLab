@@ -1,7 +1,6 @@
 #include "ui/connection/connection_facade.h"
 
 #include "runtime/device/device_context.h"
-#include "runtime/connection/connection_result.h"
 #include "runtime/connection/connection_worker.h"
 
 #include <QMetaObject>
@@ -22,34 +21,47 @@ ConnectionFacade::ConnectionFacade(DeviceContext& context, QObject* parent)
         this,
         &ConnectionFacade::requestConnect,
         worker_,
-        &ConnectionWorker2::connectDevice,
+        &ConnectionWorker2::connect,
         Qt::QueuedConnection);
 
     connect(
         this,
         &ConnectionFacade::requestDisconnect,
         worker_,
-        &ConnectionWorker2::disconnectDevice,
+        &ConnectionWorker2::disconnect,
         Qt::QueuedConnection);
 
     connect(
         worker_,
-        &ConnectionWorker2::connectCompleted,
+        &ConnectionWorker2::connectionSucces,
         this,
-        [this](const ConnectionResult& result) {
-            setConnectionState(
-                result.isConnected
-                    ? ConnectionState2::State::Connected
-                    : ConnectionState2::State::Disconnected);
-
-            setLastConnectStatusCode(QString::fromStdString(result.statusCode));
-            emit connectFinished(result.isConnected ? 0 : 1);  // TODO connectFailure bool ??
+        [this]() {
+            setConnectionState(ConnectionState2::State::Connected);
         },
         Qt::QueuedConnection);
 
     connect(
         worker_,
-        &ConnectionWorker2::disconnected,
+        &ConnectionWorker2::connectionFailure,
+        this,
+        [this]() {
+            setConnectionState(ConnectionState2::State::Disconnected);      // bug if already connected error
+            emit connectionFailure();
+        },
+        Qt::QueuedConnection);
+
+    connect(
+        worker_,
+        &ConnectionWorker2::connectionErrorCode,
+        this,
+        [this](const QString& code) {
+            setConnectionErrorCode(code);      // bug if already connected error
+        },
+        Qt::QueuedConnection);
+
+    connect(
+        worker_,
+        &ConnectionWorker2::disconnectCompleted,
         this,
         [this](bool stillConnected) {
             if (!stillConnected) {
@@ -66,7 +78,7 @@ ConnectionFacade::~ConnectionFacade()
     if (worker_ != nullptr && workerThread_.isRunning()) {
         QMetaObject::invokeMethod(
             worker_,
-            &ConnectionWorker2::disconnectDevice,
+            &ConnectionWorker2::disconnect,
             Qt::BlockingQueuedConnection);
     }
 
@@ -109,9 +121,9 @@ ConnectionState2::State ConnectionFacade::connectionState() const
     return connectionState_;
 }
 
-QString ConnectionFacade::lastConnectStatusCode() const
+QString ConnectionFacade::connectionErrorCode() const
 {
-    return lastConnectStatusCode_;
+    return connectionErrorCode_;
 }
 
 void ConnectionFacade::connectDevice()
@@ -134,11 +146,6 @@ void ConnectionFacade::disconnectDevice()
     emit requestDisconnect();
 }
 
-void ConnectionFacade::resetDevice()
-{
-    emit requestReset();
-}
-
 void ConnectionFacade::setConnectionState(ConnectionState2::State value)
 {
     if (connectionState_ == value) {
@@ -149,12 +156,12 @@ void ConnectionFacade::setConnectionState(ConnectionState2::State value)
     emit connectionStateChanged();
 }
 
-void ConnectionFacade::setLastConnectStatusCode(const QString& value)
+void ConnectionFacade::setConnectionErrorCode(const QString& value)
 {
-    if (lastConnectStatusCode_ == value) {
+    if (connectionErrorCode_ == value) {
         return;
     }
 
-    lastConnectStatusCode_ = value;
-    emit lastConnectStatusCodeChanged();
+    connectionErrorCode_ = value;
+    emit connectionErrorCodeChanged();
 }

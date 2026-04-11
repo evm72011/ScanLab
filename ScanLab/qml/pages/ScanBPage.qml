@@ -18,6 +18,5 @@ Rectangle {
         anchors.fill: parent
         anchors.margins: 8
         active: root.active
-
     }
 }

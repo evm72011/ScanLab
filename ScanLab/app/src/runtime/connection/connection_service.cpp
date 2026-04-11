@@ -12,23 +12,25 @@ ConnectionService::ConnectionService(DeviceContext& context)
 {
 }
 
-ConnectionResult ConnectionService::connect(DeviceType2 type, const std::wstring& address)
+std::expected<void, ConnectionErrorCodes> ConnectionService::connect(DeviceType2 type, const std::wstring& address)
 {
     auto* device = context_.device();
     if (!device) {
-        return {false, "DeviceNotSet"};
+        return std::unexpected(ConnectionErrorCodes::DeviceNotSet);
     }
 
     if (!device->ensureDevice(toHardware(type))) {
-        return {false, "DeviceCreateFailed"};
+        return std::unexpected(ConnectionErrorCodes::CreateDeviceFailed);
     }
 
-    const auto result = device->connect(address);
+    const auto connectionResult = device->connect(address);
 
-    return {
-        device->isConnected(),
-        std::string(magic_enum::enum_name(result))
-    };
+    if (!connectionResult.has_value()) {
+        const auto error = fromHardware(connectionResult.error());
+        return std::unexpected(error);
+    }
+
+    return {};
 }
 
 void ConnectionService::disconnect()

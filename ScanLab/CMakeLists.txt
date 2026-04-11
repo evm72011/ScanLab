@@ -55,7 +55,7 @@ qt_add_qml_module(${APP_NAME}
         app/include/runtime/device/device_type.h
         app/include/runtime/device/device_type_def.h
         app/include/runtime/device/device_type_mapper.h
-        app/include/runtime/connection/connection_result.h
+        app/include/runtime/connection/connection_error_codes.h
         app/include/runtime/connection/connection_service.h
         app/include/runtime/connection/connection_worker.h
         app/include/runtime/health/health_service.h
@@ -75,12 +75,12 @@ qt_add_qml_module(${APP_NAME}
         app/include/backend.h
         app/include/c_scan_worker.h
         app/include/connection_state.h
-        app/include/connection_worker.h
-        app/include/device_facade.h
+#        app/include/connection_worker.h
+#        app/include/device_facade.h
         app/include/device_type.h
         app/include/device_type_mapper.h
-        app/include/health_monitor.h
-        app/include/health_worker.h
+ #       app/include/health_monitor.h
+        #app/include/health_worker.h
 
         app/src/runtime/device/device_context.cpp
         app/src/runtime/connection/connection_service.cpp
@@ -98,10 +98,10 @@ qt_add_qml_module(${APP_NAME}
         app/src/backend.cpp
         app/src/c_scan_view.cpp
         app/src/c_scan_worker.cpp
-        app/src/connection_worker.cpp
-        app/src/device_facade.cpp
-        app/src/health_monitor.cpp
-        app/src/health_worker.cpp
+#        app/src/connection_worker.cpp
+#        app/src/device_facade.cpp
+#        app/src/health_monitor.cpp
+        #app/src/health_worker.cpp
 )
 
 include(GNUInstallDirs)

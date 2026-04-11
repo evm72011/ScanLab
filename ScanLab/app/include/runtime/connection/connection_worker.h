@@ -4,7 +4,6 @@
 #include <QString>
 
 #include "runtime/device/device_type.h"
-#include "runtime/connection/connection_result.h"
 #include "runtime/connection/connection_service.h"
 
 class DeviceContext;
@@ -17,12 +16,14 @@ public:
     explicit ConnectionWorker2(DeviceContext& context, QObject* parent = nullptr);
 
 public slots:
-    void connectDevice(DeviceType2 type, const QString& address);
-    void disconnectDevice();
+    void connect(DeviceType2 type, const QString& address);
+    void disconnect();
 
 signals:
-    void connectCompleted(ConnectionResult result);
-    void disconnected(bool stillConnected);
+    void connectionSucces();
+    void connectionFailure();
+    void connectionErrorCode(const QString& value);
+    void disconnectCompleted(bool stillConnected);
 
 private:
     ConnectionService service_;

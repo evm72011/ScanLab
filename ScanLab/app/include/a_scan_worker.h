@@ -4,8 +4,7 @@
 #include <QHash>
 #include <QVector>
 
-#include "device_facade.h"
-#include "scanlab/hardware/a_scan_acquisition.h"
+//#include "scanlab/hardware/a_scan_acquisition.h"
 
 class AScanWorker : public QObject
 {
@@ -14,7 +13,7 @@ class AScanWorker : public QObject
 public:
     explicit AScanWorker(QObject* parent = nullptr);
     ~AScanWorker() override;
-
+/*
 public slots:
     void setDevice(DeviceFacade* device);
     void start();
@@ -34,4 +33,5 @@ private:
 
     QHash<int, QVector<float>> frames_;
     int selectedCycle_ = 0;
+*/
 };

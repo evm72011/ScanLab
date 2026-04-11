@@ -13,6 +13,7 @@ Rectangle {
     border.color: SL.Theme.colors.border
     clip: true
 
+    /*
     SL.AScanView {
       id: aScanView
 
@@ -27,4 +28,5 @@ Rectangle {
       active: root.active
       device: backend ? backend.device : null
     }
+    */
 }

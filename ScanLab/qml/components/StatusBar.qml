@@ -7,7 +7,7 @@ ToolBar {
     id: root
     implicitHeight: 30
 
-    property int connectionState: backend?.connection?.connectionState ??
+    property int connectionState: backend?.connectionFacade?.connectionState ??
                                   SL.ConnectionState.Disconnected
 
     readonly property bool disconnected: connectionState === SL.ConnectionState2.Disconnected

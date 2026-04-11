@@ -6,6 +6,7 @@
 AScanWorker::AScanWorker(QObject* parent)
     : QObject(parent)
 {
+    /*
     acquisition_.setSamplesHandler(
         [this](scanlab::hardware::AScanAcquisition::Frame frame)
         {
@@ -33,14 +34,17 @@ AScanWorker::AScanWorker(QObject* parent)
                 },
                 Qt::QueuedConnection);
         });
+*/
 }
 
 AScanWorker::~AScanWorker()
 {
+    /*
     acquisition_.stop();
     updatePulsing(false);
+*/
 }
-
+/*
 void AScanWorker::setDevice(DeviceFacade* device)
 {
     acquisition_.stop();
@@ -97,3 +101,4 @@ void AScanWorker::updatePulsing(bool value)
         },
         Qt::QueuedConnection);
 }
+*/

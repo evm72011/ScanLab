@@ -35,6 +35,7 @@ constexpr qreal CURSOR_W = 1.0;
 AScanView::AScanView(QQuickItem* parent)
     : QQuickPaintedItem(parent)
 {
+    /*
     setAntialiasing(true);
     setAcceptHoverEvents(true);
     setAcceptedMouseButtons(Qt::NoButton);
@@ -53,15 +54,16 @@ AScanView::AScanView(QQuickItem* parent)
 
     workerThread_.start();
     emit requestSampleCount(sampleCount_);
+*/
 }
 
 AScanView::~AScanView()
 {
-    emit requestStop();
-    workerThread_.quit();
-    workerThread_.wait();
+//    emit requestStop();
+//    workerThread_.quit();
+//    workerThread_.wait();
 }
-
+/*
 DeviceFacade* AScanView::device() const
 {
     return device_;
@@ -418,3 +420,4 @@ void AScanView::paint(QPainter* p)
         p->drawText(textRect, Qt::AlignCenter, txt);
     }
 }
+*/

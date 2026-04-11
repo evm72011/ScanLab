@@ -19,35 +19,35 @@ Device::~Device() = default;
 Device::Device(Device&&) noexcept = default;
 Device& Device::operator=(Device&&) noexcept = default;
 
-ConnectResult Device::connect(const std::wstring& address)
+std::expected<void,ConnectionErrorCodes> Device::connect(const std::wstring& address)
 {
     if (!device_) {
-        return ConnectResult::DeviceNotSet;
+        return std::unexpected(ConnectionErrorCodes::HardwareNotSet);
     }
 
     if (isConnected()) {
-        return ConnectResult::AlreadyConnected;
+        return std::unexpected(ConnectionErrorCodes::AlreadyConnected);
     }
 
     auto* swOempa = device_->GetSWDeviceOEMPA();
     if (!swOempa) {
-        return ConnectResult::OempaInterfaceUnavailable;
+        return std::unexpected(ConnectionErrorCodes::OempaInterfaceUnavailable);
     }
 
     if (!swOempa->SetAddress(address.c_str())) {
-        return ConnectResult::SetAddressFailed;
+        return std::unexpected(ConnectionErrorCodes::SetAddressFailure);
     }
 
     auto* swBase = device_->GetSWDevice();
     if (!swBase) {
-        return ConnectResult::BaseInterfaceUnavailable;
+        return std::unexpected(ConnectionErrorCodes::BaseInterfaceUnavailable);
     }
 
     if (!swBase->SetConnectionState(eConnected, true)) {
-        return ConnectResult::ConnectFailed;
+        return std::unexpected(ConnectionErrorCodes::ConnectionFailure);
     }
 
-    return ConnectResult::Success;
+    return {};
 }
 
 bool Device::disconnect()

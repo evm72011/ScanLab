@@ -7,7 +7,6 @@
 #include <QVector>
 #include <qqmlintegration.h>
 
-#include "device_facade.h"
 
 class AScanWorker;
 class QHoverEvent;
@@ -16,7 +15,7 @@ class AScanView : public QQuickPaintedItem
 {
     Q_OBJECT
     QML_ELEMENT
-
+/*
     Q_PROPERTY(DeviceFacade* device READ device WRITE setDevice NOTIFY deviceChanged)
     Q_PROPERTY(int sampleCount READ sampleCount WRITE setSampleCount NOTIFY sampleCountChanged)
     Q_PROPERTY(qreal minY READ minY WRITE setMinY NOTIFY minYChanged)
@@ -28,11 +27,11 @@ class AScanView : public QQuickPaintedItem
     Q_PROPERTY(qreal timeStartUs READ timeStartUs WRITE setTimeStartUs NOTIFY timeStartUsChanged)
 
     Q_PROPERTY(int xDivisions READ xDivisions WRITE setXDivisions NOTIFY xDivisionsChanged)
-
+*/
 public:
     explicit AScanView(QQuickItem* parent = nullptr);
     ~AScanView() override;
-
+/*
     DeviceFacade* device() const;
     void setDevice(DeviceFacade* value);
 
@@ -118,4 +117,5 @@ private:
 
     QThread workerThread_;
     AScanWorker* worker_ = nullptr;
+*/
 };

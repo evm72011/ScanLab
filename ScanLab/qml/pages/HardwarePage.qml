@@ -6,8 +6,9 @@ import ScanLab as SL
 Item {
     id: root
 
-    property int connectionState: backend?.connection?.connectionState ??
-                                  SL.ConnectionState2.Disconnected
+    readonly property var connectionFacade: backend?.connectionFacade ?? null
+
+    property int connectionState: connectionFacade?.connectionState ?? SL.ConnectionState2.Disconnected
 
     readonly property bool disconnected: connectionState === SL.ConnectionState2.Disconnected
     readonly property bool connecting: connectionState === SL.ConnectionState2.Connecting
@@ -43,12 +44,12 @@ Item {
                 { value: SL.DeviceType2Qml.OEMPA_Micro, text: "OEMPA Micro" }
             ]
 
-            currentValue: backend?.connection?.deviceType ?? SL.DeviceType2Qml.None
+            currentValue: connectionFacade?.deviceType ?? SL.DeviceType2Qml.None
             enabled: root.disconnected
 
             onActivated: function(value) {
-                backend.connection.deviceType = value
-                backend.connection.resetDevice();
+                connectionFacade.deviceType = value
+                connectionFacade.resetDevice();
                 SL.AppSettings.setValue("Hardware/type", value)
             }
         }
@@ -60,11 +61,11 @@ Item {
             placeholderText: qsTr("Enter device address")
             infoText: qsTr("IP address or device path")
 
-            value:  backend?.connection?.address ?? ""
+            value:  connectionFacade?.address ?? ""
             enabled: root.disconnected
 
             onValueEdited: function(value) {
-                backend.connection.address = value;
+                backend.connectionFacade.address = value;
             }
 
             onEditingFinished: function(value) {
@@ -99,20 +100,18 @@ Item {
 
             onClicked: {
                 if (root.connected) {
-                    backend.connection.disconnectDevice();
+                    connectionFacade.disconnectDevice();
                 } else {
-                    backend.connection.connectDevice()
+                    connectionFacade.connectDevice()
                 }
             }
         }
 
         Connections {
-            target: backend?.connection ?? null
+            target: backend?.connectionFacade ?? null
 
-            function onConnectFinished(result) {
-                if (result !== 0) {
-                    connectionErrorDialog.open()
-                }
+            function onConnectionFailure() {
+                connectionErrorDialog.open()
             }
         }
 
@@ -120,7 +119,7 @@ Item {
             id: connectionErrorDialog
             messageType: MessageDialog.Type.Error
             shortText: qsTr("Connection error")
-            detailsText: `Error Code: ${backend?.connection?.lastConnectStatusCode ?? ''}`
+            detailsText: `Error Code: ${connectionFacade?.connectionErrorCode ?? ''}`
         }
 
         SL.MessageDialog {
@@ -133,13 +132,13 @@ Item {
         Item { Layout.fillHeight: true }
 
         Component.onCompleted: {
-            backend.connection.address = SL.AppSettings.value(
+            backend.connectionFacade.address = SL.AppSettings.value(
                 "Hardware/address",
-                backend.device.address
+                backend.connectionFacade.address
             )
 
-            backend.connection.deviceType = Number(
-                SL.AppSettings.value("Hardware/type", backend.connection.deviceType)
+            backend.connectionFacade.deviceType = Number(
+                SL.AppSettings.value("Hardware/type", backend.connectionFacade.deviceType)
             )
         }
     }

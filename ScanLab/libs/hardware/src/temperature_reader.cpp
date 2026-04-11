@@ -13,22 +13,6 @@ TemperatureReader::TemperatureReader(Device& device)
 {
 }
 
-/*
-bool TemperatureSnapshot::empty() const
-{
-    return sensors.empty() && boardMaxCelsius.empty();
-}
-
-std::optional<int> TemperatureSnapshot::overallMaxCelsius() const
-{
-    if (boardMaxCelsius.empty()) {
-        return std::nullopt;
-    }
-
-    return *std::max_element(boardMaxCelsius.begin(), boardMaxCelsius.end());
-}
-*/
-
 bool TemperatureReader::Topology::empty() const
 {
     return boardCount <= 0;
@@ -45,7 +29,7 @@ std::expected<void, TemperatureErrorCodes> TemperatureReader::ensureTopology() c
     auto* hw = device_.get();
     if (hw == nullptr) {
         invalidateTopology();
-        return std::unexpected(TemperatureErrorCodes::DeviceNotSet);
+        return std::unexpected(TemperatureErrorCodes::HardwareNotSet);
     }
 
     if (topology_.has_value() && topology_->hw == hw) {
@@ -109,7 +93,7 @@ std::expected<int, TemperatureErrorCodes> TemperatureReader::readMax() const {
     auto* hw = device_.get();
     if (hw == nullptr) {
         invalidateTopology();
-        return std::unexpected(TemperatureErrorCodes::DeviceNotSet);
+        return std::unexpected(TemperatureErrorCodes::HardwareNotSet);
     }
 
     auto* sw = hw->GetSWDeviceOEMPA();
