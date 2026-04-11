@@ -62,7 +62,7 @@ qt_add_qml_module(${APP_NAME}
         app/include/runtime/health/health_worker.h
 
         app/include/ui/connection/connection_facade.h
-        app/include/ui/connection/connection_state2.h
+        app/include/ui/connection/connection_state.h
         app/include/ui/device/device_type2.h
         app/include/ui/health/health_facade.h
 
@@ -74,13 +74,8 @@ qt_add_qml_module(${APP_NAME}
         app/include/c_scan_view.h
         app/include/backend.h
         app/include/c_scan_worker.h
-        app/include/connection_state.h
-#        app/include/connection_worker.h
-#        app/include/device_facade.h
-        app/include/device_type.h
-        app/include/device_type_mapper.h
- #       app/include/health_monitor.h
-        #app/include/health_worker.h
+
+#        app/include/device_type.h
 
         app/src/runtime/device/device_context.cpp
         app/src/runtime/connection/connection_service.cpp
@@ -98,10 +93,6 @@ qt_add_qml_module(${APP_NAME}
         app/src/backend.cpp
         app/src/c_scan_view.cpp
         app/src/c_scan_worker.cpp
-#        app/src/connection_worker.cpp
-#        app/src/device_facade.cpp
-#        app/src/health_monitor.cpp
-        #app/src/health_worker.cpp
 )
 
 include(GNUInstallDirs)

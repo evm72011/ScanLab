@@ -5,7 +5,7 @@
 #include <QThread>
 
 #include "runtime/device/device_type.h"
-#include "ui/connection/connection_state2.h"
+#include "ui/connection/connection_state.h"
 
 class DeviceContext;
 class ConnectionWorker2;
@@ -16,7 +16,7 @@ class ConnectionFacade : public QObject
 
     Q_PROPERTY(DeviceType2 deviceType READ deviceType WRITE setDeviceType NOTIFY deviceTypeChanged)
     Q_PROPERTY(QString address READ address WRITE setAddress NOTIFY addressChanged)
-    Q_PROPERTY(ConnectionState2::State connectionState READ connectionState NOTIFY connectionStateChanged)
+    Q_PROPERTY(ConnectionState::State connectionState READ connectionState NOTIFY connectionStateChanged)
     Q_PROPERTY(QString connectionErrorCode READ connectionErrorCode NOTIFY connectionErrorCodeChanged)
 
 public:
@@ -29,7 +29,7 @@ public:
     QString address() const;
     void setAddress(const QString& value);
 
-    ConnectionState2::State connectionState() const;
+    ConnectionState::State connectionState() const;
     QString connectionErrorCode() const;
 
     Q_INVOKABLE void connectDevice();
@@ -47,7 +47,7 @@ signals:
     void requestReset();
 
 private:
-    void setConnectionState(ConnectionState2::State value);
+    void setConnectionState(ConnectionState::State value);
     void setConnectionErrorCode(const QString& value);
 
 private:
@@ -56,6 +56,6 @@ private:
 
     DeviceType2 deviceType_ = DeviceType2::None;
     QString address_;
-    ConnectionState2::State connectionState_ = ConnectionState2::State::Disconnected;
+    ConnectionState::State connectionState_ = ConnectionState::State::Disconnected;
     QString connectionErrorCode_;
 };

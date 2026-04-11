@@ -36,7 +36,7 @@ ConnectionFacade::ConnectionFacade(DeviceContext& context, QObject* parent)
         &ConnectionWorker2::connectionSucces,
         this,
         [this]() {
-            setConnectionState(ConnectionState2::State::Connected);
+            setConnectionState(ConnectionState::State::Connected);
         },
         Qt::QueuedConnection);
 
@@ -45,7 +45,7 @@ ConnectionFacade::ConnectionFacade(DeviceContext& context, QObject* parent)
         &ConnectionWorker2::connectionFailure,
         this,
         [this]() {
-            setConnectionState(ConnectionState2::State::Disconnected);      // bug if already connected error
+            setConnectionState(ConnectionState::State::Disconnected);      // bug if already connected error
             emit connectionFailure();
         },
         Qt::QueuedConnection);
@@ -65,7 +65,7 @@ ConnectionFacade::ConnectionFacade(DeviceContext& context, QObject* parent)
         this,
         [this](bool stillConnected) {
             if (!stillConnected) {
-                setConnectionState(ConnectionState2::State::Disconnected);
+                setConnectionState(ConnectionState::State::Disconnected);
             }
         },
         Qt::QueuedConnection);
@@ -116,7 +116,7 @@ void ConnectionFacade::setAddress(const QString& value)
     emit addressChanged();
 }
 
-ConnectionState2::State ConnectionFacade::connectionState() const
+ConnectionState::State ConnectionFacade::connectionState() const
 {
     return connectionState_;
 }
@@ -128,25 +128,25 @@ QString ConnectionFacade::connectionErrorCode() const
 
 void ConnectionFacade::connectDevice()
 {
-    if (connectionState_ != ConnectionState2::State::Disconnected) {
+    if (connectionState_ != ConnectionState::State::Disconnected) {
         return;
     }
 
-    setConnectionState(ConnectionState2::State::Connecting);
+    setConnectionState(ConnectionState::State::Connecting);
     emit requestConnect(deviceType_, address_);
 }
 
 void ConnectionFacade::disconnectDevice()
 {
-    if (connectionState_ != ConnectionState2::State::Connected) {
+    if (connectionState_ != ConnectionState::State::Connected) {
         return;
     }
 
-    setConnectionState(ConnectionState2::State::Disconnecting);
+    setConnectionState(ConnectionState::State::Disconnecting);
     emit requestDisconnect();
 }
 
-void ConnectionFacade::setConnectionState(ConnectionState2::State value)
+void ConnectionFacade::setConnectionState(ConnectionState::State value)
 {
     if (connectionState_ == value) {
         return;

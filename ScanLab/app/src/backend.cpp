@@ -11,6 +11,14 @@
 Backend::Backend(QObject* parent)
     : QObject(parent)
 {
-//    device_.setType(DeviceType::OEMPA_Max);     // remove
-//    healthMonitor_.setDevice(&device_);
+}
+
+ConnectionFacade* Backend::connectionFacade()
+{
+    return &connectionFacade_;
+}
+
+HealthFacade* Backend::healthFacade()
+{
+    return &healthFacade_;
 }

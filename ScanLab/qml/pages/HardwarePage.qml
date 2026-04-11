@@ -8,12 +8,12 @@ Item {
 
     readonly property var connectionFacade: backend?.connectionFacade ?? null
 
-    property int connectionState: connectionFacade?.connectionState ?? SL.ConnectionState2.Disconnected
+    property int connectionState: connectionFacade?.connectionState ?? SL.ConnectionState.Disconnected
 
-    readonly property bool disconnected: connectionState === SL.ConnectionState2.Disconnected
-    readonly property bool connecting: connectionState === SL.ConnectionState2.Connecting
-    readonly property bool connected: connectionState === SL.ConnectionState2.Connected
-    readonly property bool disconnecting: connectionState === SL.ConnectionState2.Disconnecting
+    readonly property bool disconnected: connectionState === SL.ConnectionState.Disconnected
+    readonly property bool connecting: connectionState === SL.ConnectionState.Connecting
+    readonly property bool connected: connectionState === SL.ConnectionState.Connected
+    readonly property bool disconnecting: connectionState === SL.ConnectionState.Disconnecting
 
     Rectangle {
         anchors.fill: parent
