@@ -106,6 +106,55 @@ std::expected<int, TemperatureErrorCodes> TemperatureReader::readMax() const {
     }
 
     bool ok = true;
+    size_t sensorIdx = 0;
+    std::vector<short> values(static_cast<std::size_t>(topology_->totalSensorCount), 0);
+    for (int board = 0; board < topology_->boardCount && ok; ++board) {
+        const int sensorCount = topology_->sensorCountPerBoard[board];
+        for (int sensor = 0; sensor < sensorCount; ++sensor) {
+            if (!hw->GetTemperatureSensor(board, sensor, &values[sensorIdx])) {
+                ok = false;
+                break;
+            }
+            sensorIdx++;
+        }
+    }
+
+    const bool unlockOk = hw->UnlockDevice(eAcqContinue);
+    if (!ok || !unlockOk || values.empty()) {
+        return std::unexpected(TemperatureErrorCodes::MaxBoardTemperatureUnavailable);
+    }
+
+    short result = values[0];
+    for (short value : values) {
+        result = std::max(result, value);
+    }
+
+    return static_cast<int>(result);
+}
+
+/*
+std::expected<int, TemperatureErrorCodes> TemperatureReader::readMax() const {
+    const auto topologyResult = ensureTopology();
+    if (!topologyResult) {
+        return std::unexpected(topologyResult.error());
+    }
+
+    auto* hw = device_.get();
+    if (hw == nullptr) {
+        invalidateTopology();
+        return std::unexpected(TemperatureErrorCodes::HardwareNotSet);
+    }
+
+    auto* sw = hw->GetSWDeviceOEMPA();
+    if (sw == nullptr) {
+        return std::unexpected(TemperatureErrorCodes::OempaInterfaceUnavailable);
+    }
+
+    if (!hw->LockDevice(eAcqContinue)) {
+        return std::unexpected(TemperatureErrorCodes::DeviceLockFailed);
+    }
+
+    bool ok = true;
     std::vector<short> values(static_cast<std::size_t>(topology_->boardCount), 0);
     for (int board = 0; board < topology_->boardCount && ok; ++board) {
         if (!hw->GetTemperatureMaxHW(board, &values[static_cast<std::size_t>(board)])) {
@@ -126,7 +175,7 @@ std::expected<int, TemperatureErrorCodes> TemperatureReader::readMax() const {
 
     return static_cast<int>(result);
 }
-
+*/
 /*
 std::optional<TemperatureSnapshot> TemperatureReader::read() const
 {

@@ -58,7 +58,7 @@ qt_add_qml_module(${APP_NAME}
         app/include/runtime/connection/connection_error_codes.h
         app/include/runtime/connection/connection_service.h
         app/include/runtime/connection/connection_worker.h
-        app/include/runtime/health/health_service.h
+        app/include/runtime/health/temperature_service.h
         app/include/runtime/health/temperature_worker.h
 
         app/include/ui/connection/connection_facade.h
@@ -80,7 +80,7 @@ qt_add_qml_module(${APP_NAME}
         app/src/runtime/device/device_context.cpp
         app/src/runtime/connection/connection_service.cpp
         app/src/runtime/connection/connection_worker.cpp
-        app/src/runtime/health/health_service.cpp
+        app/src/runtime/health/temperature_service.cpp
         app/src/runtime/health/temperature_worker.cpp
 
         app/src/ui/connection/connection_facade.cpp

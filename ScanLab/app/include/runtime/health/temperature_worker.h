@@ -3,7 +3,7 @@
 #include <QObject>
 #include <QString>
 
-#include "runtime/health/health_service.h"
+#include "runtime/health/temperature_service.h"
 
 class DeviceContext;
 
@@ -23,5 +23,5 @@ signals:
     void maxTemperatureErrorCode(const QString& value);
 
 private:
-    HealthService service_;
+    TemperatureService service_;
 };

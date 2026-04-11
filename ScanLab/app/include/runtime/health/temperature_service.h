@@ -10,14 +10,14 @@ namespace scanlab::hardware {
 class TemperatureReader;
 }
 
-class HealthService
+class TemperatureService
 {
 public:
-    explicit HealthService(DeviceContext& context);
+    explicit TemperatureService(DeviceContext& context);
 
     std::expected<int, scanlab::hardware::TemperatureErrorCodes> readMax() const;
 
-    ~HealthService();
+    ~TemperatureService();
 private:
     DeviceContext& context_;
     std::unique_ptr<scanlab::hardware::TemperatureReader> temperatureReader_;
