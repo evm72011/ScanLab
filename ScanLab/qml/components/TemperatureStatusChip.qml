@@ -12,11 +12,11 @@ Rectangle {
     readonly property bool connected:
         connectionState === SL.ConnectionState.Connected
 
-    readonly property var healthFacade: backend?.healthFacade ?? null
+    readonly property var temperatureFacade: backend?.temperatureFacade ?? null
 
-    readonly property bool maxTemperatureUnavailable: healthFacade?.maxTemperatureUnavailable ?? true
-    readonly property string maxTemperatureErrorCode: healthFacade?.maxTemperatureErrorCode ?? ""
-    readonly property int maxTemperature: healthFacade?.maxTemperature ?? 0
+    readonly property bool maxTemperatureUnavailable: temperatureFacade?.maxTemperatureUnavailable ?? true
+    readonly property string maxTemperatureErrorCode: temperatureFacade?.maxTemperatureErrorCode ?? ""
+    readonly property int maxTemperature: temperatureFacade?.maxTemperature ?? 0
 
     height: 30
     radius: 4
@@ -46,14 +46,14 @@ Rectangle {
     }
 
     function updatePolling() {
-        if (!healthFacade) {
+        if (!temperatureFacade) {
             return
         }
 
         if (connected) {
-            healthFacade.startMaxTemperaturePolling()
+            temperatureFacade.startMaxTemperaturePolling()
         } else {
-            healthFacade.stopMaxTemperaturePolling()
+            temperatureFacade.stopMaxTemperaturePolling()
         }
     }
 
@@ -115,9 +115,9 @@ Rectangle {
 
     Component.onCompleted: updatePolling()
     onConnectedChanged: updatePolling()
-    onHealthFacadeChanged: updatePolling()
+    onTemperatureFacadeChanged: updatePolling() /// ?????
 
     Component.onDestruction: {
-        healthFacade?.stopPolling()
+        temperatureFacade?.stopPolling()
     }
 }

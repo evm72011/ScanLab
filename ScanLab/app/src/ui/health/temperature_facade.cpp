@@ -1,4 +1,4 @@
-#include "ui/health/health_facade.h"
+#include "ui/health/temperature_facade.h"
 
 #include "runtime/device/device_context.h"
 #include "runtime/health/health_worker.h"
@@ -6,7 +6,7 @@
 #include <QDebug>
 #include <QVariantMap>
 
-HealthFacade::HealthFacade(DeviceContext& context, QObject* parent)
+TemperatureFacade::TemperatureFacade(DeviceContext& context, QObject* parent)
     : QObject(parent)
     , timer_(this)
 {
@@ -21,7 +21,7 @@ HealthFacade::HealthFacade(DeviceContext& context, QObject* parent)
 
     connect(
         this,
-        &HealthFacade::requestPollMaxTemperature,
+        &TemperatureFacade::requestPollMaxTemperature,
         worker_,
         &HealthWorker2::pollMaxTemperature,
         Qt::QueuedConnection);
@@ -30,7 +30,7 @@ HealthFacade::HealthFacade(DeviceContext& context, QObject* parent)
         &timer_,
         &QTimer::timeout,
         this,
-        &HealthFacade::pollMaxTemperature);
+        &TemperatureFacade::pollMaxTemperature);
 
     connect(
         worker_,
@@ -65,7 +65,7 @@ HealthFacade::HealthFacade(DeviceContext& context, QObject* parent)
     workerThread_.start();
 }
 
-HealthFacade::~HealthFacade()
+TemperatureFacade::~TemperatureFacade()
 {
     timer_.stop();
 
@@ -75,22 +75,22 @@ HealthFacade::~HealthFacade()
     }
 }
 
-bool HealthFacade::maxTemperatureUnavailable() const
+bool TemperatureFacade::maxTemperatureUnavailable() const
 {
     return maxTemperatureUnavailable_;
 }
 
-int HealthFacade::maxTemperature() const
+int TemperatureFacade::maxTemperature() const
 {
     return maxTemperature_;
 }
 
-QString HealthFacade::maxTemperatureErrorCode() const
+QString TemperatureFacade::maxTemperatureErrorCode() const
 {
     return maxTemperatureErrorCode_;
 }
 
-void HealthFacade::startMaxTemperaturePolling()
+void TemperatureFacade::startMaxTemperaturePolling()
 {
     if (timer_.isActive()) {
         return;
@@ -102,7 +102,7 @@ void HealthFacade::startMaxTemperaturePolling()
     pollMaxTemperature();
 }
 
-void HealthFacade::stopMaxTemperaturePolling()
+void TemperatureFacade::stopMaxTemperaturePolling()
 {
     if (!timer_.isActive()) {
         return;
@@ -111,12 +111,12 @@ void HealthFacade::stopMaxTemperaturePolling()
     timer_.stop();
 }
 
-void HealthFacade::pollMaxTemperature()
+void TemperatureFacade::pollMaxTemperature()
 {
     emit requestPollMaxTemperature();
 }
 
-void HealthFacade::setMaxTemperature(int value)
+void TemperatureFacade::setMaxTemperature(int value)
 {
     if (maxTemperature_ == value) {
         return;
@@ -125,7 +125,7 @@ void HealthFacade::setMaxTemperature(int value)
     emit maxTemperatureChanged();
 }
 
-void HealthFacade::setMaxTemperatureUnavailable(bool value)
+void TemperatureFacade::setMaxTemperatureUnavailable(bool value)
 {
     if (maxTemperatureUnavailable_ == value) {
         return;
@@ -135,7 +135,7 @@ void HealthFacade::setMaxTemperatureUnavailable(bool value)
     emit maxTemperatureUnavailableChanged();
 }
 
-void HealthFacade::setMaxTemperatureErrorCode(const QString& value)
+void TemperatureFacade::setMaxTemperatureErrorCode(const QString& value)
 {
     if (maxTemperatureErrorCode_ == value) {
         return;

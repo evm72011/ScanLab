@@ -5,22 +5,22 @@
 
 #include "runtime/device/device_context.h"
 #include "ui/connection/connection_facade.h"
-#include "ui/health/health_facade.h"
+#include "ui/health/temperature_facade.h"
 
 class Backend : public QObject
 {
     Q_OBJECT
 
     Q_PROPERTY(ConnectionFacade* connectionFacade READ connectionFacade CONSTANT)
-    Q_PROPERTY(HealthFacade* healthFacade READ healthFacade CONSTANT)
+    Q_PROPERTY(TemperatureFacade* temperatureFacade READ temperatureFacade CONSTANT)
 public:
     explicit Backend(QObject* parent = nullptr);
 
     ConnectionFacade* connectionFacade();
-    HealthFacade* healthFacade();
+    TemperatureFacade* temperatureFacade();
 
 private:
     DeviceContext context_;
     ConnectionFacade connectionFacade_{context_, this};
-    HealthFacade healthFacade_{context_, this};
+    TemperatureFacade temperatureFacade_{context_, this};
 };

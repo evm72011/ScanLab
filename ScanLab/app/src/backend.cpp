@@ -18,7 +18,7 @@ ConnectionFacade* Backend::connectionFacade()
     return &connectionFacade_;
 }
 
-HealthFacade* Backend::healthFacade()
+TemperatureFacade* Backend::temperatureFacade()
 {
-    return &healthFacade_;
+    return &temperatureFacade_;
 }

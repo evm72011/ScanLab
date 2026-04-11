@@ -10,7 +10,7 @@
 class DeviceContext;
 class HealthWorker2;
 
-class HealthFacade : public QObject
+class TemperatureFacade : public QObject
 {
     Q_OBJECT
 
@@ -19,8 +19,8 @@ class HealthFacade : public QObject
     Q_PROPERTY(QString maxTemperatureErrorCode READ maxTemperatureErrorCode NOTIFY maxTemperatureErrorCodeChanged)
 
 public:
-    explicit HealthFacade(DeviceContext& context, QObject* parent = nullptr);
-    ~HealthFacade() override;
+    explicit TemperatureFacade(DeviceContext& context, QObject* parent = nullptr);
+    ~TemperatureFacade() override;
 
     bool maxTemperatureUnavailable() const;
     int maxTemperature() const;
