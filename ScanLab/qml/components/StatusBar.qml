@@ -72,5 +72,10 @@ ToolBar {
             visible: root.connected
             Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
         }
+
+        HumidityStatusChip {
+            visible: root.connected
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+        }
     }
 }
