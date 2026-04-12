@@ -12,16 +12,17 @@ set_source_files_properties(
 )
 
 set(QML_MODULE_FILES
+    components/StatusBar/StatusBar.qml
+    components/StatusBar/StatusChip.qml
+    components/StatusBar/HumidityStatusChip.qml
+    components/StatusBar/TemperatureStatusChip.qml
+
     components/Button.qml
     components/DropDown.qml
-    components/HumidityStatusChip.qml
     components/IconTabButton.qml
     components/InfoIcon.qml
-    components/StatusBar.qml
-    components/StatusChip.qml
     components/StyledToolTip.qml
     components/TabButton.qml
-    components/TemperatureStatusChip.qml
     components/TextField.qml
 
     dialogs/MessageDialog.qml

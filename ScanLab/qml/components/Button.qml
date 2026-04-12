@@ -56,14 +56,17 @@ Rectangle {
         opacity: root.enabled ? 1.0 : 0.35
 
         transformOrigin: Item.Center
+        rotation: 0
+    }
 
-        RotationAnimator on rotation {
-            running: root.busy
-            from: 0
-            to: 360
-            duration: 900
-            loops: Animation.Infinite
-        }
+    NumberAnimation {
+        id: spinAnimation
+        target: icon
+        property: "rotation"
+        from: 0
+        to: 360
+        duration: 900
+        loops: Animation.Infinite
     }
 
     MouseArea {
@@ -76,5 +79,20 @@ Rectangle {
             : Qt.ArrowCursor
 
         onClicked: root.clicked()
+    }
+
+    onBusyChanged: {
+        if (busy) {
+            spinAnimation.start()
+        } else {
+            spinAnimation.stop()
+            icon.rotation = 0
+        }
+    }
+
+    Component.onCompleted: {
+        if (busy) {
+            spinAnimation.start()
+        }
     }
 }
