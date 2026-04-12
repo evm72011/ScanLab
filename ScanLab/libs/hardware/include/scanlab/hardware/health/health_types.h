@@ -2,7 +2,7 @@
 
 namespace scanlab::hardware {
 
-enum class TemperatureErrorCodes {
+enum class HealthErrorCodes {
     HardwareNotSet,
     OempaInterfaceUnavailable,
     BoardToppologyUnavailable,
@@ -10,7 +10,7 @@ enum class TemperatureErrorCodes {
     SensorTopologyUnavailable,
     SensorTopologyErrors,
     DeviceLockFailed,
-    MaxBoardTemperatureUnavailable
+    SensorDataUnavailable
 };
 
 }// namespace scanlab::hardware

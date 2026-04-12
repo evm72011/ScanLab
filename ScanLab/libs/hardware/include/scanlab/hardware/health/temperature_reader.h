@@ -1,12 +1,13 @@
 #pragma once
 
-#include <cstddef>
+//#include <cstddef>
 #include <optional>
 #include <expected>
-#include <vector>
+//#include <vector>
 
 #include "scanlab/hardware/device/device.h"
-#include "scanlab/hardware/health/temperature_types.h"
+#include "scanlab/hardware/health/health_types.h"
+#include "scanlab/hardware/health/health_topology.h"
 
 namespace scanlab::hardware {
 
@@ -14,9 +15,10 @@ class TemperatureReader
 {
 public:
     explicit TemperatureReader(Device& device);
-    [[nodiscard]] std::expected<int, TemperatureErrorCodes> readMax() const;
+    [[nodiscard]] std::expected<int, HealthErrorCodes> readMax() const;
 
 private:
+    /*
     struct Topology
     {
         CHWDeviceOEMPA* hw = nullptr;
@@ -26,14 +28,15 @@ private:
 
         [[nodiscard]] bool empty() const;
     };
+*/
 
 private:
-    [[nodiscard]] std::expected<void, TemperatureErrorCodes> ensureTopology() const;
+    [[nodiscard]] std::expected<void, HealthErrorCodes> ensureTopology() const;
     void invalidateTopology() const;
 
 private:
     Device& device_;
-    mutable std::optional<Topology> topology_;
+    mutable std::optional<HealthTopology> topology_;
 };
 
 } // namespace scanlab::hardware

@@ -2,7 +2,7 @@
 
 #include <memory>
 #include <expected>
-#include "scanlab/hardware/health/temperature_types.h"
+#include "scanlab/hardware/health/health_types.h"
 
 class DeviceContext;
 
@@ -15,7 +15,7 @@ class TemperatureService
 public:
     explicit TemperatureService(DeviceContext& context);
 
-    std::expected<int, scanlab::hardware::TemperatureErrorCodes> readMax() const;
+    std::expected<int, scanlab::hardware::HealthErrorCodes> readMax() const;
 
     ~TemperatureService();
 private:

@@ -12,22 +12,17 @@ TemperatureReader::TemperatureReader(Device& device)
 {
 }
 
-bool TemperatureReader::Topology::empty() const
-{
-    return boardCount <= 0;
-}
-
 void TemperatureReader::invalidateTopology() const
 {
     topology_.reset();
 }
 
-std::expected<void, TemperatureErrorCodes> TemperatureReader::ensureTopology() const
+std::expected<void, HealthErrorCodes> TemperatureReader::ensureTopology() const
 {
     auto* hw = device_.get();
     if (hw == nullptr) {
         invalidateTopology();
-        return std::unexpected(TemperatureErrorCodes::HardwareNotSet);
+        return std::unexpected(HealthErrorCodes::HardwareNotSet);
     }
 
     if (topology_.has_value() && topology_->hw == hw) {
@@ -37,22 +32,22 @@ std::expected<void, TemperatureErrorCodes> TemperatureReader::ensureTopology() c
     auto* sw = hw->GetSWDeviceOEMPA();
     if (sw == nullptr) {
         invalidateTopology();
-        return std::unexpected(TemperatureErrorCodes::OempaInterfaceUnavailable);;
+        return std::unexpected(HealthErrorCodes::OempaInterfaceUnavailable);;
     }
 
     int boardCount = 0;
     int sensorCountMax = 0;
     if (!sw->GetTemperatureCount(boardCount, sensorCountMax)) {
         invalidateTopology();
-        return std::unexpected(TemperatureErrorCodes::BoardToppologyUnavailable);
+        return std::unexpected(HealthErrorCodes::BoardToppologyUnavailable);
     }
 
     if (boardCount < 0) {
         invalidateTopology();
-        return std::unexpected(TemperatureErrorCodes::BoardTopologyErrors);
+        return std::unexpected(HealthErrorCodes::BoardTopologyErrors);
     }
 
-    Topology topology;
+    HealthTopology topology;
     topology.hw = hw;
     topology.boardCount = boardCount;
     topology.sensorCountPerBoard.reserve(static_cast<std::size_t>(boardCount));
@@ -63,12 +58,12 @@ std::expected<void, TemperatureErrorCodes> TemperatureReader::ensureTopology() c
         int sensorCount = 0;
         if (!sw->GetTemperatureSensorCount(board, sensorCount)) {
             invalidateTopology();
-            return std::unexpected(TemperatureErrorCodes::SensorTopologyUnavailable);
+            return std::unexpected(HealthErrorCodes::SensorTopologyUnavailable);
         }
 
         if (sensorCount < 0) {
             invalidateTopology();
-            return std::unexpected(TemperatureErrorCodes::SensorTopologyErrors);
+            return std::unexpected(HealthErrorCodes::SensorTopologyErrors);
         }
 
         topology.sensorCountPerBoard.push_back(sensorCount);
@@ -80,7 +75,7 @@ std::expected<void, TemperatureErrorCodes> TemperatureReader::ensureTopology() c
     return {};
 }
 
-std::expected<int, TemperatureErrorCodes> TemperatureReader::readMax() const {
+std::expected<int, HealthErrorCodes> TemperatureReader::readMax() const {
     const auto topologyResult = ensureTopology();
     if (!topologyResult) {
         return std::unexpected(topologyResult.error());
@@ -89,16 +84,16 @@ std::expected<int, TemperatureErrorCodes> TemperatureReader::readMax() const {
     auto* hw = device_.get();
     if (hw == nullptr) {
         invalidateTopology();
-        return std::unexpected(TemperatureErrorCodes::HardwareNotSet);
+        return std::unexpected(HealthErrorCodes::HardwareNotSet);
     }
 
     auto* sw = hw->GetSWDeviceOEMPA();
     if (sw == nullptr) {
-        return std::unexpected(TemperatureErrorCodes::OempaInterfaceUnavailable);
+        return std::unexpected(HealthErrorCodes::OempaInterfaceUnavailable);
     }
 
     if (!hw->LockDevice(eAcqContinue)) {
-        return std::unexpected(TemperatureErrorCodes::DeviceLockFailed);
+        return std::unexpected(HealthErrorCodes::DeviceLockFailed);
     }
 
     bool ok = true;
@@ -117,7 +112,7 @@ std::expected<int, TemperatureErrorCodes> TemperatureReader::readMax() const {
 
     const bool unlockOk = hw->UnlockDevice(eAcqContinue);
     if (!ok || !unlockOk || values.empty()) {
-        return std::unexpected(TemperatureErrorCodes::MaxBoardTemperatureUnavailable);
+        return std::unexpected(HealthErrorCodes::SensorDataUnavailable);
     }
 
     short result = values[0];
