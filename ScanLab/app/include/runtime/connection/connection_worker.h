@@ -20,7 +20,7 @@ public slots:
     void disconnect();
 
 signals:
-    void connectionSucces();
+    void connectionSucces(const ConnectionResult& value);
     void connectionFailure();
     void connectionErrorCode(const QString& value);
     void disconnectCompleted(bool stillConnected);

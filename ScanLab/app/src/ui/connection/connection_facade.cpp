@@ -4,6 +4,7 @@
 #include "runtime/connection/connection_worker.h"
 
 #include <QMetaObject>
+#include <QDebug>
 
 ConnectionFacade::ConnectionFacade(DeviceContext& context, QObject* parent)
     : QObject(parent)
@@ -35,7 +36,8 @@ ConnectionFacade::ConnectionFacade(DeviceContext& context, QObject* parent)
         worker_,
         &ConnectionWorker::connectionSucces,
         this,
-        [this]() {
+        [this](const ConnectionResult& value) {
+            setSerialNumber(value.serialNumber);
             setConnectionState(ConnectionState::State::Connected);
         },
         Qt::QueuedConnection);
@@ -126,6 +128,11 @@ QString ConnectionFacade::connectionErrorCode() const
     return connectionErrorCode_;
 }
 
+QString ConnectionFacade::serialNumber() const
+{
+    return serialNumber_;
+}
+
 void ConnectionFacade::connectDevice()
 {
     if (connectionState_ != ConnectionState::State::Disconnected) {
@@ -164,4 +171,14 @@ void ConnectionFacade::setConnectionErrorCode(const QString& value)
 
     connectionErrorCode_ = value;
     emit connectionErrorCodeChanged();
+}
+
+void ConnectionFacade::setSerialNumber(const QString& value)
+{
+    if (serialNumber_ == value) {
+        return;
+    }
+
+    serialNumber_ = value;
+    emit serialNumberChanged();
 }

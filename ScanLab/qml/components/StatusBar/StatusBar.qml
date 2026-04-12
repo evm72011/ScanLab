@@ -53,6 +53,7 @@ ToolBar {
             visible: root.connected
             iconSource: "qrc:/icons/connected.svg"
             text: qsTr("Connected")
+            tooltip: qsTr("Connected to device\ns/n: %1").arg(backend?.connectionFacade?.serialNumber)
         }
 
         StatusChip {

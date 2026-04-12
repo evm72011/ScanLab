@@ -54,7 +54,6 @@ Rectangle {
     }
 
     StyledToolTip {
-        id: errorTip
         text: root.maxTemperatureUnavailable
             ? qsTr("Unable to read temperature!\nErrorCode: %1").arg(root.maxTemperatureErrorCode)
             : qsTr("Temperature")

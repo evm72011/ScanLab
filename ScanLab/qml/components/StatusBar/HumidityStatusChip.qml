@@ -54,7 +54,6 @@ Rectangle {
     }
 
     StyledToolTip {
-        id: errorTip
         text: root.maxHumidityUnavailable
               ? qsTr("Unable to read humidity!\nErrorCode: %1").arg(root.maxHumidityErrorCode)
               : qsTr("Humidity")

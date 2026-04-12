@@ -20,7 +20,7 @@ void ConnectionWorker::connect(DeviceType type, const QString& address)
         emit connectionFailure();
         return;
     }
-    emit connectionSucces();
+    emit connectionSucces(*connectionResult);
 }
 
 void ConnectionWorker::disconnect()

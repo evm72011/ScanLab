@@ -18,6 +18,7 @@ class ConnectionFacade : public QObject
     Q_PROPERTY(QString address READ address WRITE setAddress NOTIFY addressChanged)
     Q_PROPERTY(ConnectionState::State connectionState READ connectionState NOTIFY connectionStateChanged)
     Q_PROPERTY(QString connectionErrorCode READ connectionErrorCode NOTIFY connectionErrorCodeChanged)
+    Q_PROPERTY(QString serialNumber READ serialNumber NOTIFY serialNumberChanged)
 
 public:
     explicit ConnectionFacade(DeviceContext& context, QObject* parent = nullptr);
@@ -31,6 +32,7 @@ public:
 
     ConnectionState::State connectionState() const;
     QString connectionErrorCode() const;
+    QString serialNumber() const;
 
     Q_INVOKABLE void connectDevice();
     Q_INVOKABLE void disconnectDevice();
@@ -40,6 +42,7 @@ signals:
     void addressChanged();
     void connectionStateChanged();
     void connectionErrorCodeChanged();
+    void serialNumberChanged();
     void connectionFailure();
 
     void requestConnect(DeviceType type, const QString& address);
@@ -49,6 +52,7 @@ signals:
 private:
     void setConnectionState(ConnectionState::State value);
     void setConnectionErrorCode(const QString& value);
+    void setSerialNumber(const QString& value);
 
 private:
     ConnectionWorker* worker_ = nullptr;
@@ -58,4 +62,5 @@ private:
     QString address_;
     ConnectionState::State connectionState_ = ConnectionState::State::Disconnected;
     QString connectionErrorCode_;
+    QString serialNumber_;
 };

@@ -7,6 +7,7 @@ Rectangle {
 
     property url iconSource: ""
     property string text: ""
+    property string tooltip: ""
     property int iconSize: 14
     property real iconOpacity: 1
     property bool rotateIcon: false
@@ -72,6 +73,11 @@ Rectangle {
 
     HoverHandler {
         id: hoverHandler
+    }
+
+    StyledToolTip {
+        text: root.tooltip
+        visible: hoverHandler.hovered && root.tooltip != ""
     }
 
     Rectangle {
