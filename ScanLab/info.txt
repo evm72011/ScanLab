@@ -1,6 +1,13 @@
 pwsh -ExecutionPolicy Bypass -File .\scripts\bootstrap-venv.ps1
 pwsh -ExecutionPolicy Bypass -File .\scripts\conan-install.ps1
 
+add to project configuration
+-DCMAKE_TOOLCHAIN_FILE:FILEPATH=D:/_Work/ScanLab/ScanLab/build/Desktop_Qt_6_11_0_MSVC2022_64bit-Debug/conan_toolchain.cmake
+
+
+keep actual buid dir in ./scripts/conan-install.ps1
+
+
 Backend
     DeviceContext context_;                                                                 // Container for hardwareDevice
         std::unique_ptr<scanlab::hardware::Device> device_;
