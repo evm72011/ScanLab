@@ -63,9 +63,10 @@ Rectangle {
 
     StyledToolTip {
         id: errorTip
-        text: qsTr("Unable to read temperature!\nErrorCode: %1")
-                .arg(root.maxTemperatureErrorCode)
-        visible: hoverHandler.hovered && root.maxTemperatureUnavailable && root.connected
+        text: root.maxTemperatureUnavailable
+              ? qsTr("Unable to read humidity!\nErrorCode: %1").arg(root.maxTemperatureErrorCode)
+              : qsTr("Humidity")
+        visible: hoverHandler.hovered
     }
 
     Rectangle {
@@ -114,6 +115,6 @@ Rectangle {
     onTemperatureFacadeChanged: updatePolling() /// ?????
 
     Component.onDestruction: {
-        temperatureFacade?.stopPolling()
+        temperatureFacade?.stopMaxTemperaturePolling()
     }
 }

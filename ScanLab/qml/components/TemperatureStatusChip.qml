@@ -26,10 +26,6 @@ Rectangle {
     readonly property color textColor: SL.Theme.colors.textPrimary
 
     readonly property color tempColor: {
-        if (!connected) {
-            return Qt.rgba(1, 1, 1, 0.55)
-        }
-
         if (maxTemperature >= 50 || maxTemperatureUnavailable) {
             return SL.Theme.colors.textError //"#ff6b6b"
         }
@@ -62,7 +58,7 @@ Rectangle {
         text: root.maxTemperatureUnavailable
             ? qsTr("Unable to read temperature!\nErrorCode: %1").arg(root.maxTemperatureErrorCode)
             : qsTr("Temperature")
-        //visible: hoverHandler.hovered && root.maxTemperatureUnavailable && root.connected
+        visible: hoverHandler.hovered
     }
 
     Rectangle {

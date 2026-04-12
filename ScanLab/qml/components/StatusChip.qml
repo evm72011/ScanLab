@@ -69,4 +69,14 @@ Rectangle {
             verticalAlignment: Text.AlignVCenter
         }
     }
+
+    HoverHandler {
+        id: hoverHandler
+    }
+
+    Rectangle {
+        anchors.fill: parent
+        radius: 4
+        color: hoverHandler.hovered ? Qt.rgba(1, 1, 1, 0.05) : "transparent"
+    }
 }
