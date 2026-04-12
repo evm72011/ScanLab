@@ -86,12 +86,12 @@ ConnectionFacade::~ConnectionFacade()
     workerThread_.wait();
 }
 
-DeviceType2 ConnectionFacade::deviceType() const
+DeviceType ConnectionFacade::deviceType() const
 {
     return deviceType_;
 }
 
-void ConnectionFacade::setDeviceType(DeviceType2 value)
+void ConnectionFacade::setDeviceType(DeviceType value)
 {
     if (deviceType_ == value) {
         return;

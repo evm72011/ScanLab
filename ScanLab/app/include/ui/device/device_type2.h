@@ -5,7 +5,7 @@
 #include <qqmlintegration.h>
 #include "runtime/device/device_type_def.h"
 
-class DeviceType2Qml : public QObject
+class DeviceTypeQml : public QObject
 {
     Q_OBJECT
     QML_ELEMENT

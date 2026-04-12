@@ -12,7 +12,7 @@ ConnectionService::ConnectionService(DeviceContext& context)
 {
 }
 
-std::expected<void, ConnectionErrorCodes> ConnectionService::connect(DeviceType2 type, const std::wstring& address)
+std::expected<ConnectionResult, ConnectionErrorCodes> ConnectionService::connect(DeviceType type, const std::wstring& address)
 {
     auto* device = context_.device();
     if (!device) {
@@ -30,7 +30,9 @@ std::expected<void, ConnectionErrorCodes> ConnectionService::connect(DeviceType2
         return std::unexpected(error);
     }
 
-    return {};
+    return ConnectionResult {
+        .serialNumber = QString::fromStdWString(connectionResult->serialNumber)
+    };
 }
 
 void ConnectionService::disconnect()

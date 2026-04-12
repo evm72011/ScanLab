@@ -32,19 +32,19 @@ Item {
             infoText: qsTr("Select the connected device")
 
             model: [
-                { value: SL.DeviceType2Qml.None, text: "None" },
-                { value: SL.DeviceType2Qml.OEMPA_1, text: "OEMPA 1" },
-                { value: SL.DeviceType2Qml.OEMPA_2, text: "OEMPA 2" },
-                { value: SL.DeviceType2Qml.OEMPA_Max, text: "OEMPA Max" },
-                { value: SL.DeviceType2Qml.OEMPA_Mini, text: "OEMPA Mini" },
-                { value: SL.DeviceType2Qml.OEMPA_MC1, text: "OEMPA MC1" },
-                { value: SL.DeviceType2Qml.OEMPA_MC2, text: "OEMPA MC2" },
-                { value: SL.DeviceType2Qml.OEMPA_MCmu, text: "OEMPA MCμ" },
-                { value: SL.DeviceType2Qml.OEMPA_MCmuF, text: "OEMPA MCμF" },
-                { value: SL.DeviceType2Qml.OEMPA_Micro, text: "OEMPA Micro" }
+                { value: SL.DeviceTypeQml.None, text: "None" },
+                { value: SL.DeviceTypeQml.OEMPA_1, text: "OEMPA 1" },
+                { value: SL.DeviceTypeQml.OEMPA_2, text: "OEMPA 2" },
+                { value: SL.DeviceTypeQml.OEMPA_Max, text: "OEMPA Max" },
+                { value: SL.DeviceTypeQml.OEMPA_Mini, text: "OEMPA Mini" },
+                { value: SL.DeviceTypeQml.OEMPA_MC1, text: "OEMPA MC1" },
+                { value: SL.DeviceTypeQml.OEMPA_MC2, text: "OEMPA MC2" },
+                { value: SL.DeviceTypeQml.OEMPA_MCmu, text: "OEMPA MCμ" },
+                { value: SL.DeviceTypeQml.OEMPA_MCmuF, text: "OEMPA MCμF" },
+                { value: SL.DeviceTypeQml.OEMPA_Micro, text: "OEMPA Micro" }
             ]
 
-            currentValue: connectionFacade?.deviceType ?? SL.DeviceType2Qml.None
+            currentValue: connectionFacade?.deviceType ?? SL.DeviceTypeQml.None
             enabled: root.disconnected
 
             onActivated: function(value) {

@@ -16,7 +16,7 @@ public:
     explicit ConnectionWorker(DeviceContext& context, QObject* parent = nullptr);
 
 public slots:
-    void connect(DeviceType2 type, const QString& address);
+    void connect(DeviceType type, const QString& address);
     void disconnect();
 
 signals:

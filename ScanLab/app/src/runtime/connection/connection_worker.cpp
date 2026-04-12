@@ -10,7 +10,7 @@ ConnectionWorker::ConnectionWorker(DeviceContext& context, QObject* parent)
 {
 }
 
-void ConnectionWorker::connect(DeviceType2 type, const QString& address)
+void ConnectionWorker::connect(DeviceType type, const QString& address)
 {
     const auto connectionResult = service_.connect(type, address.toStdWString());
     if (!connectionResult.has_value()) {

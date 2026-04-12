@@ -22,7 +22,7 @@ Backend
 
         
         ConnectionWorker                                           // API for ConnectionFacade
-            void connectDevice(DeviceType2 type, const QString& address)
+            void connectDevice(DeviceType type, const QString& address)
             {
                 const auto result = service_.connect(type, address.toStdWString());
                 emit connectCompleted(result);
