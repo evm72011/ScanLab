@@ -58,6 +58,8 @@ qt_add_qml_module(${APP_NAME}
         app/include/runtime/connection/connection_error_codes.h
         app/include/runtime/connection/connection_service.h
         app/include/runtime/connection/connection_worker.h
+        app/include/runtime/health/humidity_service.h
+        app/include/runtime/health/humidity_worker.h
         app/include/runtime/health/temperature_service.h
         app/include/runtime/health/temperature_worker.h
 
@@ -65,6 +67,7 @@ qt_add_qml_module(${APP_NAME}
         app/include/ui/connection/connection_state.h
         app/include/ui/device/device_type2.h
         app/include/ui/health/temperature_facade.h
+        app/include/ui/health/humidity_facade.h
 
         app/include/a_scan_view.h
         app/include/a_scan_worker.h
@@ -80,11 +83,14 @@ qt_add_qml_module(${APP_NAME}
         app/src/runtime/device/device_context.cpp
         app/src/runtime/connection/connection_service.cpp
         app/src/runtime/connection/connection_worker.cpp
+        app/src/runtime/health/humidity_service.cpp
+        app/src/runtime/health/humidity_worker.cpp
         app/src/runtime/health/temperature_service.cpp
         app/src/runtime/health/temperature_worker.cpp
 
         app/src/ui/connection/connection_facade.cpp
         app/src/ui/health/temperature_facade.cpp
+        app/src/ui/health/humidity_facade.cpp
 
         app/src/a_scan_view.cpp
         app/src/a_scan_worker.cpp

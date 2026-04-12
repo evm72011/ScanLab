@@ -6,6 +6,7 @@
 #include "runtime/device/device_context.h"
 #include "ui/connection/connection_facade.h"
 #include "ui/health/temperature_facade.h"
+#include "ui/health/humidity_facade.h"
 
 class Backend : public QObject
 {
@@ -23,4 +24,5 @@ private:
     DeviceContext context_;
     ConnectionFacade connectionFacade_{context_, this};
     TemperatureFacade temperatureFacade_{context_, this};
+    HumidityFacade humidityFacade_{context_, this};
 };

@@ -12,11 +12,11 @@ Rectangle {
     readonly property bool connected:
         connectionState === SL.ConnectionState.Connected
 
-    readonly property var temperatureFacade: backend?.temperatureFacade ?? null
+    readonly property var humidityFacade: backend?.humidityFacade ?? null
 
-    readonly property bool maxTemperatureUnavailable: temperatureFacade?.maxTemperatureUnavailable ?? true
-    readonly property string maxTemperatureErrorCode: temperatureFacade?.maxTemperatureErrorCode ?? ""
-    readonly property int maxTemperature: temperatureFacade?.maxTemperature ?? 0
+    readonly property bool maxHumidityUnavailable: humidityFacade?.maxHumidityUnavailable ?? true
+    readonly property string maxHumidityErrorCode: humidityFacade?.maxHumidityErrorCode ?? ""
+    readonly property int maxHumidity: humidityFacade?.maxHumidity ?? 0
 
     height: 30
     radius: 4
@@ -30,15 +30,15 @@ Rectangle {
             return Qt.rgba(1, 1, 1, 0.55)
         }
 
-        if (maxTemperatureUnavailable) {
+        if (maxHumidityUnavailable) {
             return "#ff6b6b"   // всегда красный для Err
         }
 
-        if (maxTemperature >= 50) {
+        if (maxHumidity >= 50) {
             return "#ff6b6b"
         }
 
-        if (maxTemperature >= 40) {
+        if (maxHumidity >= 40) {
             return "#ffb347"
         }
 
@@ -46,14 +46,14 @@ Rectangle {
     }
 
     function updatePolling() {
-        if (!temperatureFacade) {
+        if (!humidityFacade) {
             return
         }
 
         if (connected) {
-            temperatureFacade.startMaxTemperaturePolling()
+            humidityFacade.startMaxHumidityPolling()
         } else {
-            temperatureFacade.stopMaxTemperaturePolling()
+            humidityFacade.stopMaxHumidityPolling()
         }
     }
 
@@ -63,8 +63,8 @@ Rectangle {
 
     StyledToolTip {
         id: errorTip
-        text: root.maxTemperatureUnavailable
-              ? qsTr("Unable to read humidity!\nErrorCode: %1").arg(root.maxTemperatureErrorCode)
+        text: root.maxHumidityUnavailable
+              ? qsTr("Unable to read humidity!\nErrorCode: %1").arg(root.maxHumidityErrorCode)
               : qsTr("Humidity")
         visible: hoverHandler.hovered
     }
@@ -87,7 +87,7 @@ Rectangle {
             height: 16
             fillMode: Image.PreserveAspectFit
             smooth: true
-            opacity: root.connected && !root.maxTemperatureUnavailable ? 1.0 : 0.65
+            opacity: root.connected && !root.maxHumidityUnavailable ? 1.0 : 0.65
         }
 
         Text {
@@ -96,25 +96,25 @@ Rectangle {
                     return qsTr("Humidity: n/a")
                 }
 
-                if (root.maxTemperatureUnavailable) {
+                if (root.maxHumidityUnavailable) {
                     return qsTr("Humidity: Err")
                 }
 
-                return qsTr("%1 %").arg(root.maxTemperature)
+                return qsTr("%1 %").arg(root.maxHumidity)
             }
 
             color: root.tempColor
             font.pixelSize: 12
-            font.weight: !root.maxTemperatureUnavailable ? Font.Medium : Font.Normal
+            font.weight: !root.maxHumidityUnavailable ? Font.Medium : Font.Normal
             verticalAlignment: Text.AlignVCenter
         }
     }
 
     Component.onCompleted: updatePolling()
     onConnectedChanged: updatePolling()
-    onTemperatureFacadeChanged: updatePolling() /// ?????
+    onHumidityFacadeChanged: updatePolling() /// ?????
 
     Component.onDestruction: {
-        temperatureFacade?.stopMaxTemperaturePolling()
+        humidityFacade?.stopMaxHumidityPolling()
     }
 }
