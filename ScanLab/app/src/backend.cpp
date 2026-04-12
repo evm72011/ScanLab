@@ -22,3 +22,8 @@ TemperatureFacade* Backend::temperatureFacade()
 {
     return &temperatureFacade_;
 }
+
+HumidityFacade* Backend::humidityFacade()
+{
+    return &humidityFacade_;
+}

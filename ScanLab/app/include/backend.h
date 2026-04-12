@@ -19,6 +19,7 @@ public:
 
     ConnectionFacade* connectionFacade();
     TemperatureFacade* temperatureFacade();
+    HumidityFacade* humidityFacade();
 
 private:
     DeviceContext context_;
