@@ -1,5 +1,6 @@
 #include "scanlab/hardware/device/device.h"
 
+#include <array>
 #include <memory>
 
 #include <UTDriverOEMPA1.h>
@@ -19,7 +20,7 @@ Device::~Device() = default;
 Device::Device(Device&&) noexcept = default;
 Device& Device::operator=(Device&&) noexcept = default;
 
-std::expected<void,ConnectionErrorCodes> Device::connect(const std::wstring& address)
+std::expected<ConnectionResult,ConnectionErrorCodes> Device::connect(const std::wstring& address)
 {
     if (!device_) {
         return std::unexpected(ConnectionErrorCodes::HardwareNotSet);
@@ -47,7 +48,15 @@ std::expected<void,ConnectionErrorCodes> Device::connect(const std::wstring& add
         return std::unexpected(ConnectionErrorCodes::ConnectionFailure);
     }
 
-    return {};
+    std::array<wchar_t, 64> serialBuffer{};
+    if (!swOempa->GetSerialNumber(serialBuffer.data(),
+                                 static_cast<int>(serialBuffer.size()))) {
+        return std::unexpected(ConnectionErrorCodes::SerialNumberUnavailable);
+    }
+
+    return ConnectionResult{
+        std::wstring(serialBuffer.data())
+    };
 }
 
 bool Device::disconnect()

@@ -8,6 +8,7 @@ enum class ConnectionErrorCodes {
     OempaInterfaceUnavailable,
     SetAddressFailure,
     BaseInterfaceUnavailable,
-    ConnectionFailure
+    ConnectionFailure,
+    SerialNumberUnavailable
 };
 } // namespace scanlab::hardware
