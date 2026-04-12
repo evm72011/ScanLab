@@ -5,6 +5,7 @@ add_library(${LIB_NAME} STATIC src/a_scan_acquisition.cpp
 
                                src/health/health_topology.cpp
                                src/health/humidity_reader.cpp
+                               src/health/humidity_topology_api.cpp
                                src/health/temperature_reader.cpp
                                src/health/temperature_topology_api.cpp
                            )

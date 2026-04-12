@@ -1,6 +1,3 @@
-#include <algorithm>
-//#include <UTDriverOEMPA.h>
-
 #include "scanlab/hardware/health/temperature_reader.h"
 #include "scanlab/hardware/health/temperature_topology_api.h"
 
