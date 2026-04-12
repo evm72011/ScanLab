@@ -14,6 +14,7 @@ class Backend : public QObject
 
     Q_PROPERTY(ConnectionFacade* connectionFacade READ connectionFacade CONSTANT)
     Q_PROPERTY(TemperatureFacade* temperatureFacade READ temperatureFacade CONSTANT)
+    Q_PROPERTY(HumidityFacade* humidityFacade READ humidityFacade CONSTANT)
 public:
     explicit Backend(QObject* parent = nullptr);
 

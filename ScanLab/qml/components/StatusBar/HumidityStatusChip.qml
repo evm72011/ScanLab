@@ -26,20 +26,12 @@ Rectangle {
     readonly property color textColor: SL.Theme.colors.textPrimary
 
     readonly property color tempColor: {
-        if (!connected) {
-            return Qt.rgba(1, 1, 1, 0.55)
+        if (maxHumidity >= 75 || maxHumidityUnavailable) {
+            return  SL.Theme.colors.textError // "#ff6b6b"
         }
 
-        if (maxHumidityUnavailable) {
-            return "#ff6b6b"   // всегда красный для Err
-        }
-
-        if (maxHumidity >= 50) {
-            return "#ff6b6b"
-        }
-
-        if (maxHumidity >= 40) {
-            return "#ffb347"
+        if (maxHumidity >= 60) {
+            return SL.Theme.colors.textWarning // "#ffb347"
         }
 
         return "#9ad27a"
