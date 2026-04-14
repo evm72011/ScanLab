@@ -9,6 +9,7 @@ target_include_directories(${APP_NAME} PRIVATE
     include/ui/connection
     include/ui/device
     include/ui/health
+    ${CMAKE_BINARY_DIR}/generated
 )
 
 target_link_libraries(${APP_NAME}
@@ -22,5 +23,7 @@ set_target_properties(${APP_NAME} PROPERTIES
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
 )
+
+add_subdirectory(config)
 
 target_add_oempa(TARGET ${APP_NAME})

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 set(QT_CREATOR_SKIP_CONAN_SETUP ON CACHE BOOL "" FORCE)
 
-project(ScanLab VERSION 0.1 LANGUAGES CXX)
+project(ScanLab VERSION 0.1.0 LANGUAGES CXX)
 
 add_compile_definitions(
     NOMINMAX
@@ -63,6 +63,7 @@ qt_add_qml_module(${APP_NAME}
         app/include/runtime/health/temperature_service.h
         app/include/runtime/health/temperature_worker.h
 
+        app/include/ui/app_info.h
         app/include/ui/connection/connection_facade.h
         app/include/ui/connection/connection_state.h
         app/include/ui/device/device_type2.h
