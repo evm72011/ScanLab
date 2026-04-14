@@ -3,6 +3,10 @@ import QtQuick.Controls
 import ScanLab as SL
 
 Item {
+    id: root
+
+    readonly property var appInfo: backend?.appInfo ?? null
+
     BusyIndicator {
         id: busyIndicator
         anchors.centerIn: parent
@@ -10,7 +14,7 @@ Item {
     }
 
     Text {
-        text: qsTr("Starting ScanLab...")
+        text: qsTr("Starting %1...").arg(appInfo?.name ?? "foo")
         anchors.top: busyIndicator.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.topMargin: 12
@@ -19,7 +23,7 @@ Item {
     }
 
     Text {
-        text: "ver. 0.0.1"
+        text: "ver. " + (appInfo?.version ?? "?.?.?")
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.margins: 12

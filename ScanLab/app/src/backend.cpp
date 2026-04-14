@@ -13,6 +13,11 @@ Backend::Backend(QObject* parent)
 {
 }
 
+AppInfo* Backend::appInfo()
+{
+    return &appInfo_;
+}
+
 ConnectionFacade* Backend::connectionFacade()
 {
     return &connectionFacade_;
