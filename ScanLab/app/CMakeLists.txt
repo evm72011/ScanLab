@@ -9,7 +9,7 @@ target_include_directories(${APP_NAME} PRIVATE
     include/ui/connection
     include/ui/device
     include/ui/health
-    ${CMAKE_BINARY_DIR}/configured_files/include
+    ${CMAKE_BINARY_DIR}/configured/include
 )
 
 target_link_libraries(${APP_NAME}

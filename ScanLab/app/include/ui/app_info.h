@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QObject>
-#include "config.hpp"
+#include "configured/app_info.h"
 
 class AppInfo : public QObject
 {
