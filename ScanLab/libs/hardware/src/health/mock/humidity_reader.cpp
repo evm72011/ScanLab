@@ -7,7 +7,7 @@ HumidityReader::HumidityReader(Device& device)
 {
 }
 
-std::expected<int, HealthErrorCodes> HumidityReader::readMax() const {
+std::expected<int, HealthError> HumidityReader::readMax() const {
     return 25;
 }
 }// namespace scanlab::hardware

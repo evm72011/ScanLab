@@ -22,14 +22,14 @@ Device::~Device() = default;
 Device::Device(Device&&) noexcept = default;
 Device& Device::operator=(Device&&) noexcept = default;
 
-std::expected<ConnectionResult,ConnectionErrorCode> Device::connect(const std::wstring& address)
+std::expected<ConnectionResult,ConnectionError> Device::connect(const std::wstring& address)
 {
     if (!device_) {
         return std::unexpected(HardwareError::HardwareNotSet);
     }
 
     if (isConnected()) {
-        return std::unexpected(ConnectionError::AlreadyConnected);
+        return std::unexpected(ConnectionErrorKind::AlreadyConnected);
     }
 
     connected_ = true;

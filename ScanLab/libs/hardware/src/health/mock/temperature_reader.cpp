@@ -8,7 +8,7 @@ TemperatureReader::TemperatureReader(Device& device)
 {
 }
 
-std::expected<int, HealthErrorCodes> TemperatureReader::readMax() const {
-    return 25;
+std::expected<int, HealthError> TemperatureReader::readMax() const {
+    return 20;
 }
 } // namespace scanlab::hardware
