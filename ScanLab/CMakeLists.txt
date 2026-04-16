@@ -69,7 +69,7 @@ qt_add_qml_module(${APP_NAME}
         app/include/ui/app_info.h
         app/include/ui/connection/connection_facade.h
         app/include/ui/connection/connection_state.h
-        app/include/ui/device/device_type2.h
+        app/include/ui/device/device_type.h
         app/include/ui/health/temperature_facade.h
         app/include/ui/health/humidity_facade.h
 

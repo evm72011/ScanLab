@@ -1,4 +1,3 @@
-// device_type2_qml.h
 #pragma once
 
 #include <QObject>
