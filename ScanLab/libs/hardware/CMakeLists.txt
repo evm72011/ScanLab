@@ -1,21 +1,24 @@
 set(LIB_NAME ${HARDWARE_LIB_NAME})
 
-add_library(${LIB_NAME} STATIC src/a_scan_acquisition.cpp
-#                               src/device/device.cpp
+add_library(${LIB_NAME} STATIC
+    src/a_scan_acquisition.cpp
+    src/health/health_topology.cpp
+    src/health/humidity_reader.cpp
+    src/health/humidity_topology_api.cpp
+    src/health/temperature_reader.cpp
+    src/health/temperature_topology_api.cpp
+)
 
-                               src/health/health_topology.cpp
-                               src/health/humidity_reader.cpp
-                               src/health/humidity_topology_api.cpp
-                               src/health/temperature_reader.cpp
-                               src/health/temperature_topology_api.cpp
-                           )
+set(IMPL_VARIANT "")
 
 if(MOCK_DEVICE)
-    target_compile_definitions(${LIB_NAME} PRIVATE  MOCK_DEVICE=1)
-    target_sources(${LIB_NAME} PRIVATE  src/device/device_mock.cpp)
-else()
-    target_sources(${LIB_NAME} PRIVATE src/device/device.cpp)
+    set(IMPL_VARIANT "mock/")
+    target_compile_definitions(${LIB_NAME} PRIVATE MOCK_DEVICE=1)
 endif()
+
+target_sources(${LIB_NAME} PRIVATE
+    src/device/${IMPL_VARIANT}device.cpp
+)
 
 target_include_directories(${LIB_NAME}
                            PUBLIC ${CMAKE_CURRENT_LIST_DIR}/include)

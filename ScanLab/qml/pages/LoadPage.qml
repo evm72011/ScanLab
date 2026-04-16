@@ -31,4 +31,19 @@ Item {
         color: SL.Theme.colors.textSecondary
         opacity: 0.6
     }
+
+    Text {
+        visible: appInfo?.isMockDevice ?? false
+        text: qsTr("MOCKED DEVICE")
+
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.margins: 12
+
+        font.pixelSize: 22
+        font.bold: true
+        color: SL.Theme.colors.textWarning
+
+        horizontalAlignment: Text.AlignRight
+    }
 }
