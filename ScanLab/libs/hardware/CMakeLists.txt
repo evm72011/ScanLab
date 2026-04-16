@@ -3,9 +3,7 @@ set(LIB_NAME ${HARDWARE_LIB_NAME})
 add_library(${LIB_NAME} STATIC
     src/a_scan_acquisition.cpp
     src/health/health_topology.cpp
-    src/health/humidity_reader.cpp
     src/health/humidity_topology_api.cpp
-    src/health/temperature_reader.cpp
     src/health/temperature_topology_api.cpp
 )
 
@@ -18,6 +16,8 @@ endif()
 
 target_sources(${LIB_NAME} PRIVATE
     src/device/${IMPL_VARIANT}device.cpp
+    src/health/${IMPL_VARIANT}humidity_reader.cpp
+    src/health/${IMPL_VARIANT}temperature_reader.cpp
 )
 
 target_include_directories(${LIB_NAME}
