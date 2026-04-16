@@ -39,6 +39,9 @@ public:
 private:
     std::unique_ptr<CHWDeviceOEMPA> device_;
     std::optional<DeviceType> type_;
+#ifdef MOCK_DEVICE
+    bool connected_ = false;
+#endif
 };
 
 } // namespace scanlab::hardware
