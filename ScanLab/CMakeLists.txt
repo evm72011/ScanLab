@@ -25,7 +25,7 @@ set(OEMPA_SDK_DIR "C:/ProgramData/AOS/OEMPA 1.3.0.2/Sources")
 set(OEMPA_ENABLE ON)
 
 unset(MOCK_DEVICE CACHE)
-option(MOCK_DEVICE "Use mock hardware implementation" ON)
+option(MOCK_DEVICE "Use mock hardware implementation" OFF)
 
 option(ENABLE_WARNINGS "Enable to add warnings to a target." ON)
 option(ENABLE_WARNINGS_AS_ERRORS "Enable compiler warnings as errors" OFF)

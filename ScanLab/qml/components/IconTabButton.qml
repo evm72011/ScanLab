@@ -7,7 +7,7 @@ TabButton {
     id: root
 
     property url iconSource: ""
-    property int iconSize: 32
+    property int iconSize: 24
 
     width: 96
     hoverEnabled: true
@@ -49,7 +49,7 @@ TabButton {
 
         Text {
             text: root.text
-            font.pixelSize: SL.Theme.typography.fontSizeMd
+            font.pixelSize: SL.Theme.typography.fontSizeSm
             font.bold: root.checked
             color: (root.hovered || root.checked)
                    ? SL.Theme.colors.controlActiveText

@@ -3,53 +3,72 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import ScanLab as SL
 
-ColumnLayout {
+RowLayout {
     width: parent ? parent.width : 0
     height: parent ? parent.height : 0
     spacing: 0
 
-    TabBar {
-        id: tabBar
-        Layout.fillWidth: true
-
-        SL.IconTabButton {
-            text: qsTr("Settings")
-            iconSource: "qrc:/icons/service.svg"
-        }
-
-        SL.IconTabButton {
-            text: qsTr("Scan")
-            iconSource: "qrc:/icons/scan.svg"
-        }
-    }
-
     Rectangle {
-        Layout.fillWidth: true
-        height: 1
-        color: SL.Theme.colors.border
+        Layout.fillHeight: true
+        Layout.preferredWidth: 84
+        color: SL.Theme.colors.windowBackground
+
+        Column {
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.margins: 8
+            spacing: 8
+
+            SL.IconTabButton {
+                width: parent.width
+                text: qsTr("Settings")
+                iconSource: "qrc:/icons/service.svg"
+                checked: navigation.currentIndex === 0
+                onClicked: navigation.currentIndex = 0
+            }
+
+            SL.IconTabButton {
+                width: parent.width
+                text: qsTr("Scan")
+                iconSource: "qrc:/icons/scan.svg"
+                checked: navigation.currentIndex === 1
+                onClicked: navigation.currentIndex = 1
+            }
+        }
+
+        Rectangle {
+            anchors.top: parent.top
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            width: 1
+            color: SL.Theme.colors.border
+        }
     }
 
-    SwipeView {
-        id: stack
+    ColumnLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
+        spacing: 0
 
-        interactive: false
+        StackLayout {
+            id: navigation
+            Layout.fillWidth: true
+            Layout.fillHeight: true
 
-        currentIndex: tabBar.currentIndex
+            SL.SettingsPage {
+                active: navigation.currentIndex === 0
+            }
 
-        SL.SettingsPage {
-            active: stack.currentIndex === 0
+            SL.ScanPage {
+                active: navigation.currentIndex === 1
+            }
         }
 
-        SL.ScanPage {
-            active: stack.currentIndex === 1
+        SL.StatusBar {
+            id: statusBar
+            Layout.fillWidth: true
+            Layout.preferredHeight: 32
         }
-    }
-
-    SL.StatusBar {
-        id: statusBar
-        Layout.fillWidth: true
-        Layout.preferredHeight: 32
     }
 }
