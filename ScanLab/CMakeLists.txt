@@ -58,7 +58,7 @@ qt_add_qml_module(${APP_NAME}
         app/include/runtime/device/device_type.h
         app/include/runtime/device/device_type_def.h
         app/include/runtime/device/device_type_mapper.h
-        app/include/runtime/connection/connection_error_codes.h
+        app/include/runtime/connection/connection_error.h
         app/include/runtime/connection/connection_service.h
         app/include/runtime/connection/connection_worker.h
         app/include/runtime/health/humidity_service.h

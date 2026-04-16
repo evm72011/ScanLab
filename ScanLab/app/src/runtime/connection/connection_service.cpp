@@ -12,15 +12,15 @@ ConnectionService::ConnectionService(DeviceContext& context)
 {
 }
 
-std::expected<ConnectionResult, ConnectionErrorCodes> ConnectionService::connect(DeviceType type, const std::wstring& address)
+std::expected<ConnectionResult, ConnectionError> ConnectionService::connect(DeviceType type, const std::wstring& address)
 {
     auto* device = context_.device();
     if (!device) {
-        return std::unexpected(ConnectionErrorCodes::DeviceNotSet);
+        return std::unexpected(ConnectionError::DeviceNotSet);
     }
 
     if (!device->ensureDevice(toHardware(type))) {
-        return std::unexpected(ConnectionErrorCodes::CreateDeviceFailed);
+        return std::unexpected(ConnectionError::CreateDeviceFailed);
     }
 
     const auto connectionResult = device->connect(address);

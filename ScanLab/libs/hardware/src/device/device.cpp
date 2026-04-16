@@ -11,6 +11,8 @@
 #include <UTDriverOEMMC.h>
 #include <UTDriverOEMPAmicro.h>
 
+#include "scanlab/hardware/device/hardware_error.h"
+
 namespace scanlab::hardware {
 
 
@@ -20,38 +22,38 @@ Device::~Device() = default;
 Device::Device(Device&&) noexcept = default;
 Device& Device::operator=(Device&&) noexcept = default;
 
-std::expected<ConnectionResult,ConnectionErrorCodes> Device::connect(const std::wstring& address)
+std::expected<ConnectionResult,ConnectionError> Device::connect(const std::wstring& address)
 {
     if (!device_) {
-        return std::unexpected(ConnectionErrorCodes::HardwareNotSet);
+        return std::unexpected(HardwareError::HardwareNotSet);
     }
 
     if (isConnected()) {
-        return std::unexpected(ConnectionErrorCodes::AlreadyConnected);
+        return std::unexpected(ConnectionErrorKind::AlreadyConnected);
     }
 
     auto* swOempa = device_->GetSWDeviceOEMPA();
     if (!swOempa) {
-        return std::unexpected(ConnectionErrorCodes::OempaInterfaceUnavailable);
+        return std::unexpected(HardwareError::OempaInterfaceUnavailable);
     }
 
     if (!swOempa->SetAddress(address.c_str())) {
-        return std::unexpected(ConnectionErrorCodes::SetAddressFailure);
+        return std::unexpected(ConnectionErrorKind::SetAddressFailure);
     }
 
     auto* swBase = device_->GetSWDevice();
     if (!swBase) {
-        return std::unexpected(ConnectionErrorCodes::BaseInterfaceUnavailable);
+        return std::unexpected(ConnectionErrorKind::BaseInterfaceUnavailable);
     }
 
     if (!swBase->SetConnectionState(eConnected, true)) {
-        return std::unexpected(ConnectionErrorCodes::ConnectionFailure);
+        return std::unexpected(ConnectionErrorKind::ConnectionFailure);
     }
 
     std::array<wchar_t, 64> serialBuffer{};
     if (!swOempa->GetSerialNumber(serialBuffer.data(),
                                  static_cast<int>(serialBuffer.size()))) {
-        return std::unexpected(ConnectionErrorCodes::SerialNumberUnavailable);
+        return std::unexpected(ConnectionErrorKind::SerialNumberUnavailable);
     }
 
     return ConnectionResult{

@@ -8,7 +8,7 @@
 #include <UTDriverOEMPA.h>
 
 #include "scanlab/hardware/device/device_type.h"
-#include "scanlab/hardware/device/connection_error_codes.h"
+#include "scanlab/hardware/device/connection_error.h"
 #include "scanlab/hardware/device/connection_result.h"
 
 namespace scanlab::hardware {
@@ -28,7 +28,7 @@ public:
 
     bool ensureDevice(DeviceType type);
 
-    std::expected<ConnectionResult,ConnectionErrorCodes> connect(const std::wstring& address);
+    std::expected<ConnectionResult,ConnectionError> connect(const std::wstring& address);
     bool disconnect();
 
     bool hasDevice() const;

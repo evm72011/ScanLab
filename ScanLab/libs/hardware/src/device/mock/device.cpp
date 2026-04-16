@@ -11,6 +11,8 @@
 #include <UTDriverOEMMC.h>
 #include <UTDriverOEMPAmicro.h>
 
+#include "scanlab/hardware/device/hardware_error.h"
+
 namespace scanlab::hardware {
 
 
@@ -20,14 +22,14 @@ Device::~Device() = default;
 Device::Device(Device&&) noexcept = default;
 Device& Device::operator=(Device&&) noexcept = default;
 
-std::expected<ConnectionResult,ConnectionErrorCodes> Device::connect(const std::wstring& address)
+std::expected<ConnectionResult,ConnectionErrorCode> Device::connect(const std::wstring& address)
 {
     if (!device_) {
-        return std::unexpected(ConnectionErrorCodes::HardwareNotSet);
+        return std::unexpected(HardwareError::HardwareNotSet);
     }
 
     if (isConnected()) {
-        return std::unexpected(ConnectionErrorCodes::AlreadyConnected);
+        return std::unexpected(ConnectionError::AlreadyConnected);
     }
 
     connected_ = true;
