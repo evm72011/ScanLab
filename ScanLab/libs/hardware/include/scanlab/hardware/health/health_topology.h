@@ -19,7 +19,7 @@ public:
     void reset() noexcept;
 
     template <HealthTopologyApi Api>
-    std::expected<void, HealthErrorCodes> ensure(Device& device, const Api& api);
+    std::expected<void, HealthError> ensure(Device& device, const Api& api);
 
     [[nodiscard]] int boardCount() const noexcept;
     [[nodiscard]] std::span<const int> sensorCountPerBoard() const noexcept;
@@ -34,11 +34,11 @@ private:
 
 
 template <HealthTopologyApi Api>
-std::expected<void, HealthErrorCodes> HealthTopology::ensure(Device& device, const Api& api){
+std::expected<void, HealthError> HealthTopology::ensure(Device& device, const Api& api){
     auto* hw = device.get();
     if (hw == nullptr) {
         reset();
-        return std::unexpected(HealthErrorCodes::HardwareNotSet);
+        return std::unexpected(HardwareError::HardwareNotSet);
     }
 
     if (hw_ == hw) {
@@ -48,7 +48,7 @@ std::expected<void, HealthErrorCodes> HealthTopology::ensure(Device& device, con
 
     auto* sw = hw->GetSWDeviceOEMPA();
     if (sw == nullptr) {
-        return std::unexpected(HealthErrorCodes::OempaInterfaceUnavailable);
+        return std::unexpected(HardwareError::OempaInterfaceUnavailable);
     }
 
     int boardCount = 0;
@@ -56,11 +56,11 @@ std::expected<void, HealthErrorCodes> HealthTopology::ensure(Device& device, con
     std::size_t totalSensorCount = 0;
 
     if (!api.getBoardCount(sw, boardCount, sensorCountMax)) {
-        return std::unexpected(HealthErrorCodes::BoardToppologyUnavailable);
+        return std::unexpected(HealthErrorKind::BoardToppologyUnavailable);
     }
 
     if (boardCount < 0) {
-        return std::unexpected(HealthErrorCodes::BoardTopologyErrors);
+        return std::unexpected(HealthErrorKind::BoardTopologyErrors);
     }
 
     std::vector<int> sensorCountPerBoard;
@@ -69,11 +69,11 @@ std::expected<void, HealthErrorCodes> HealthTopology::ensure(Device& device, con
     for (int board = 0; board < boardCount; ++board) {
         int sensorCount = 0;
         if (!api.getSensorCount(sw, board, sensorCount)) {
-            return std::unexpected(HealthErrorCodes::SensorTopologyUnavailable);
+            return std::unexpected(HealthErrorKind::SensorTopologyUnavailable);
         }
 
         if (sensorCount < 0) {
-            return std::unexpected(HealthErrorCodes::SensorTopologyErrors);
+            return std::unexpected(HealthErrorKind::SensorTopologyErrors);
         }
 
         sensorCountPerBoard.push_back(sensorCount);

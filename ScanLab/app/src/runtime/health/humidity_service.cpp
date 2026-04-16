@@ -9,7 +9,7 @@ HumidityService::HumidityService(DeviceContext& context)
 {
 }
 
-std::expected<int, scanlab::hardware::HealthErrorCodes> HumidityService::readMax() const {
+std::expected<int, scanlab::hardware::HealthError> HumidityService::readMax() const {
     return humidityReader_->readMax();
 }
 

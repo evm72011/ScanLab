@@ -15,7 +15,7 @@ class HumidityService
 public:
     explicit HumidityService(DeviceContext& context);
 
-    std::expected<int, scanlab::hardware::HealthErrorCodes> readMax() const;
+    std::expected<int, scanlab::hardware::HealthError> readMax() const;
 
     ~HumidityService();
 private:

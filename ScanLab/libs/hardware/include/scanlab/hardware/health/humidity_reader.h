@@ -10,7 +10,7 @@ class HumidityReader
 {
 public:
     explicit HumidityReader(Device& device);
-    [[nodiscard]] std::expected<int, HealthErrorCodes> readMax() const;
+    [[nodiscard]] std::expected<int, HealthError> readMax() const;
 
 private:
     Device& device_;

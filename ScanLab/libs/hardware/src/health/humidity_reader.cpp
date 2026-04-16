@@ -8,7 +8,7 @@ HumidityReader::HumidityReader(Device& device)
 {
 }
 
-std::expected<int, HealthErrorCodes> HumidityReader::readMax() const {
+std::expected<int, HealthError> HumidityReader::readMax() const {
     const auto topologyResult = topology_.ensure(device_, HumidityTopologyApi{});
 
     if (!topologyResult) {
@@ -18,16 +18,16 @@ std::expected<int, HealthErrorCodes> HumidityReader::readMax() const {
     auto* hw = device_.get();
     if (hw == nullptr) {
         topology_.reset();
-        return std::unexpected(HealthErrorCodes::HardwareNotSet);
+        return std::unexpected(HardwareError::HardwareNotSet);
     }
 
     if (hw->GetSWDeviceOEMPA() == nullptr) {
         topology_.reset();
-        return std::unexpected(HealthErrorCodes::OempaInterfaceUnavailable);
+        return std::unexpected(HardwareError::OempaInterfaceUnavailable);
     }
 
     if (!hw->LockDevice(eAcqContinue)) {
-        return std::unexpected(HealthErrorCodes::DeviceLockFailed);
+        return std::unexpected(HardwareError::DeviceLockFailed);
     }
 
     bool ok = true;
@@ -46,7 +46,7 @@ std::expected<int, HealthErrorCodes> HumidityReader::readMax() const {
 
     const bool unlockOk = hw->UnlockDevice(eAcqContinue);
     if (!ok || !unlockOk || values.empty()) {
-        return std::unexpected(HealthErrorCodes::SensorDataUnavailable);
+        return std::unexpected(HealthErrorKind::SensorDataUnavailable);
     }
 
     short result = values[0];

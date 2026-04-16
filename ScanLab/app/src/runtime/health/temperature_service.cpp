@@ -9,7 +9,7 @@ TemperatureService::TemperatureService(DeviceContext& context)
 {
 }
 
-std::expected<int, scanlab::hardware::HealthErrorCodes> TemperatureService::readMax() const {
+std::expected<int, scanlab::hardware::HealthError> TemperatureService::readMax() const {
     return temperatureReader_->readMax();
 }
 

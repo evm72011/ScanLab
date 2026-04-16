@@ -12,7 +12,7 @@ class TemperatureReader
 {
 public:
     explicit TemperatureReader(Device& device);
-    [[nodiscard]] std::expected<int, HealthErrorCodes> readMax() const;
+    [[nodiscard]] std::expected<int, HealthError> readMax() const;
 
 private:
     Device& device_;
