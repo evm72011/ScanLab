@@ -1,10 +1,13 @@
 set(LIB_NAME ${HARDWARE_LIB_NAME})
 
 add_library(${LIB_NAME} STATIC
-    src/a_scan_acquisition.cpp
+    src/acquisition/acquisition_stream.cpp  # todo mock
+
     src/health/health_topology.cpp
     src/health/humidity_topology_api.cpp
     src/health/temperature_topology_api.cpp
+
+    src/a_scan_acquisition.cpp # deprecated
 )
 
 set(IMPL_VARIANT "")

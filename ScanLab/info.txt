@@ -38,3 +38,106 @@ Backend
 
             ConnectionService   // Wrapper for working with hardware lib
 
+
+
+Да, фильтры из hardware надо учесть сразу. И ещё лучше сразу отделить **общие классы сканирования** от **A-scan-специфичных**, чтобы потом B-scan/C-scan не ломали архитектуру.
+
+## Shared
+
+### `AcquisitionStream`
+
+**Где:** `shared`
+Управляет lifecycle захвата с устройства: start/stop, регистрация callback, связь с `Device`. Не знает про конкретный тип скана, только доставляет сырой пакет дальше.
+
+### `RawAcquisitionFrame`
+
+**Где:** `shared`
+Общий контейнер сырого кадра от OEMPA. Хранит raw buffer, cycle, bitSize, dataSize, метаданные acquisition.
+
+### `HardwareFilterController`
+
+**Где:** `shared`
+Обёртка над OEMPA hardware/FW filter API. Загружает FIR-коэффициенты в устройство, выбирает индекс фильтра для cycle, включает/выключает аппаратную фильтрацию.
+
+### `SignalProcessingSettings`
+
+**Где:** `shared`
+Общая конфигурация обработки сигнала. Хранит sample rate, скорость звука, crop/resample settings, выбор hardware filter и software filter chain.
+
+### `AxisMapper`
+
+**Где:** `shared`
+Переводит индекс семпла в время и глубину. Использует sample rate, start/range и скорость звука; это понадобится не только A-scan, но и B-scan/C-scan.
+
+### `SoftwareFilterChain`
+
+**Где:** `shared`
+Цепочка software-фильтров поверх уже прочитанных данных. Нужна для того, чего нет в OEMPA hardware filters, или для постобработки.
+
+---
+
+## A-scan
+
+### `AScanAcquisition`
+
+**Где:** `a-scan`
+A-scan-специфичный вход в acquisition. Получает OEMPA A-scan callback, упаковывает его в `RawAcquisitionFrame` и передаёт в pipeline.
+
+### `AScanRawDecoder`
+
+**Где:** `a-scan`
+Декодирует OEMPA A-scan buffer в массив чисел. Понимает `dataSize`, `bitSize`, `sign`, включая OEMPA-специфику вроде 12/16/27 bit container.
+
+### `AScanNormalizer`
+
+**Где:** `a-scan`
+Приводит декодированные значения к рабочему диапазону, например `[-1;1]` или `[0;1]`. Это именно A-scan signal-level логика, не UI.
+
+### `AScanCropper`
+
+**Где:** `a-scan`
+Обрезает начало и конец сигнала по индексам, времени или глубине. Работает до или после ресемплинга, в зависимости от настроек pipeline.
+
+### `AScanResampler`
+
+**Где:** `a-scan`
+Меняет число семплов или эффективную частоту дискретизации в выходном кадре. Нужен для унификации сигнала перед дальнейшей обработкой.
+
+### `AScanPipeline`
+
+**Где:** `a-scan`
+Оркестратор обработки A-scan. Собирает шаги: decode → normalize → crop → resample → software filters → axis mapping.
+
+### `AScanFrame`
+
+**Где:** `a-scan`
+Итоговый результат для hardware-слоя. Содержит `vector<double>` и метаданные, которые потом сможет использовать UI или B-scan builder.
+
+---
+
+## Что сразу общее для будущих B-scan / C-scan
+
+Общие:
+
+* `AcquisitionSession`
+* `RawAcquisitionFrame`
+* `HardwareFilterController`
+* `SignalProcessingSettings`
+* `AxisMapper`
+* `SoftwareFilterChain`
+
+A-scan-специфичное:
+
+* `AScanAcquisition`
+* `AScanRawDecoder`
+* `AScanNormalizer`
+* `AScanCropper`
+* `AScanResampler`
+* `AScanPipeline`
+* `AScanFrame`
+
+## Главное уточнение по hardware filters
+
+`HardwareFilterController` должен жить **не внутри A-scan pipeline**, а рядом с `Device` / acquisition setup. Потому что OEMPA hardware FIR — это **настройка устройства и cycle**, а не постобработка уже полученного `vector<double>`.
+
+Если хочешь, следующим сообщением дам это в виде очень короткой таблички: **класс | shared/a-scan | зачем нужен**.
