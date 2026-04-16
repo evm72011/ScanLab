@@ -6,7 +6,7 @@
 #include <Windows.h>
 #include <UTDriverOEMPA.h>
 
-#include "scanlab/hardware/health/health_error_codes.h"
+#include "scanlab/hardware/health/health_error.h"
 #include "scanlab/hardware/health/health_topology_api.h"
 #include "scanlab/hardware/device/device.h"
 
