@@ -119,7 +119,7 @@ A-scan-специфичный вход в acquisition. Получает OEMPA A-
 
 Общие:
 
-* `AcquisitionSession`
+* `AcquisitionStream`
 * `RawAcquisitionFrame`
 * `HardwareFilterController`
 * `SignalProcessingSettings`
