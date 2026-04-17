@@ -3,7 +3,7 @@
 namespace scanlab::hardware {
 enum class HardwareError
 {
-    HardwareNotSet = 0,
+    HardwareNotSet,
     OempaInterfaceUnavailable,
     DeviceLockFailed
 };

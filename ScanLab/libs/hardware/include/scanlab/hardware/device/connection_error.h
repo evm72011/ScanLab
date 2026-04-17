@@ -6,7 +6,7 @@
 namespace scanlab::hardware {
 
 enum class ConnectionErrorKind {
-    AlreadyConnected = 10,
+    AlreadyConnected,
     SetAddressFailure,
     BaseInterfaceUnavailable,
     ConnectionFailure,

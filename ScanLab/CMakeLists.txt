@@ -58,6 +58,9 @@ qt_add_qml_module(${APP_NAME}
         app/include/runtime/device/device_type.h
         app/include/runtime/device/device_type_def.h
         app/include/runtime/device/device_type_mapper.h
+        app/include/runtime/errors/error_info.h
+        app/include/runtime/errors/describe_error.h
+        app/include/runtime/errors/describe_error_hw.h
         app/include/runtime/connection/connection_error.h
         app/include/runtime/connection/connection_service.h
         app/include/runtime/connection/connection_worker.h
@@ -82,7 +85,7 @@ qt_add_qml_module(${APP_NAME}
         app/include/backend.h
         app/include/c_scan_worker.h
 
-#        app/include/device_type.h
+#-----------
 
         app/src/runtime/device/device_context.cpp
         app/src/runtime/connection/connection_service.cpp

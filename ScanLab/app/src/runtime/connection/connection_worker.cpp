@@ -1,7 +1,5 @@
 #include "runtime/connection/connection_worker.h"
 
-#include <variant>
-
 #include "runtime/device/device_context.h"
 #include "runtime/connection/connection_service.h"
 #include <magic_enum/magic_enum.hpp>
@@ -16,15 +14,15 @@ void ConnectionWorker::connect(DeviceType type, const QString& address)
 {
     const auto connectionResult = service_.connect(type, address.toStdWString());
     if (!connectionResult.has_value()) {
-        const auto error = connectionResult.error();
-        const auto errorCode = QString::fromUtf8(magic_enum::enum_name(error).data());
+        const auto& error = connectionResult.error();
+        const auto errorInfo = describeError(error);
 
-        /*
-        const auto errorCode = std::visit([](auto err) {
-            return QString::fromUtf8(magic_enum::enum_name(err));
-        }, error);*/
-
-        emit connectionErrorCode(errorCode);
+        if (errorInfo.textKey) {
+            emit connectionErrorCode(errorInfo.textKey);
+        }
+        else {
+            emit connectionErrorCode(errorInfo.fallbackText);
+        }
         emit connectionFailure();
         return;
     }

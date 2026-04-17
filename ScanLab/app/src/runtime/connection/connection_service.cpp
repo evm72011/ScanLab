@@ -16,11 +16,11 @@ std::expected<ConnectionResult, ConnectionError> ConnectionService::connect(Devi
 {
     auto* device = context_.device();
     if (!device) {
-        return std::unexpected(ConnectionError::DeviceNotSet);
+        return std::unexpected(ConnectionLocalError::DeviceNotSet);
     }
 
     if (!device->ensureDevice(toHardware(type))) {
-        return std::unexpected(ConnectionError::CreateDeviceFailed);
+        return std::unexpected(ConnectionLocalError::CreateDeviceFailed);
     }
 
     const auto connectionResult = device->connect(address);
