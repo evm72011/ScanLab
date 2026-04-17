@@ -15,12 +15,11 @@ ErrorInfo describeErrorImpl(
 
     const auto it = map.find(error);
     if (it != map.end()) {
-        return {technicalCode, it.value(), {}};
+        return {technicalCode, it.value()};
     }
 
     return {
         technicalCode,
-        nullptr,
-        QStringLiteral("Unknown error code: %1").arg(technicalCode)
+        QT_TR_NOOP("Unknown error code")
     };
 }

@@ -4,6 +4,7 @@
 #include <QString>
 
 #include "runtime/device/device_type.h"
+#include "runtime/errors/error_info.h"
 #include "runtime/connection/connection_service.h"
 
 class DeviceContext;
@@ -22,7 +23,7 @@ public slots:
 signals:
     void connectionSucces(const ConnectionResult& value);
     void connectionFailure();
-    void connectionErrorCode(const QString& value);
+    void errorInfo(const ErrorInfo& value);
     void disconnectCompleted(bool stillConnected);
 
 private:

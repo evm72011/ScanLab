@@ -5,6 +5,7 @@
 
 #include <QMetaObject>
 #include <QDebug>
+#include <QCoreApplication>
 
 ConnectionFacade::ConnectionFacade(DeviceContext& context, QObject* parent)
     : QObject(parent)
@@ -54,10 +55,10 @@ ConnectionFacade::ConnectionFacade(DeviceContext& context, QObject* parent)
 
     connect(
         worker_,
-        &ConnectionWorker::connectionErrorCode,
+        &ConnectionWorker::errorInfo,
         this,
-        [this](const QString& code) {
-            setConnectionErrorCode(code);      // bug if already connected error
+        [this](const ErrorInfo& errorInfo) {
+            setErrorInfo(errorInfo);      // bug if already connected error
         },
         Qt::QueuedConnection);
 
@@ -125,7 +126,16 @@ ConnectionState::State ConnectionFacade::connectionState() const
 
 QString ConnectionFacade::connectionErrorCode() const
 {
-    return connectionErrorCode_;
+    return errorInfo_.technicalCode;
+}
+
+QString ConnectionFacade::connectionErrorText() const
+{
+    if (errorInfo_.textKey != nullptr) {
+        return QCoreApplication::translate("Errors", errorInfo_.textKey);
+    }
+
+    return "";
 }
 
 QString ConnectionFacade::serialNumber() const
@@ -163,14 +173,21 @@ void ConnectionFacade::setConnectionState(ConnectionState::State value)
     emit connectionStateChanged();
 }
 
-void ConnectionFacade::setConnectionErrorCode(const QString& value)
+void ConnectionFacade::setErrorInfo(const ErrorInfo& value)
 {
-    if (connectionErrorCode_ == value) {
-        return;
+    //if (connectionErrorCode_ == value) { TODO
+    //    return;
+    //}
+    auto old = errorInfo_;
+    errorInfo_ = value;
+
+    if (old.technicalCode != value.technicalCode) {
+        emit connectionErrorCodeChanged();
     }
 
-    connectionErrorCode_ = value;
-    emit connectionErrorCodeChanged();
+    if (old.textKey != value.textKey) {
+        emit connectionErrorTextChanged();
+    }
 }
 
 void ConnectionFacade::setSerialNumber(const QString& value)

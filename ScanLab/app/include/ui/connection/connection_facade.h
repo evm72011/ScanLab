@@ -5,6 +5,7 @@
 #include <QThread>
 
 #include "runtime/device/device_type.h"
+#include "runtime/errors/error_info.h"
 #include "ui/connection/connection_state.h"
 
 class DeviceContext;
@@ -18,6 +19,7 @@ class ConnectionFacade : public QObject
     Q_PROPERTY(QString address READ address WRITE setAddress NOTIFY addressChanged)
     Q_PROPERTY(ConnectionState::State connectionState READ connectionState NOTIFY connectionStateChanged)
     Q_PROPERTY(QString connectionErrorCode READ connectionErrorCode NOTIFY connectionErrorCodeChanged)
+    Q_PROPERTY(QString connectionErrorText READ connectionErrorText NOTIFY connectionErrorTextChanged)
     Q_PROPERTY(QString serialNumber READ serialNumber NOTIFY serialNumberChanged)
 
 public:
@@ -32,6 +34,7 @@ public:
 
     ConnectionState::State connectionState() const;
     QString connectionErrorCode() const;
+    QString connectionErrorText() const;
     QString serialNumber() const;
 
     Q_INVOKABLE void connectDevice();
@@ -42,6 +45,7 @@ signals:
     void addressChanged();
     void connectionStateChanged();
     void connectionErrorCodeChanged();
+    void connectionErrorTextChanged();
     void serialNumberChanged();
     void connectionFailure();
 
@@ -51,7 +55,7 @@ signals:
 
 private:
     void setConnectionState(ConnectionState::State value);
-    void setConnectionErrorCode(const QString& value);
+    void setErrorInfo(const ErrorInfo& value);
     void setSerialNumber(const QString& value);
 
 private:
@@ -61,6 +65,6 @@ private:
     DeviceType deviceType_ = DeviceType::None;
     QString address_;
     ConnectionState::State connectionState_ = ConnectionState::State::Disconnected;
-    QString connectionErrorCode_;
+    ErrorInfo errorInfo_;
     QString serialNumber_;
 };

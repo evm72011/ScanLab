@@ -16,7 +16,7 @@ std::expected<ConnectionResult, ConnectionError> ConnectionService::connect(Devi
 {
     auto* device = context_.device();
     if (!device) {
-        return std::unexpected(ConnectionLocalError::DeviceNotSet);
+        return std::unexpected(ConnectionLocalError::DeviceContextNotSet);
     }
 
     if (!device->ensureDevice(toHardware(type))) {

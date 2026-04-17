@@ -6,6 +6,7 @@ set_target_properties(${APP_NAME} PROPERTIES
 
 target_include_directories(${APP_NAME} PRIVATE
     include
+    include/runtime/errors
     include/ui/connection
     include/ui/device
     include/ui/health

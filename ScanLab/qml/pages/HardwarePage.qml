@@ -119,7 +119,9 @@ Item {
             id: connectionErrorDialog
             messageType: MessageDialog.Type.Error
             shortText: qsTr("Connection error")
-            detailsText: `Error Code: ${connectionFacade?.connectionErrorCode ?? ''}`
+            detailsText: qsTr("%1,\nError code: %2")
+                .arg(connectionFacade?.connectionErrorText ?? '')
+                .arg(connectionFacade?.connectionErrorCode ?? '')
         }
 
         SL.MessageDialog {

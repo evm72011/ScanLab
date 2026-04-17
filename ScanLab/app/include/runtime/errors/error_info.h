@@ -5,6 +5,5 @@
 struct ErrorInfo
 {
     QString technicalCode;
-    const char* textKey;
-    QString fallbackText;
+    const char* textKey = nullptr;
 };

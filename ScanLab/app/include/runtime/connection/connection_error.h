@@ -11,7 +11,7 @@ namespace hw = scanlab::hardware;
 
 enum class ConnectionLocalError
 {
-    DeviceNotSet,
+    DeviceContextNotSet,
     CreateDeviceFailed,
 };
 
@@ -30,7 +30,7 @@ inline ConnectionError fromHardware(const hw::ConnectionError& error)
 inline ErrorInfo describeError(ConnectionLocalError error)
 {
     static const QHash<ConnectionLocalError, const char*> mp = {
-        {ConnectionLocalError::DeviceNotSet, QT_TR_NOOP("Device is not set")},
+        {ConnectionLocalError::DeviceContextNotSet, QT_TR_NOOP("Device context is not set")},
         {ConnectionLocalError::CreateDeviceFailed, QT_TR_NOOP("Failed to create the device")}
     };
 
