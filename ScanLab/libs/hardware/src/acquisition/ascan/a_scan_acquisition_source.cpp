@@ -1,0 +1,122 @@
+#include "scanlab/hardware/acquisition/ascan/a_scan_acquisition_source.h"
+
+#include <UTDriverOEMPA.h>
+
+#include <cstring>
+#include <utility>
+
+namespace scanlab::hardware {
+
+AScanAcquisitionSource::AScanAcquisitionSource(Device& device)
+    : device_(device)
+    , control_(device)
+{
+}
+
+AScanAcquisitionSource::~AScanAcquisitionSource()
+{
+    stop();
+}
+
+void AScanAcquisitionSource::setFrameHandler(FrameHandler handler)
+{
+    std::lock_guard lock(mutex_);
+    handler_ = std::move(handler);
+}
+
+std::expected<void, AcquisitionError> AScanAcquisitionSource::start()
+{
+    return control_.start(
+        [this]() { registerCallbacks(); },
+        [this]() { unregisterCallbacks(); });
+}
+
+void AScanAcquisitionSource::stop()
+{
+    control_.stop([this]() { unregisterCallbacks(); });
+}
+
+bool AScanAcquisitionSource::isRunning() const
+{
+    return control_.isRunning();
+}
+
+void AScanAcquisitionSource::registerCallbacks()
+{
+    auto* hw = device_.get();
+    if (!hw) {
+        return;
+    }
+
+    hw->SetAcquisitionParameter(this);
+    hw->SetAcquisitionAscan_0x00010103(&AScanAcquisitionSource::callback);
+    hw->SetAcquisitionAscan_0x00020203(nullptr);
+}
+
+void AScanAcquisitionSource::unregisterCallbacks()
+{
+    auto* hw = device_.get();
+    if (!hw) {
+        return;
+    }
+
+    hw->SetAcquisitionAscan_0x00010103(nullptr);
+    hw->SetAcquisitionAscan_0x00020203(nullptr);
+    hw->SetAcquisitionParameter(nullptr);
+}
+
+UINT WINAPI AScanAcquisitionSource::callback(
+    void* p,
+    structAcqInfoEx&,
+    const CStream_0x0001*,
+    const CSubStreamAscan_0x0103* hdr,
+    const void* bufferMax,
+    const void*,
+    const void*)
+{
+    auto* self = static_cast<AScanAcquisitionSource*>(p);
+    if (!self || !hdr || !bufferMax) {
+        return 0;
+    }
+
+    self->handle(hdr, bufferMax);
+    return 0;
+}
+
+void AScanAcquisitionSource::handle(
+    const CSubStreamAscan_0x0103* hdr,
+    const void* buffer)
+{
+    FrameHandler localHandler;
+    bool running = false;
+
+    {
+        std::lock_guard lock(mutex_);
+        localHandler = handler_;
+        running = control_.isRunning();
+    }
+
+    if (!running || !localHandler) {
+        return;
+    }
+
+    const auto byteCount =
+        static_cast<std::size_t>(hdr->dataSize) *
+        static_cast<std::size_t>(hdr->dataCount);
+
+    RawAScanFrame frame;
+    frame.dataSize = static_cast<int>(hdr->dataSize);
+    frame.dataCount = static_cast<int>(hdr->dataCount);
+    frame.cycle = static_cast<int>(hdr->cycle);
+    frame.bitSize = static_cast<int>(hdr->bitSize);
+    frame.sign = hdr->sign != 0;
+    frame.data.resize(byteCount);
+
+    if (byteCount != 0) {
+        std::memcpy(frame.data.data(), buffer, byteCount);
+    }
+
+    localHandler(std::move(frame));
+}
+
+} // namespace scanlab::hardware

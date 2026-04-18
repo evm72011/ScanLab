@@ -5,6 +5,7 @@ enum class HardwareError
 {
     HardwareNotSet,
     OempaInterfaceUnavailable,
-    DeviceLockFailed
+    DeviceLockFailed,
+    DeviceUnlockFailed
 };
 } // namespace scanlab::hardware

@@ -1,7 +1,9 @@
 set(LIB_NAME ${HARDWARE_LIB_NAME})
 
 add_library(${LIB_NAME} STATIC
-    src/acquisition/acquisition_stream.cpp  # todo mock
+    # todo mock
+    src/acquisition/acquisition_control.cpp
+    src/acquisition/ascan/a_scan_acquisition_source.cpp
 
     src/health/health_topology.cpp
     src/health/humidity_topology_api.cpp
