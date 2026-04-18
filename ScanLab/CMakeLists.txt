@@ -72,6 +72,7 @@ qt_add_qml_module(${APP_NAME}
         app/include/runtime/health/temperature_worker.h
 
         app/include/ui/app_info.h
+        app/include/ui/acquisition/ascan_facade.h
         app/include/ui/connection/connection_facade.h
         app/include/ui/connection/connection_state.h
         app/include/ui/device/device_type.h
@@ -99,6 +100,7 @@ qt_add_qml_module(${APP_NAME}
         app/src/runtime/health/temperature_service.cpp
         app/src/runtime/health/temperature_worker.cpp
 
+        app/src/ui/acquisition/ascan_facade.cpp
         app/src/ui/connection/connection_facade.cpp
         app/src/ui/health/temperature_facade.cpp
         app/src/ui/health/humidity_facade.cpp

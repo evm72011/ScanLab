@@ -1,5 +1,5 @@
 #pragma once
-
+/*
 #include <QObject>
 #include <QHash>
 #include <QVector>
@@ -13,7 +13,7 @@ class AScanWorker : public QObject
 public:
     explicit AScanWorker(QObject* parent = nullptr);
     ~AScanWorker() override;
-/*
+
 public slots:
     void setDevice(DeviceFacade* device);
     void start();
@@ -33,5 +33,6 @@ private:
 
     QHash<int, QVector<float>> frames_;
     int selectedCycle_ = 0;
-*/
+
 };
+*/
