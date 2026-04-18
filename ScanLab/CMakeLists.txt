@@ -54,6 +54,8 @@ qt_add_qml_module(${APP_NAME}
     URI ScanLab
     VERSION 1.0
     SOURCES
+        app/include/runtime/acquisition/ascan/ascan_service.h
+        app/include/runtime/acquisition/ascan/ascan_worker.h
         app/include/runtime/device/device_context.h
         app/include/runtime/device/device_type.h
         app/include/runtime/device/device_type_def.h
@@ -77,7 +79,7 @@ qt_add_qml_module(${APP_NAME}
         app/include/ui/health/humidity_facade.h
 
         app/include/a_scan_view.h
-        app/include/a_scan_worker.h
+#        app/include/a_scan_worker.h
         app/include/app_settings.h
         app/include/b_scan_view.h
         app/include/b_scan_worker.h
@@ -87,6 +89,8 @@ qt_add_qml_module(${APP_NAME}
 
 #-----------
 
+        app/src/runtime/acquisition/ascan/ascan_service.cpp
+        app/src/runtime/acquisition/ascan/ascan_worker.cpp
         app/src/runtime/device/device_context.cpp
         app/src/runtime/connection/connection_service.cpp
         app/src/runtime/connection/connection_worker.cpp
@@ -100,7 +104,7 @@ qt_add_qml_module(${APP_NAME}
         app/src/ui/health/humidity_facade.cpp
 
         app/src/a_scan_view.cpp
-        app/src/a_scan_worker.cpp
+ #       app/src/a_scan_worker.cpp
         app/src/b_scan_view.cpp
         app/src/b_scan_worker.cpp
         app/src/backend.cpp
