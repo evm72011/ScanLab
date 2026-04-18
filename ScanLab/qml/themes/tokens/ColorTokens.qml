@@ -22,6 +22,10 @@ QtObject {
 
     property color border
 
+    property color ascanLine
+    property color ascanGrid
+    property color ascanMarker
+
     // text
     property color textPrimary
     property color textSecondary

@@ -11,6 +11,7 @@ target_include_directories(${APP_NAME} PRIVATE
     include/ui/connection
     include/ui/device
     include/ui/health
+    include/ui/view
     ${CMAKE_BINARY_DIR}/configured/include
 )
 

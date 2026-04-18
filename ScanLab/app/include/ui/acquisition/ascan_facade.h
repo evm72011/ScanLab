@@ -11,7 +11,6 @@ class AScanWorker;
 class AScanFacade : public QObject
 {
     Q_OBJECT
-    QML_ELEMENT
 
     Q_PROPERTY(QVariantList samples READ samples NOTIFY samplesChanged)
     Q_PROPERTY(bool running READ running NOTIFY runningChanged)

@@ -33,4 +33,8 @@ ColorTokens {
     textSuccess: p.green300
     textWarning: p.yellow600
     textError: p.red700
+
+    ascanLine: p.sky600
+    ascanGrid: p.teal900
+    ascanMarker: p.amber500
 }

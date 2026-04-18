@@ -15,7 +15,7 @@ ToolBar {
     readonly property bool connected: connectionState === SL.ConnectionState.Connected
     readonly property bool disconnecting: connectionState === SL.ConnectionState.Disconnecting
 
-    readonly property bool pulsing: backend?.device?.pulsing ?? false
+    readonly property bool pulsing: false //backend?.ascanFacade?.pulsing ?? false TODO
 
     background: Rectangle {
         color: SL.Theme.colors.statusbarBackground
