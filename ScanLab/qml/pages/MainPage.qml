@@ -22,11 +22,21 @@ RowLayout {
 
             SL.IconTabButton {
                 width: parent.width
+                text: qsTr("Device")
+                iconSource: "qrc:/icons/device.svg"
+                checked: navigation.currentIndex === 0
+                onClicked: navigation.currentIndex = 0
+            }
+
+            /*
+            SL.IconTabButton {
+                width: parent.width
                 text: qsTr("Settings")
                 iconSource: "qrc:/icons/service.svg"
                 checked: navigation.currentIndex === 0
                 onClicked: navigation.currentIndex = 0
             }
+            */
 
             SL.IconTabButton {
                 width: parent.width
@@ -56,9 +66,13 @@ RowLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
+            SL.HardwarePage {}
+
+            /*
             SL.SettingsPage {
                 active: navigation.currentIndex === 0
             }
+            */
 
             SL.ScanPage {
                 active: navigation.currentIndex === 1
