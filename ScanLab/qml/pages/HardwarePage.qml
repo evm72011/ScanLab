@@ -120,7 +120,7 @@ Item {
             messageType: MessageDialog.Type.Error
             dialogTitle: qsTr("Unable to connect")
             shortText: connectionFacade?.errorText ?? ""
-            detailsText: qsTr("Check the address and make sure the device is powered on.")
+            //detailsText: qsTr("Check the address and make sure the device is powered on.")
             errorCode: connectionFacade?.errorCode ?? ""
         }
 
