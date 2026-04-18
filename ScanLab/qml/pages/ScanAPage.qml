@@ -21,6 +21,7 @@ Rectangle {
         lineColor: SL.Theme.colors.ascanLine
         gridColor: SL.Theme.colors.ascanGrid
         markerColor: SL.Theme.colors.ascanMarker
+        axisTextColor: SL.Theme.colors.textSecondary
         backgroundColor: SL.Theme.colors.windowBackground
     }
 

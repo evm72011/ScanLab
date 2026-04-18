@@ -116,9 +116,65 @@ void AScanView::setBackgroundColor(const QColor& value)
     update();
 }
 
+QColor AScanView::axisTextColor() const
+{
+    return axisTextColor_;
+}
+
+void AScanView::setAxisTextColor(const QColor& value)
+{
+    if (axisTextColor_ == value)
+        return;
+
+    axisTextColor_ = value;
+    emit axisTextColorChanged();
+    update();
+}
+
+qreal AScanView::minThicknessMm() const
+{
+    return minThicknessMm_;
+}
+
+void AScanView::setMinThicknessMm(qreal value)
+{
+    if (qFuzzyCompare(minThicknessMm_, value)) {
+        return;
+    }
+
+    minThicknessMm_ = value;
+    emit minThicknessMmChanged();
+    update();
+}
+
+qreal AScanView::maxThicknessMm() const
+{
+    return maxThicknessMm_;
+}
+
+void AScanView::setMaxThicknessMm(qreal value)
+{
+    if (qFuzzyCompare(maxThicknessMm_, value)) {
+        return;
+    }
+
+    maxThicknessMm_ = value;
+    emit maxThicknessMmChanged();
+    update();
+}
+
 QRectF AScanView::plotRect() const
 {
-    return boundingRect().adjusted(0.5, 0.5, -0.5, -0.5);
+    constexpr qreal leftMargin = 8.0;
+    constexpr qreal rightMargin = 16.0;
+    constexpr qreal topMargin = 8.0;
+    constexpr qreal bottomMargin = 24.0;
+
+    return boundingRect().adjusted(
+        leftMargin,
+        topMargin,
+        -rightMargin,
+        -bottomMargin);
 }
 
 void AScanView::paint(QPainter* painter)
@@ -132,6 +188,7 @@ void AScanView::paint(QPainter* painter)
 
     paintBackground(painter, rect);
     paintGrid(painter, rect);
+    paintXAxisLabels(painter, rect);
 
     if (!facade_) {
         return;
@@ -144,6 +201,7 @@ void AScanView::paint(QPainter* painter)
 
     paintSignal(painter, rect, samples);
     paintCursor(painter, rect);
+    paintCursorLabel(painter, rect);
 }
 
 void AScanView::paintBackground(QPainter* painter, const QRectF& rect)
@@ -157,27 +215,58 @@ void AScanView::paintGrid(QPainter* painter, const QRectF& rect)
     gridPen.setWidthF(1.0);
     painter->setPen(gridPen);
 
-    const int xDivisions = 10;
-    const int yDivisions = 10;
-
-    for (int i = 0; i <= xDivisions; ++i) {
+    for (int i = 0; i <= xDivisions_; ++i) {
         const double x =
             rect.left() +
-            (static_cast<double>(i) / static_cast<double>(xDivisions)) * rect.width();
+            (static_cast<double>(i) / static_cast<double>(xDivisions_)) * rect.width();
 
         painter->drawLine(
             QPointF(x, rect.top()),
             QPointF(x, rect.bottom()));
     }
 
-    for (int i = 0; i <= yDivisions; ++i) {
+    for (int i = 0; i <= yDivisions_; ++i) {
         const double y =
             rect.top() +
-            (static_cast<double>(i) / static_cast<double>(yDivisions)) * rect.height();
+            (static_cast<double>(i) / static_cast<double>(yDivisions_)) * rect.height();
 
         painter->drawLine(
             QPointF(rect.left(), y),
             QPointF(rect.right(), y));
+    }
+}
+
+void AScanView::paintXAxisLabels(QPainter* painter, const QRectF& rect)
+{
+    painter->setPen(Qt::white);
+
+    if (xDivisions_ <= 0) {
+        return;
+    }
+
+    const double step =
+        (maxThicknessMm_ - minThicknessMm_) /
+        static_cast<double>(xDivisions_);
+
+    for (int i = 0; i <= xDivisions_; ++i) {
+        const double x =
+            rect.left() +
+            (static_cast<double>(i) / static_cast<double>(xDivisions_)) * rect.width();
+
+        const double value =
+            minThicknessMm_ + static_cast<double>(i) * step;
+
+        const QRectF textRect(
+            x - 24.0,
+            rect.bottom() + 4.0,
+            48.0,
+            16.0);
+
+        painter->setPen(axisTextColor_);
+        painter->drawText(
+            textRect,
+            Qt::AlignHCenter | Qt::AlignTop,
+            QString::number(value, 'f', 1));
     }
 }
 
@@ -219,7 +308,7 @@ void AScanView::paintCursor(QPainter* painter, const QRectF& rect)
 
     const qreal x = std::clamp(cursorX_, rect.left(), rect.right());
 
-    QPen cursorPen(QColor("#FFD54A"));
+    QPen cursorPen(markerColor_);
     cursorPen.setWidthF(1.0);
     cursorPen.setStyle(Qt::DashLine);
     painter->setPen(cursorPen);
@@ -227,6 +316,34 @@ void AScanView::paintCursor(QPainter* painter, const QRectF& rect)
     painter->drawLine(
         QPointF(x, rect.top()),
         QPointF(x, rect.bottom()));
+}
+
+void AScanView::paintCursorLabel(QPainter* painter, const QRectF& rect)
+{
+    if (!cursorVisible_) {
+        return;
+    }
+
+    const qreal x = std::clamp(cursorX_, rect.left(), rect.right());
+    const qreal thickness = cursorThicknessMm(rect);
+
+    const QString text = QString::number(thickness, 'f', 1);
+
+    constexpr qreal width = 30.0;
+    constexpr qreal height = 18.0;
+
+    qreal left = x + width < rect.right() ? x : x - width;
+    const QRectF textRect(
+        left,
+        rect.top(),
+        width,
+        height);
+
+    painter->setPen(markerColor_);
+    painter->drawText(
+        textRect,
+        Qt::AlignHCenter | Qt::AlignVCenter,
+        text);
 }
 
 qreal AScanView::mapSampleY(double value, const QRectF& rect) const
@@ -243,6 +360,20 @@ qreal AScanView::mapSampleX(int index, int count, const QRectF& rect) const
 
     return rect.left() +
            (static_cast<double>(index) / static_cast<double>(count - 1)) * rect.width();
+}
+
+qreal AScanView::cursorThicknessMm(const QRectF& rect) const
+{
+    if (!cursorVisible_ || rect.width() <= 0.0) {
+        return minThicknessMm_;
+    }
+
+    const qreal x = std::clamp(cursorX_, rect.left(), rect.right());
+    const qreal relative =
+        (x - rect.left()) / rect.width();
+
+    return minThicknessMm_ +
+           relative * (maxThicknessMm_ - minThicknessMm_);
 }
 
 void AScanView::hoverMoveEvent(QHoverEvent* event)
