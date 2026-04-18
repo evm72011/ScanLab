@@ -18,8 +18,8 @@ class ConnectionFacade : public QObject
     Q_PROPERTY(DeviceType deviceType READ deviceType WRITE setDeviceType NOTIFY deviceTypeChanged)
     Q_PROPERTY(QString address READ address WRITE setAddress NOTIFY addressChanged)
     Q_PROPERTY(ConnectionState::State connectionState READ connectionState NOTIFY connectionStateChanged)
-    Q_PROPERTY(QString connectionErrorCode READ connectionErrorCode NOTIFY connectionErrorCodeChanged)
-    Q_PROPERTY(QString connectionErrorText READ connectionErrorText NOTIFY connectionErrorTextChanged)
+    Q_PROPERTY(QString errorCode READ errorCode NOTIFY errorCodeChanged)
+    Q_PROPERTY(QString errorText READ errorText NOTIFY errorTextChanged)
     Q_PROPERTY(QString serialNumber READ serialNumber NOTIFY serialNumberChanged)
 
 public:
@@ -33,8 +33,8 @@ public:
     void setAddress(const QString& value);
 
     ConnectionState::State connectionState() const;
-    QString connectionErrorCode() const;
-    QString connectionErrorText() const;
+    QString errorCode() const;
+    QString errorText() const;
     QString serialNumber() const;
 
     Q_INVOKABLE void connectDevice();
@@ -44,14 +44,15 @@ signals:
     void deviceTypeChanged();
     void addressChanged();
     void connectionStateChanged();
-    void connectionErrorCodeChanged();
-    void connectionErrorTextChanged();
+    void errorCodeChanged();
+    void errorTextChanged();
     void serialNumberChanged();
     void connectionFailure();
 
     void requestConnect(DeviceType type, const QString& address);
     void requestDisconnect();
     void requestReset();
+
 
 private:
     void setConnectionState(ConnectionState::State value);

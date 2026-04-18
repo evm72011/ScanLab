@@ -124,18 +124,14 @@ ConnectionState::State ConnectionFacade::connectionState() const
     return connectionState_;
 }
 
-QString ConnectionFacade::connectionErrorCode() const
+QString ConnectionFacade::errorCode() const
 {
     return errorInfo_.technicalCode;
 }
 
-QString ConnectionFacade::connectionErrorText() const
+QString ConnectionFacade::errorText() const
 {
-    if (errorInfo_.textKey != nullptr) {
-        return QCoreApplication::translate("Errors", errorInfo_.textKey);
-    }
-
-    return "";
+    return errorInfo_.message();
 }
 
 QString ConnectionFacade::serialNumber() const
@@ -182,11 +178,11 @@ void ConnectionFacade::setErrorInfo(const ErrorInfo& value)
     errorInfo_ = value;
 
     if (old.technicalCode != value.technicalCode) {
-        emit connectionErrorCodeChanged();
+        emit errorCodeChanged();
     }
 
     if (old.textKey != value.textKey) {
-        emit connectionErrorTextChanged();
+        emit errorTextChanged();
     }
 }
 

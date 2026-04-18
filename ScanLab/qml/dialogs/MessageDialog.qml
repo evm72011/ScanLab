@@ -22,8 +22,10 @@ Dialog {
         }
     }
 
+    property string dialodTitle: ""
     property string shortText: ""
     property string detailsText: ""
+    property string errorCode: ""
 
     modal: true
     focus: true
@@ -73,6 +75,15 @@ Dialog {
 
                 Label {
                     Layout.fillWidth: true
+                    text: root.dialodTitle
+                    wrapMode: Text.Wrap
+                    font.pixelSize: 18
+                    font.bold: true
+                    color: SL.Theme.colors.textPrimary
+                }
+
+                Label {
+                    Layout.fillWidth: true
                     text: root.shortText
                     wrapMode: Text.Wrap
                     font.pixelSize: 18
@@ -86,6 +97,17 @@ Dialog {
                     wrapMode: Text.Wrap
                     font.pixelSize: 14
                     color: SL.Theme.colors.textPrimary
+                }
+
+                Text {
+                    Layout.fillWidth: true
+                    text: root.errorCode.length > 0
+                          ? qsTr("Error code: %1").arg(root.errorCode)
+                          : ""
+                    visible: root.errorCode.length > 0
+                    font.pixelSize: 12
+                    color: SL.Theme.colors.textSecondary
+                    font.family: "monospace"
                 }
 
                 Item {

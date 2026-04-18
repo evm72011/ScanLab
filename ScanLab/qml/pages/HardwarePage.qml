@@ -118,17 +118,17 @@ Item {
         SL.MessageDialog {
             id: connectionErrorDialog
             messageType: MessageDialog.Type.Error
-            shortText: qsTr("Connection error")
-            detailsText: qsTr("%1,\nError code: %2")
-                .arg(connectionFacade?.connectionErrorText ?? '')
-                .arg(connectionFacade?.connectionErrorCode ?? '')
+            dialodTitle: qsTr("Unable to connect")
+            shortText: connectionFacade?.errorText ?? ""
+            detailsText: qsTr("Check the address and make sure the device is powered on.")
+            errorCode: connectionFacade?.errorCode ?? ""
         }
 
         SL.MessageDialog {
             id: notImplementedDialog
             messageType: MessageDialog.Type.Info
-            shortText: qsTr("Not implemented")
-            detailsText: qsTr("The feature is under the construction")
+            dialodTitle: qsTr("Not implemented")
+            shortText: qsTr("The feature is under the construction")
         }
 
         Item { Layout.fillHeight: true }
