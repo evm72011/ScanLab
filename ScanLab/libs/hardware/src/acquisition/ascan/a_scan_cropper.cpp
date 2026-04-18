@@ -5,11 +5,43 @@
 
 namespace scanlab::hardware {
 
-std::vector<float> AScanCropper::crop(
-    const std::vector<float>& input,
-    int startIndex,
-    int endIndex) const
+void AScanCropper::setRange(int startIndex, int endIndex)
 {
+    if (startIndex < 0 || endIndex <= startIndex) {
+        return;
+    }
+
+    std::lock_guard lock(mutex_);
+    enabled_ = true;
+    startIndex_ = startIndex;
+    endIndex_ = endIndex;
+}
+
+void AScanCropper::disable()
+{
+    std::lock_guard lock(mutex_);
+    enabled_ = false;
+    startIndex_ = 0;
+    endIndex_ = 0;
+}
+
+std::vector<float> AScanCropper::process(std::vector<float> input) const
+{
+    bool enabled = false;
+    int startIndex = 0;
+    int endIndex = 0;
+
+    {
+        std::lock_guard lock(mutex_);
+        enabled = enabled_;
+        startIndex = startIndex_;
+        endIndex = endIndex_;
+    }
+
+    if (!enabled) {
+        return input;
+    }
+
     if (input.empty()) {
         return {};
     }

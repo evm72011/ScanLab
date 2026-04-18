@@ -1,6 +1,7 @@
 #pragma once
 
 #include "scanlab/hardware/acquisition/ascan/a_scan_acquisition_source.h"
+#include "scanlab/hardware/acquisition/ascan/a_scan_cropper.h"
 #include "scanlab/hardware/acquisition/ascan/a_scan_frame.h"
 #include "scanlab/hardware/acquisition/ascan/a_scan_raw_decoder.h"
 #include "scanlab/hardware/acquisition/ascan/a_scan_resampler.h"
@@ -10,14 +11,21 @@ namespace scanlab::hardware {
 class AScanPipeline
 {
 public:
-    void setTargetSampleCount(int value);
+    AScanRawDecoder& decoder();
+    const AScanRawDecoder& decoder() const;
+
+    AScanCropper& cropper();
+    const AScanCropper& cropper() const;
+
+    AScanResampler& resampler();
+    const AScanResampler& resampler() const;
 
     AScanFrame process(const RawAScanFrame& raw) const;
 
 private:
     AScanRawDecoder decoder_;
+    AScanCropper cropper_;
     AScanResampler resampler_;
-    int targetSampleCount_ = 512;
 };
 
 } // namespace scanlab::hardware

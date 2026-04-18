@@ -1,5 +1,6 @@
 #pragma once
 
+#include <mutex>
 #include <vector>
 
 namespace scanlab::hardware {
@@ -7,7 +8,13 @@ namespace scanlab::hardware {
 class AScanResampler
 {
 public:
-    std::vector<float> resample(const std::vector<float>& input, int targetSampleCount) const;
+    void setTargetSampleCount(int value);
+
+    std::vector<float> process(std::vector<float> input) const;
+
+private:
+    int targetSampleCount_ = 512;
+    mutable std::mutex mutex_;
 };
 
 } // namespace scanlab::hardware
