@@ -5,6 +5,7 @@ add_library(${LIB_NAME} STATIC
     src/acquisition/acquisition_control.cpp
     src/acquisition/ascan/a_scan_acquisition_source.cpp
     src/acquisition/ascan/a_scan_raw_decoder.cpp
+    src/acquisition/ascan/a_scan_resampler.cpp
 
     src/health/health_topology.cpp
     src/health/humidity_topology_api.cpp
