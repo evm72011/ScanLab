@@ -22,7 +22,7 @@ Dialog {
         }
     }
 
-    property string dialodTitle: ""
+    property string dialogTitle: ""
     property string shortText: ""
     property string detailsText: ""
     property string errorCode: ""
@@ -44,56 +44,80 @@ Dialog {
 
     contentItem: Item {
         implicitWidth: 520
-        implicitHeight: contentColumn.implicitHeight + 32
+        implicitHeight: contentColumn.implicitHeight
 
-        RowLayout {
+        ColumnLayout {
+            id: contentColumn
             anchors.fill: parent
-            anchors.margins: 16
-            spacing: 16
+            spacing: 0
 
-            Item {
-                Layout.alignment: Qt.AlignTop
-                Layout.preferredWidth: 36
-                Layout.preferredHeight: 36
+            Rectangle {
+                Layout.fillWidth: true
+                implicitHeight: Math.max(48, titleLabel.implicitHeight + 24)
+                color: "transparent"
+                border.width: 0
 
-                Image {
-                    anchors.centerIn: parent
-                    width: 28
-                    height: 28
-                    source: root.iconSource
-                    fillMode: Image.PreserveAspectFit
-                    smooth: true
-                    mipmap: true
+                Rectangle {
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.bottom: parent.bottom
+                    height: 1
+                    color: SL.Theme.colors.border
+                }
+
+                RowLayout {
+                    anchors.fill: parent
+                    anchors.leftMargin: 16
+                    anchors.rightMargin: 16
+                    anchors.topMargin: 8
+                    anchors.bottomMargin: 8
+                    spacing: 16
+
+                    Item {
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.preferredWidth: 28
+                        Layout.preferredHeight: 28
+
+                        Image {
+                            anchors.centerIn: parent
+                            width: 20
+                            height: 20
+                            source: root.iconSource
+                            fillMode: Image.PreserveAspectFit
+                            smooth: true
+                            mipmap: true
+                        }
+                    }
+
+                    Label {
+                        id: titleLabel
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignVCenter
+                        text: root.dialogTitle
+                        visible: text.length > 0
+                        wrapMode: Text.Wrap
+                        font.pixelSize: 14
+                        font.bold: true
+                        color: SL.Theme.colors.textPrimary
+                    }
                 }
             }
 
             ColumnLayout {
-                id: contentColumn
                 Layout.fillWidth: true
-                Layout.fillHeight: true
                 spacing: 10
 
-                Label {
+                Item {
                     Layout.fillWidth: true
-                    text: root.dialodTitle
-                    wrapMode: Text.Wrap
-                    font.pixelSize: 18
-                    font.bold: true
-                    color: SL.Theme.colors.textPrimary
-                }
-
-                Label {
-                    Layout.fillWidth: true
-                    text: root.shortText
-                    wrapMode: Text.Wrap
-                    font.pixelSize: 18
-                    font.bold: true
-                    color: SL.Theme.colors.textPrimary
+                    Layout.preferredHeight: 16
                 }
 
                 Text {
                     Layout.fillWidth: true
-                    text: root.detailsText
+                    Layout.leftMargin: 16
+                    Layout.rightMargin: 16
+                    text: root.shortText
+                    visible: text.length > 0
                     wrapMode: Text.Wrap
                     font.pixelSize: 14
                     color: SL.Theme.colors.textPrimary
@@ -101,26 +125,43 @@ Dialog {
 
                 Text {
                     Layout.fillWidth: true
+                    Layout.leftMargin: 16
+                    Layout.rightMargin: 16
+                    text: root.detailsText
+                    visible: text.length > 0
+                    wrapMode: Text.Wrap
+                    font.pixelSize: 14
+                    color: SL.Theme.colors.textSecondary
+                }
+
+                Text {
+                    Layout.fillWidth: true
+                    Layout.topMargin: 24
+                    Layout.leftMargin: 16
+                    Layout.rightMargin: 16
                     text: root.errorCode.length > 0
                           ? qsTr("Error code: %1").arg(root.errorCode)
                           : ""
                     visible: root.errorCode.length > 0
+                    wrapMode: Text.Wrap
                     font.pixelSize: 12
                     color: SL.Theme.colors.textSecondary
                     font.family: "monospace"
                 }
 
-                Item {
-                    Layout.fillHeight: true
-                    Layout.minimumHeight: 8
-                }
-
                 RowLayout {
-                    Layout.alignment: Qt.AlignRight
-                    spacing: 8
+                    Layout.fillWidth: true
+                    Layout.leftMargin: 16
+                    Layout.rightMargin: 16
+                    Layout.topMargin: 12
+                    Layout.bottomMargin: 16
+
+                    Item {
+                        Layout.fillWidth: true
+                    }
 
                     SL.Button {
-                        text: "OK"
+                        text: qsTr("OK")
                         onClicked: root.close()
                     }
                 }
