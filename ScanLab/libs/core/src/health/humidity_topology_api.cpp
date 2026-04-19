@@ -3,7 +3,7 @@
 #include <Windows.h>
 #include <UTDriverOEMPA.h>
 
-namespace scanlab::hardware {
+namespace scanlab::health {
 
 bool HumidityTopologyApi::getBoardCount(CSWDeviceOEMPA* sw, int& boardCount, int& sensorCountMax) const
 {

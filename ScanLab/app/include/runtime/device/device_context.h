@@ -2,7 +2,7 @@
 
 #include <memory>
 
-namespace scanlab::hardware {
+namespace scanlab::device {
 class Device;
 }
 
@@ -16,9 +16,9 @@ public:
 
     ~DeviceContext();
 
-    scanlab::hardware::Device* device();
-    const scanlab::hardware::Device* device() const;
+    scanlab::device::Device* device();
+    const scanlab::device::Device* device() const;
 
 private:
-    std::unique_ptr<scanlab::hardware::Device> device_;
+    std::unique_ptr<scanlab::device::Device> device_;
 };

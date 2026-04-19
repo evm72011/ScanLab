@@ -6,7 +6,7 @@
 
 class DeviceContext;
 
-namespace scanlab::hardware {
+namespace scanlab::health {
 class HumidityReader;
 }
 
@@ -15,10 +15,10 @@ class HumidityService
 public:
     explicit HumidityService(DeviceContext& context);
 
-    std::expected<int, scanlab::hardware::HealthError> readMax() const;
+    std::expected<int, scanlab::health::HealthError> readMax() const;
 
     ~HumidityService();
 private:
     DeviceContext& context_;
-    std::unique_ptr<scanlab::hardware::HumidityReader> humidityReader_;
+    std::unique_ptr<scanlab::health::HumidityReader> humidityReader_;
 };

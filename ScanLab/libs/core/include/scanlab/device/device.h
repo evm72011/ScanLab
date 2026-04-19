@@ -11,7 +11,7 @@
 #include "scanlab/device/connection_error.h"
 #include "scanlab/device/connection_result.h"
 
-namespace scanlab::hardware {
+namespace scanlab::device {
 
 class Device
 {

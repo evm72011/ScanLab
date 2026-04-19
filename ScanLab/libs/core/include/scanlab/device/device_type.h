@@ -1,7 +1,7 @@
 #pragma once
 #include <cstdint>
 
-namespace scanlab::hardware {
+namespace scanlab::device {
 
 enum class DeviceType: uint8_t
 {

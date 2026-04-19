@@ -1,6 +1,6 @@
 #include "scanlab/health/health_topology.h"
 
-namespace scanlab::hardware {
+namespace scanlab::health {
 
 void HealthTopology::reset() noexcept {
     hw_ = nullptr;

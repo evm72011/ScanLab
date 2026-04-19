@@ -4,16 +4,16 @@
 #include "scanlab/health/health_error.h"
 #include "scanlab/health/health_topology.h"
 
-namespace scanlab::hardware {
+namespace scanlab::health {
 
 class HumidityReader
 {
 public:
-    explicit HumidityReader(Device& device);
+    explicit HumidityReader(scanlab::device::Device& device);
     [[nodiscard]] std::expected<int, HealthError> readMax() const;
 
 private:
-    Device& device_;
+    scanlab::device::Device& device_;
     mutable HealthTopology topology_;
 };
 }// namespace scanlab::hardware

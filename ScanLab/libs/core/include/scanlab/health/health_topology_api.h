@@ -4,7 +4,7 @@
 
 class CSWDeviceOEMPA;
 
-namespace scanlab::hardware {
+namespace scanlab::health {
 
 template <class T>
 concept HealthTopologyApi =

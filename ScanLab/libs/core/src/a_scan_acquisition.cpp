@@ -9,12 +9,14 @@
 #include <utility>
 #include <vector>
 
+namespace sd = scanlab::device;
+
 namespace scanlab::hardware {
 
 class AScanAcquisition::Impl
 {
 public:
-    Device* device = nullptr;
+    sd::Device* device = nullptr;
     SamplesHandler handler;
     int targetSampleCount = 512;
     bool running = false;
@@ -324,18 +326,18 @@ AScanAcquisition::~AScanAcquisition()
 AScanAcquisition::AScanAcquisition(AScanAcquisition&&) noexcept = default;
 AScanAcquisition& AScanAcquisition::operator=(AScanAcquisition&&) noexcept = default;
 
-void AScanAcquisition::setDevice(Device* device)
+void AScanAcquisition::setDevice(sd::Device* device)
 {
     stop();
     impl_->device = device;
 }
 
-Device* AScanAcquisition::device()
+sd::Device* AScanAcquisition::device()
 {
     return impl_->device;
 }
 
-const Device* AScanAcquisition::device() const
+const sd::Device* AScanAcquisition::device() const
 {
     return impl_->device;
 }

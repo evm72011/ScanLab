@@ -1,9 +1,9 @@
 #include "scanlab/health/temperature_reader.h"
 
 
-namespace scanlab::hardware {
+namespace scanlab::health {
 
-TemperatureReader::TemperatureReader(Device& device)
+TemperatureReader::TemperatureReader(scanlab::device::Device& device)
     : device_(device)
 {
 }

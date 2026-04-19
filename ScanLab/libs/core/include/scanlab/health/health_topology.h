@@ -11,7 +11,7 @@
 #include "scanlab/device/device.h"
 
 
-namespace scanlab::hardware {
+namespace scanlab::health {
 
 class HealthTopology
 {
@@ -19,7 +19,7 @@ public:
     void reset() noexcept;
 
     template <HealthTopologyApi Api>
-    std::expected<void, HealthError> ensure(Device& device, const Api& api);
+    std::expected<void, HealthError> ensure(scanlab::device::Device& device, const Api& api);
 
     [[nodiscard]] int boardCount() const noexcept;
     [[nodiscard]] std::span<const int> sensorCountPerBoard() const noexcept;
@@ -34,11 +34,11 @@ private:
 
 
 template <HealthTopologyApi Api>
-std::expected<void, HealthError> HealthTopology::ensure(Device& device, const Api& api){
+std::expected<void, HealthError> HealthTopology::ensure(scanlab::device::Device& device, const Api& api){
     auto* hw = device.get();
     if (hw == nullptr) {
         reset();
-        return std::unexpected(HardwareError::HardwareNotSet);
+        return std::unexpected(scanlab::device::HardwareError::HardwareNotSet);
     }
 
     if (hw_ == hw) {
@@ -48,7 +48,7 @@ std::expected<void, HealthError> HealthTopology::ensure(Device& device, const Ap
 
     auto* sw = hw->GetSWDeviceOEMPA();
     if (sw == nullptr) {
-        return std::unexpected(HardwareError::OempaInterfaceUnavailable);
+        return std::unexpected(scanlab::device::HardwareError::OempaInterfaceUnavailable);
     }
 
     int boardCount = 0;

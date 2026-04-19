@@ -13,7 +13,7 @@
 
 #include "scanlab/device/hardware_error.h"
 
-namespace scanlab::hardware {
+namespace scanlab::device {
 
 
 Device::Device() = default;

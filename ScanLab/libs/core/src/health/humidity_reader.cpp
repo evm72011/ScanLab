@@ -1,9 +1,11 @@
 #include "scanlab/health/humidity_reader.h"
 #include "scanlab/health/humidity_topology_api.h"
 
-namespace scanlab::hardware {
+namespace sd = scanlab::device;
 
-HumidityReader::HumidityReader(Device& device)
+namespace scanlab::health {
+
+HumidityReader::HumidityReader(sd::Device& device)
     : device_(device)
 {
 }
@@ -18,16 +20,16 @@ std::expected<int, HealthError> HumidityReader::readMax() const {
     auto* hw = device_.get();
     if (hw == nullptr) {
         topology_.reset();
-        return std::unexpected(HardwareError::HardwareNotSet);
+        return std::unexpected(sd::HardwareError::HardwareNotSet);
     }
 
     if (hw->GetSWDeviceOEMPA() == nullptr) {
         topology_.reset();
-        return std::unexpected(HardwareError::OempaInterfaceUnavailable);
+        return std::unexpected(sd::HardwareError::OempaInterfaceUnavailable);
     }
 
     if (!hw->LockDevice(eAcqContinue)) {
-        return std::unexpected(HardwareError::DeviceLockFailed);
+        return std::unexpected(sd::HardwareError::DeviceLockFailed);
     }
 
     bool ok = true;

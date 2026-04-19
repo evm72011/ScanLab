@@ -28,7 +28,7 @@ class AScanAcquisitionSource
 public:
     using FrameHandler = std::function<void(RawAScanFrame&&)>;
 
-    explicit AScanAcquisitionSource(Device& device);
+    explicit AScanAcquisitionSource(scanlab::device::Device& device);
     ~AScanAcquisitionSource();
 
     AScanAcquisitionSource(const AScanAcquisitionSource&) = delete;
@@ -56,7 +56,7 @@ private:
     void handle(const CSubStreamAscan_0x0103* hdr, const void* buffer);
 
 private:
-    Device& device_;
+    scanlab::device::Device& device_;
     AcquisitionControl control_;
 
     FrameHandler handler_;

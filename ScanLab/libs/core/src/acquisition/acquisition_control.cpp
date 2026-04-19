@@ -2,9 +2,11 @@
 
 #include <UTDriverOEMPA.h>
 
+namespace sd = scanlab::device;
+
 namespace scanlab::hardware {
 
-AcquisitionControl::AcquisitionControl(Device& device)
+AcquisitionControl::AcquisitionControl(sd::Device& device)
     : device_(device)
 {
 }
@@ -15,7 +17,7 @@ std::expected<void, AcquisitionError> AcquisitionControl::start(
 {
     auto* hw = device_.get();
     if (!hw) {
-        return std::unexpected(HardwareError::HardwareNotSet);
+        return std::unexpected(sd::HardwareError::HardwareNotSet);
     }
 
     {
@@ -34,7 +36,7 @@ std::expected<void, AcquisitionError> AcquisitionControl::start(
         std::lock_guard lock(mutex_);
         running_ = false;
 
-        return std::unexpected(HardwareError::DeviceLockFailed);
+        return std::unexpected(sd::HardwareError::DeviceLockFailed);
     }
 
     if (!hw->UnlockDevice(eAcqOn)) {
@@ -43,7 +45,7 @@ std::expected<void, AcquisitionError> AcquisitionControl::start(
         std::lock_guard lock(mutex_);
         running_ = false;
 
-        return std::unexpected(HardwareError::DeviceUnlockFailed);
+        return std::unexpected(sd::HardwareError::DeviceUnlockFailed);
     }
 
     return {};

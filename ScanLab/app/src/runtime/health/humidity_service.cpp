@@ -3,13 +3,15 @@
 
 #include "scanlab/health/humidity_reader.h"
 
+namespace sh = scanlab::health;
+
 HumidityService::HumidityService(DeviceContext& context)
     : context_(context)
-    , humidityReader_(std::make_unique<scanlab::hardware::HumidityReader>(*context.device()))
+    , humidityReader_(std::make_unique<sh::HumidityReader>(*context.device()))
 {
 }
 
-std::expected<int, scanlab::hardware::HealthError> HumidityService::readMax() const {
+std::expected<int, sh::HealthError> HumidityService::readMax() const {
     return humidityReader_->readMax();
 }
 

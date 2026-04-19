@@ -6,16 +6,16 @@
 #include "scanlab/health/health_error.h"
 #include "scanlab/health/health_topology.h"
 
-namespace scanlab::hardware {
+namespace scanlab::health {
 
 class TemperatureReader
 {
 public:
-    explicit TemperatureReader(Device& device);
+    explicit TemperatureReader(scanlab::device::Device& device);
     [[nodiscard]] std::expected<int, HealthError> readMax() const;
 
 private:
-    Device& device_;
+    scanlab::device::Device& device_;
     mutable HealthTopology topology_;
 };
 

@@ -1,10 +1,11 @@
 #include "scanlab/health/temperature_reader.h"
 #include "scanlab/health/temperature_topology_api.h"
 
+namespace sd = scanlab::device;
 
-namespace scanlab::hardware {
+namespace scanlab::health {
 
-TemperatureReader::TemperatureReader(Device& device)
+TemperatureReader::TemperatureReader(sd::Device& device)
     : device_(device)
 {
 }
@@ -19,16 +20,16 @@ std::expected<int, HealthError> TemperatureReader::readMax() const {
     auto* hw = device_.get();
     if (hw == nullptr) {
         topology_.reset();
-        return std::unexpected(HardwareError::HardwareNotSet);
+        return std::unexpected(sd::HardwareError::HardwareNotSet);
     }
 
     if (hw->GetSWDeviceOEMPA() == nullptr) {
         topology_.reset();
-        return std::unexpected(HardwareError::OempaInterfaceUnavailable);
+        return std::unexpected(sd::HardwareError::OempaInterfaceUnavailable);
     }
 
     if (!hw->LockDevice(eAcqContinue)) {
-        return std::unexpected(HardwareError::DeviceLockFailed);
+        return std::unexpected(sd::HardwareError::DeviceLockFailed);
     }
 
     bool ok = true;

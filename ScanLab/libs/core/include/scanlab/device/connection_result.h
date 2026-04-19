@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace scanlab::hardware {
+namespace scanlab::device {
 
 struct ConnectionResult
 {

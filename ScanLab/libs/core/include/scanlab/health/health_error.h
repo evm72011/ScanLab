@@ -3,7 +3,7 @@
 #include <variant>
 #include "scanlab/device/hardware_error.h"
 
-namespace scanlab::hardware {
+namespace scanlab::health {
 
 enum class HealthErrorKind {
     BoardToppologyUnavailable,
@@ -13,6 +13,6 @@ enum class HealthErrorKind {
     SensorDataUnavailable
 };
 
-using HealthError = std::variant<HardwareError,HealthErrorKind>;
+using HealthError = std::variant<scanlab::device::HardwareError,HealthErrorKind>;
 
 }// namespace scanlab::hardware

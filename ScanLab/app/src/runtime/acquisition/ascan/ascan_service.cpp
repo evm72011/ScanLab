@@ -33,7 +33,7 @@ std::expected<void, scanlab::hardware::AcquisitionError> AScanService::start()
     if (!device) {
         return std::unexpected(
             scanlab::hardware::AcquisitionError {
-                scanlab::hardware::HardwareError::HardwareNotSet
+                scanlab::device::HardwareError::HardwareNotSet
             });
     }
 

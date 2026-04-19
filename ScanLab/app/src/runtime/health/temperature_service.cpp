@@ -3,13 +3,15 @@
 
 #include "scanlab/health/temperature_reader.h"
 
+namespace sh = scanlab::health;
+
 TemperatureService::TemperatureService(DeviceContext& context)
     : context_(context)
-    , temperatureReader_(std::make_unique<scanlab::hardware::TemperatureReader>(*context.device()))
+    , temperatureReader_(std::make_unique<sh::TemperatureReader>(*context.device()))
 {
 }
 
-std::expected<int, scanlab::hardware::HealthError> TemperatureService::readMax() const {
+std::expected<int, sh::HealthError> TemperatureService::readMax() const {
     return temperatureReader_->readMax();
 }
 

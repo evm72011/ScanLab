@@ -12,7 +12,7 @@ namespace scanlab::hardware {
 class AcquisitionControl
 {
 public:
-    explicit AcquisitionControl(Device& device);
+    explicit AcquisitionControl(scanlab::device::Device& device);
 
     std::expected<void, AcquisitionError> start(
         const std::function<void()>& registerCallbacks,
@@ -23,7 +23,7 @@ public:
     bool isRunning() const;
 
 private:
-    Device& device_;
+    scanlab::device::Device& device_;
     bool running_ = false;
     mutable std::mutex mutex_;
 };

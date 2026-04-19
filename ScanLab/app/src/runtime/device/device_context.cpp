@@ -2,19 +2,21 @@
 
 #include "scanlab/device/device.h"
 
+namespace sd = scanlab::device;
+
 DeviceContext::DeviceContext()
-    : device_(std::make_unique<scanlab::hardware::Device>())
+    : device_(std::make_unique<sd::Device>())
 {
 }
 
 DeviceContext::~DeviceContext() = default;
 
-scanlab::hardware::Device* DeviceContext::device()
+sd::Device* DeviceContext::device()
 {
     return device_.get();
 }
 
-const scanlab::hardware::Device* DeviceContext::device() const
+const sd::Device* DeviceContext::device() const
 {
     return device_.get();
 }

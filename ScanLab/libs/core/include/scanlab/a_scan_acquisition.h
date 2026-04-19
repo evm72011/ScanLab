@@ -31,9 +31,9 @@ public:
     AScanAcquisition(AScanAcquisition&&) noexcept;
     AScanAcquisition& operator=(AScanAcquisition&&) noexcept;
 
-    void setDevice(Device* device);
-    Device* device();
-    const Device* device() const;
+    void setDevice(scanlab::device::Device* device);
+    scanlab::device::Device* device();
+    const scanlab::device::Device* device() const;
 
     void setSamplesHandler(SamplesHandler handler);
     void setTargetSampleCount(int value);

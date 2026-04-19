@@ -5,9 +5,11 @@
 #include <cstring>
 #include <utility>
 
+namespace sd = scanlab::device;
+
 namespace scanlab::hardware {
 
-AScanAcquisitionSource::AScanAcquisitionSource(Device& device)
+AScanAcquisitionSource::AScanAcquisitionSource(sd::Device& device)
     : device_(device)
     , control_(device)
 {

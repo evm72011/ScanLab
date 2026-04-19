@@ -7,8 +7,6 @@
 #include "runtime/errors/describe_error_hw.h"
 #include "QHash"
 
-namespace hw = scanlab::hardware;
-
 enum class ConnectionLocalError
 {
     DeviceContextNotSet,
@@ -17,10 +15,10 @@ enum class ConnectionLocalError
 
 using ConnectionError = std::variant<
     ConnectionLocalError,
-    hw::HardwareError,
-    hw::ConnectionErrorKind>;
+    scanlab::device::HardwareError,
+    scanlab::device::ConnectionErrorKind>;
 
-inline ConnectionError fromHardware(const hw::ConnectionError& error)
+inline ConnectionError fromHardware(const scanlab::device::ConnectionError& error)
 {
     return std::visit([](const auto& value) -> ConnectionError {
         return value;

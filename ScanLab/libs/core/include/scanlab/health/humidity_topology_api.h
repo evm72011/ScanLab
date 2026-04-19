@@ -2,7 +2,7 @@
 
 class CSWDeviceOEMPA;
 
-namespace scanlab::hardware {
+namespace scanlab::health {
 
 struct HumidityTopologyApi
 {

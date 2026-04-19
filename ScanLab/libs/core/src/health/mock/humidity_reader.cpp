@@ -1,8 +1,8 @@
 #include "scanlab/health/humidity_reader.h"
 
-namespace scanlab::hardware {
+namespace scanlab::health {
 
-HumidityReader::HumidityReader(Device& device)
+HumidityReader::HumidityReader(scanlab::device::Device& device)
     : device_(device)
 {
 }

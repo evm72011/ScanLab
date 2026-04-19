@@ -1,6 +1,7 @@
 #pragma once
 
-namespace scanlab::hardware {
+namespace scanlab::device {
+
 enum class HardwareError
 {
     HardwareNotSet,
