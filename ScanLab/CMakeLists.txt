@@ -18,7 +18,7 @@ find_package(magic_enum REQUIRED)
 
 qt_standard_project_setup(REQUIRES 6.8)
 
-set(HARDWARE_LIB_NAME "sl-hardware")
+set(CORE_LIB_NAME "scanlab-core")
 set(APP_NAME appScanLab)
 
 set(OEMPA_SDK_DIR "C:/ProgramData/AOS/OEMPA 1.3.0.2/Sources")

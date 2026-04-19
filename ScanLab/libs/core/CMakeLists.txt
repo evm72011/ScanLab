@@ -1,4 +1,4 @@
-set(LIB_NAME ${HARDWARE_LIB_NAME})
+set(LIB_NAME ${CORE_LIB_NAME})
 
 add_library(${LIB_NAME} STATIC
     # todo mock

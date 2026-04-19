@@ -16,7 +16,7 @@ target_include_directories(${APP_NAME} PRIVATE
 )
 
 target_link_libraries(${APP_NAME}
-    PRIVATE Qt6::Quick ${HARDWARE_LIB_NAME}
+    PRIVATE Qt6::Quick ${CORE_LIB_NAME}
 )
 
 set_target_properties(${APP_NAME} PROPERTIES
