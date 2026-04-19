@@ -20,7 +20,7 @@ public:
     Resampler& resampler();
     const Resampler& resampler() const;
 
-    AScanFrame process(const RawAScanFrame& raw) const;
+    AScanFrame process(const RawFrame& raw) const;
 
 private:
     AScanRawDecoder decoder_;

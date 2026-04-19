@@ -34,7 +34,7 @@ public:
     bool isRunning() const;
 
 private:
-    void handleRawFrame(scanlab::acquisition::ascan::RawAScanFrame&& rawFrame);
+    void handleRawFrame(scanlab::acquisition::ascan::RawFrame&& rawFrame);
 
 private:
     DeviceContext& context_;

@@ -14,7 +14,7 @@ AScanService::AScanService(DeviceContext& context)
     : context_(context)
     , source_(std::make_unique<saa::AcquisitionSource>(*context.device()))
 {
-    source_->setFrameHandler([this](saa::RawAScanFrame&& rawFrame) {
+    source_->setFrameHandler([this](saa::RawFrame&& rawFrame) {
         handleRawFrame(std::move(rawFrame));
     });
 }
@@ -43,7 +43,7 @@ std::expected<void, sa::AcquisitionError> AScanService::start()
     if (!source_) {
         source_ = std::make_unique<saa::AcquisitionSource>(*device);
 
-        source_->setFrameHandler([this](saa::RawAScanFrame&& rawFrame) {
+        source_->setFrameHandler([this](saa::RawFrame&& rawFrame) {
             handleRawFrame(std::move(rawFrame));
         });
     }
@@ -61,7 +61,7 @@ bool AScanService::isRunning() const
     return source_->isRunning();
 }
 
-void AScanService::handleRawFrame(saa::RawAScanFrame&& rawFrame)
+void AScanService::handleRawFrame(saa::RawFrame&& rawFrame)
 {
     auto frame = pipeline_.process(rawFrame);
 

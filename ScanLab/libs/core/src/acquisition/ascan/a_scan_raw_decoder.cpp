@@ -5,7 +5,7 @@
 
 namespace scanlab::acquisition::ascan {
 
-std::vector<float> AScanRawDecoder::decode(const RawAScanFrame& frame) const
+std::vector<float> AScanRawDecoder::decode(const RawFrame& frame) const
 {
     if (frame.data.empty()) {
         return {};

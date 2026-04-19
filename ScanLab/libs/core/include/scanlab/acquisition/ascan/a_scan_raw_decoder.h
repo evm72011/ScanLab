@@ -10,7 +10,7 @@ namespace scanlab::acquisition::ascan {
 class AScanRawDecoder
 {
 public:
-    std::vector<float> decode(const RawAScanFrame& frame) const;
+    std::vector<float> decode(const RawFrame& frame) const;
 
 private:
     static int effectiveBitWidth(int bitSize, int dataSize);

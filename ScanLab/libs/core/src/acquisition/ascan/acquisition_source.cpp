@@ -106,7 +106,7 @@ void AcquisitionSource::handle(
         static_cast<std::size_t>(hdr->dataSize) *
         static_cast<std::size_t>(hdr->dataCount);
 
-    RawAScanFrame frame;
+    RawFrame frame;
     frame.dataSize = static_cast<int>(hdr->dataSize);
     frame.dataCount = static_cast<int>(hdr->dataCount);
     frame.cycle = static_cast<int>(hdr->cycle);

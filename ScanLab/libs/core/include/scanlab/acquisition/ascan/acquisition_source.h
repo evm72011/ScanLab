@@ -13,7 +13,7 @@ struct structAcqInfoEx;
 
 namespace scanlab::acquisition::ascan {
 
-struct RawAScanFrame
+struct RawFrame
 {
     int dataSize = 0;
     int dataCount = 0;
@@ -26,7 +26,7 @@ struct RawAScanFrame
 class AcquisitionSource
 {
 public:
-    using FrameHandler = std::function<void(RawAScanFrame&&)>;
+    using FrameHandler = std::function<void(RawFrame&&)>;
 
     explicit AcquisitionSource(scanlab::device::Device& device);
     ~AcquisitionSource();

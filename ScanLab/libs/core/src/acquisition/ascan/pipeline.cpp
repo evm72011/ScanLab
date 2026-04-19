@@ -34,7 +34,7 @@ const Resampler& Pipeline::resampler() const
     return resampler_;
 }
 
-AScanFrame Pipeline::process(const RawAScanFrame& raw) const
+AScanFrame Pipeline::process(const RawFrame& raw) const
 {
     auto samples = decoder_.decode(raw);
     samples = cropper_.process(std::move(samples));
