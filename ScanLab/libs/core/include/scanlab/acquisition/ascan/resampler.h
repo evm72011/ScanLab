@@ -10,11 +10,12 @@ class Resampler
 public:
     void setTargetSampleCount(int value);
 
-    std::vector<float> process(std::vector<float> input) const;
+    [[nodiscard]]
+    std::vector<float> transform(std::vector<float> input) const;
 
 private:
-    int targetSampleCount_ = 512;
     mutable std::mutex mutex_;
+    int targetSampleCount_ = 512;
 };
 
 } // namespace scanlab::acquisition::ascan

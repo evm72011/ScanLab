@@ -8,15 +8,11 @@ namespace scanlab::acquisition::ascan {
 
 void Resampler::setTargetSampleCount(int value)
 {
-    if (value < 2) {
-        return;
-    }
-
     std::lock_guard lock(mutex_);
     targetSampleCount_ = value;
 }
 
-std::vector<float> Resampler::process(std::vector<float> input) const
+std::vector<float> Resampler::transform(std::vector<float> input) const
 {
     int targetSampleCount = 0;
 
@@ -25,7 +21,11 @@ std::vector<float> Resampler::process(std::vector<float> input) const
         targetSampleCount = targetSampleCount_;
     }
 
-    if (targetSampleCount <= 1 || input.empty()) {
+    if (input.empty()) {
+        return input;
+    }
+
+    if (targetSampleCount <= 1) {
         return input;
     }
 

@@ -14,43 +14,33 @@ const RawDecoder& Pipeline::decoder() const
     return decoder_;
 }
 
-Cropper& Pipeline::cropper()
+void Pipeline::addTransformer(Transformer transformer)
 {
-    return cropper_;
+    if (transformer.isValid()) {
+        transformers_.push_back(std::move(transformer));
+    }
 }
 
-const Cropper& Pipeline::cropper() const
+void Pipeline::clearTransformers()
 {
-    return cropper_;
-}
-
-Resampler& Pipeline::resampler()
-{
-    return resampler_;
-}
-
-const Resampler& Pipeline::resampler() const
-{
-    return resampler_;
+    transformers_.clear();
 }
 
 Frame Pipeline::process(const RawFrame& raw) const
 {
     auto samples = decoder_.decode(raw);
 
-    if (config_.cropEnabled) {
-        samples = cropper_.process(std::move(samples));
+    for (const auto& transformer : transformers_) {
+        samples = transformer.transform(std::move(samples));
     }
 
-    if (config_.resampleEnabled) {
-        samples = resampler_.process(std::move(samples));
-    }
+    const auto sampleCount = static_cast<int>(samples.size());
 
-    return Frame {
+    return Frame{
         .samples = std::move(samples),
         .cycle = raw.cycle,
         .dataSize = raw.dataSize,
-        .dataCount = raw.dataCount,
+        .dataCount = sampleCount,
         .bitSize = raw.bitSize,
         .sign = raw.sign
     };
