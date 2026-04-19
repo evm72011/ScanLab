@@ -14,12 +14,12 @@ const AScanRawDecoder& Pipeline::decoder() const
     return decoder_;
 }
 
-AScanCropper& Pipeline::cropper()
+Cropper& Pipeline::cropper()
 {
     return cropper_;
 }
 
-const AScanCropper& Pipeline::cropper() const
+const Cropper& Pipeline::cropper() const
 {
     return cropper_;
 }

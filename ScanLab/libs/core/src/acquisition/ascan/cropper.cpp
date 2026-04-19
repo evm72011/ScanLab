@@ -1,11 +1,11 @@
-#include "scanlab/acquisition/ascan/a_scan_cropper.h"
+#include "scanlab/acquisition/ascan/cropper.h"
 
 #include <algorithm>
 #include <vector>
 
 namespace scanlab::acquisition::ascan {
 
-void AScanCropper::setRange(int startIndex, int endIndex)
+void Cropper::setRange(int startIndex, int endIndex)
 {
     if (startIndex < 0 || endIndex <= startIndex) {
         return;
@@ -17,7 +17,7 @@ void AScanCropper::setRange(int startIndex, int endIndex)
     endIndex_ = endIndex;
 }
 
-void AScanCropper::disable()
+void Cropper::disable()
 {
     std::lock_guard lock(mutex_);
     enabled_ = false;
@@ -25,7 +25,7 @@ void AScanCropper::disable()
     endIndex_ = 0;
 }
 
-std::vector<float> AScanCropper::process(std::vector<float> input) const
+std::vector<float> Cropper::process(std::vector<float> input) const
 {
     bool enabled = false;
     int startIndex = 0;

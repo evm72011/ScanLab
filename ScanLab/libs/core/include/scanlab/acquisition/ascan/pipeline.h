@@ -1,7 +1,7 @@
 #pragma once
 
 #include "scanlab/acquisition/ascan/a_scan_acquisition_source.h"
-#include "scanlab/acquisition/ascan/a_scan_cropper.h"
+#include "scanlab/acquisition/ascan/cropper.h"
 #include "scanlab/acquisition/ascan/a_scan_frame.h"
 #include "scanlab/acquisition/ascan/a_scan_raw_decoder.h"
 #include "scanlab/acquisition/ascan/a_scan_resampler.h"
@@ -14,8 +14,8 @@ public:
     AScanRawDecoder& decoder();
     const AScanRawDecoder& decoder() const;
 
-    AScanCropper& cropper();
-    const AScanCropper& cropper() const;
+    Cropper& cropper();
+    const Cropper& cropper() const;
 
     AScanResampler& resampler();
     const AScanResampler& resampler() const;
@@ -24,7 +24,7 @@ public:
 
 private:
     AScanRawDecoder decoder_;
-    AScanCropper cropper_;
+    Cropper cropper_;
     AScanResampler resampler_;
 };
 

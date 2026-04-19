@@ -5,7 +5,7 @@
 
 namespace scanlab::acquisition::ascan {
 
-class AScanCropper
+class Cropper
 {
 public:
     void setRange(int startIndex, int endIndex);
