@@ -1,7 +1,7 @@
 #pragma once
 
 #include "scanlab/acquisition/acquisition_error.h"
-#include "scanlab/acquisition/ascan/a_scan_frame.h"
+#include "scanlab/acquisition/ascan/frame.h"
 #include "scanlab/acquisition/ascan/pipeline.h"
 
 #include <expected>
@@ -17,7 +17,7 @@ class AcquisitionSource;
 class AScanService
 {
 public:
-    using FrameHandler = std::function<void(scanlab::acquisition::ascan::AScanFrame&&)>;
+    using FrameHandler = std::function<void(scanlab::acquisition::ascan::Frame&&)>;
 
     explicit AScanService(DeviceContext& context);
     ~AScanService();

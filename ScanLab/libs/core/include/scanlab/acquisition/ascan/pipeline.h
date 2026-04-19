@@ -2,7 +2,7 @@
 
 #include "scanlab/acquisition/ascan/acquisition_source.h"
 #include "scanlab/acquisition/ascan/cropper.h"
-#include "scanlab/acquisition/ascan/a_scan_frame.h"
+#include "scanlab/acquisition/ascan/frame.h"
 #include "scanlab/acquisition/ascan/raw_decoder.h"
 #include "scanlab/acquisition/ascan/resampler.h"
 
@@ -20,7 +20,7 @@ public:
     Resampler& resampler();
     const Resampler& resampler() const;
 
-    AScanFrame process(const RawFrame& raw) const;
+    Frame process(const RawFrame& raw) const;
 
 private:
     RawDecoder decoder_;

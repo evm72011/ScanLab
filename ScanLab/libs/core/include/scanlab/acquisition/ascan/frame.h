@@ -4,7 +4,7 @@
 
 namespace scanlab::acquisition::ascan {
 
-struct AScanFrame
+struct Frame
 {
     std::vector<float> samples;
     int cycle = 0;

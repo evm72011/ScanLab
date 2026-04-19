@@ -3,15 +3,15 @@
 #include "runtime/acquisition/ascan/ascan_worker.h"
 #include "runtime/device/device_context.h"
 
-#include "scanlab/acquisition/ascan/a_scan_frame.h"
+#include "scanlab/acquisition/ascan/frame.h"
 
 #include <QMetaType>
 
 AScanFacade::AScanFacade(DeviceContext& context, QObject* parent)
     : QObject(parent)
 {
-    using AScanFrame = scanlab::acquisition::ascan::AScanFrame;
-    qRegisterMetaType<AScanFrame>("scanlab::hardware::AScanFrame");  // TODO ???
+    using Frame = scanlab::acquisition::ascan::Frame;
+    qRegisterMetaType<Frame>("scanlab::hardware::AScanFrame");  // TODO ???
 
     worker_ = new AScanWorker(context);
     worker_->moveToThread(&workerThread_);
@@ -40,7 +40,7 @@ AScanFacade::AScanFacade(DeviceContext& context, QObject* parent)
         worker_,
         &AScanWorker::frameUpdated,
         this,
-        [this](const AScanFrame& frame) {
+        [this](const Frame& frame) {
             QVariantList values;
             values.reserve(static_cast<qsizetype>(frame.samples.size()));
 

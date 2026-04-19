@@ -2,7 +2,7 @@
 
 #include "runtime/acquisition/ascan/ascan_service.h"
 
-#include "scanlab/acquisition/ascan/a_scan_frame.h"
+#include "scanlab/acquisition/ascan/frame.h"
 
 #include <QObject>
 
@@ -20,7 +20,7 @@ public slots:
     void stop();
 
 signals:
-    void frameUpdated(scanlab::acquisition::ascan::AScanFrame frame);
+    void frameUpdated(scanlab::acquisition::ascan::Frame frame);
     void startFailed();
     void started();
     void stopped(bool stillRunning);
