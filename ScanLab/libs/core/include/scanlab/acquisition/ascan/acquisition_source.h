@@ -23,16 +23,16 @@ struct RawAScanFrame
     std::vector<std::uint8_t> data;
 };
 
-class AScanAcquisitionSource
+class AcquisitionSource
 {
 public:
     using FrameHandler = std::function<void(RawAScanFrame&&)>;
 
-    explicit AScanAcquisitionSource(scanlab::device::Device& device);
-    ~AScanAcquisitionSource();
+    explicit AcquisitionSource(scanlab::device::Device& device);
+    ~AcquisitionSource();
 
-    AScanAcquisitionSource(const AScanAcquisitionSource&) = delete;
-    AScanAcquisitionSource& operator=(const AScanAcquisitionSource&) = delete;
+    AcquisitionSource(const AcquisitionSource&) = delete;
+    AcquisitionSource& operator=(const AcquisitionSource&) = delete;
 
     void setFrameHandler(FrameHandler handler);
 

@@ -11,7 +11,7 @@
 class DeviceContext;
 
 namespace scanlab::acquisition::ascan {
-class AScanAcquisitionSource;
+class AcquisitionSource;
 }
 
 class AScanService
@@ -38,7 +38,7 @@ private:
 
 private:
     DeviceContext& context_;
-    std::unique_ptr<scanlab::acquisition::ascan::AScanAcquisitionSource> source_;
+    std::unique_ptr<scanlab::acquisition::ascan::AcquisitionSource> source_;
     scanlab::acquisition::ascan::Pipeline pipeline_;
 
     FrameHandler handler_;

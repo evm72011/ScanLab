@@ -2,7 +2,7 @@
 
 #include "runtime/device/device_context.h"
 
-#include "scanlab/acquisition/ascan/a_scan_acquisition_source.h"
+#include "scanlab/acquisition/ascan/acquisition_source.h"
 #include "scanlab/acquisition/ascan/pipeline.h"
 
 #include <utility>
@@ -12,7 +12,7 @@ namespace saa = scanlab::acquisition::ascan;
 
 AScanService::AScanService(DeviceContext& context)
     : context_(context)
-    , source_(std::make_unique<saa::AScanAcquisitionSource>(*context.device()))
+    , source_(std::make_unique<saa::AcquisitionSource>(*context.device()))
 {
     source_->setFrameHandler([this](saa::RawAScanFrame&& rawFrame) {
         handleRawFrame(std::move(rawFrame));
@@ -41,7 +41,7 @@ std::expected<void, sa::AcquisitionError> AScanService::start()
     }
 
     if (!source_) {
-        source_ = std::make_unique<saa::AScanAcquisitionSource>(*device);
+        source_ = std::make_unique<saa::AcquisitionSource>(*device);
 
         source_->setFrameHandler([this](saa::RawAScanFrame&& rawFrame) {
             handleRawFrame(std::move(rawFrame));

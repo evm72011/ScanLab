@@ -3,7 +3,7 @@ set(LIB_NAME ${CORE_LIB_NAME})
 add_library(${LIB_NAME} SHARED
     # todo mock
     src/acquisition/acquisition_control.cpp
-    src/acquisition/ascan/a_scan_acquisition_source.cpp
+    src/acquisition/ascan/acquisition_source.cpp
     src/acquisition/ascan/a_scan_raw_decoder.cpp
     src/acquisition/ascan/resampler.cpp
     src/acquisition/ascan/cropper.cpp

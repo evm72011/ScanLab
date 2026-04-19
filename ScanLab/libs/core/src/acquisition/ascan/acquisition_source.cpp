@@ -1,4 +1,4 @@
-#include "scanlab/acquisition/ascan/a_scan_acquisition_source.h"
+#include "scanlab/acquisition/ascan/acquisition_source.h"
 
 #include <UTDriverOEMPA.h>
 
@@ -9,41 +9,41 @@ namespace sd = scanlab::device;
 
 namespace scanlab::acquisition::ascan {
 
-AScanAcquisitionSource::AScanAcquisitionSource(sd::Device& device)
+AcquisitionSource::AcquisitionSource(sd::Device& device)
     : device_(device)
     , control_(device)
 {
 }
 
-AScanAcquisitionSource::~AScanAcquisitionSource()
+AcquisitionSource::~AcquisitionSource()
 {
     stop();
 }
 
-void AScanAcquisitionSource::setFrameHandler(FrameHandler handler)
+void AcquisitionSource::setFrameHandler(FrameHandler handler)
 {
     std::lock_guard lock(mutex_);
     handler_ = std::move(handler);
 }
 
-std::expected<void, AcquisitionError> AScanAcquisitionSource::start()
+std::expected<void, AcquisitionError> AcquisitionSource::start()
 {
     return control_.start(
         [this]() { registerCallbacks(); },
         [this]() { unregisterCallbacks(); });
 }
 
-void AScanAcquisitionSource::stop()
+void AcquisitionSource::stop()
 {
     control_.stop([this]() { unregisterCallbacks(); });
 }
 
-bool AScanAcquisitionSource::isRunning() const
+bool AcquisitionSource::isRunning() const
 {
     return control_.isRunning();
 }
 
-void AScanAcquisitionSource::registerCallbacks()
+void AcquisitionSource::registerCallbacks()
 {
     auto* hw = device_.get();
     if (!hw) {
@@ -51,11 +51,11 @@ void AScanAcquisitionSource::registerCallbacks()
     }
 
     hw->SetAcquisitionParameter(this);
-    hw->SetAcquisitionAscan_0x00010103(&AScanAcquisitionSource::callback);
+    hw->SetAcquisitionAscan_0x00010103(&AcquisitionSource::callback);
     hw->SetAcquisitionAscan_0x00020203(nullptr);
 }
 
-void AScanAcquisitionSource::unregisterCallbacks()
+void AcquisitionSource::unregisterCallbacks()
 {
     auto* hw = device_.get();
     if (!hw) {
@@ -67,7 +67,7 @@ void AScanAcquisitionSource::unregisterCallbacks()
     hw->SetAcquisitionParameter(nullptr);
 }
 
-UINT WINAPI AScanAcquisitionSource::callback(
+UINT WINAPI AcquisitionSource::callback(
     void* p,
     structAcqInfoEx&,
     const CStream_0x0001*,
@@ -76,7 +76,7 @@ UINT WINAPI AScanAcquisitionSource::callback(
     const void*,
     const void*)
 {
-    auto* self = static_cast<AScanAcquisitionSource*>(p);
+    auto* self = static_cast<AcquisitionSource*>(p);
     if (!self || !hdr || !bufferMax) {
         return 0;
     }
@@ -85,7 +85,7 @@ UINT WINAPI AScanAcquisitionSource::callback(
     return 0;
 }
 
-void AScanAcquisitionSource::handle(
+void AcquisitionSource::handle(
     const CSubStreamAscan_0x0103* hdr,
     const void* buffer)
 {
