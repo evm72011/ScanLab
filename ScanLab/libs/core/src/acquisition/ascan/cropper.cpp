@@ -9,6 +9,7 @@ namespace scanlab::acquisition::ascan {
 void Cropper::setMargins(double leftFraction, double rightFraction)
 {
     std::lock_guard lock(mutex_);
+
     leftFraction_ = std::clamp(leftFraction, 0.0, 1.0);
     rightFraction_ = std::clamp(rightFraction, 0.0, 1.0);
 }
@@ -39,10 +40,16 @@ std::vector<float> Cropper::transform(std::vector<float> input) const
     const int size = static_cast<int>(input.size());
 
     const int startIndex =
-        std::clamp(static_cast<int>(std::floor(leftFraction * static_cast<double>(size))), 0, size);
+        std::clamp(
+            static_cast<int>(std::floor(leftFraction * static_cast<double>(size))),
+            0,
+            size);
 
     const int endIndex =
-        std::clamp(static_cast<int>(std::ceil((1.0 - rightFraction) * static_cast<double>(size))), 0, size);
+        std::clamp(
+            static_cast<int>(std::ceil((1.0 - rightFraction) * static_cast<double>(size))),
+            0,
+            size);
 
     if (startIndex >= endIndex) {
         return {};

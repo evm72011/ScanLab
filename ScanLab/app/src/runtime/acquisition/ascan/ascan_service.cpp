@@ -4,7 +4,6 @@
 
 #include "scanlab/acquisition/ascan/acquisition_source.h"
 #include "scanlab/acquisition/ascan/pipeline.h"
-#include "scanlab/acquisition/ascan/transformer.h"
 
 #include <utility>
 
@@ -14,11 +13,14 @@ namespace saa = scanlab::acquisition::ascan;
 AScanService::AScanService(DeviceContext& context)
     : context_(context)
     , source_(nullptr)
-    , cropper_(std::make_shared<saa::Cropper>())
-    , resampler_(std::make_shared<saa::Resampler>())
 {
-    pipeline_.addTransformer(saa::Transformer::fromShared(cropper_));
-    pipeline_.addTransformer(saa::Transformer::fromShared(resampler_));
+    pipeline_.setSteps({
+        saa::TransformStep::Crop,
+        saa::TransformStep::Resample
+    });
+
+    pipeline_.cropper().setMargins(0.12, 0.0);
+    pipeline_.resampler().setTargetSampleCount(512);
 
     if (auto* device = context_.device()) {
         source_ = std::make_unique<saa::AcquisitionSource>(*device);
@@ -81,12 +83,17 @@ bool AScanService::isRunning() const
 
 void AScanService::setCropMargins(double leftFraction, double rightFraction)
 {
-    cropper_->setMargins(leftFraction, rightFraction);
+    pipeline_.cropper().setMargins(leftFraction, rightFraction);
 }
 
 void AScanService::setResampleTargetSampleCount(int value)
 {
-    resampler_->setTargetSampleCount(value);
+    pipeline_.resampler().setTargetSampleCount(value);
+}
+
+void AScanService::setTransformSteps(std::vector<saa::TransformStep> steps)
+{
+    pipeline_.setSteps(std::move(steps));
 }
 
 void AScanService::handleRawFrame(saa::RawFrame&& rawFrame)

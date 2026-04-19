@@ -15,7 +15,7 @@ public:
 
 private:
     mutable std::mutex mutex_;
-    int targetSampleCount_ = 512;
+    int targetSampleCount_ = 0;
 };
 
 } // namespace scanlab::acquisition::ascan

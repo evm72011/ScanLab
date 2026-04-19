@@ -14,24 +14,58 @@ const RawDecoder& Pipeline::decoder() const
     return decoder_;
 }
 
-void Pipeline::addTransformer(Transformer transformer)
+Cropper& Pipeline::cropper()
 {
-    if (transformer.isValid()) {
-        transformers_.push_back(std::move(transformer));
-    }
+    return cropper_;
 }
 
-void Pipeline::clearTransformers()
+const Cropper& Pipeline::cropper() const
 {
-    transformers_.clear();
+    return cropper_;
+}
+
+Resampler& Pipeline::resampler()
+{
+    return resampler_;
+}
+
+const Resampler& Pipeline::resampler() const
+{
+    return resampler_;
+}
+
+void Pipeline::setSteps(std::vector<TransformStep> steps)
+{
+    std::lock_guard lock(stepsMutex_);
+    steps_ = std::move(steps);
+}
+
+void Pipeline::clearSteps()
+{
+    std::lock_guard lock(stepsMutex_);
+    steps_.clear();
 }
 
 Frame Pipeline::process(const RawFrame& raw) const
 {
     auto samples = decoder_.decode(raw);
 
-    for (const auto& transformer : transformers_) {
-        samples = transformer.transform(std::move(samples));
+    std::vector<TransformStep> stepsCopy;
+    {
+        std::lock_guard lock(stepsMutex_);
+        stepsCopy = steps_;
+    }
+
+    for (const auto step : stepsCopy) {
+        switch (step) {
+        case TransformStep::Crop:
+            samples = cropper_.transform(std::move(samples));
+            break;
+
+        case TransformStep::Resample:
+            samples = resampler_.transform(std::move(samples));
+            break;
+        }
     }
 
     const auto sampleCount = static_cast<int>(samples.size());
