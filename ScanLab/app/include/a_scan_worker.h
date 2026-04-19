@@ -4,7 +4,7 @@
 #include <QHash>
 #include <QVector>
 
-//#include "scanlab/hardware/a_scan_acquisition.h"
+//#include "scanlab/a_scan_acquisition.h"
 
 class AScanWorker : public QObject
 {

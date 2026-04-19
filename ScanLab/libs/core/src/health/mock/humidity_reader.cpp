@@ -1,4 +1,4 @@
-#include "scanlab/hardware/health/humidity_reader.h"
+#include "scanlab/health/humidity_reader.h"
 
 namespace scanlab::hardware {
 

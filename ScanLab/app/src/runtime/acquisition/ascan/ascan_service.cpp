@@ -2,8 +2,8 @@
 
 #include "runtime/device/device_context.h"
 
-#include "scanlab/hardware/acquisition/ascan/a_scan_acquisition_source.h"
-#include "scanlab/hardware/acquisition/ascan/a_scan_pipeline.h"
+#include "scanlab/acquisition/ascan/a_scan_acquisition_source.h"
+#include "scanlab/acquisition/ascan/a_scan_pipeline.h"
 
 #include <utility>
 

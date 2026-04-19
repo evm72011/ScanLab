@@ -1,7 +1,7 @@
 #pragma once
 
-#include "scanlab/hardware/device/connection_error.h"
-#include "scanlab/hardware/device/hardware_error.h"
+#include "scanlab/device/connection_error.h"
+#include "scanlab/device/hardware_error.h"
 
 #include "runtime/errors/describe_error.h"
 #include "runtime/errors/describe_error_hw.h"

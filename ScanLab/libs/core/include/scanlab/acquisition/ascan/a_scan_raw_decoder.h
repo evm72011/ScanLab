@@ -1,6 +1,6 @@
 #pragma once
 
-#include "scanlab/hardware/acquisition/ascan/a_scan_acquisition_source.h"
+#include "scanlab/acquisition/ascan/a_scan_acquisition_source.h"
 
 #include <cstdint>
 #include <vector>

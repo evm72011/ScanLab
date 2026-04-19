@@ -1,7 +1,7 @@
 #pragma once
 
 #include "runtime/device/device_type.h"
-#include "scanlab/hardware/device/device_type.h"
+#include "scanlab/device/device_type.h"
 
 namespace hw = scanlab::hardware;
 

@@ -1,4 +1,4 @@
-#include "scanlab/hardware/acquisition/ascan/a_scan_cropper.h"
+#include "scanlab/acquisition/ascan/a_scan_cropper.h"
 
 #include <algorithm>
 #include <vector>

@@ -1,4 +1,4 @@
-#include "scanlab/hardware/acquisition/ascan/a_scan_pipeline.h"
+#include "scanlab/acquisition/ascan/a_scan_pipeline.h"
 
 #include <utility>
 

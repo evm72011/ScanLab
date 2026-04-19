@@ -1,7 +1,7 @@
 #include "runtime/health/humidity_service.h"
 #include "runtime/device/device_context.h"
 
-#include "scanlab/hardware/health/humidity_reader.h"
+#include "scanlab/health/humidity_reader.h"
 
 HumidityService::HumidityService(DeviceContext& context)
     : context_(context)

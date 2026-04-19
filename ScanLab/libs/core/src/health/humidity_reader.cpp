@@ -1,5 +1,5 @@
-#include "scanlab/hardware/health/humidity_reader.h"
-#include "scanlab/hardware/health/humidity_topology_api.h"
+#include "scanlab/health/humidity_reader.h"
+#include "scanlab/health/humidity_topology_api.h"
 
 namespace scanlab::hardware {
 

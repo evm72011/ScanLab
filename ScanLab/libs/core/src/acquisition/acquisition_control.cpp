@@ -1,4 +1,4 @@
-#include "scanlab/hardware/acquisition/acquisition_control.h"
+#include "scanlab/acquisition/acquisition_control.h"
 
 #include <UTDriverOEMPA.h>
 

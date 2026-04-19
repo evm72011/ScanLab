@@ -3,7 +3,7 @@
 #include "runtime/acquisition/ascan/ascan_worker.h"
 #include "runtime/device/device_context.h"
 
-#include "scanlab/hardware/acquisition/ascan/a_scan_frame.h"
+#include "scanlab/acquisition/ascan/a_scan_frame.h"
 
 #include <QMetaType>
 

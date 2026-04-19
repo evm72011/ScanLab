@@ -1,8 +1,8 @@
 #pragma once
 
-#include "scanlab/hardware/device/device.h"
-#include "scanlab/hardware/health/health_error.h"
-#include "scanlab/hardware/health/health_topology.h"
+#include "scanlab/device/device.h"
+#include "scanlab/health/health_error.h"
+#include "scanlab/health/health_topology.h"
 
 namespace scanlab::hardware {
 

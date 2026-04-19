@@ -1,4 +1,4 @@
-#include "scanlab/hardware/health/temperature_topology_api.h"
+#include "scanlab/health/temperature_topology_api.h"
 
 #include <Windows.h>
 #include <UTDriverOEMPA.h>

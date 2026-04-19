@@ -1,6 +1,6 @@
 #pragma once
 
-#include "scanlab/hardware/device/device.h"
+#include "scanlab/device/device.h"
 
 #include <functional>
 #include <memory>

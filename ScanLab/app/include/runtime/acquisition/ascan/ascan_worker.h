@@ -2,7 +2,7 @@
 
 #include "runtime/acquisition/ascan/ascan_service.h"
 
-#include "scanlab/hardware/acquisition/ascan/a_scan_frame.h"
+#include "scanlab/acquisition/ascan/a_scan_frame.h"
 
 #include <QObject>
 

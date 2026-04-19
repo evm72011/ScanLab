@@ -2,7 +2,7 @@
 
 #include <memory>
 #include <expected>
-#include "scanlab/hardware/health/health_error.h"
+#include "scanlab/health/health_error.h"
 
 class DeviceContext;
 

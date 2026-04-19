@@ -1,4 +1,4 @@
-#include "scanlab/hardware/health/health_topology.h"
+#include "scanlab/health/health_topology.h"
 
 namespace scanlab::hardware {
 

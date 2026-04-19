@@ -1,4 +1,4 @@
-#include "scanlab/hardware/device/device.h"
+#include "scanlab/device/device.h"
 
 #include <array>
 #include <memory>
@@ -11,7 +11,7 @@
 #include <UTDriverOEMMC.h>
 #include <UTDriverOEMPAmicro.h>
 
-#include "scanlab/hardware/device/hardware_error.h"
+#include "scanlab/device/hardware_error.h"
 
 namespace scanlab::hardware {
 

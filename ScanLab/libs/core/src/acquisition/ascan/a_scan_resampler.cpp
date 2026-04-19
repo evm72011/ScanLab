@@ -1,4 +1,4 @@
-#include "scanlab/hardware/acquisition/ascan/a_scan_resampler.h"
+#include "scanlab/acquisition/ascan/a_scan_resampler.h"
 
 #include <algorithm>
 #include <cstddef>

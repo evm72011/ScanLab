@@ -1,7 +1,7 @@
 #pragma once
 
-#include "scanlab/hardware/acquisition/acquisition_error.h"
-#include "scanlab/hardware/device/device.h"
+#include "scanlab/acquisition/acquisition_error.h"
+#include "scanlab/device/device.h"
 
 #include <expected>
 #include <functional>

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <variant>
-#include "scanlab/hardware/device/hardware_error.h"
+#include "scanlab/device/hardware_error.h"
 
 namespace scanlab::hardware {
 

@@ -7,9 +7,9 @@
 #include <expected>
 #include <UTDriverOEMPA.h>
 
-#include "scanlab/hardware/device/device_type.h"
-#include "scanlab/hardware/device/connection_error.h"
-#include "scanlab/hardware/device/connection_result.h"
+#include "scanlab/device/device_type.h"
+#include "scanlab/device/connection_error.h"
+#include "scanlab/device/connection_result.h"
 
 namespace scanlab::hardware {
 

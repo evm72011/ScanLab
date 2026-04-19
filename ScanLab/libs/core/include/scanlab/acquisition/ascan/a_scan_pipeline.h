@@ -1,10 +1,10 @@
 #pragma once
 
-#include "scanlab/hardware/acquisition/ascan/a_scan_acquisition_source.h"
-#include "scanlab/hardware/acquisition/ascan/a_scan_cropper.h"
-#include "scanlab/hardware/acquisition/ascan/a_scan_frame.h"
-#include "scanlab/hardware/acquisition/ascan/a_scan_raw_decoder.h"
-#include "scanlab/hardware/acquisition/ascan/a_scan_resampler.h"
+#include "scanlab/acquisition/ascan/a_scan_acquisition_source.h"
+#include "scanlab/acquisition/ascan/a_scan_cropper.h"
+#include "scanlab/acquisition/ascan/a_scan_frame.h"
+#include "scanlab/acquisition/ascan/a_scan_raw_decoder.h"
+#include "scanlab/acquisition/ascan/a_scan_resampler.h"
 
 namespace scanlab::hardware {
 

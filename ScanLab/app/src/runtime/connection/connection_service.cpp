@@ -3,7 +3,7 @@
 #include "runtime/device/device_type.h"
 #include "runtime/device/device_type_mapper.h"
 
-#include "scanlab/hardware/device/device.h"
+#include "scanlab/device/device.h"
 #include <qcontainerfwd.h>
 #include <magic_enum/magic_enum.hpp>
 

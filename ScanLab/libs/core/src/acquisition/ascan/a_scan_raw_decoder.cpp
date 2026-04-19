@@ -1,4 +1,4 @@
-#include "scanlab/hardware/acquisition/ascan/a_scan_raw_decoder.h"
+#include "scanlab/acquisition/ascan/a_scan_raw_decoder.h"
 
 #include <algorithm>
 #include <limits>

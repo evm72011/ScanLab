@@ -1,5 +1,5 @@
-#include "scanlab/hardware/health/temperature_reader.h"
-#include "scanlab/hardware/health/temperature_topology_api.h"
+#include "scanlab/health/temperature_reader.h"
+#include "scanlab/health/temperature_topology_api.h"
 
 
 namespace scanlab::hardware {

@@ -4,8 +4,8 @@
 
 #include "runtime/errors/describe_error.h"
 
-#include "scanlab/hardware/device/hardware_error.h"
-#include "scanlab/hardware/device/connection_error.h"
+#include "scanlab/device/hardware_error.h"
+#include "scanlab/device/connection_error.h"
 
 
 namespace hw = scanlab::hardware;
