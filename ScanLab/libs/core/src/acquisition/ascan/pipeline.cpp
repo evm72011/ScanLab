@@ -1,40 +1,40 @@
-#include "scanlab/acquisition/ascan/a_scan_pipeline.h"
+#include "scanlab/acquisition/ascan/pipeline.h"
 
 #include <utility>
 
 namespace scanlab::acquisition::ascan {
 
-AScanRawDecoder& AScanPipeline::decoder()
+AScanRawDecoder& Pipeline::decoder()
 {
     return decoder_;
 }
 
-const AScanRawDecoder& AScanPipeline::decoder() const
+const AScanRawDecoder& Pipeline::decoder() const
 {
     return decoder_;
 }
 
-AScanCropper& AScanPipeline::cropper()
+AScanCropper& Pipeline::cropper()
 {
     return cropper_;
 }
 
-const AScanCropper& AScanPipeline::cropper() const
+const AScanCropper& Pipeline::cropper() const
 {
     return cropper_;
 }
 
-AScanResampler& AScanPipeline::resampler()
+AScanResampler& Pipeline::resampler()
 {
     return resampler_;
 }
 
-const AScanResampler& AScanPipeline::resampler() const
+const AScanResampler& Pipeline::resampler() const
 {
     return resampler_;
 }
 
-AScanFrame AScanPipeline::process(const RawAScanFrame& raw) const
+AScanFrame Pipeline::process(const RawAScanFrame& raw) const
 {
     auto samples = decoder_.decode(raw);
     samples = cropper_.process(std::move(samples));

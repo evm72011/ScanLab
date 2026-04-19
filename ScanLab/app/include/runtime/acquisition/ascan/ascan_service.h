@@ -2,7 +2,7 @@
 
 #include "scanlab/acquisition/acquisition_error.h"
 #include "scanlab/acquisition/ascan/a_scan_frame.h"
-#include "scanlab/acquisition/ascan/a_scan_pipeline.h"
+#include "scanlab/acquisition/ascan/pipeline.h"
 
 #include <expected>
 #include <functional>
@@ -39,7 +39,7 @@ private:
 private:
     DeviceContext& context_;
     std::unique_ptr<scanlab::acquisition::ascan::AScanAcquisitionSource> source_;
-    scanlab::acquisition::ascan::AScanPipeline pipeline_;
+    scanlab::acquisition::ascan::Pipeline pipeline_;
 
     FrameHandler handler_;
     mutable std::mutex mutex_;

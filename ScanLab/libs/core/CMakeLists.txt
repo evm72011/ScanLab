@@ -7,7 +7,7 @@ add_library(${LIB_NAME} SHARED
     src/acquisition/ascan/a_scan_raw_decoder.cpp
     src/acquisition/ascan/a_scan_resampler.cpp
     src/acquisition/ascan/a_scan_cropper.cpp
-    src/acquisition/ascan/a_scan_pipeline.cpp
+    src/acquisition/ascan/pipeline.cpp
 
     src/health/health_topology.cpp
     src/health/humidity_topology_api.cpp

@@ -8,7 +8,7 @@
 
 namespace scanlab::acquisition::ascan {
 
-class AScanPipeline
+class Pipeline
 {
 public:
     AScanRawDecoder& decoder();
