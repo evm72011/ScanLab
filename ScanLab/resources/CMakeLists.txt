@@ -2,8 +2,11 @@ qt_add_resources(${APP_NAME} app_resources
     PREFIX "/"
     FILES
         icons/app.svg
+        icons/ascan.svg
+        icons/bscan.svg
         icons/close.svg
         icons/connected.svg
+        icons/cscan.svg
         icons/device.svg
         icons/disconnected.svg
         icons/error.svg

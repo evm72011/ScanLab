@@ -30,7 +30,6 @@ set(QML_MODULE_FILES
     pages/HardwarePage.qml
     pages/LoadPage.qml
     pages/MainPage.qml
-    pages/ScanPage.qml
     pages/ScanAPage.qml
     pages/ScanBPage.qml
     pages/ScanCPage.qml

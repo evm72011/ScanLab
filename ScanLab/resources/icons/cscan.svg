@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.88 78.97">
+  <defs>
+    <clipPath id="screenClip">
+      <rect x="4.15" y="4.15" width="114.58" height="60.14" rx="0"/>
+    </clipPath>
+
+    <filter id="softBlur" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="2.8"/>
+    </filter>
+
+    <radialGradient id="hotGreen" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#d8ff6a" stop-opacity="0.95"/>
+      <stop offset="35%" stop-color="#79e34d" stop-opacity="0.9"/>
+      <stop offset="70%" stop-color="#2a9d3e" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#2a9d3e" stop-opacity="0"/>
+    </radialGradient>
+
+    <radialGradient id="hotRed" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffe16a" stop-opacity="0.95"/>
+      <stop offset="30%" stop-color="#ff9f43" stop-opacity="0.92"/>
+      <stop offset="62%" stop-color="#ef4444" stop-opacity="0.75"/>
+      <stop offset="100%" stop-color="#ef4444" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- monitor frame -->
+  <rect x="0" y="0" width="122.88" height="78.97" fill="#78bbfa"/>
+  <rect x="4.15" y="4.15" width="114.58" height="60.14" fill="#000000"/>
+
+  <!-- c-scan style areas -->
+  <g clip-path="url(#screenClip)">
+    <!-- subtle dark background -->
+    <rect x="4.15" y="4.15" width="114.58" height="60.14" fill="#06110a"/>
+
+    <!-- green indication area -->
+    <g transform="translate(34 46) rotate(-28)" filter="url(#softBlur)">
+      <ellipse cx="0" cy="0" rx="18" ry="10.5" fill="url(#hotGreen)"/>
+      <ellipse cx="-3" cy="1" rx="9" ry="5.5" fill="#b8ff72" opacity="0.35"/>
+    </g>
+
+    <!-- red/orange indication area -->
+    <g transform="translate(86 22) rotate(-28)" filter="url(#softBlur)">
+      <ellipse cx="0" cy="0" rx="18" ry="10.5" fill="url(#hotRed)"/>
+      <ellipse cx="2" cy="-1" rx="8.5" ry="5" fill="#ffd36a" opacity="0.28"/>
+    </g>
+  </g>
+
+  <!-- bottom controls: horizontal -->
+  <rect x="46.2" y="70.1" width="4.6" height="2.8" rx="1.4" fill="#000000"/>
+  <rect x="55.2" y="69.7" width="12.5" height="3.6" rx="1.8" fill="#000000"/>
+  <rect x="72.1" y="70.1" width="4.6" height="2.8" rx="1.4" fill="#000000"/>
+</svg>

@@ -28,6 +28,33 @@ RowLayout {
                 onClicked: navigation.currentIndex = 0
             }
 
+            SL.IconTabButton {
+                width: parent.width
+                text: qsTr("A-scan")
+                iconSource: "qrc:/icons/ascan.svg"
+                iconSize: 30
+                checked: navigation.currentIndex === 1
+                onClicked: navigation.currentIndex = 1
+            }
+
+            SL.IconTabButton {
+                width: parent.width
+                text: qsTr("B-scan")
+                iconSource: "qrc:/icons/bscan.svg"
+                iconSize: 30
+                checked: navigation.currentIndex === 2
+                onClicked: navigation.currentIndex = 2
+            }
+
+            SL.IconTabButton {
+                width: parent.width
+                text: qsTr("C-scan")
+                iconSource: "qrc:/icons/cscan.svg"
+                iconSize: 30
+                checked: navigation.currentIndex === 3
+                onClicked: navigation.currentIndex = 3
+            }
+
             /*
             SL.IconTabButton {
                 width: parent.width
@@ -36,15 +63,15 @@ RowLayout {
                 checked: navigation.currentIndex === 0
                 onClicked: navigation.currentIndex = 0
             }
-            */
+
 
             SL.IconTabButton {
                 width: parent.width
                 text: qsTr("Scan")
                 iconSource: "qrc:/icons/scan.svg"
-                checked: navigation.currentIndex === 1
-                onClicked: navigation.currentIndex = 1
-            }
+                checked: navigation.currentIndex === 2
+                onClicked: navigation.currentIndex = 2
+            } */
         }
 
         Rectangle {
@@ -74,8 +101,16 @@ RowLayout {
             }
             */
 
-            SL.ScanPage {
+            SL.ScanAPage {
                 active: navigation.currentIndex === 1
+            }
+
+            SL.ScanBPage {
+                active: navigation.currentIndex === 2
+            }
+
+            SL.ScanCPage {
+                active: navigation.currentIndex === 3
             }
         }
 

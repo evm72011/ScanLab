@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.88 78.97">
+  <defs>
+    <clipPath id="screenClip">
+      <rect x="4.15" y="4.15" width="114.58" height="60.14"/>
+    </clipPath>
+
+    <linearGradient id="stripeBright" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="35%" stop-color="#ffffff" stop-opacity="0.85"/>
+      <stop offset="50%" stop-color="#ffffff" stop-opacity="1"/>
+      <stop offset="65%" stop-color="#ffffff" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+
+    <linearGradient id="stripeSoft" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#dfe7ef" stop-opacity="0"/>
+      <stop offset="35%" stop-color="#dfe7ef" stop-opacity="0.45"/>
+      <stop offset="50%" stop-color="#f8fbff" stop-opacity="0.75"/>
+      <stop offset="65%" stop-color="#dfe7ef" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#dfe7ef" stop-opacity="0"/>
+    </linearGradient>
+
+    <filter id="bscanBlur" x="-30%" y="-10%" width="160%" height="120%">
+      <feGaussianBlur stdDeviation="0.8"/>
+    </filter>
+  </defs>
+
+  <!-- monitor frame -->
+  <rect x="0" y="0" width="122.88" height="78.97" fill="#78bbfa"/>
+  <rect x="4.15" y="4.15" width="114.58" height="60.14" fill="#000000"/>
+
+  <!-- b-scan inside screen -->
+  <g clip-path="url(#screenClip)">
+    <rect x="4.15" y="4.15" width="114.58" height="60.14" fill="#05080c"/>
+
+    <!-- vertical echo bands -->
+    <g filter="url(#bscanBlur)">
+      <rect x="18" y="9"  width="7"  height="50" fill="url(#stripeSoft)"/>
+      <rect x="28" y="7"  width="10" height="54" fill="url(#stripeBright)"/>
+      <rect x="42" y="11" width="6"  height="46" fill="url(#stripeSoft)"/>
+      <rect x="51" y="8"  width="12" height="52" fill="url(#stripeBright)"/>
+      <rect x="67" y="10" width="8"  height="48" fill="url(#stripeSoft)"/>
+      <rect x="79" y="6"  width="14" height="56" fill="url(#stripeBright)"/>
+      <rect x="98" y="12" width="7"  height="44" fill="url(#stripeSoft)"/>
+    </g>
+  </g>
+
+  <!-- bottom controls: horizontal -->
+  <rect x="46.2" y="70.1" width="4.6" height="2.8" rx="1.4" fill="#000000"/>
+  <rect x="55.2" y="69.7" width="12.5" height="3.6" rx="1.8" fill="#000000"/>
+  <rect x="72.1" y="70.1" width="4.6" height="2.8" rx="1.4" fill="#000000"/>
+</svg>
