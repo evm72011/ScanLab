@@ -6,7 +6,7 @@
 #include "scanlab/acquisition/ascan/a_scan_raw_decoder.h"
 #include "scanlab/acquisition/ascan/a_scan_resampler.h"
 
-namespace scanlab::acquisition {
+namespace scanlab::acquisition::ascan {
 
 class AScanPipeline
 {
@@ -28,4 +28,4 @@ private:
     AScanResampler resampler_;
 };
 
-} // namespace scanlab::acquisition
+} // namespace scanlab::acquisition::ascan

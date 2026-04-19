@@ -7,7 +7,7 @@
 
 namespace sd = scanlab::device;
 
-namespace scanlab::acquisition {
+namespace scanlab::acquisition::ascan {
 
 AScanAcquisitionSource::AScanAcquisitionSource(sd::Device& device)
     : device_(device)
@@ -121,4 +121,4 @@ void AScanAcquisitionSource::handle(
     localHandler(std::move(frame));
 }
 
-} // namespace scanlab::acquisition
+} // namespace scanlab::acquisition::ascan

@@ -3,7 +3,7 @@
 #include <mutex>
 #include <vector>
 
-namespace scanlab::acquisition {
+namespace scanlab::acquisition::ascan {
 
 class AScanCropper
 {
@@ -20,4 +20,4 @@ private:
     mutable std::mutex mutex_;
 };
 
-} // namespace scanlab::acquisition
+} // namespace scanlab::acquisition::ascan

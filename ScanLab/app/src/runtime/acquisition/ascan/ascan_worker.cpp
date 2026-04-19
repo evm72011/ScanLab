@@ -2,11 +2,13 @@
 
 #include "runtime/device/device_context.h"
 
+namespace saa = scanlab::acquisition::ascan;
+
 AScanWorker::AScanWorker(DeviceContext& context, QObject* parent)
     : QObject(parent)
     , service_(context)
 {
-    service_.setFrameHandler([this](scanlab::acquisition::AScanFrame&& frame) {
+    service_.setFrameHandler([this](saa::AScanFrame&& frame) {
         emit frameUpdated(std::move(frame));
     });
 }

@@ -4,7 +4,7 @@
 #include <cstddef>
 #include <vector>
 
-namespace scanlab::acquisition {
+namespace scanlab::acquisition::ascan {
 
 void AScanResampler::setTargetSampleCount(int value)
 {
@@ -62,4 +62,4 @@ std::vector<float> AScanResampler::process(std::vector<float> input) const
     return output;
 }
 
-} // namespace scanlab::acquisition
+} // namespace scanlab::acquisition::ascan

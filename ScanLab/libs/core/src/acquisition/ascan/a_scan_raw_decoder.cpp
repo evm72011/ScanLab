@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <limits>
 
-namespace scanlab::acquisition {
+namespace scanlab::acquisition::ascan {
 
 std::vector<float> AScanRawDecoder::decode(const RawAScanFrame& frame) const
 {
@@ -155,4 +155,4 @@ std::vector<float> AScanRawDecoder::decodeBuffer(
     return result;
 }
 
-} // namespace scanlab::acquisition
+} // namespace scanlab::acquisition::ascan
