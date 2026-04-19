@@ -40,15 +40,14 @@ Frame Pipeline::process(const RawFrame& raw) const
     samples = cropper_.process(std::move(samples));
     samples = resampler_.process(std::move(samples));
 
-    Frame frame;
-    frame.samples = std::move(samples);
-    frame.cycle = raw.cycle;
-    frame.dataSize = raw.dataSize;
-    frame.dataCount = raw.dataCount;
-    frame.bitSize = raw.bitSize;
-    frame.sign = raw.sign;
-
-    return frame;
+    return Frame {
+        .samples = std::move(samples),
+        .cycle = raw.cycle,
+        .dataSize = raw.dataSize,
+        .dataCount = raw.dataCount,
+        .bitSize = raw.bitSize,
+        .sign = raw.sign
+    };
 }
 
 } // namespace scanlab::acquisition::ascan

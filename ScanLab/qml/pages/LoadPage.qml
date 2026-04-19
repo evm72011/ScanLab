@@ -14,7 +14,7 @@ Item {
     }
 
     Text {
-        text: qsTr("Starting %1...").arg(appInfo?.name ?? "foo")
+        text: qsTr("Starting %1").arg(appInfo?.name ?? "ScanLab")
         anchors.top: busyIndicator.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.topMargin: 12

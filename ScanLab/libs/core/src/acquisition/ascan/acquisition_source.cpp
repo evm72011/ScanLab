@@ -106,13 +106,14 @@ void AcquisitionSource::handle(
         static_cast<std::size_t>(hdr->dataSize) *
         static_cast<std::size_t>(hdr->dataCount);
 
-    RawFrame frame;
-    frame.dataSize = static_cast<int>(hdr->dataSize);
-    frame.dataCount = static_cast<int>(hdr->dataCount);
-    frame.cycle = static_cast<int>(hdr->cycle);
-    frame.bitSize = static_cast<int>(hdr->bitSize);
-    frame.sign = hdr->sign != 0;
-    frame.data.resize(byteCount);
+    RawFrame frame {
+        .dataSize = static_cast<int>(hdr->dataSize),
+        .dataCount = static_cast<int>(hdr->dataCount),
+        .cycle = static_cast<int>(hdr->cycle),
+        .bitSize = static_cast<int>(hdr->bitSize),
+        .sign = hdr->sign != 0,
+        .data = std::vector<uint8_t>(byteCount)
+    };
 
     if (byteCount != 0) {
         std::memcpy(frame.data.data(), buffer, byteCount);
