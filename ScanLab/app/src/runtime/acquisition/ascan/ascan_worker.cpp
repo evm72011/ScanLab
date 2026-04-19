@@ -6,7 +6,7 @@ AScanWorker::AScanWorker(DeviceContext& context, QObject* parent)
     : QObject(parent)
     , service_(context)
 {
-    service_.setFrameHandler([this](scanlab::hardware::AScanFrame&& frame) {
+    service_.setFrameHandler([this](scanlab::acquisition::AScanFrame&& frame) {
         emit frameUpdated(std::move(frame));
     });
 }

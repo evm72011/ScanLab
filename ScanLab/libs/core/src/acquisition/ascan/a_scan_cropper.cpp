@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <vector>
 
-namespace scanlab::hardware {
+namespace scanlab::acquisition {
 
 void AScanCropper::setRange(int startIndex, int endIndex)
 {
@@ -60,4 +60,4 @@ std::vector<float> AScanCropper::process(std::vector<float> input) const
         input.begin() + endIndex);
 }
 
-} // namespace scanlab::hardware
+} // namespace scanlab::acquisition

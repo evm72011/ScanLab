@@ -20,7 +20,7 @@ public slots:
     void stop();
 
 signals:
-    void frameUpdated(scanlab::hardware::AScanFrame frame);
+    void frameUpdated(scanlab::acquisition::AScanFrame frame);
     void startFailed();
     void started();
     void stopped(bool stillRunning);

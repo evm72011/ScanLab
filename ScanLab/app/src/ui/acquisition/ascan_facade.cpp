@@ -10,7 +10,7 @@
 AScanFacade::AScanFacade(DeviceContext& context, QObject* parent)
     : QObject(parent)
 {
-    qRegisterMetaType<scanlab::hardware::AScanFrame>("scanlab::hardware::AScanFrame");
+    qRegisterMetaType<scanlab::acquisition::AScanFrame>("scanlab::hardware::AScanFrame");
 
     worker_ = new AScanWorker(context);
     worker_->moveToThread(&workerThread_);
@@ -39,7 +39,7 @@ AScanFacade::AScanFacade(DeviceContext& context, QObject* parent)
         worker_,
         &AScanWorker::frameUpdated,
         this,
-        [this](const scanlab::hardware::AScanFrame& frame) {
+        [this](const scanlab::acquisition::AScanFrame& frame) {
             QVariantList values;
             values.reserve(static_cast<qsizetype>(frame.samples.size()));
 

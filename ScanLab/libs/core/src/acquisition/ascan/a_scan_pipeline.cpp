@@ -2,7 +2,7 @@
 
 #include <utility>
 
-namespace scanlab::hardware {
+namespace scanlab::acquisition {
 
 AScanRawDecoder& AScanPipeline::decoder()
 {
@@ -51,4 +51,4 @@ AScanFrame AScanPipeline::process(const RawAScanFrame& raw) const
     return frame;
 }
 
-} // namespace scanlab::hardware
+} // namespace scanlab::acquisition

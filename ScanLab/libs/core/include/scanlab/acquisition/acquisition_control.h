@@ -7,7 +7,7 @@
 #include <functional>
 #include <mutex>
 
-namespace scanlab::hardware {
+namespace scanlab::acquisition {
 
 class AcquisitionControl
 {
@@ -28,4 +28,4 @@ private:
     mutable std::mutex mutex_;
 };
 
-} // namespace scanlab::hardware
+} // namespace scanlab::acquisition

@@ -10,14 +10,14 @@
 
 class DeviceContext;
 
-namespace scanlab::hardware {
+namespace scanlab::acquisition {
 class AScanAcquisitionSource;
 }
 
 class AScanService
 {
 public:
-    using FrameHandler = std::function<void(scanlab::hardware::AScanFrame&&)>;
+    using FrameHandler = std::function<void(scanlab::acquisition::AScanFrame&&)>;
 
     explicit AScanService(DeviceContext& context);
     ~AScanService();
@@ -29,17 +29,17 @@ public:
 
     void setFrameHandler(FrameHandler handler);
 
-    std::expected<void, scanlab::hardware::AcquisitionError> start();
+    std::expected<void, scanlab::acquisition::AcquisitionError> start();
     void stop();
     bool isRunning() const;
 
 private:
-    void handleRawFrame(scanlab::hardware::RawAScanFrame&& rawFrame);
+    void handleRawFrame(scanlab::acquisition::RawAScanFrame&& rawFrame);
 
 private:
     DeviceContext& context_;
-    std::unique_ptr<scanlab::hardware::AScanAcquisitionSource> source_;
-    scanlab::hardware::AScanPipeline pipeline_;
+    std::unique_ptr<scanlab::acquisition::AScanAcquisitionSource> source_;
+    scanlab::acquisition::AScanPipeline pipeline_;
 
     FrameHandler handler_;
     mutable std::mutex mutex_;

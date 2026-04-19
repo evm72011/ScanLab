@@ -11,7 +11,7 @@ class  CStream_0x0001;
 class  CSubStreamAscan_0x0103;
 struct structAcqInfoEx;
 
-namespace scanlab::hardware {
+namespace scanlab::acquisition {
 
 struct RawAScanFrame
 {
@@ -63,4 +63,4 @@ private:
     mutable std::mutex mutex_;
 };
 
-} // namespace scanlab::hardware
+} // namespace scanlab::acquisition

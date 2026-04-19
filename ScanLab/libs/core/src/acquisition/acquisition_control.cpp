@@ -4,7 +4,7 @@
 
 namespace sd = scanlab::device;
 
-namespace scanlab::hardware {
+namespace scanlab::acquisition {
 
 AcquisitionControl::AcquisitionControl(sd::Device& device)
     : device_(device)
@@ -76,4 +76,4 @@ bool AcquisitionControl::isRunning() const
     return running_;
 }
 
-} // namespace scanlab::hardware
+} // namespace scanlab::acquisition

@@ -7,11 +7,13 @@
 
 #include <utility>
 
+namespace sa = scanlab::acquisition;
+
 AScanService::AScanService(DeviceContext& context)
     : context_(context)
-    , source_(std::make_unique<scanlab::hardware::AScanAcquisitionSource>(*context.device()))
+    , source_(std::make_unique<sa::AScanAcquisitionSource>(*context.device()))
 {
-    source_->setFrameHandler([this](scanlab::hardware::RawAScanFrame&& rawFrame) {
+    source_->setFrameHandler([this](sa::RawAScanFrame&& rawFrame) {
         handleRawFrame(std::move(rawFrame));
     });
 }
@@ -27,20 +29,20 @@ void AScanService::setFrameHandler(FrameHandler handler)
     handler_ = std::move(handler);
 }
 
-std::expected<void, scanlab::hardware::AcquisitionError> AScanService::start()
+std::expected<void, sa::AcquisitionError> AScanService::start()
 {
     auto* device = context_.device();
     if (!device) {
         return std::unexpected(
-            scanlab::hardware::AcquisitionError {
+            sa::AcquisitionError {
                 scanlab::device::HardwareError::HardwareNotSet
             });
     }
 
     if (!source_) {
-        source_ = std::make_unique<scanlab::hardware::AScanAcquisitionSource>(*device);
+        source_ = std::make_unique<sa::AScanAcquisitionSource>(*device);
 
-        source_->setFrameHandler([this](scanlab::hardware::RawAScanFrame&& rawFrame) {
+        source_->setFrameHandler([this](sa::RawAScanFrame&& rawFrame) {
             handleRawFrame(std::move(rawFrame));
         });
     }
@@ -58,7 +60,7 @@ bool AScanService::isRunning() const
     return source_->isRunning();
 }
 
-void AScanService::handleRawFrame(scanlab::hardware::RawAScanFrame&& rawFrame)
+void AScanService::handleRawFrame(sa::RawAScanFrame&& rawFrame)
 {
     auto frame = pipeline_.process(rawFrame);
 

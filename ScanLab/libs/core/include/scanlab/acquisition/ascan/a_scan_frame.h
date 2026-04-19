@@ -2,7 +2,7 @@
 
 #include <vector>
 
-namespace scanlab::hardware {
+namespace scanlab::acquisition {
 
 struct AScanFrame
 {
@@ -14,4 +14,4 @@ struct AScanFrame
     bool sign = false;
 };
 
-} // namespace scanlab::hardware
+} // namespace scanlab::acquisition

@@ -5,7 +5,7 @@
 #include <cstdint>
 #include <vector>
 
-namespace scanlab::hardware {
+namespace scanlab::acquisition {
 
 class AScanRawDecoder
 {
@@ -26,4 +26,4 @@ private:
         bool sign);
 };
 
-} // namespace scanlab::hardware
+} // namespace scanlab::acquisition

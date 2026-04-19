@@ -3,7 +3,7 @@
 #include <variant>
 #include "scanlab/device/hardware_error.h"
 
-namespace scanlab::hardware {
+namespace scanlab::acquisition {
 
 enum class AcquisitionErrorKind {
     Foo,
@@ -11,4 +11,4 @@ enum class AcquisitionErrorKind {
 
 using AcquisitionError = std::variant<scanlab::device::HardwareError,AcquisitionErrorKind>;
 
-} // namespace scanlab::hardware
+} // namespace scanlab::acquisition
