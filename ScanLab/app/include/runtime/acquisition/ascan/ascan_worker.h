@@ -2,8 +2,6 @@
 
 #include "runtime/acquisition/ascan/ascan_service.h"
 
-#include "scanlab/acquisition/ascan/frame.h"
-
 #include <QObject>
 
 class DeviceContext;
@@ -21,8 +19,8 @@ public slots:
 
 signals:
     void frameUpdated(scanlab::acquisition::ascan::Frame frame);
-    void startFailed();
     void started();
+    void startFailed();
     void stopped(bool stillRunning);
 
 private:

@@ -1,8 +1,9 @@
 #pragma once
 
+#include <QMutex>
 #include <QObject>
 #include <QThread>
-#include <QVariantList>
+#include <QVector>
 #include <qqmlintegration.h>
 
 class DeviceContext;
@@ -12,34 +13,36 @@ class AScanFacade : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QVariantList samples READ samples NOTIFY samplesChanged)
     Q_PROPERTY(bool running READ running NOTIFY runningChanged)
 
 public:
     explicit AScanFacade(DeviceContext& context, QObject* parent = nullptr);
     ~AScanFacade() override;
 
-    QVariantList samples() const;
     bool running() const;
 
     Q_INVOKABLE void start();
     Q_INVOKABLE void stop();
 
+    QVector<float> samplesSnapshot() const;
+
 signals:
     void requestStart();
     void requestStop();
 
-    void samplesChanged();
+    void frameReady();
     void runningChanged();
 
 private:
-    void setSamples(const QVariantList& value);
+    void setSamples(QVector<float> value);
     void setRunning(bool value);
 
 private:
-    QVariantList samples_;
-    bool running_ = false;
-
     AScanWorker* worker_ = nullptr;
     QThread workerThread_;
+
+    mutable QMutex samplesMutex_;
+    QVector<float> samples_;
+
+    bool running_ = false;
 };

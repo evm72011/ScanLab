@@ -1,8 +1,9 @@
 #pragma once
 
+#include <QColor>
 #include <QPointer>
-#include <QHoverEvent>
 #include <QQuickPaintedItem>
+#include <QVector>
 #include <qqmlintegration.h>
 
 class AScanFacade;
@@ -21,7 +22,6 @@ class AScanView : public QQuickPaintedItem
     Q_PROPERTY(QColor axisTextColor READ axisTextColor WRITE setAxisTextColor NOTIFY axisTextColorChanged)
     Q_PROPERTY(qreal minThicknessMm READ minThicknessMm WRITE setMinThicknessMm NOTIFY minThicknessMmChanged)
     Q_PROPERTY(qreal maxThicknessMm READ maxThicknessMm WRITE setMaxThicknessMm NOTIFY maxThicknessMmChanged)
-
 
 public:
     explicit AScanView(QQuickItem* parent = nullptr);
@@ -62,7 +62,7 @@ private:
     void paintBackground(QPainter* painter, const QRectF& rect);
     void paintGrid(QPainter* painter, const QRectF& rect);
     void paintXAxisLabels(QPainter* painter, const QRectF& rect);
-    void paintSignal(QPainter* painter, const QRectF& rect, const QVariantList& samples);
+    void paintSignal(QPainter* painter, const QRectF& rect, const QVector<float>& samples);
     void paintCursor(QPainter* painter, const QRectF& rect);
     void paintCursorLabel(QPainter* painter, const QRectF& rect);
 
@@ -96,4 +96,6 @@ private:
 
     bool cursorVisible_ = false;
     qreal cursorX_ = 0.0;
+
+    QMetaObject::Connection frameReadyConnection_;
 };

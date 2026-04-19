@@ -6,12 +6,13 @@
 #include "scanlab/acquisition/ascan/frame.h"
 
 #include <QMetaType>
+#include <utility>
 
 AScanFacade::AScanFacade(DeviceContext& context, QObject* parent)
     : QObject(parent)
 {
     using Frame = scanlab::acquisition::ascan::Frame;
-    qRegisterMetaType<Frame>("scanlab::hardware::AScanFrame");  // TODO ???
+    qRegisterMetaType<Frame>();
 
     worker_ = new AScanWorker(context);
     worker_->moveToThread(&workerThread_);
@@ -41,14 +42,15 @@ AScanFacade::AScanFacade(DeviceContext& context, QObject* parent)
         &AScanWorker::frameUpdated,
         this,
         [this](const Frame& frame) {
-            QVariantList values;
+            QVector<float> values;
             values.reserve(static_cast<qsizetype>(frame.samples.size()));
 
             for (float sample : frame.samples) {
                 values.push_back(sample);
             }
 
-            setSamples(values);
+            setSamples(std::move(values));
+            emit frameReady();
         },
         Qt::QueuedConnection);
 
@@ -92,11 +94,6 @@ AScanFacade::~AScanFacade()
     }
 }
 
-QVariantList AScanFacade::samples() const
-{
-    return samples_;
-}
-
 bool AScanFacade::running() const
 {
     return running_;
@@ -112,10 +109,16 @@ void AScanFacade::stop()
     emit requestStop();
 }
 
-void AScanFacade::setSamples(const QVariantList& value)
+QVector<float> AScanFacade::samplesSnapshot() const
 {
-    samples_ = value;
-    emit samplesChanged();
+    QMutexLocker lock(&samplesMutex_);
+    return samples_;
+}
+
+void AScanFacade::setSamples(QVector<float> value)
+{
+    QMutexLocker lock(&samplesMutex_);
+    samples_ = std::move(value);
 }
 
 void AScanFacade::setRunning(bool value)
