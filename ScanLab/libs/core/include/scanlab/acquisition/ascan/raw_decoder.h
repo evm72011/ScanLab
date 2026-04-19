@@ -7,7 +7,7 @@
 
 namespace scanlab::acquisition::ascan {
 
-class AScanRawDecoder
+class RawDecoder
 {
 public:
     std::vector<float> decode(const RawFrame& frame) const;

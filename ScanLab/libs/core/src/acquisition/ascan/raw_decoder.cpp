@@ -1,11 +1,11 @@
-#include "scanlab/acquisition/ascan/a_scan_raw_decoder.h"
+#include "scanlab/acquisition/ascan/raw_decoder.h"
 
 #include <algorithm>
 #include <limits>
 
 namespace scanlab::acquisition::ascan {
 
-std::vector<float> AScanRawDecoder::decode(const RawFrame& frame) const
+std::vector<float> RawDecoder::decode(const RawFrame& frame) const
 {
     if (frame.data.empty()) {
         return {};
@@ -19,7 +19,7 @@ std::vector<float> AScanRawDecoder::decode(const RawFrame& frame) const
         frame.sign);
 }
 
-int AScanRawDecoder::effectiveBitWidth(int bitSize, int dataSize)
+int RawDecoder::effectiveBitWidth(int bitSize, int dataSize)
 {
     switch (bitSize) {
     case eLog8Bits:
@@ -48,7 +48,7 @@ int AScanRawDecoder::effectiveBitWidth(int bitSize, int dataSize)
     }
 }
 
-float AScanRawDecoder::normalizeSigned(std::int64_t value, int bits)
+float RawDecoder::normalizeSigned(std::int64_t value, int bits)
 {
     if (bits <= 1) {
         return 0.0f;
@@ -66,7 +66,7 @@ float AScanRawDecoder::normalizeSigned(std::int64_t value, int bits)
     return static_cast<float>(v);
 }
 
-float AScanRawDecoder::normalizeUnsigned(std::uint64_t value, int bits)
+float RawDecoder::normalizeUnsigned(std::uint64_t value, int bits)
 {
     if (bits <= 0) {
         return 0.0f;
@@ -87,7 +87,7 @@ float AScanRawDecoder::normalizeUnsigned(std::uint64_t value, int bits)
     return static_cast<float>(v);
 }
 
-std::vector<float> AScanRawDecoder::decodeBuffer(
+std::vector<float> RawDecoder::decodeBuffer(
     const std::uint8_t* data,
     int dataSize,
     int dataCount,

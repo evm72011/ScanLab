@@ -4,12 +4,12 @@
 
 namespace scanlab::acquisition::ascan {
 
-AScanRawDecoder& Pipeline::decoder()
+RawDecoder& Pipeline::decoder()
 {
     return decoder_;
 }
 
-const AScanRawDecoder& Pipeline::decoder() const
+const RawDecoder& Pipeline::decoder() const
 {
     return decoder_;
 }
