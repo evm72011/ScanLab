@@ -14,7 +14,7 @@ void Cropper::setMargins(double leftFraction, double rightFraction)
     rightFraction_ = std::clamp(rightFraction, 0.0, 1.0);
 }
 
-std::vector<float> Cropper::transform(std::vector<float> input) const
+void Cropper::transform(std::vector<float>& samples) const
 {
     double leftFraction = 0.0;
     double rightFraction = 0.0;
@@ -25,19 +25,20 @@ std::vector<float> Cropper::transform(std::vector<float> input) const
         rightFraction = rightFraction_;
     }
 
-    if (input.empty()) {
-        return {};
+    if (samples.empty()) {
+        return;
     }
 
     if (leftFraction <= 0.0 && rightFraction <= 0.0) {
-        return input;
+        return;
     }
 
     if (leftFraction + rightFraction >= 1.0) {
-        return {};
+        samples.clear();
+        return;
     }
 
-    const int size = static_cast<int>(input.size());
+    const int size = static_cast<int>(samples.size());
 
     const int startIndex =
         std::clamp(
@@ -52,12 +53,12 @@ std::vector<float> Cropper::transform(std::vector<float> input) const
             size);
 
     if (startIndex >= endIndex) {
-        return {};
+        samples.clear();
+        return;
     }
 
-    return std::vector<float>(
-        input.begin() + startIndex,
-        input.begin() + endIndex);
+    samples.erase(samples.begin() + endIndex, samples.end());
+    samples.erase(samples.begin(), samples.begin() + startIndex);
 }
 
 } // namespace scanlab::acquisition::ascan

@@ -19,7 +19,7 @@ AScanService::AScanService(DeviceContext& context)
         saa::TransformStep::Resample
     });
 
-    pipeline_.cropper().setMargins(0.12, 0.0);
+    pipeline_.cropper().setMargins(0.12, 0.10);
     pipeline_.resampler().setTargetSampleCount(512);
 
     if (auto* device = context_.device()) {

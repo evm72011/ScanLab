@@ -9,9 +9,7 @@ class Cropper
 {
 public:
     void setMargins(double leftFraction, double rightFraction);
-
-    [[nodiscard]]
-    std::vector<float> transform(std::vector<float> input) const;
+    void transform(std::vector<float>& input) const;
 
 private:
     mutable std::mutex mutex_;

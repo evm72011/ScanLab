@@ -59,7 +59,7 @@ Frame Pipeline::process(const RawFrame& raw) const
     for (const auto step : stepsCopy) {
         switch (step) {
         case TransformStep::Crop:
-            samples = cropper_.transform(std::move(samples));
+            cropper_.transform(samples);
             break;
 
         case TransformStep::Resample:
