@@ -8,9 +8,19 @@
 
 namespace scanlab::acquisition::ascan {
 
+struct PipelineConfig {
+    bool cropEnabled = true;
+    bool resampleEnabled = true;
+};
+
 class Pipeline
 {
 public:
+    PipelineConfig& config() { return config_; }
+    const PipelineConfig& config() const { return config_; }
+
+    Frame process(const RawFrame& raw) const;
+
     RawDecoder& decoder();
     const RawDecoder& decoder() const;
 
@@ -20,9 +30,8 @@ public:
     Resampler& resampler();
     const Resampler& resampler() const;
 
-    Frame process(const RawFrame& raw) const;
-
 private:
+    PipelineConfig config_;
     RawDecoder decoder_;
     Cropper cropper_;
     Resampler resampler_;

@@ -37,8 +37,14 @@ const Resampler& Pipeline::resampler() const
 Frame Pipeline::process(const RawFrame& raw) const
 {
     auto samples = decoder_.decode(raw);
-    samples = cropper_.process(std::move(samples));
-    samples = resampler_.process(std::move(samples));
+
+    if (config_.cropEnabled) {
+        samples = cropper_.process(std::move(samples));
+    }
+
+    if (config_.resampleEnabled) {
+        samples = resampler_.process(std::move(samples));
+    }
 
     return Frame {
         .samples = std::move(samples),
