@@ -9,4 +9,4 @@ enum class HardwareError
     DeviceLockFailed,
     DeviceUnlockFailed
 };
-} // namespace scanlab::hardware
+} // namespace scanlab::device

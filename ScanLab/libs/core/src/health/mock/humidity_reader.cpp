@@ -10,4 +10,4 @@ HumidityReader::HumidityReader(scanlab::device::Device& device)
 std::expected<int, HealthError> HumidityReader::readMax() const {
     return 25;
 }
-}// namespace scanlab::hardware
+}// namespace scanlab::health

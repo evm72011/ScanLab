@@ -15,5 +15,5 @@ enum class ConnectionErrorKind {
 
 using ConnectionError = std::variant<HardwareError,ConnectionErrorKind>;
 
-} // namespace scanlab::hardware
+} // namespace scanlab::device
 

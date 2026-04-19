@@ -12,4 +12,4 @@ concept HealthTopologyApi =
         { api.getBoardCount(sw, boardCount, sensorCountMax) } -> std::convertible_to<bool>;
         { api.getSensorCount(sw, board, sensorCount) } -> std::convertible_to<bool>;
     };
-}// namespace scanlab::hardware
+}// namespace scanlab::health

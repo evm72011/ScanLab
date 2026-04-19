@@ -16,4 +16,4 @@ private:
     scanlab::device::Device& device_;
     mutable HealthTopology topology_;
 };
-}// namespace scanlab::hardware
+}// namespace scanlab::health

@@ -17,4 +17,4 @@ enum class DeviceType: uint8_t
     OEMPA_Micro
 };
 
-} // namespace scanlab::hardware
+} // namespace scanlab::device

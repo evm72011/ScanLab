@@ -87,4 +87,4 @@ std::expected<void, HealthError> HealthTopology::ensure(scanlab::device::Device&
 
     return {};
 }
-}// namespace scanlab::hardware
+}// namespace scanlab::health

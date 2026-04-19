@@ -15,4 +15,4 @@ enum class HealthErrorKind {
 
 using HealthError = std::variant<scanlab::device::HardwareError,HealthErrorKind>;
 
-}// namespace scanlab::hardware
+}// namespace scanlab::health

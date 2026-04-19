@@ -20,4 +20,4 @@ std::span<const int> HealthTopology::sensorCountPerBoard() const noexcept {
 std::size_t HealthTopology::totalSensorCount() const noexcept {
     return totalSensorCount_;
 }
-}// namespace scanlab::hardware
+}// namespace scanlab::health

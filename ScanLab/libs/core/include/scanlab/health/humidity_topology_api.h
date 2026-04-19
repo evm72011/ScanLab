@@ -10,4 +10,4 @@ struct HumidityTopologyApi
     bool getSensorCount(CSWDeviceOEMPA* sw, int board, int& sensorCount) const;
 };
 
-} // namespace scanlab::hardware
+} // namespace scanlab::health

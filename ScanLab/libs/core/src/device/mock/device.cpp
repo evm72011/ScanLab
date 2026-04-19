@@ -112,4 +112,4 @@ const CHWDeviceOEMPA* Device::get() const
 {
     return device_.get();
 }
-} // namespace scanlab::hardware
+} // namespace scanlab::device

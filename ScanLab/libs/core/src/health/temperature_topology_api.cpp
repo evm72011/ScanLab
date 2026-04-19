@@ -15,4 +15,4 @@ bool TemperatureTopologyApi::getSensorCount(CSWDeviceOEMPA* sw, int board, int& 
     return sw->GetTemperatureSensorCount(board, sensorCount);
 }
 
-} // namespace scanlab::hardware
+} // namespace scanlab::health

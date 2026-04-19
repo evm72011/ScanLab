@@ -58,4 +58,4 @@ std::expected<int, HealthError> TemperatureReader::readMax() const {
 
     return static_cast<int>(result);
 }
-} // namespace scanlab::hardware
+} // namespace scanlab::health

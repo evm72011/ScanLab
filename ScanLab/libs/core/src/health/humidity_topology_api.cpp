@@ -15,4 +15,4 @@ bool HumidityTopologyApi::getSensorCount(CSWDeviceOEMPA* sw, int board, int& sen
     return sw->GetHumiditySensorCount(board, sensorCount);
 }
 
-} // namespace scanlab::hardware
+} // namespace scanlab::health

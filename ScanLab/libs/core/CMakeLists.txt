@@ -12,8 +12,6 @@ add_library(${LIB_NAME} SHARED
     src/health/health_topology.cpp
     src/health/humidity_topology_api.cpp
     src/health/temperature_topology_api.cpp
-
-    src/a_scan_acquisition.cpp # deprecated
 )
 
 # TODO: Replace WINDOWS_EXPORT_ALL_SYMBOLS with explicit export macros (e.g. SL_CORE_API).

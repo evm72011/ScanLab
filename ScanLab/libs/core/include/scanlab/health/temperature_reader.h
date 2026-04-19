@@ -19,4 +19,4 @@ private:
     mutable HealthTopology topology_;
 };
 
-} // namespace scanlab::hardware
+} // namespace scanlab::health

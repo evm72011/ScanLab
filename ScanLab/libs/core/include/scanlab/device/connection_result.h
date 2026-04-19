@@ -8,4 +8,4 @@ struct ConnectionResult
 {
     std::wstring serialNumber;
 };
-} // namespace scanlab::hardware
+} // namespace scanlab::device

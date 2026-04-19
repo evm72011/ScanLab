@@ -44,4 +44,4 @@ private:
 #endif
 };
 
-} // namespace scanlab::hardware
+} // namespace scanlab::device

@@ -8,37 +8,6 @@ add to project configuration
 keep actual buid dir in ./scripts/conan-install.ps1
 
 
-Backend
-    DeviceContext context_;                                                                 // Container for hardwareDevice
-        std::unique_ptr<scanlab::hardware::Device> device_;
-
-    ConnectionFacade connectionFacade_{context_, this};                                     // Interface for QML and thread orchestrator
-        Q_PROPERTY(QString address READ address WRITE setAddress NOTIFY addressChanged)
-        Q_INVOKABLE void connectDevice();
-        signals:
-            void addressChanged();
-        
-        connectors in constructor (in both directions facade <-> worker):
-            worker_ = new ConnectionWorker(context);
-            connect(
-                this,
-                &ConnectionFacade::requestConnect,
-                worker_,
-                &ConnectionWorker::connectDevice,
-                Qt::QueuedConnection);              <- 
-
-        
-        ConnectionWorker                                           // API for ConnectionFacade
-            void connectDevice(DeviceType type, const QString& address)
-            {
-                const auto result = service_.connect(type, address.toStdWString());
-                emit connectCompleted(result);
-            }
-
-
-            ConnectionService   // Wrapper for working with hardware lib
-
-
 
 Да, фильтры из hardware надо учесть сразу. И ещё лучше сразу отделить **общие классы сканирования** от **A-scan-специфичных**, чтобы потом B-scan/C-scan не ломали архитектуру.
 
