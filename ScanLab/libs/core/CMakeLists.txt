@@ -5,7 +5,7 @@ add_library(${LIB_NAME} SHARED
     src/acquisition/acquisition_control.cpp
     src/acquisition/ascan/a_scan_acquisition_source.cpp
     src/acquisition/ascan/a_scan_raw_decoder.cpp
-    src/acquisition/ascan/a_scan_resampler.cpp
+    src/acquisition/ascan/resampler.cpp
     src/acquisition/ascan/cropper.cpp
     src/acquisition/ascan/pipeline.cpp
 

@@ -5,7 +5,7 @@
 
 namespace scanlab::acquisition::ascan {
 
-class AScanResampler
+class Resampler
 {
 public:
     void setTargetSampleCount(int value);

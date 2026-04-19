@@ -4,7 +4,7 @@
 #include "scanlab/acquisition/ascan/cropper.h"
 #include "scanlab/acquisition/ascan/a_scan_frame.h"
 #include "scanlab/acquisition/ascan/a_scan_raw_decoder.h"
-#include "scanlab/acquisition/ascan/a_scan_resampler.h"
+#include "scanlab/acquisition/ascan/resampler.h"
 
 namespace scanlab::acquisition::ascan {
 
@@ -17,15 +17,15 @@ public:
     Cropper& cropper();
     const Cropper& cropper() const;
 
-    AScanResampler& resampler();
-    const AScanResampler& resampler() const;
+    Resampler& resampler();
+    const Resampler& resampler() const;
 
     AScanFrame process(const RawAScanFrame& raw) const;
 
 private:
     AScanRawDecoder decoder_;
     Cropper cropper_;
-    AScanResampler resampler_;
+    Resampler resampler_;
 };
 
 } // namespace scanlab::acquisition::ascan

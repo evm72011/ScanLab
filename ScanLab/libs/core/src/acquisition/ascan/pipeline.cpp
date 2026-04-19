@@ -24,12 +24,12 @@ const Cropper& Pipeline::cropper() const
     return cropper_;
 }
 
-AScanResampler& Pipeline::resampler()
+Resampler& Pipeline::resampler()
 {
     return resampler_;
 }
 
-const AScanResampler& Pipeline::resampler() const
+const Resampler& Pipeline::resampler() const
 {
     return resampler_;
 }

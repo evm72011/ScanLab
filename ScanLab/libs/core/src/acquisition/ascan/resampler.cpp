@@ -1,4 +1,4 @@
-#include "scanlab/acquisition/ascan/a_scan_resampler.h"
+#include "scanlab/acquisition/ascan/resampler.h"
 
 #include <algorithm>
 #include <cstddef>
@@ -6,7 +6,7 @@
 
 namespace scanlab::acquisition::ascan {
 
-void AScanResampler::setTargetSampleCount(int value)
+void Resampler::setTargetSampleCount(int value)
 {
     if (value < 2) {
         return;
@@ -16,7 +16,7 @@ void AScanResampler::setTargetSampleCount(int value)
     targetSampleCount_ = value;
 }
 
-std::vector<float> AScanResampler::process(std::vector<float> input) const
+std::vector<float> Resampler::process(std::vector<float> input) const
 {
     int targetSampleCount = 0;
 
