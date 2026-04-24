@@ -7,7 +7,6 @@ Rectangle {
     id: root
 
     property bool active: false
-    property bool settingsPanelOpen: false
 
     radius: 8
     color: SL.Theme.colors.windowBackground
@@ -15,80 +14,68 @@ Rectangle {
     border.color: SL.Theme.colors.border
     clip: true
 
-    SL.AScanView {
+    RowLayout {
         anchors.fill: parent
-        facade: backend?.ascanFacade ?? null
+        spacing: 0
 
-        lineColor: SL.Theme.colors.ascanLine
-        gridColor: SL.Theme.colors.ascanGrid
-        markerColor: SL.Theme.colors.ascanMarker
-        axisTextColor: SL.Theme.colors.textSecondary
-        backgroundColor: SL.Theme.colors.windowBackground
-    }
+        SL.AScanView {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
 
-    ToolButton {
-        id: settingsButton
+            facade: backend?.ascanFacade ?? null
 
-        anchors.top: parent.top
-        anchors.right: parent.right
-        anchors.margins: 8
-
-        width: 36
-        height: 36
-
-        checkable: true
-        checked: root.settingsPanelOpen
-
-        icon.source: "qrc:/icons/cog.svg"
-        icon.width: 22
-        icon.height: 22
-
-        background: Rectangle {
-            radius: 6
-            color: settingsButton.checked
-                   ? SL.Theme.colors.primary
-                   : SL.Theme.colors.windowBackground
-            border.width: 1
-            border.color: SL.Theme.colors.border
-        }
-
-        onClicked: root.settingsPanelOpen = !root.settingsPanelOpen
-    }
-
-    Rectangle {
-        id: settingsPanel
-
-        width: 320
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-
-        // 👇 позиция: либо на месте, либо за экраном
-        x: root.settingsPanelOpen ? parent.width - width : parent.width
-
-        color: SL.Theme.colors.windowBackground
-        z: 5
-
-        Behavior on x {
-            NumberAnimation {
-                duration: 200
-                easing.type: Easing.OutCubic
-            }
+            lineColor: SL.Theme.colors.ascanLine
+            gridColor: SL.Theme.colors.ascanGrid
+            markerColor: SL.Theme.colors.ascanMarker
+            axisTextColor: SL.Theme.colors.textSecondary
+            backgroundColor: SL.Theme.colors.windowBackground
         }
 
         Rectangle {
-            anchors.left: parent.left
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            width: 1
-            color: SL.Theme.colors.border
+            id: ascanSettingsResizeHandle
+
+            Layout.preferredWidth: ascanSettings.expanded ? 4 : 0
+            Layout.fillHeight: true
+            visible: ascanSettings.expanded
+
+            color: resizeArea.containsMouse || resizeArea.pressed
+                   ? Qt.rgba(1, 1, 1, 0.18)
+                   : Qt.rgba(1, 1, 1, 0.06)
+
+            MouseArea {
+                id: resizeArea
+
+                anchors.fill: parent
+                hoverEnabled: true
+                cursorShape: Qt.SizeHorCursor
+
+                property real startRootX: 0
+                property int startWidth: 0
+
+                onPressed: function(mouse) {
+                    startRootX = ascanSettingsResizeHandle.mapToItem(root, mouse.x, mouse.y).x
+                    startWidth = ascanSettings.panelWidth
+                }
+
+                onPositionChanged: function(mouse) {
+                    if (!pressed)
+                        return
+
+                    var currentRootX = ascanSettingsResizeHandle.mapToItem(root, mouse.x, mouse.y).x
+                    var dx = currentRootX - startRootX
+
+                    ascanSettings.panelWidth = Math.max(
+                        ascanSettings.minWidth,
+                        Math.min(ascanSettings.maxWidth, startWidth - dx)
+                    )
+                }
+            }
         }
 
-        // placeholder
-        Label {
-            anchors.centerIn: parent
-            text: qsTr("Settings panel")
-            color: SL.Theme.colors.textSecondary
-            opacity: 0.6
+        SL.AScanSettings {
+            id: ascanSettings
+            Layout.preferredWidth: implicitWidth
+            Layout.fillHeight: true
         }
     }
 
