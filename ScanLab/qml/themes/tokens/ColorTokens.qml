@@ -13,6 +13,9 @@ QtObject {
     property color controlNormalText
     property color controlActiveText
 
+    property color splitterBackground
+    property color splitterHovered
+
     property color toolbarIcon
 
     property color tabChecked

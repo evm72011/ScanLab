@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import ScanLab as SL
 
 Rectangle {
     id: root
@@ -17,8 +18,8 @@ Rectangle {
     Layout.fillHeight: true
 
     color: resizeArea.containsMouse || resizeArea.pressed
-           ? Qt.rgba(1, 1, 1, 0.18)
-           : Qt.rgba(1, 1, 1, 0.06)
+           ? SL.Theme.colors.splitterHovered
+           : SL.Theme.colors.splitterBackground
 
     MouseArea {
         id: resizeArea

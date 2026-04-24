@@ -23,12 +23,6 @@ TabButton {
                       : root.hovered ? SL.Theme.colors.controlHovered
                       : SL.Theme.colors.tabDefault
 
-            /*
-            fillColor: root.down ? SL.Theme.colors.controlDown
-                      : root.checked ? SL.Theme.colors.controlChecked
-                      : root.hovered ? SL.Theme.colors.controlHovered
-                      : "transparent"
-            */
             startX: 0; startY: height
 
             PathLine { x: 0; y: 6 }

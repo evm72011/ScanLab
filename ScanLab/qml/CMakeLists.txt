@@ -22,6 +22,7 @@ set(QML_MODULE_FILES
     components/HorizontalResizeHandle.qml
     components/IconTabButton.qml
     components/InfoIcon.qml
+    components/RailIconButton.qml
     components/StyledToolTip.qml
     components/TabButton.qml
     components/TextField.qml

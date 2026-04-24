@@ -27,14 +27,14 @@ Rectangle {
         anchors.fill: parent
         spacing: 0
 
-        // 👇 border слева
         Rectangle {
+            id: leftBorder
             Layout.preferredWidth: 1
             Layout.fillHeight: true
             color: SL.Theme.colors.border
+            visible: !root.expanded
         }
 
-        // 👇 rail (иконки)
         Rectangle {
             Layout.preferredWidth: root.collapsedWidth - 1
             Layout.fillHeight: true
@@ -42,60 +42,39 @@ Rectangle {
 
             ColumnLayout {
                 anchors.fill: parent
-                spacing: 8
 
-                Item { Layout.preferredHeight: 12 }
+                Item { Layout.preferredHeight: 6 }
 
-                // ⚙
-                ToolButton {
-                    id: cogTab
-
+                SL.RailIconButton {
                     Layout.alignment: Qt.AlignHCenter
-                    Layout.preferredWidth: 30
-                    Layout.preferredHeight: 30
 
-                    checkable: true
-                    checked: root.expanded
+                    iconSource: "qrc:/icons/cog.svg"
+                    active: root.expanded
 
-                    icon.source: "qrc:/icons/cog.svg"
-
-                    background: Rectangle {
-                        radius: 6
-                        color: cogTab.checked
-                               ? SL.Theme.colors.primary
-                               : cogTab.hovered
-                                 ? Qt.rgba(1,1,1,0.08)
-                                 : "transparent"
-                    }
-
-                    onClicked: root.expanded = true
-                }
-
-                // >>
-                ToolButton {
-                    id: collapseButton
-
-                    Layout.alignment: Qt.AlignHCenter
-                    Layout.preferredWidth: 30
-                    Layout.preferredHeight: 30
-
-                    visible: root.expanded
-
-                    icon.source: "qrc:/icons/double-right.svg"
-
-                    background: Rectangle {
-                        radius: 6
-                        color: collapseButton.hovered
-                               ? Qt.rgba(1,1,1,0.08)
-                               : "transparent"
-                    }
-
-                    onClicked: root.expanded = false
+                    onActivated: root.expanded = true
                 }
 
                 Item { Layout.fillHeight: true }
-                Item { Layout.preferredHeight: 12 }
+
+                SL.RailIconButton {
+                    Layout.alignment: Qt.AlignHCenter
+
+                    visible: root.expanded
+                    iconSource: "qrc:/icons/double-right.svg"
+                    iconSize: 10
+
+                    onActivated: root.expanded = false
+                }
+                Item { Layout.preferredHeight: 6 }
             }
+        }
+
+        Rectangle {
+            id: rightBorder
+            Layout.preferredWidth: 1
+            Layout.fillHeight: true
+            color: SL.Theme.colors.border
+            visible: root.expanded
         }
 
         // 👇 content area

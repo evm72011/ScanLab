@@ -14,6 +14,9 @@ ColorTokens {
     controlChecked: p.cyan1200
     controlHovered: p.gray700
 
+    splitterBackground: p.gray700
+    splitterHovered: p.gray650
+
     controlNormalText: p.gray100
     controlActiveText: p.gray000
 
