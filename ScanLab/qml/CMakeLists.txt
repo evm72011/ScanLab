@@ -27,10 +27,10 @@ set(QML_MODULE_FILES
 
     dialogs/MessageDialog.qml
 
+    pages/AScanPage.qml
     pages/HardwarePage.qml
     pages/LoadPage.qml
     pages/MainPage.qml
-    pages/ScanAPage.qml
     pages/ScanBPage.qml
     pages/ScanCPage.qml
     pages/SettingsPage.qml

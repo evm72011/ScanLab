@@ -53,11 +53,11 @@ RowLayout {
                 onClicked: navigation.currentIndex = 3
             }
 
-            /*
             Item {
                 Layout.fillHeight: true
             }
 
+            /*
             SL.IconTabButton {
                 Layout.fillWidth: true
                 text: qsTr("Settings")
@@ -91,7 +91,7 @@ RowLayout {
 
             SL.HardwarePage {}
 
-            SL.ScanAPage {
+            SL.AScanPage {
                 active: navigation.currentIndex === 1
             }
 
