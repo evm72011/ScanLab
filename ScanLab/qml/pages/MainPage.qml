@@ -13,15 +13,13 @@ RowLayout {
         Layout.preferredWidth: 84
         color: SL.Theme.colors.windowBackground
 
-        Column {
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.right: parent.right
+        ColumnLayout {
+            anchors.fill: parent
             anchors.margins: 8
             spacing: 8
 
             SL.IconTabButton {
-                width: parent.width
+                Layout.fillWidth: true
                 text: qsTr("Device")
                 iconSource: "qrc:/icons/device.svg"
                 checked: navigation.currentIndex === 0
@@ -29,7 +27,7 @@ RowLayout {
             }
 
             SL.IconTabButton {
-                width: parent.width
+               Layout.fillWidth: true
                 text: qsTr("A-scan")
                 iconSource: "qrc:/icons/ascan.svg"
                 iconSize: 30
@@ -38,7 +36,7 @@ RowLayout {
             }
 
             SL.IconTabButton {
-                width: parent.width
+                Layout.fillWidth: true
                 text: qsTr("B-scan")
                 iconSource: "qrc:/icons/bscan.svg"
                 iconSize: 30
@@ -47,7 +45,7 @@ RowLayout {
             }
 
             SL.IconTabButton {
-                width: parent.width
+                Layout.fillWidth: true
                 text: qsTr("C-scan")
                 iconSource: "qrc:/icons/cscan.svg"
                 iconSize: 30
@@ -56,22 +54,20 @@ RowLayout {
             }
 
             /*
-            SL.IconTabButton {
-                width: parent.width
-                text: qsTr("Settings")
-                iconSource: "qrc:/icons/service.svg"
-                checked: navigation.currentIndex === 0
-                onClicked: navigation.currentIndex = 0
+            Item {
+                Layout.fillHeight: true
             }
 
-
             SL.IconTabButton {
-                width: parent.width
-                text: qsTr("Scan")
-                iconSource: "qrc:/icons/scan.svg"
-                checked: navigation.currentIndex === 2
-                onClicked: navigation.currentIndex = 2
-            } */
+                Layout.fillWidth: true
+                text: qsTr("Settings")
+                iconSource: "qrc:/icons/cog.svg"
+                onClicked: {
+                    // например:
+                    console.log("Settings clicked")
+                }
+            }
+            */
         }
 
         Rectangle {
@@ -94,12 +90,6 @@ RowLayout {
             Layout.fillHeight: true
 
             SL.HardwarePage {}
-
-            /*
-            SL.SettingsPage {
-                active: navigation.currentIndex === 0
-            }
-            */
 
             SL.ScanAPage {
                 active: navigation.currentIndex === 1
