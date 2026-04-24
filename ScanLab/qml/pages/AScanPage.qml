@@ -31,44 +31,16 @@ Rectangle {
             backgroundColor: SL.Theme.colors.windowBackground
         }
 
-        Rectangle {
-            id: ascanSettingsResizeHandle
-
-            Layout.preferredWidth: ascanSettings.expanded ? 4 : 0
-            Layout.fillHeight: true
+        SL.HorizontalResizeHandle {
             visible: ascanSettings.expanded
 
-            color: resizeArea.containsMouse || resizeArea.pressed
-                   ? Qt.rgba(1, 1, 1, 0.18)
-                   : Qt.rgba(1, 1, 1, 0.06)
+            coordinateItem: root
+            targetWidth: ascanSettings.panelWidth
+            minWidth: ascanSettings.minWidth
+            maxWidth: ascanSettings.maxWidth
 
-            MouseArea {
-                id: resizeArea
-
-                anchors.fill: parent
-                hoverEnabled: true
-                cursorShape: Qt.SizeHorCursor
-
-                property real startRootX: 0
-                property int startWidth: 0
-
-                onPressed: function(mouse) {
-                    startRootX = ascanSettingsResizeHandle.mapToItem(root, mouse.x, mouse.y).x
-                    startWidth = ascanSettings.panelWidth
-                }
-
-                onPositionChanged: function(mouse) {
-                    if (!pressed)
-                        return
-
-                    var currentRootX = ascanSettingsResizeHandle.mapToItem(root, mouse.x, mouse.y).x
-                    var dx = currentRootX - startRootX
-
-                    ascanSettings.panelWidth = Math.max(
-                        ascanSettings.minWidth,
-                        Math.min(ascanSettings.maxWidth, startWidth - dx)
-                    )
-                }
+            onWidthChangedByUser: function(width) {
+                ascanSettings.panelWidth = width
             }
         }
 

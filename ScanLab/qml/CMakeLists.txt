@@ -19,6 +19,7 @@ set(QML_MODULE_FILES
 
     components/Button.qml
     components/DropDown.qml
+    components/HorizontalResizeHandle.qml
     components/IconTabButton.qml
     components/InfoIcon.qml
     components/StyledToolTip.qml
