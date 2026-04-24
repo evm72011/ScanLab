@@ -23,6 +23,7 @@ set(QML_MODULE_FILES
     components/IconTabButton.qml
     components/InfoIcon.qml
     components/RailIconButton.qml
+    components/RangeSlider.qml
     components/StyledToolTip.qml
     components/TabButton.qml
     components/TextField.qml
