@@ -14,26 +14,6 @@ const RawDecoder& Pipeline::decoder() const
     return decoder_;
 }
 
-Cropper& Pipeline::cropper()
-{
-    return cropper_;
-}
-
-const Cropper& Pipeline::cropper() const
-{
-    return cropper_;
-}
-
-Resampler& Pipeline::resampler()
-{
-    return resampler_;
-}
-
-const Resampler& Pipeline::resampler() const
-{
-    return resampler_;
-}
-
 EnvelopeDownsampler& Pipeline::envelope()
 {
     return envelope_;
@@ -44,38 +24,30 @@ const EnvelopeDownsampler& Pipeline::envelope() const
     return envelope_;
 }
 
-void Pipeline::setSteps(std::vector<TransformStep> steps)
+void Pipeline::setTransformers(std::vector<Transformer> transformers)
 {
-    std::lock_guard lock(stepsMutex_);
-    steps_ = std::move(steps);
+    std::lock_guard lock(transformersMutex_);
+    transformers_ = std::move(transformers);
 }
 
-void Pipeline::clearSteps()
+void Pipeline::clearTransformers()
 {
-    std::lock_guard lock(stepsMutex_);
-    steps_.clear();
+    std::lock_guard lock(transformersMutex_);
+    transformers_.clear();
 }
 
 Frame Pipeline::process(const RawFrame& raw) const
 {
     auto samples = decoder_.decode(raw);
 
-    std::vector<TransformStep> stepsCopy;
+    std::vector<Transformer> transformersCopy;
     {
-        std::lock_guard lock(stepsMutex_);
-        stepsCopy = steps_;
+        std::lock_guard lock(transformersMutex_);
+        transformersCopy = transformers_;
     }
 
-    for (const auto step : stepsCopy) {
-        switch (step) {
-        case TransformStep::Crop:
-            cropper_.transform(samples);
-            break;
-
-        case TransformStep::Resample:
-            samples = resampler_.transform(std::move(samples));
-            break;
-        }
+    for (const auto& transformer : transformersCopy) {
+        transformer.transform(samples);
     }
 
     auto envelopeSamples = envelope_.transform(samples);

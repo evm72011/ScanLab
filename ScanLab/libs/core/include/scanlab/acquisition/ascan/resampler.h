@@ -10,8 +10,7 @@ class Resampler
 public:
     void setTargetSampleCount(int value);
 
-    [[nodiscard]]
-    std::vector<float> transform(std::vector<float> input) const;
+    void transform(std::vector<float>& input) const;
 
 private:
     mutable std::mutex mutex_;

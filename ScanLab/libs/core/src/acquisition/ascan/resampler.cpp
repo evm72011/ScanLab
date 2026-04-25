@@ -12,7 +12,7 @@ void Resampler::setTargetSampleCount(int value)
     targetSampleCount_ = value;
 }
 
-std::vector<float> Resampler::transform(std::vector<float> input) const
+void Resampler::transform(std::vector<float>& input) const
 {
     int targetSampleCount = 0;
 
@@ -22,22 +22,23 @@ std::vector<float> Resampler::transform(std::vector<float> input) const
     }
 
     if (input.empty()) {
-        return input;
+        return;
     }
 
     if (targetSampleCount <= 1) {
-        return input;
+        return;
     }
 
     if (static_cast<int>(input.size()) == targetSampleCount) {
-        return input;
+        return;
     }
 
     std::vector<float> output(static_cast<std::size_t>(targetSampleCount));
 
     if (input.size() == 1) {
         std::fill(output.begin(), output.end(), input.front());
-        return output;
+        input = std::move(output);
+        return;
     }
 
     const int sourceLastIndex = static_cast<int>(input.size()) - 1;
@@ -59,7 +60,7 @@ std::vector<float> Resampler::transform(std::vector<float> input) const
                 input[static_cast<std::size_t>(rightIndex)] * factor);
     }
 
-    return output;
+    input = std::move(output);
 }
 
 } // namespace scanlab::acquisition::ascan

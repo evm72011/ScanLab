@@ -1,11 +1,25 @@
 #pragma once
 
+#include <concepts>
 #include <functional>
 #include <memory>
+#include <span>
 #include <utility>
 #include <vector>
 
 namespace scanlab::acquisition::ascan {
+
+template<typename T>
+concept VectorTransformer =
+    requires(T& transformer, std::vector<float>& samples) {
+        { transformer.transform(samples) } -> std::same_as<void>;
+    };
+
+template<typename T>
+concept SpanTransformer =
+    requires(T& transformer, std::span<float> samples) {
+        { transformer.transform(samples) } -> std::same_as<void>;
+    };
 
 class Transformer
 {
@@ -13,24 +27,38 @@ public:
     Transformer() = default;
 
     template<typename T>
+        requires VectorTransformer<T>
     static Transformer fromShared(std::shared_ptr<T> transformer)
     {
         Transformer result;
         result.transform_ =
-            [transformer = std::move(transformer)](std::vector<float> input) {
-                return transformer->transform(std::move(input));
+            [transformer = std::move(transformer)](std::vector<float>& samples) {
+                transformer->transform(samples);
             };
+
         return result;
     }
 
-    [[nodiscard]]
-    std::vector<float> transform(std::vector<float> input) const
+    template<typename T>
+        requires (!VectorTransformer<T> && SpanTransformer<T>)
+    static Transformer fromShared(std::shared_ptr<T> transformer)
+    {
+        Transformer result;
+        result.transform_ =
+            [transformer = std::move(transformer)](std::vector<float>& samples) {
+                transformer->transform(std::span<float>{samples});
+            };
+
+        return result;
+    }
+
+    void transform(std::vector<float>& samples) const
     {
         if (!transform_) {
-            return input;
+            return;
         }
 
-        return transform_(std::move(input));
+        transform_(samples);
     }
 
     [[nodiscard]]
@@ -40,7 +68,7 @@ public:
     }
 
 private:
-    std::function<std::vector<float>(std::vector<float>)> transform_;
+    std::function<void(std::vector<float>&)> transform_;
 };
 
 } // namespace scanlab::acquisition::ascan

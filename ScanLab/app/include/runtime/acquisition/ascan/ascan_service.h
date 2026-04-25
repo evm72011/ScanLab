@@ -3,6 +3,8 @@
 #include "scanlab/acquisition/acquisition_error.h"
 #include "scanlab/acquisition/ascan/frame.h"
 #include "scanlab/acquisition/ascan/pipeline.h"
+#include "scanlab/acquisition/ascan/cropper.h"
+#include "scanlab/acquisition/ascan/resampler.h"
 
 #include <expected>
 #include <functional>
@@ -38,16 +40,15 @@ public:
     void setCropMargins(double leftFraction, double rightFraction);
     void setResampleTargetSampleCount(int value);
     void setEnvelopeTargetPointCount(int value);
-
-    void setTransformSteps(
-        std::vector<scanlab::acquisition::ascan::TransformStep> steps);
-
 private:
     void handleRawFrame(scanlab::acquisition::ascan::RawFrame&& rawFrame);
 
 private:
     DeviceContext& context_;
     std::unique_ptr<scanlab::acquisition::ascan::AcquisitionSource> source_;
+    std::shared_ptr<scanlab::acquisition::ascan::Cropper> cropper_;
+    std::shared_ptr<scanlab::acquisition::ascan::Resampler> resampler_;
+
     scanlab::acquisition::ascan::Pipeline pipeline_;
 
     FrameHandler handler_;

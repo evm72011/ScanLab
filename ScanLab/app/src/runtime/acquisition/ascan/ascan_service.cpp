@@ -13,14 +13,13 @@ namespace saa = scanlab::acquisition::ascan;
 AScanService::AScanService(DeviceContext& context)
     : context_(context)
     , source_(nullptr)
+    , cropper_(std::make_shared<saa::Cropper>())
+    , resampler_(std::make_shared<saa::Resampler>())
 {
-    pipeline_.setSteps({
-        saa::TransformStep::Crop
-//        saa::TransformStep::Resample
+    pipeline_.setTransformers({
+        saa::Transformer::fromShared(cropper_)
     });
 
-    //pipeline_.cropper().setMargins(0.12, 0.10);
-    //pipeline_.resampler().setTargetSampleCount(512);
     pipeline_.envelope().setTargetPointCount(1024);
 
     if (auto* device = context_.device()) {
@@ -84,17 +83,12 @@ bool AScanService::isRunning() const
 
 void AScanService::setCropMargins(double leftFraction, double rightFraction)
 {
-    pipeline_.cropper().setMargins(leftFraction, rightFraction);
+    cropper_->setMargins(leftFraction, rightFraction);
 }
 
 void AScanService::setResampleTargetSampleCount(int value)
 {
-    pipeline_.resampler().setTargetSampleCount(value);
-}
-
-void AScanService::setTransformSteps(std::vector<saa::TransformStep> steps)
-{
-    pipeline_.setSteps(std::move(steps));
+    resampler_->setTargetSampleCount(value);
 }
 
 void AScanService::setEnvelopeTargetPointCount(int value)
