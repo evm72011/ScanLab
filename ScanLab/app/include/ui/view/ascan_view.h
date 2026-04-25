@@ -76,6 +76,7 @@ private:
 
     void applyZoom(qreal cursorX, qreal factor);
     void updateCropMargins();
+    bool canPan() const;
 
     qreal mapSampleY(double value, const QRectF& rect) const;
     qreal mapSampleX(int index, int count, const QRectF& rect) const;

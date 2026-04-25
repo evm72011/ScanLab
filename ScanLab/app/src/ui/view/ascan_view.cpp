@@ -8,6 +8,7 @@
 #include <QtMath>
 #include <QWheelEvent>
 #include <QMouseEvent>
+#include <QCursor>
 
 AScanView::AScanView(QQuickItem* parent)
     : QQuickPaintedItem(parent)
@@ -16,6 +17,7 @@ AScanView::AScanView(QQuickItem* parent)
     setAcceptedMouseButtons(Qt::AllButtons);
     setAcceptedMouseButtons(Qt::LeftButton);
     setOpaquePainting(true);
+    setCursor(Qt::ArrowCursor);
 }
 
 AScanView::~AScanView() = default;
@@ -192,6 +194,7 @@ void AScanView::hoverMoveEvent(QHoverEvent* event)
 
     cursorVisible_ = true;
     cursorX_ = event->position().x();
+
     update();
 }
 
@@ -200,6 +203,11 @@ void AScanView::hoverLeaveEvent(QHoverEvent* event)
     Q_UNUSED(event);
 
     cursorVisible_ = false;
+
+    if (!dragging_) {
+        setCursor(Qt::ArrowCursor);
+    }
+
     update();
 }
 
@@ -231,14 +239,14 @@ void AScanView::wheelEvent(QWheelEvent* event)
 
 void AScanView::mousePressEvent(QMouseEvent* event)
 {
-    if (!event || event->button() != Qt::LeftButton) {
+    if (!event || event->button() != Qt::LeftButton || !canPan()) {
         return;
     }
 
     const auto rect = plotRect();
     const qreal x = event->position().x();
 
-    if (x < rect.left() || x > rect.right()) {
+    if (!rect.contains(event->position())) {
         return;
     }
 
@@ -246,6 +254,8 @@ void AScanView::mousePressEvent(QMouseEvent* event)
     dragStartX_ = x;
     dragStartVisibleLeft_ = visibleLeft_;
     dragStartVisibleRight_ = visibleRight_;
+
+    setCursor(QCursor(Qt::ClosedHandCursor));
 
     event->accept();
 }
@@ -301,6 +311,8 @@ void AScanView::mouseReleaseEvent(QMouseEvent* event)
     }
 
     dragging_ = false;
+    unsetCursor();
+
     event->accept();
 }
 
@@ -341,6 +353,12 @@ void AScanView::applyZoom(qreal cursorX, qreal factor)
     visibleRight_ = qBound<qreal>(0.0, newRight, 1.0);
 
     updateCropMargins();
+
+    if (!canPan()) {
+        dragging_ = false;
+        unsetCursor();
+    }
+
     update();
 }
 
@@ -353,6 +371,11 @@ void AScanView::updateCropMargins()
     facade_->setCropMargins(
         visibleLeft_,
         1.0 - visibleRight_);
+}
+
+bool AScanView::canPan() const
+{
+    return (visibleRight_ - visibleLeft_) < 1.0;
 }
 
 QRectF AScanView::plotRect() const
