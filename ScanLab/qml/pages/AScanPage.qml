@@ -44,7 +44,7 @@ Rectangle {
             }
         }
 
-        SL.AScanSettings {
+        SL.AScanSettingsPage {
             id: ascanSettings
             Layout.preferredWidth: implicitWidth
             Layout.fillHeight: true

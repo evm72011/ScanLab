@@ -31,7 +31,7 @@ set(QML_MODULE_FILES
     dialogs/MessageDialog.qml
 
     pages/AScanPage.qml
-    pages/AScanSettings.qml
+    pages/AScanSettingsPage.qml
     pages/HardwarePage.qml
     pages/LoadPage.qml
     pages/MainPage.qml
