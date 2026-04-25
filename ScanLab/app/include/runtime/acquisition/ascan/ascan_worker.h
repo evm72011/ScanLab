@@ -3,6 +3,7 @@
 #include "runtime/acquisition/ascan/ascan_service.h"
 
 #include <QObject>
+#include <QtTypes>
 
 class DeviceContext;
 
@@ -16,6 +17,7 @@ public:
 public slots:
     void start();
     void stop();
+    void setCropMargins(qreal leftFraction, qreal rightFraction);
 
 signals:
     void frameUpdated(scanlab::acquisition::ascan::Frame frame);

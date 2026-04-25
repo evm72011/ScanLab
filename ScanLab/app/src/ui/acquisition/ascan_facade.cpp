@@ -40,6 +40,13 @@ AScanFacade::AScanFacade(DeviceContext& context, QObject* parent)
         Qt::QueuedConnection);
 
     connect(
+        this,
+        &AScanFacade::requestSetCropMargins,
+        worker_,
+        &AScanWorker::setCropMargins,
+        Qt::QueuedConnection);
+
+    connect(
         worker_,
         &AScanWorker::frameUpdated,
         this,
@@ -109,6 +116,11 @@ void AScanFacade::start()
 void AScanFacade::stop()
 {
     emit requestStop();
+}
+
+void AScanFacade::setCropMargins(qreal leftFraction, qreal rightFraction)
+{
+    emit requestSetCropMargins(leftFraction, rightFraction);
 }
 
 QVector<EnvelopePoint> AScanFacade::samplesSnapshot() const

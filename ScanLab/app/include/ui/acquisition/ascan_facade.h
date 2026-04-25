@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QThread>
 #include <QVector>
+#include <QtTypes>
 #include <qqmlintegration.h>
 
 #include "scanlab/acquisition/ascan/envelope_point.h"
@@ -22,6 +23,7 @@ public:
     ~AScanFacade() override;
 
     bool running() const;
+    void setCropMargins(qreal leftFraction, qreal rightFraction);
 
     Q_INVOKABLE void start();
     Q_INVOKABLE void stop();
@@ -34,6 +36,7 @@ signals:
 
     void frameReady();
     void runningChanged();
+    void requestSetCropMargins(qreal leftFraction, qreal rightFraction);
 
 private:
     using EnvelopePoint = scanlab::acquisition::ascan::EnvelopePoint;

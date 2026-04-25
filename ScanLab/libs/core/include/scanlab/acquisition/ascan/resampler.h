@@ -5,7 +5,7 @@
 
 namespace scanlab::acquisition::ascan {
 
-class Resampler
+class [[deprecated("Use Envelope logic instead")]] Resampler
 {
 public:
     void setTargetSampleCount(int value);

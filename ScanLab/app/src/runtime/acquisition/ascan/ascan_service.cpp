@@ -14,7 +14,6 @@ AScanService::AScanService(DeviceContext& context)
     : context_(context)
     , source_(nullptr)
     , cropper_(std::make_shared<saa::Cropper>())
-    , resampler_(std::make_shared<saa::Resampler>())
 {
     pipeline_.setTransformers({
         saa::Transformer::fromShared(cropper_)
@@ -84,11 +83,6 @@ bool AScanService::isRunning() const
 void AScanService::setCropMargins(double leftFraction, double rightFraction)
 {
     cropper_->setMargins(leftFraction, rightFraction);
-}
-
-void AScanService::setResampleTargetSampleCount(int value)
-{
-    resampler_->setTargetSampleCount(value);
 }
 
 void AScanService::setEnvelopeTargetPointCount(int value)

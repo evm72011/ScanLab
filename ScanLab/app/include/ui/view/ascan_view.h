@@ -58,6 +58,7 @@ public:
 protected:
     void hoverMoveEvent(QHoverEvent* event) override;
     void hoverLeaveEvent(QHoverEvent* event) override;
+    void wheelEvent(QWheelEvent* event) override;
 
 private:
     using EnvelopePoint = scanlab::acquisition::ascan::EnvelopePoint;
@@ -69,6 +70,9 @@ private:
     void paintSignal(QPainter* painter, const QRectF& rect, const QVector<EnvelopePoint>& samples);
     void paintCursor(QPainter* painter, const QRectF& rect);
     void paintCursorLabel(QPainter* painter, const QRectF& rect);
+
+    void applyZoom(qreal cursorX, qreal factor);
+    void updateCropMargins();
 
     qreal mapSampleY(double value, const QRectF& rect) const;
     qreal mapSampleX(int index, int count, const QRectF& rect) const;
@@ -97,6 +101,10 @@ private:
     int yDivisions_ = 10;
     qreal minThicknessMm_ = 0.0;
     qreal maxThicknessMm_ = 20.0;
+
+    qreal visibleLeft_ = 0.0;
+    qreal visibleRight_ = 1.0;
+    qreal minVisibleWidth_ = 0.01;
 
     bool cursorVisible_ = false;
     qreal cursorX_ = 0.0;

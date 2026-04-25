@@ -6,11 +6,13 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QtMath>
+#include <QWheelEvent>
 
 AScanView::AScanView(QQuickItem* parent)
     : QQuickPaintedItem(parent)
 {
     setAcceptHoverEvents(true);
+    setAcceptedMouseButtons(Qt::AllButtons);
     setOpaquePainting(true);
 }
 
@@ -197,6 +199,83 @@ void AScanView::hoverLeaveEvent(QHoverEvent* event)
 
     cursorVisible_ = false;
     update();
+}
+
+
+void AScanView::wheelEvent(QWheelEvent* event)
+{
+    if (!event) {
+        return;
+    }
+
+    const auto rect = plotRect();
+    const qreal x = event->position().x();
+
+    if (x < rect.left() || x > rect.right()) {
+        return;
+    }
+
+    cursorVisible_ = true;
+    cursorX_ = x;
+
+    const qreal factor = event->angleDelta().y() > 0
+                             ? 0.8   // zoom in
+                             : 1.25; // zoom out
+
+    applyZoom(x, factor);
+
+    event->accept();
+}
+
+void AScanView::applyZoom(qreal cursorX, qreal factor)
+{
+    const auto rect = plotRect();
+
+    if (rect.width() <= 0.0) {
+        return;
+    }
+
+    const qreal cursorNorm =
+        qBound<qreal>(0.0, (cursorX - rect.left()) / rect.width(), 1.0);
+
+    const qreal oldLeft = visibleLeft_;
+    const qreal oldRight = visibleRight_;
+    const qreal oldWidth = oldRight - oldLeft;
+
+    qreal newWidth = oldWidth * factor;
+    newWidth = qBound(minVisibleWidth_, newWidth, 1.0);
+
+    const qreal centerInSource = oldLeft + cursorNorm * oldWidth;
+
+    qreal newLeft = centerInSource - cursorNorm * newWidth;
+    qreal newRight = newLeft + newWidth;
+
+    if (newLeft < 0.0) {
+        newRight -= newLeft;
+        newLeft = 0.0;
+    }
+
+    if (newRight > 1.0) {
+        newLeft -= newRight - 1.0;
+        newRight = 1.0;
+    }
+
+    visibleLeft_ = qBound<qreal>(0.0, newLeft, 1.0);
+    visibleRight_ = qBound<qreal>(0.0, newRight, 1.0);
+
+    updateCropMargins();
+    update();
+}
+
+void AScanView::updateCropMargins()
+{
+    if (!facade_) {
+        return;
+    }
+
+    facade_->setCropMargins(
+        visibleLeft_,
+        1.0 - visibleRight_);
 }
 
 QRectF AScanView::plotRect() const

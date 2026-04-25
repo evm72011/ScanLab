@@ -29,3 +29,10 @@ void AScanWorker::stop()
     service_.stop();
     emit stopped(service_.isRunning());
 }
+
+void AScanWorker::setCropMargins(qreal leftFraction, qreal rightFraction)
+{
+    service_.setCropMargins(
+        static_cast<double>(leftFraction),
+        static_cast<double>(rightFraction));
+}
