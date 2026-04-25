@@ -6,7 +6,8 @@
 namespace scanlab::acquisition {
 
 enum class AcquisitionErrorKind {
-    Foo,
+    ReadParameterFailed,
+    WriteParameterFailed,
 };
 
 using AcquisitionError = std::variant<scanlab::device::HardwareError,AcquisitionErrorKind>;

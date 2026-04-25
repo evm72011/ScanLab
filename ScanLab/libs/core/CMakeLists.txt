@@ -1,6 +1,7 @@
 set(LIB_NAME ${CORE_LIB_NAME})
 
 add_library(${LIB_NAME} SHARED
+    src/acquisition/acquisition_configurator.cpp
     src/acquisition/acquisition_control.cpp
     src/acquisition/ascan/raw_decoder.cpp
     src/acquisition/ascan/resampler.cpp
