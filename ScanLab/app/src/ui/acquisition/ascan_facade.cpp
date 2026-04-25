@@ -8,10 +8,12 @@
 #include <QMetaType>
 #include <utility>
 
+using Frame = scanlab::acquisition::ascan::Frame;
+using EnvelopePoint = scanlab::acquisition::ascan::EnvelopePoint;
+
 AScanFacade::AScanFacade(DeviceContext& context, QObject* parent)
     : QObject(parent)
 {
-    using Frame = scanlab::acquisition::ascan::Frame;
     qRegisterMetaType<Frame>();
 
     worker_ = new AScanWorker(context);
@@ -42,10 +44,10 @@ AScanFacade::AScanFacade(DeviceContext& context, QObject* parent)
         &AScanWorker::frameUpdated,
         this,
         [this](const Frame& frame) {
-            QVector<float> values;
+            QVector<EnvelopePoint> values;
             values.reserve(static_cast<qsizetype>(frame.samples.size()));
 
-            for (float sample : frame.samples) {
+            for (const auto&  sample : frame.samples) {
                 values.push_back(sample);
             }
 
@@ -109,13 +111,13 @@ void AScanFacade::stop()
     emit requestStop();
 }
 
-QVector<float> AScanFacade::samplesSnapshot() const
+QVector<EnvelopePoint> AScanFacade::samplesSnapshot() const
 {
     QMutexLocker lock(&samplesMutex_);
     return samples_;
 }
 
-void AScanFacade::setSamples(QVector<float> value)
+void AScanFacade::setSamples(QVector<EnvelopePoint> value)
 {
     QMutexLocker lock(&samplesMutex_);
     samples_ = std::move(value);

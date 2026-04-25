@@ -34,6 +34,16 @@ const Resampler& Pipeline::resampler() const
     return resampler_;
 }
 
+EnvelopeDownsampler& Pipeline::envelope()
+{
+    return envelope_;
+}
+
+const EnvelopeDownsampler& Pipeline::envelope() const
+{
+    return envelope_;
+}
+
 void Pipeline::setSteps(std::vector<TransformStep> steps)
 {
     std::lock_guard lock(stepsMutex_);
@@ -68,13 +78,17 @@ Frame Pipeline::process(const RawFrame& raw) const
         }
     }
 
-    const auto sampleCount = static_cast<int>(samples.size());
+    auto envelopeSamples = envelope_.transform(samples);
+
+    const auto displayCount = static_cast<int>(envelopeSamples.size());
+    const auto sourceCount = static_cast<int>(samples.size());
 
     return Frame{
-        .samples = std::move(samples),
+        .samples = std::move(envelopeSamples),
         .cycle = raw.cycle,
         .dataSize = raw.dataSize,
-        .dataCount = sampleCount,
+        .dataCount = displayCount,
+        .sourceDataCount = sourceCount,
         .bitSize = raw.bitSize,
         .sign = raw.sign
     };

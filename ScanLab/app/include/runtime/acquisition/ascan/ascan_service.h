@@ -37,6 +37,7 @@ public:
 
     void setCropMargins(double leftFraction, double rightFraction);
     void setResampleTargetSampleCount(int value);
+    void setEnvelopeTargetPointCount(int value);
 
     void setTransformSteps(
         std::vector<scanlab::acquisition::ascan::TransformStep> steps);

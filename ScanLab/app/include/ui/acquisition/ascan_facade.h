@@ -6,6 +6,8 @@
 #include <QVector>
 #include <qqmlintegration.h>
 
+#include "scanlab/acquisition/ascan/envelope_point.h"
+
 class DeviceContext;
 class AScanWorker;
 
@@ -24,7 +26,7 @@ public:
     Q_INVOKABLE void start();
     Q_INVOKABLE void stop();
 
-    QVector<float> samplesSnapshot() const;
+    QVector<scanlab::acquisition::ascan::EnvelopePoint> samplesSnapshot() const;
 
 signals:
     void requestStart();
@@ -34,7 +36,9 @@ signals:
     void runningChanged();
 
 private:
-    void setSamples(QVector<float> value);
+    using EnvelopePoint = scanlab::acquisition::ascan::EnvelopePoint;
+
+    void setSamples(QVector<EnvelopePoint> value);
     void setRunning(bool value);
 
 private:
@@ -42,7 +46,7 @@ private:
     QThread workerThread_;
 
     mutable QMutex samplesMutex_;
-    QVector<float> samples_;
+    QVector<EnvelopePoint> samples_;
 
     bool running_ = false;
 };

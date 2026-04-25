@@ -6,6 +6,8 @@
 #include <QVector>
 #include <qqmlintegration.h>
 
+#include "scanlab/acquisition/ascan/envelope_point.h"
+
 class AScanFacade;
 
 class AScanView : public QQuickPaintedItem
@@ -58,11 +60,13 @@ protected:
     void hoverLeaveEvent(QHoverEvent* event) override;
 
 private:
+    using EnvelopePoint = scanlab::acquisition::ascan::EnvelopePoint;
+
     QRectF plotRect() const;
     void paintBackground(QPainter* painter, const QRectF& rect);
     void paintGrid(QPainter* painter, const QRectF& rect);
     void paintXAxisLabels(QPainter* painter, const QRectF& rect);
-    void paintSignal(QPainter* painter, const QRectF& rect, const QVector<float>& samples);
+    void paintSignal(QPainter* painter, const QRectF& rect, const QVector<EnvelopePoint>& samples);
     void paintCursor(QPainter* painter, const QRectF& rect);
     void paintCursorLabel(QPainter* painter, const QRectF& rect);
 

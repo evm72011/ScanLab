@@ -5,6 +5,7 @@ add_library(${LIB_NAME} SHARED
     src/acquisition/ascan/raw_decoder.cpp
     src/acquisition/ascan/resampler.cpp
     src/acquisition/ascan/cropper.cpp
+    src/acquisition/ascan/envelope_downsampler.cpp
     src/acquisition/ascan/pipeline.cpp
 
     src/health/health_topology.cpp

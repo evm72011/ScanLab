@@ -290,7 +290,10 @@ void AScanView::paintXAxisLabels(QPainter* painter, const QRectF& rect)
     painter->restore();
 }
 
-void AScanView::paintSignal(QPainter* painter, const QRectF& rect, const QVector<float>& samples)
+void AScanView::paintSignal(
+    QPainter* painter,
+    const QRectF& rect,
+    const QVector<EnvelopePoint>& samples)
 {
     if (samples.isEmpty()) {
         return;
@@ -301,20 +304,45 @@ void AScanView::paintSignal(QPainter* painter, const QRectF& rect, const QVector
     QPen pen(lineColor_);
     pen.setWidthF(2.0);
     painter->setPen(pen);
-    painter->setRenderHint(QPainter::Antialiasing, true);
+    painter->setRenderHint(QPainter::Antialiasing, false);
 
-    QPainterPath path;
-    path.moveTo(
-        mapSampleX(0, samples.size(), rect),
-        mapSampleY(samples.front(), rect));
+    const int count = samples.size();
 
-    for (int i = 1; i < samples.size(); ++i) {
-        path.lineTo(
-            mapSampleX(i, samples.size(), rect),
-            mapSampleY(samples[i], rect));
+    QPainterPath centerPath;
+
+    const auto centerValue = [](const EnvelopePoint& p) {
+        return (p.min + p.max) * 0.5f;
+    };
+
+    centerPath.moveTo(
+        mapSampleX(0, count, rect),
+        mapSampleY(centerValue(samples[0]), rect));
+
+    for (int i = 1; i < count; ++i) {
+        centerPath.lineTo(
+            mapSampleX(i, count, rect),
+            mapSampleY(centerValue(samples[i]), rect));
     }
 
-    painter->drawPath(path);
+    painter->drawPath(centerPath);
+
+    for (int i = 0; i < count; ++i) {
+        const auto& sample = samples[i];
+
+        const qreal yMin = mapSampleY(sample.min, rect);
+        const qreal yMax = mapSampleY(sample.max, rect);
+
+        if (qAbs(yMin - yMax) < 5.0) {
+            continue;
+        }
+
+        const qreal x = mapSampleX(i, count, rect);
+
+        painter->drawLine(
+            QPointF(x, yMin),
+            QPointF(x, yMax));
+    }
+
     painter->restore();
 }
 

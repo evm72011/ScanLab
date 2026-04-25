@@ -15,12 +15,13 @@ AScanService::AScanService(DeviceContext& context)
     , source_(nullptr)
 {
     pipeline_.setSteps({
-        saa::TransformStep::Crop,
-        saa::TransformStep::Resample
+        saa::TransformStep::Crop
+//        saa::TransformStep::Resample
     });
 
     //pipeline_.cropper().setMargins(0.12, 0.10);
-    pipeline_.resampler().setTargetSampleCount(512);
+    //pipeline_.resampler().setTargetSampleCount(512);
+    pipeline_.envelope().setTargetPointCount(1024);
 
     if (auto* device = context_.device()) {
         source_ = std::make_unique<saa::AcquisitionSource>(*device);
@@ -94,6 +95,11 @@ void AScanService::setResampleTargetSampleCount(int value)
 void AScanService::setTransformSteps(std::vector<saa::TransformStep> steps)
 {
     pipeline_.setSteps(std::move(steps));
+}
+
+void AScanService::setEnvelopeTargetPointCount(int value)
+{
+    pipeline_.envelope().setTargetPointCount(value);
 }
 
 void AScanService::handleRawFrame(saa::RawFrame&& rawFrame)
