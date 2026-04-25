@@ -54,6 +54,8 @@ qt_add_qml_module(${APP_NAME}
     URI ScanLab
     VERSION 1.0
     SOURCES
+        app/include/runtime/acquisition/acquisition_configuration_service.h
+        app/include/runtime/acquisition/acquisition_configuration_worker.h
         app/include/runtime/acquisition/ascan/ascan_service.h
         app/include/runtime/acquisition/ascan/ascan_worker.h
         app/include/runtime/device/device_context.h
@@ -72,6 +74,7 @@ qt_add_qml_module(${APP_NAME}
         app/include/runtime/health/temperature_worker.h
 
         app/include/ui/app_info.h
+        app/include/ui/acquisition/acquisition_configuration_facade.h
         app/include/ui/acquisition/ascan_facade.h
         app/include/ui/connection/connection_facade.h
         app/include/ui/connection/connection_state.h
@@ -89,7 +92,8 @@ qt_add_qml_module(${APP_NAME}
         app/include/c_scan_worker.h
 
 #-----------
-
+        app/src/runtime/acquisition/acquisition_configuration_service.cpp
+        app/src/runtime/acquisition/acquisition_configuration_worker.cpp
         app/src/runtime/acquisition/ascan/ascan_service.cpp
         app/src/runtime/acquisition/ascan/ascan_worker.cpp
         app/src/runtime/device/device_context.cpp
@@ -100,6 +104,7 @@ qt_add_qml_module(${APP_NAME}
         app/src/runtime/health/temperature_service.cpp
         app/src/runtime/health/temperature_worker.cpp
 
+        app/src/ui/acquisition/acquisition_configuration_facade.cpp
         app/src/ui/acquisition/ascan_facade.cpp
         app/src/ui/connection/connection_facade.cpp
         app/src/ui/health/temperature_facade.cpp

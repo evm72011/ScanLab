@@ -23,6 +23,11 @@ ConnectionFacade* Backend::connectionFacade()
     return &connectionFacade_;
 }
 
+AcquisitionConfigurationFacade* Backend::acquisitionConfigurationFacade()
+{
+    return &acquisitionConfigurationFacade_;
+}
+
 AScanFacade* Backend::ascanFacade()
 {
     return &ascanFacade_;
