@@ -12,6 +12,8 @@ class AcquisitionConfigurator {
 public:
     explicit AcquisitionConfigurator(device::Device& device);
 
+    std::expected<int, AcquisitionError> getCycleCount() const;
+
     std::expected<AscanParameters, AcquisitionError>
     getAscanParameters(int cycle) const;
 

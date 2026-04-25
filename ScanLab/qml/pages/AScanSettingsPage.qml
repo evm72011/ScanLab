@@ -83,20 +83,6 @@ Rectangle {
             Layout.fillHeight: true
             visible: root.expanded
             clip: true
-
-            SL.RangeSlider {
-                width: 200
-
-                onLeftValueChanged: console.log("left crop:", leftValue)
-                onRightValueChanged: console.log("right crop:", rightValue)
-            }
-
-            Label {
-                anchors.centerIn: parent
-                text: qsTr("A-scan settings")
-                color: SL.Theme.colors.textSecondary
-                opacity: 0.6
-            }
         }
     }
 }

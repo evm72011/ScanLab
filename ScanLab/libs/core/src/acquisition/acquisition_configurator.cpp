@@ -11,6 +11,34 @@ AcquisitionConfigurator::AcquisitionConfigurator(sd::Device& device)
 {
 }
 
+std::expected<int, AcquisitionError>
+AcquisitionConfigurator::getCycleCount() const
+{
+    auto* hw = device_.get();
+    if (!hw) {
+        return std::unexpected(sd::HardwareError::HardwareNotSet);
+    }
+
+    if (!hw->LockDevice()) {
+        return std::unexpected(sd::HardwareError::DeviceLockFailed);
+    }
+
+    int cycleCount = 0;
+    const bool ok = hw->GetCycleCount(&cycleCount);
+
+    const bool unlocked = hw->UnlockDevice();
+
+    if (!unlocked) {
+        return std::unexpected(sd::HardwareError::DeviceUnlockFailed);
+    }
+
+    if (!ok) {
+        return std::unexpected(AcquisitionErrorKind::ReadParameterFailed);
+    }
+
+    return static_cast<int>(cycleCount);
+}
+
 std::expected<AscanParameters, AcquisitionError>
 AcquisitionConfigurator::getAscanParameters(int cycle) const
 {
