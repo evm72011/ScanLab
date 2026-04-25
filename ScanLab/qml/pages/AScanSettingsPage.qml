@@ -83,6 +83,40 @@ Rectangle {
             Layout.fillHeight: true
             visible: root.expanded
             clip: true
+            ColumnLayout {
+                anchors.fill: parent
+                anchors.margins: 12
+                spacing: 8
+
+                Button {
+                    text: "Read cycles"
+
+                    onClicked: {
+                        backend.acquisitionConfigurationFacade.refresh()
+                    }
+                }
+
+                Text {
+                    text: "Cycles: " + backend.acquisitionConfigurationFacade.cycleCount
+                    color: SL.Theme.colors.text
+                }
+
+                Connections {
+                    target: backend.acquisitionConfigurationFacade
+
+                    function onCycleCountChanged() {
+                        console.log("Cycle count:", backend.acquisitionConfigurationFacade.cycleCount)
+                    }
+
+                    function onErrorCodeChanged() {
+                        console.log("Scan config error:", backend.acquisitionConfigurationFacade.errorCode)
+                    }
+                }
+
+                Item {
+                    Layout.fillHeight: true
+                }
+            }
         }
     }
 }
