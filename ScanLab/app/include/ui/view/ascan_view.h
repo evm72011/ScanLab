@@ -59,6 +59,9 @@ protected:
     void hoverMoveEvent(QHoverEvent* event) override;
     void hoverLeaveEvent(QHoverEvent* event) override;
     void wheelEvent(QWheelEvent* event) override;
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseMoveEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event) override;
 
 private:
     using EnvelopePoint = scanlab::acquisition::ascan::EnvelopePoint;
@@ -105,6 +108,11 @@ private:
     qreal visibleLeft_ = 0.0;
     qreal visibleRight_ = 1.0;
     qreal minVisibleWidth_ = 0.01;
+
+    bool dragging_ = false;
+    qreal dragStartX_ = 0.0;
+    qreal dragStartVisibleLeft_ = 0.0;
+    qreal dragStartVisibleRight_ = 1.0;
 
     bool cursorVisible_ = false;
     qreal cursorX_ = 0.0;

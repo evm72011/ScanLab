@@ -7,12 +7,14 @@
 #include <QPainterPath>
 #include <QtMath>
 #include <QWheelEvent>
+#include <QMouseEvent>
 
 AScanView::AScanView(QQuickItem* parent)
     : QQuickPaintedItem(parent)
 {
     setAcceptHoverEvents(true);
     setAcceptedMouseButtons(Qt::AllButtons);
+    setAcceptedMouseButtons(Qt::LeftButton);
     setOpaquePainting(true);
 }
 
@@ -224,6 +226,81 @@ void AScanView::wheelEvent(QWheelEvent* event)
 
     applyZoom(x, factor);
 
+    event->accept();
+}
+
+void AScanView::mousePressEvent(QMouseEvent* event)
+{
+    if (!event || event->button() != Qt::LeftButton) {
+        return;
+    }
+
+    const auto rect = plotRect();
+    const qreal x = event->position().x();
+
+    if (x < rect.left() || x > rect.right()) {
+        return;
+    }
+
+    dragging_ = true;
+    dragStartX_ = x;
+    dragStartVisibleLeft_ = visibleLeft_;
+    dragStartVisibleRight_ = visibleRight_;
+
+    event->accept();
+}
+
+void AScanView::mouseMoveEvent(QMouseEvent* event)
+{
+    if (!event) {
+        return;
+    }
+
+    if (!dragging_) {
+        return;
+    }
+
+    const auto rect = plotRect();
+
+    if (rect.width() <= 0.0) {
+        return;
+    }
+
+    const qreal dx = event->position().x() - dragStartX_;
+    const qreal visibleWidth = dragStartVisibleRight_ - dragStartVisibleLeft_;
+
+    const qreal sourceShift =
+        -dx / rect.width() * visibleWidth;
+
+    qreal newLeft = dragStartVisibleLeft_ + sourceShift;
+    qreal newRight = dragStartVisibleRight_ + sourceShift;
+
+    if (newLeft < 0.0) {
+        newRight -= newLeft;
+        newLeft = 0.0;
+    }
+
+    if (newRight > 1.0) {
+        newLeft -= newRight - 1.0;
+        newRight = 1.0;
+    }
+
+    visibleLeft_ = qBound<qreal>(0.0, newLeft, 1.0);
+    visibleRight_ = qBound<qreal>(0.0, newRight, 1.0);
+
+    updateCropMargins();
+    update();
+
+    event->accept();
+}
+
+void AScanView::mouseReleaseEvent(QMouseEvent* event)
+{
+    if (!event || event->button() != Qt::LeftButton) {
+        return;
+    }
+
+    dragging_ = false;
     event->accept();
 }
 
