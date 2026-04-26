@@ -1,13 +1,17 @@
 #include "scanlab/acquisition/acquisition_configurator.h"
 
+
 #include <UTDriverOEMPA.h>
 
 namespace sd = scanlab::device;
 
 namespace scanlab::acquisition {
 
-AcquisitionConfigurator::AcquisitionConfigurator(sd::Device& device)
+AcquisitionConfigurator::AcquisitionConfigurator(
+    sd::Device& device,
+    AcquisitionSetupSnapshot& snapshot)
     : device_(device)
+    , snapshot_(snapshot)
 {
 }
 
@@ -19,14 +23,14 @@ AcquisitionConfigurator::getCycleCount() const
         return std::unexpected(sd::HardwareError::HardwareNotSet);
     }
 
-    if (!hw->LockDevice()) {
+    if (!hw->LockDevice(eAcqContinue)) {
         return std::unexpected(sd::HardwareError::DeviceLockFailed);
     }
 
     int cycleCount = 0;
     const bool ok = hw->GetCycleCount(&cycleCount);
 
-    const bool unlocked = hw->UnlockDevice();
+    const bool unlocked = hw->UnlockDevice(eAcqContinue);
 
     if (!unlocked) {
         return std::unexpected(sd::HardwareError::DeviceUnlockFailed);
@@ -42,53 +46,10 @@ AcquisitionConfigurator::getCycleCount() const
 std::expected<AscanParameters, AcquisitionError>
 AcquisitionConfigurator::getAscanParameters(int cycle) const
 {
-    auto* hw = device_.get();
-    if (!hw) {
-        return std::unexpected(sd::HardwareError::HardwareNotSet);
-    }
-
-    if (!hw->LockDevice()) {
-        return std::unexpected(sd::HardwareError::DeviceLockFailed);
-    }
-
-    AscanParameters parameters;
-    parameters.cycle = cycle;
-
-    enumCompressionType compressionType {};
-    long pointFactor = 0;
-    long pointCount = 0;
-
-    bool ok = true;
-
-    // OEMPA API uses seconds internally; OEMPA file displays us.
-    if (!hw->GetAscanStart(cycle, &parameters.start)) {
-        ok = false;
-    }
-
-    if (ok && !hw->GetAscanRange(
-                  cycle,
-                  &parameters.range,
-                  &compressionType,
-                  &pointFactor,
-                  &pointCount)) {
-        ok = false;
-    }
-
-    parameters.pointCount = static_cast<int>(pointCount);
-
-    const bool unlocked = hw->UnlockDevice();
-
-    if (!unlocked) {
-        return std::unexpected(sd::HardwareError::DeviceUnlockFailed);
-    }
-
-    if (!ok) {
-        return std::unexpected(AcquisitionErrorKind::ReadParameterFailed);
-    }
-
-    return parameters;
+    return snapshot_.getAscanParameters(cycle);
 }
 
+/*
 std::expected<void, AcquisitionError>
 AcquisitionConfigurator::setAscanParameters(const AscanParameters& parameters)
 {
@@ -133,6 +94,63 @@ AcquisitionConfigurator::setAscanParameters(const AscanParameters& parameters)
     if (!ok) {
         return std::unexpected(AcquisitionErrorKind::WriteParameterFailed);
     }
+
+    return {};
+}
+*/
+
+std::expected<void, AcquisitionError>
+AcquisitionConfigurator::setAscanParameters(const AscanParameters&)
+{
+    auto* hw = device_.get();
+    if (!hw) {
+        return std::unexpected(sd::HardwareError::HardwareNotSet);
+    }
+
+    if (!hw->LockDevice()) {
+        return std::unexpected(sd::HardwareError::DeviceLockFailed);
+    }
+
+    bool ok = true;
+
+    const int cycle = 0;
+
+    double start = 5.0e-6;       // Start=0.000000 us
+    double range = 30.0e-6;      // Range=30.000000 us
+    long pointCount = 3001;      // PointCount=3001
+    long pointFactor = 0;
+
+    enumCompressionType compressionType = eCompression;
+
+    if (!hw->SetAscanStart(cycle, start)) {
+        ok = false;
+    }
+
+    if (!hw->SetAscanRangeWithCount( //ok &&
+            cycle,
+            range,
+            compressionType,
+            pointCount,
+            pointFactor)) {
+        ok = false;
+    }
+
+    const bool unlocked = hw->UnlockDevice();
+
+    if (!unlocked) {
+        return std::unexpected(sd::HardwareError::DeviceUnlockFailed);
+    }
+
+    if (!ok) {
+        return std::unexpected(AcquisitionErrorKind::WriteParameterFailed);
+    }
+
+    snapshot_.updateOne(AscanParameters{
+        .cycle = cycle,
+        .start = start,
+        .range = range,
+        .pointCount = static_cast<int>(pointCount),
+    });
 
     return {};
 }

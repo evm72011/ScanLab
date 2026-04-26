@@ -97,19 +97,19 @@ Rectangle {
                 }
 
                 Text {
-                    text: "Cycles: " + backend.acquisitionConfigurationFacade.cycleCount
+                    text: "Cycles: " + backend?.acquisitionConfigurationFacade.cycleCount ?? 0
                     color: SL.Theme.colors.text
                 }
 
                 Connections {
-                    target: backend.acquisitionConfigurationFacade
+                    target: backend?.acquisitionConfigurationFacade
 
                     function onCycleCountChanged() {
-                        console.log("Cycle count:", backend.acquisitionConfigurationFacade.cycleCount)
+                        console.log("Cycle count:", backend?.acquisitionConfigurationFacade.cycleCount)
                     }
 
                     function onErrorCodeChanged() {
-                        console.log("Scan config error:", backend.acquisitionConfigurationFacade.errorCode)
+                        console.log("Scan config error:", backend?.acquisitionConfigurationFacade.errorCode)
                     }
                 }
 

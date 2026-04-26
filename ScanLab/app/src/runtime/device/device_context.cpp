@@ -20,3 +20,8 @@ const sd::Device* DeviceContext::device() const
 {
     return device_.get();
 }
+
+scanlab::acquisition::AcquisitionSetupSnapshot& DeviceContext::setupSnapshot()
+{
+    return setupSnapshot_;
+}

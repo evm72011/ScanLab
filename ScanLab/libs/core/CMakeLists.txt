@@ -3,6 +3,9 @@ set(LIB_NAME ${CORE_LIB_NAME})
 add_library(${LIB_NAME} SHARED
     src/acquisition/acquisition_configurator.cpp
     src/acquisition/acquisition_control.cpp
+    src/acquisition/acquisition_setup_snapshot.cpp
+    src/acquisition/customized_api_dispatcher.cpp
+
     src/acquisition/ascan/raw_decoder.cpp
     src/acquisition/ascan/resampler.cpp
     src/acquisition/ascan/cropper.cpp
@@ -27,6 +30,11 @@ if(MOCK_DEVICE)
     set(IMPL_VARIANT "mock/")
     target_compile_definitions(${LIB_NAME} PRIVATE MOCK_DEVICE=1)
 endif()
+
+target_compile_definitions(${LIB_NAME} PRIVATE
+    UNICODE
+    _UNICODE
+)
 
 target_sources(${LIB_NAME} PRIVATE
     src/device/${IMPL_VARIANT}device.cpp
