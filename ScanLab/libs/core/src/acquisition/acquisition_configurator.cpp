@@ -1,3 +1,4 @@
+#include "scanlab/device/device_lock_guard.h"
 #include "scanlab/acquisition/acquisition_configurator.h"
 
 #include <UTDriverOEMPA.h>
@@ -42,12 +43,13 @@ AcquisitionConfigurator::getCycleCount() const
 std::expected<AscanParameters, AcquisitionError>
 AcquisitionConfigurator::getAscanParameters(int cycle) const
 {
-    auto* hw = device_.get();
+    auto* hw = device_.get();  // hw is CHWDeviceOEMPA* here
     if (!hw) {
         return std::unexpected(sd::HardwareError::HardwareNotSet);
     }
 
-    if (!hw->LockDevice()) {
+    DeviceLockGuard lock(*hw);
+    if (!lock.locked()) {
         return std::unexpected(sd::HardwareError::DeviceLockFailed);
     }
 
@@ -58,19 +60,72 @@ AcquisitionConfigurator::getAscanParameters(int cycle) const
     long pointFactor = 0;
     long pointCount = 0;
 
-    bool ok = true;
+    if (!hw->GetAscanStart(cycle, &parameters.start)) {
+        return std::unexpected(AcquisitionErrorKind::ReadParameterFailed);
+    }
 
-    // OEMPA API uses seconds internally; OEMPA file displays us.
+    if (!hw->GetAscanRange(
+            cycle,
+            &parameters.range,
+            &compressionType,
+            &pointFactor,
+            &pointCount)) {
+        return std::unexpected(AcquisitionErrorKind::ReadParameterFailed);
+    }
+
+    parameters.pointCount = static_cast<int>(pointCount);
+
+    if (!lock.release()) {
+        return std::unexpected(sd::HardwareError::DeviceUnlockFailed);
+    }
+
+    return parameters;
+}
+
+std::expected<AscanParameters, AcquisitionError>
+AcquisitionConfigurator::getAscanParameters_(int cycle) const
+{
+    auto* hw = device_.get();  // hw is CHWDeviceOEMPA* here
+    if (!hw) {
+        return std::unexpected(sd::HardwareError::HardwareNotSet);
+    }
+
+
+
+    if (!hw->LockDevice()) {
+        return std::unexpected(sd::HardwareError::DeviceLockFailed);
+    }
+
+    /*
+    struct AscanParameters {
+        int cycle = 0;
+        double start = 0.0;
+        double range = 0.0;
+        int pointCount = 0;
+    };
+    */
+
+    AscanParameters parameters;
+    parameters.cycle = cycle;
+
+    enumCompressionType compressionType {};
+    long pointFactor = 0;
+    long pointCount = 0;
+    //double dGain = 5.55;
+
+    bool ok = true; // hw->GetGainDigital(cycle, &dGain); - works fine
+
+    // as GetAscanStart as GetAscanRange return false - why ???
     if (!hw->GetAscanStart(cycle, &parameters.start)) {
         ok = false;
     }
 
     if (ok && !hw->GetAscanRange(
-                  cycle,
-                  &parameters.range,
-                  &compressionType,
-                  &pointFactor,
-                  &pointCount)) {
+            cycle,
+            &parameters.range,
+            &compressionType,
+            &pointFactor,
+            &pointCount)) {
         ok = false;
     }
 
@@ -88,6 +143,7 @@ AcquisitionConfigurator::getAscanParameters(int cycle) const
 
     return parameters;
 }
+
 
 std::expected<void, AcquisitionError>
 AcquisitionConfigurator::setAscanParameters(const AscanParameters& parameters)

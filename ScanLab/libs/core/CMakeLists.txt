@@ -9,6 +9,8 @@ add_library(${LIB_NAME} SHARED
     src/acquisition/ascan/envelope_downsampler.cpp
     src/acquisition/ascan/pipeline.cpp
 
+    src/device/device_lock_guard.cpp
+
     src/health/health_topology.cpp
     src/health/humidity_topology_api.cpp
     src/health/temperature_topology_api.cpp

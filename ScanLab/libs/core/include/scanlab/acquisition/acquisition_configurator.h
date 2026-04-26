@@ -14,8 +14,8 @@ public:
 
     std::expected<int, AcquisitionError> getCycleCount() const;
 
-    std::expected<AscanParameters, AcquisitionError>
-    getAscanParameters(int cycle) const;
+    std::expected<AscanParameters, AcquisitionError> getAscanParameters(int cycle) const;
+    std::expected<AscanParameters, AcquisitionError> getAscanParameters_(int cycle) const;
 
     std::expected<void, AcquisitionError>
     setAscanParameters(const AscanParameters& parameters);

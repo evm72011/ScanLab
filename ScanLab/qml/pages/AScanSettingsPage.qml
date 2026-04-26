@@ -89,7 +89,7 @@ Rectangle {
                 spacing: 8
 
                 Button {
-                    text: "Read cycles"
+                    text: "Test"
 
                     onClicked: {
                         backend.acquisitionConfigurationFacade.refresh()
@@ -97,19 +97,19 @@ Rectangle {
                 }
 
                 Text {
-                    text: "Cycles: " + backend.acquisitionConfigurationFacade.cycleCount
-                    color: SL.Theme.colors.text
+                    text: "Cycles: " + backend?.acquisitionConfigurationFacade?.cycleCount ?? 0
+                    color: SL.Theme.colors.textPrimary
                 }
 
                 Connections {
-                    target: backend.acquisitionConfigurationFacade
+                    target: backend?.acquisitionConfigurationFacade ?? null
 
                     function onCycleCountChanged() {
-                        console.log("Cycle count:", backend.acquisitionConfigurationFacade.cycleCount)
+                        console.log("Cycle count:", backend?.acquisitionConfigurationFacade?.cycleCount)
                     }
 
                     function onErrorCodeChanged() {
-                        console.log("Scan config error:", backend.acquisitionConfigurationFacade.errorCode)
+                        console.log("Scan config error:", backend?.acquisitionConfigurationFacade?.errorCode)
                     }
                 }
 

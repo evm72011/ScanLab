@@ -142,7 +142,7 @@ QString AcquisitionConfigurationFacade::errorCode() const
 
 void AcquisitionConfigurationFacade::refresh()
 {
-    emit requestReadCycleCount();
+    //emit requestReadCycleCount();
     emit requestReadAscanParameters(cycle_);
 }
 
