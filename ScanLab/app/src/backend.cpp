@@ -11,6 +11,16 @@
 Backend::Backend(QObject* parent)
     : QObject(parent)
 {
+    // if there is a lot of connection, pack them in a new class BackendCoordinator / BackendOrchestrator
+    connect(
+        &connectionFacade_,
+        &ConnectionFacade::connectionStateChanged,
+        this,
+        [this]() {
+            if (connectionFacade_.connectionState() == ConnectionState::State::Connected) {
+                acquisitionConfigurationFacade_.refresh();
+            }
+        });
 }
 
 AppInfo* Backend::appInfo()

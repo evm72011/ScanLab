@@ -30,6 +30,11 @@ void AScanWorker::stop()
     emit stopped(service_.isRunning());
 }
 
+void AScanWorker::setCycleFilter(int cycle)
+{
+    service_.setCycleFilter(cycle);
+}
+
 void AScanWorker::setCropMargins(qreal leftFraction, qreal rightFraction)
 {
     service_.setCropMargins(

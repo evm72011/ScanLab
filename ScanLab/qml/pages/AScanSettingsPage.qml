@@ -6,6 +6,10 @@ import ScanLab as SL
 Rectangle {
     id: root
 
+    readonly property int connectionState: backend?.connectionFacade?.connectionState ??
+                                  SL.ConnectionState.Disconnected
+    readonly property bool connected: connectionState === SL.ConnectionState.Connected
+
     property bool expanded: false
     property int collapsedWidth: 40
     property int panelWidth: 280

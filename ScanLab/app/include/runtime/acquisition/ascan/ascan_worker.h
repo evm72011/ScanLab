@@ -17,6 +17,7 @@ public:
 public slots:
     void start();
     void stop();
+    void setCycleFilter(int cycle);
     void setCropMargins(qreal leftFraction, qreal rightFraction);
 
 signals:
