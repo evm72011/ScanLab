@@ -41,6 +41,13 @@ AScanFacade::AScanFacade(DeviceContext& context, QObject* parent)
 
     connect(
         this,
+        &AScanFacade::requestSetCycleFilter,
+        worker_,
+        &AScanWorker::setCycleFilter,
+        Qt::QueuedConnection);
+
+    connect(
+        this,
         &AScanFacade::requestSetCropMargins,
         worker_,
         &AScanWorker::setCropMargins,

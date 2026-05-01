@@ -26,6 +26,18 @@ void AcquisitionSource::setFrameHandler(FrameHandler handler)
     handler_ = std::move(handler);
 }
 
+void AcquisitionSource::setCycleFilter(int cycle)
+{
+    std::lock_guard lock(mutex_);
+    cycleFilter_ = cycle;
+}
+
+void AcquisitionSource::clearCycleFilter()
+{
+    std::lock_guard lock(mutex_);
+    cycleFilter_.reset();
+}
+
 std::expected<void, AcquisitionError> AcquisitionSource::start()
 {
     return control_.start(
@@ -91,14 +103,21 @@ void AcquisitionSource::handle(
 {
     FrameHandler localHandler;
     bool running = false;
+    std::optional<int> cycleFilter;
 
     {
         std::lock_guard lock(mutex_);
         localHandler = handler_;
         running = control_.isRunning();
+        cycleFilter = cycleFilter_;
     }
 
     if (!running || !localHandler) {
+        return;
+    }
+
+    const int cycle = static_cast<int>(hdr->cycle);
+    if (cycleFilter && cycle != *cycleFilter) {
         return;
     }
 

@@ -35,6 +35,8 @@ public:
     AcquisitionSource& operator=(const AcquisitionSource&) = delete;
 
     void setFrameHandler(FrameHandler handler);
+    void setCycleFilter(int cycle);
+    void clearCycleFilter();
 
     std::expected<void, AcquisitionError> start();
     void stop();
@@ -58,6 +60,8 @@ private:
 private:
     scanlab::device::Device& device_;
     AcquisitionControl control_;
+
+    std::optional<int> cycleFilter_;
 
     FrameHandler handler_;
     mutable std::mutex mutex_;

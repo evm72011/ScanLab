@@ -37,6 +37,7 @@ signals:
     void frameReady();
     void runningChanged();
     void requestSetCropMargins(qreal leftFraction, qreal rightFraction);
+    void requestSetCycleFilter(int cycle);
 
 private:
     using EnvelopePoint = scanlab::acquisition::ascan::EnvelopePoint;

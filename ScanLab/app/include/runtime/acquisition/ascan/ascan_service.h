@@ -36,6 +36,7 @@ public:
     void stop();
     bool isRunning() const;
 
+    void setCycleFilter(int cycle);
     void setCropMargins(double leftFraction, double rightFraction);
     void setEnvelopeTargetPointCount(int value);
 private:

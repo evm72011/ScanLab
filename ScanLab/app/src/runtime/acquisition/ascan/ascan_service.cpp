@@ -80,6 +80,11 @@ bool AScanService::isRunning() const
     return source_->isRunning();
 }
 
+void AScanService::setCycleFilter(int cycle)
+{
+    source_->setCycleFilter(cycle);
+}
+
 void AScanService::setCropMargins(double leftFraction, double rightFraction)
 {
     cropper_->setMargins(leftFraction, rightFraction);
