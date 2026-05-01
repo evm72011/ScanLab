@@ -81,8 +81,8 @@ Rectangle {
             visible: root.expanded
         }
 
-        // 👇 content area
         Item {
+            id: contentArea
             Layout.fillWidth: true
             Layout.fillHeight: true
             visible: root.expanded
@@ -92,28 +92,18 @@ Rectangle {
                 anchors.margins: 12
                 spacing: 8
 
-                Button {
-                    text: "Test"
+                SL.DropDown {
+                    label: qsTr("Cycle")
+                    labelWidth: 40
+                    fieldWidth: 75
+                    infoText: qsTr("Select the active cycle")
 
-                    onClicked: {
-                        backend.acquisitionConfigurationFacade.refresh()
-                    }
-                }
+                    model: backend?.acquisitionConfigurationFacade.cycles ?? []
+                    currentValue: backend?.acquisitionConfigurationFacade.cycle ?? 0
+                    enabled: root.connected
 
-                Text {
-                    text: "Cycles: " + backend?.acquisitionConfigurationFacade?.cycleCount ?? 0
-                    color: SL.Theme.colors.textPrimary
-                }
-
-                Connections {
-                    target: backend?.acquisitionConfigurationFacade ?? null
-
-                    function onCycleCountChanged() {
-                        console.log("Cycle count:", backend?.acquisitionConfigurationFacade?.cycleCount)
-                    }
-
-                    function onErrorCodeChanged() {
-                        console.log("Scan config error:", backend?.acquisitionConfigurationFacade?.errorCode)
+                    onActivated: function(value) {
+                        backend.acquisitionConfigurationFacade.setCycle(value)
                     }
                 }
 

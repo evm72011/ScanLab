@@ -61,7 +61,7 @@ private:
     scanlab::device::Device& device_;
     AcquisitionControl control_;
 
-    std::optional<int> cycleFilter_;
+    std::optional<int> cycleFilter_{0};
 
     FrameHandler handler_;
     mutable std::mutex mutex_;

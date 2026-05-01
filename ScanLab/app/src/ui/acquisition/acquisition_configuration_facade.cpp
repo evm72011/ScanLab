@@ -1,5 +1,7 @@
 #include "ui/acquisition/acquisition_configuration_facade.h"
 
+#include <QVariantMap>
+
 #include "runtime/acquisition/acquisition_configuration_worker.h"
 #include "runtime/device/device_context.h"
 
@@ -110,6 +112,11 @@ int AcquisitionConfigurationFacade::cycleCount() const
     return cycleCount_;
 }
 
+QVariantList AcquisitionConfigurationFacade::cycles() const
+{
+    return cycles_;
+}
+
 int AcquisitionConfigurationFacade::cycle() const
 {
     return cycle_;
@@ -206,7 +213,21 @@ void AcquisitionConfigurationFacade::setCycleCount(int value)
     }
 
     cycleCount_ = value;
+
+    QVariantList cycles;
+    cycles.reserve(cycleCount_);
+
+    for (int i = 0; i < cycleCount_; ++i) {
+        QVariantMap item;
+        item["text"] = QString::number(i);
+        item["value"] = i;
+        cycles.push_back(item);
+    }
+
+    cycles_ = std::move(cycles);
+
     emit cycleCountChanged();
+    emit cyclesChanged();
 }
 
 void AcquisitionConfigurationFacade::setUnavailable(bool value)

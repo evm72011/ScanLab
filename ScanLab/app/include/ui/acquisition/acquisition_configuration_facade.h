@@ -3,6 +3,7 @@
 #include <QObject>
 #include <QThread>
 #include <QString>
+#include <QVariantList>
 
 namespace scanlab::acquisition {
 struct AscanParameters;
@@ -16,6 +17,7 @@ class AcquisitionConfigurationFacade : public QObject
     Q_OBJECT
 
     Q_PROPERTY(int cycleCount READ cycleCount NOTIFY cycleCountChanged)
+    Q_PROPERTY(QVariantList cycles READ cycles NOTIFY cyclesChanged)
     Q_PROPERTY(int cycle READ cycle WRITE setCycle NOTIFY cycleChanged)
 
     Q_PROPERTY(double start READ start WRITE setStart NOTIFY startChanged)
@@ -30,6 +32,7 @@ public:
     ~AcquisitionConfigurationFacade();
 
     int cycleCount() const;
+    QVariantList cycles() const;
     int cycle() const;
 
     double start() const;
@@ -50,6 +53,7 @@ public slots:
 
 signals:
     void cycleCountChanged();
+    void cyclesChanged();
     void cycleChanged();
 
     void startChanged();
@@ -75,6 +79,7 @@ private:
     AcquisitionConfigurationWorker* worker_ = nullptr;
 
     int cycleCount_ = 0;
+    QVariantList cycles_;
     int cycle_ = 0;
 
     double start_ = 0.0;
