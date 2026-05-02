@@ -86,6 +86,10 @@ structCorrectionOEMPA* WINAPI CallbackDispatcher::callback(
     CFocalLaw* emission,
     CFocalLaw* reception)
 {
+
+    printf("CALLBACK FIRED\n");
+    return nullptr;
+
     CallbackDispatcher* dispatcher = nullptr;
 
     {

@@ -18,9 +18,11 @@ Backend::Backend(QObject* parent)
         this,
         [this]() {
             if (connectionFacade_.connectionState() == ConnectionState::State::Connected) {
+                qDebug() << "startWatching()";
                 configCallbackFacade_.startWatching();
 
                 QTimer::singleShot(1000, this, [this]() {
+                    qDebug() << "loadSelectedConfigFile: "  << configFileFacade_.selectedConfigFile();
                     configFileFacade_.loadSelectedConfigFile();
                 });
 
