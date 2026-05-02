@@ -10,7 +10,7 @@ add_library(${LIB_NAME} SHARED
     src/acquisition/ascan/pipeline.cpp
 
     src/config/file_loader.cpp
-    src/config/config_file_saver.cpp
+    src/config/file_saver.cpp
 
     src/device/device_lock_guard.cpp
 

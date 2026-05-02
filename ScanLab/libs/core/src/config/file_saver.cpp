@@ -1,4 +1,4 @@
-#include "scanlab/config/config_file_saver.h"
+#include "scanlab/config/file_saver.h"
 
 #include <CustomizedDriverOEMPA.h>
 
@@ -8,13 +8,13 @@ namespace sd = scanlab::device;
 
 namespace scanlab::config {
 
-ConfigFileSaver::ConfigFileSaver(sd::Device& device)
+FileSaver::FileSaver(sd::Device& device)
     : device_(device)
 {
 }
 
 std::expected<void, ConfigFileError>
-ConfigFileSaver::save(const std::filesystem::path& filePath) const
+FileSaver::save(const std::filesystem::path& filePath) const
 {
     {
         std::ofstream test(filePath);

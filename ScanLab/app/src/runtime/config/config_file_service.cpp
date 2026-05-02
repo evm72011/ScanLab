@@ -54,7 +54,6 @@ ConfigFileService::loadToHardware(const QString& fileName)
     const auto result = loader.load(path->toStdString());
 
     if (!result.has_value()) {
-        // маппим ошибки HW слоя в Qt слой
         return std::unexpected(ConfigFileError::LoadFailed);
     }
 

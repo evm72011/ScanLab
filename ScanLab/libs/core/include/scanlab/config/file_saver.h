@@ -17,9 +17,9 @@ enum class ConfigFileErrorKind {
 using ConfigFileError =
     std::variant<scanlab::device::HardwareError, ConfigFileErrorKind>;
 
-class ConfigFileSaver {
+class FileSaver {
 public:
-    explicit ConfigFileSaver(scanlab::device::Device& device);
+    explicit FileSaver(scanlab::device::Device& device);
 
     std::expected<void, ConfigFileError>
     save(const std::filesystem::path& filePath) const;
