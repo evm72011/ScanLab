@@ -1,8 +1,5 @@
 #include "scanlab/config/callback_dispatcher.h"
 
-//#include <UTKernelDriver.h>
-//#include <UTKernelDriverOEMPA.h>
-
 #include <Common.h>
 #include <myMFC.h>
 #include <UTBasicEnum.h>
@@ -11,22 +8,61 @@
 #include <UTDriverTypes.h>
 #include <CustomizedKernelOEMPA.h>
 
-namespace scanlab::config {
+#include <mutex>
 
-CallbackDispatcher& CallbackDispatcher::instance()
+namespace scanlab::config {
+namespace {
+
+std::mutex g_activeDispatcherMutex;
+CallbackDispatcher* g_activeDispatcher = nullptr;
+
+} // namespace
+
+CallbackDispatcher::CallbackDispatcher(scanlab::device::Device& device)
+    : device_(device)
 {
-    static CallbackDispatcher dispatcher;
-    return dispatcher;
+}
+
+CallbackDispatcher::~CallbackDispatcher()
+{
+    unregisterCallback();
 }
 
 void CallbackDispatcher::registerCallback()
 {
+    {
+        std::lock_guard lock(g_activeDispatcherMutex);
+        g_activeDispatcher = this;
+    }
+
     OEMPA_SetCallbackCustomizedDriverAPI(&CallbackDispatcher::callback);
+
+    std::lock_guard lock(mutex_);
+    registered_ = true;
 }
 
 void CallbackDispatcher::unregisterCallback()
 {
+    bool wasRegistered = false;
+
+    {
+        std::lock_guard lock(mutex_);
+        wasRegistered = registered_;
+        registered_ = false;
+    }
+
+    if (!wasRegistered) {
+        return;
+    }
+
     OEMPA_SetCallbackCustomizedDriverAPI(nullptr);
+
+    {
+        std::lock_guard lock(g_activeDispatcherMutex);
+        if (g_activeDispatcher == this) {
+            g_activeDispatcher = nullptr;
+        }
+    }
 }
 
 void CallbackDispatcher::setHandler(Handler handler)
@@ -42,7 +78,7 @@ void CallbackDispatcher::clearHandler()
 }
 
 structCorrectionOEMPA* WINAPI CallbackDispatcher::callback(
-    CHWDeviceOEMPA*,
+    CHWDeviceOEMPA* hw,
     const wchar_t* fileName,
     enumStepCustomizedAPI step,
     structRoot* root,
@@ -50,18 +86,29 @@ structCorrectionOEMPA* WINAPI CallbackDispatcher::callback(
     CFocalLaw* emission,
     CFocalLaw* reception)
 {
-    instance().handle(
-        fileName,
-        step,
-        root,
-        cycle,
-        emission,
-        reception);
+    CallbackDispatcher* dispatcher = nullptr;
+
+    {
+        std::lock_guard lock(g_activeDispatcherMutex);
+        dispatcher = g_activeDispatcher;
+    }
+
+    if (dispatcher) {
+        dispatcher->handle(
+            hw,
+            fileName,
+            step,
+            root,
+            cycle,
+            emission,
+            reception);
+    }
 
     return nullptr;
 }
 
 void CallbackDispatcher::handle(
+    CHWDeviceOEMPA* hw,
     const wchar_t* fileName,
     enumStepCustomizedAPI step,
     structRoot* root,
@@ -77,9 +124,17 @@ void CallbackDispatcher::handle(
         return;
     }
 
+    // Optional safety: ignore callbacks from another device.
+    if (device_.get() != hw) {
+        return;
+    }
+
     Handler localHandler;
     {
         std::lock_guard lock(mutex_);
+        if (!registered_) {
+            return;
+        }
         localHandler = handler_;
     }
 
@@ -99,7 +154,7 @@ void CallbackDispatcher::handle(
             .cycle = i,
             .start = cycle[i].dStart,
             .range = cycle[i].dRange,
-            .pointCount = cycle[i].lPointCount
+            .pointCount = static_cast<int>(cycle[i].lPointCount)
         });
     }
 

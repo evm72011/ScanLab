@@ -1,3 +1,4 @@
+#include "runtime/device/device_context.h"
 #include "runtime/config/config_callback_service.h"
 
 #include "scanlab/config/callback_dispatcher.h"
@@ -9,7 +10,7 @@
 namespace sc = scanlab::config;
 
 ConfigCallbackService::ConfigCallbackService(DeviceContext& context)
-    : context_(context)
+    : dispatcher_(std::make_unique<sc::CallbackDispatcher>(*context.device()))
 {
 }
 
@@ -20,22 +21,26 @@ ConfigCallbackService::~ConfigCallbackService()
 
 void ConfigCallbackService::startWatching(SnapshotHandler handler)
 {
-    auto& dispatcher = sc::CallbackDispatcher::instance();
+    if (!dispatcher_) {
+        return;
+    }
 
-    dispatcher.setHandler(
+    dispatcher_->setHandler(
         [handler = std::move(handler)](sc::ConfigSnapshot snapshot) {
             handler(toVariantMap(snapshot));
         });
 
-    dispatcher.registerCallback();
+    dispatcher_->registerCallback();
 }
 
 void ConfigCallbackService::stopWatching()
 {
-    auto& dispatcher = sc::CallbackDispatcher::instance();
+    if (!dispatcher_) {
+        return;
+    }
 
-    dispatcher.clearHandler();
-    dispatcher.unregisterCallback();
+    dispatcher_->clearHandler();
+    dispatcher_->unregisterCallback();
 }
 
 QVariantMap ConfigCallbackService::toVariantMap(

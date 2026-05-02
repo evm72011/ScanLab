@@ -7,6 +7,7 @@ class DeviceContext;
 
 namespace scanlab::config {
 struct ConfigSnapshot;
+class CallbackDispatcher;
 }
 
 class ConfigCallbackService {
@@ -20,7 +21,7 @@ public:
     void stopWatching();
 
 private:
-    DeviceContext& context_;
+    std::unique_ptr<scanlab::config::CallbackDispatcher> dispatcher_;
 
     static QVariantMap toVariantMap(
         const scanlab::config::ConfigSnapshot& snapshot);

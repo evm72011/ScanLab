@@ -18,9 +18,24 @@ Backend::Backend(QObject* parent)
         this,
         [this]() {
             if (connectionFacade_.connectionState() == ConnectionState::State::Connected) {
-                configFileFacade_.loadSelectedConfigFile();
-                acquisitionConfigurationFacade_.refresh();
+                configCallbackFacade_.startWatching();
+
+                QTimer::singleShot(1000, this, [this]() {
+                    configFileFacade_.loadSelectedConfigFile();
+                });
+
+                //configFileFacade_.loadSelectedConfigFile();
+                //acquisitionConfigurationFacade_.refresh();
             }
+        });
+
+    connect(
+        &configCallbackFacade_,
+        &ConfigCallbackFacade::configSnapshotChanged,
+        this,
+        [this]() {
+            qDebug() << "CONFIG CALLBACK:"
+                     << configCallbackFacade_.configSnapshot();
         });
 }
 
