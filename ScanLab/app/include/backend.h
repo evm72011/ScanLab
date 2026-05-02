@@ -8,6 +8,7 @@
 #include "ui/connection/connection_facade.h"
 #include "ui/acquisition/acquisition_configuration_facade.h"
 #include "ui/acquisition/ascan_facade.h"
+#include "ui/config/config_callback_facade.h"
 #include "ui/config/config_file_facade.h"
 #include "ui/health/temperature_facade.h"
 #include "ui/health/humidity_facade.h"
@@ -40,6 +41,7 @@ private:
     ConnectionFacade connectionFacade_{context_, this};
     AcquisitionConfigurationFacade acquisitionConfigurationFacade_{context_, this};
     AScanFacade ascanFacade_{context_, this};
+    ConfigCallbackFacade configCallbackFacade_{context_, this};
     ConfigFileFacade configFileFacade_{context_, this};
     TemperatureFacade temperatureFacade_{context_, this};
     HumidityFacade humidityFacade_{context_, this};

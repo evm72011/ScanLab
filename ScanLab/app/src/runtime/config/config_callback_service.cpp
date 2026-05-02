@@ -8,7 +8,10 @@
 
 namespace sc = scanlab::config;
 
-ConfigCallbackService::ConfigCallbackService() = default;
+ConfigCallbackService::ConfigCallbackService(DeviceContext& context)
+    : context_(context)
+{
+}
 
 ConfigCallbackService::~ConfigCallbackService()
 {

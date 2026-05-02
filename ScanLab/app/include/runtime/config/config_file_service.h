@@ -13,10 +13,6 @@ enum class ConfigFileError {
     LoadFailed
 };
 
-namespace scanlab::config {
-    struct ConfigSnapshot;
-}
-
 class ConfigFileService {
 public:
     using SnapshotHandler = std::function<void(QVariantMap)>;
