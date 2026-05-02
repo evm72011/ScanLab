@@ -13,8 +13,14 @@ enum class ConfigFileError {
     LoadFailed
 };
 
+namespace scanlab::config {
+    struct ConfigSnapshot;
+}
+
 class ConfigFileService {
 public:
+    using SnapshotHandler = std::function<void(QVariantMap)>;
+
     explicit ConfigFileService(DeviceContext& context);
 
     std::expected<QStringList, ConfigFileError> availableConfigFiles() const;

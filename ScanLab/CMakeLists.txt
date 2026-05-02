@@ -58,6 +58,7 @@ qt_add_qml_module(${APP_NAME}
         app/include/runtime/acquisition/acquisition_configuration_worker.h
         app/include/runtime/acquisition/ascan/ascan_service.h
         app/include/runtime/acquisition/ascan/ascan_worker.h
+        app/include/runtime/config/config_callback_service.h
         app/include/runtime/config/config_file_service.h
         app/include/runtime/config/config_file_worker.h
         app/include/runtime/device/device_context.h
@@ -99,6 +100,7 @@ qt_add_qml_module(${APP_NAME}
         app/src/runtime/acquisition/acquisition_configuration_worker.cpp
         app/src/runtime/acquisition/ascan/ascan_service.cpp
         app/src/runtime/acquisition/ascan/ascan_worker.cpp
+        app/src/runtime/config/config_callback_service.cpp
         app/src/runtime/config/config_file_service.cpp
         app/src/runtime/config/config_file_worker.cpp
         app/src/runtime/device/device_context.cpp

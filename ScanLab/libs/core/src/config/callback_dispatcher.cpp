@@ -1,38 +1,47 @@
-#include "scanlab/config/config_file_callback_dispatcher.h"
+#include "scanlab/config/callback_dispatcher.h"
 
-#include <CustomizedDriverOEMPA.h>
+//#include <UTKernelDriver.h>
+//#include <UTKernelDriverOEMPA.h>
+
+#include <Common.h>
+#include <myMFC.h>
+#include <UTBasicEnum.h>
+#include <UTBasicType.h>
+#include <UTDriverCommon.h>
+#include <UTDriverTypes.h>
+#include <CustomizedKernelOEMPA.h>
 
 namespace scanlab::config {
 
-ConfigFileCallbackDispatcher& ConfigFileCallbackDispatcher::instance()
+CallbackDispatcher& CallbackDispatcher::instance()
 {
-    static ConfigFileCallbackDispatcher dispatcher;
+    static CallbackDispatcher dispatcher;
     return dispatcher;
 }
 
-void ConfigFileCallbackDispatcher::registerCallback()
+void CallbackDispatcher::registerCallback()
 {
-    OEMPA_SetCallbackCustomizedDriverAPI(&ConfigFileCallbackDispatcher::callback);
+    OEMPA_SetCallbackCustomizedDriverAPI(&CallbackDispatcher::callback);
 }
 
-void ConfigFileCallbackDispatcher::unregisterCallback()
+void CallbackDispatcher::unregisterCallback()
 {
     OEMPA_SetCallbackCustomizedDriverAPI(nullptr);
 }
 
-void ConfigFileCallbackDispatcher::setHandler(Handler handler)
+void CallbackDispatcher::setHandler(Handler handler)
 {
     std::lock_guard lock(mutex_);
     handler_ = std::move(handler);
 }
 
-void ConfigFileCallbackDispatcher::clearHandler()
+void CallbackDispatcher::clearHandler()
 {
     std::lock_guard lock(mutex_);
     handler_ = nullptr;
 }
 
-structCorrectionOEMPA* WINAPI ConfigFileCallbackDispatcher::callback(
+structCorrectionOEMPA* WINAPI CallbackDispatcher::callback(
     CHWDeviceOEMPA*,
     const wchar_t* fileName,
     enumStepCustomizedAPI step,
@@ -52,7 +61,7 @@ structCorrectionOEMPA* WINAPI ConfigFileCallbackDispatcher::callback(
     return nullptr;
 }
 
-void ConfigFileCallbackDispatcher::handle(
+void CallbackDispatcher::handle(
     const wchar_t* fileName,
     enumStepCustomizedAPI step,
     structRoot* root,
@@ -90,7 +99,7 @@ void ConfigFileCallbackDispatcher::handle(
             .cycle = i,
             .start = cycle[i].dStart,
             .range = cycle[i].dRange,
-            .pointCount = cycle[i].iPointCount
+            .pointCount = cycle[i].lPointCount
         });
     }
 

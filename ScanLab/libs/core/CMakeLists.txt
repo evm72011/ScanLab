@@ -9,6 +9,7 @@ add_library(${LIB_NAME} SHARED
     src/acquisition/ascan/envelope_downsampler.cpp
     src/acquisition/ascan/pipeline.cpp
 
+    src/config/callback_dispatcher.cpp
     src/config/file_loader.cpp
     src/config/file_saver.cpp
 

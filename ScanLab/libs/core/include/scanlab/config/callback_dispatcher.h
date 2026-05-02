@@ -1,5 +1,9 @@
 #pragma once
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 #include "scanlab/config/config_snapshot.h"
 
 #include <functional>
@@ -12,13 +16,15 @@ struct structRoot;
 struct structCycle;
 enum enumStepCustomizedAPI;
 
+//using enumStepCustomizedAPI = int;
+
 namespace scanlab::config {
 
-class ConfigFileCallbackDispatcher {
+class CallbackDispatcher {
 public:
     using Handler = std::function<void(ConfigSnapshot)>;
 
-    static ConfigFileCallbackDispatcher& instance();
+    static CallbackDispatcher& instance();
 
     void registerCallback();
     void unregisterCallback();
@@ -27,7 +33,7 @@ public:
     void clearHandler();
 
 private:
-    ConfigFileCallbackDispatcher() = default;
+    CallbackDispatcher() = default;
 
     static structCorrectionOEMPA* WINAPI callback(
         CHWDeviceOEMPA* hw,

@@ -1,11 +1,11 @@
 #include "runtime/config/config_file_service.h"
+#include "runtime/device/device_context.h"
 
 #include <QCoreApplication>
 #include <QDir>
 #include <QFileInfo>
 
 #include "scanlab/config/file_loader.h"
-#include "runtime/device/device_context.h"
 
 namespace sc = scanlab::config;
 
