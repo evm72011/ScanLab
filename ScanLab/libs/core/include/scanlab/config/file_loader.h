@@ -9,9 +9,9 @@
 
 namespace scanlab::config {
 
-class ConfigFileLoader {
+class FileLoader {
 public:
-    explicit ConfigFileLoader(scanlab::device::Device& device);
+    explicit FileLoader(scanlab::device::Device& device);
 
     std::expected<void, ConfigFileError>
     load(const std::filesystem::path& filePath) const;

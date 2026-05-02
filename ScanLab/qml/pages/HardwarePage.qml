@@ -110,6 +110,8 @@ Item {
 
         SL.DropDown {
             label: qsTr("Config file")
+            labelWidth: 140
+            fieldWidth: 260
             currentValue: configFileFacade?.selectedConfigFile
 
             model: configFileFacade?.availableConfigFiles.map(function(fileName) {
@@ -120,7 +122,6 @@ Item {
             }) ?? []
 
             onActivated: function(fileName) {
-                console.log(fileName)
                 backend.configFileFacade.selectedConfigFile = fileName
                 SL.AppSettings.setValue("Hardware/configFile", fileName)
             }

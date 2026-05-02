@@ -4,7 +4,7 @@
 #include <QDir>
 #include <QFileInfo>
 
-#include "scanlab/config/config_file_loader.h"
+#include "scanlab/config/file_loader.h"
 #include "runtime/device/device_context.h"
 
 namespace sc = scanlab::config;
@@ -49,7 +49,7 @@ ConfigFileService::loadToHardware(const QString& fileName)
         return std::unexpected(ConfigFileError::HardwareNotSet);
     }
 
-    sc::ConfigFileLoader loader(*device);
+    sc::FileLoader loader(*device);
 
     const auto result = loader.load(path->toStdString());
 
