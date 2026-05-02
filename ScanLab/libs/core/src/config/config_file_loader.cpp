@@ -1,0 +1,51 @@
+#include "scanlab/config/config_file_loader.h"
+
+#include <CustomizedDriverOEMPA.h>
+
+
+namespace sd = scanlab::device;
+
+namespace scanlab::config {
+
+ConfigFileLoader::ConfigFileLoader(sd::Device& device)
+    : device_(device)
+{
+}
+
+std::expected<void, ConfigFileError>
+ConfigFileLoader::load(const std::filesystem::path& filePath) const
+{
+    if (!std::filesystem::exists(filePath)) {
+        return std::unexpected(ConfigFileErrorKind::FileNotFound);
+    }
+
+    auto* hw = device_.get();
+    if (hw == nullptr) {
+        return std::unexpected(sd::HardwareError::HardwareNotSet);
+    }
+
+    if (hw->GetSWDeviceOEMPA() == nullptr) {
+        return std::unexpected(sd::HardwareError::OempaInterfaceUnavailable);
+    }
+
+    if (!hw->LockDevice(eAcqContinue)) {
+        return std::unexpected(sd::HardwareError::DeviceLockFailed);
+    }
+
+    const std::wstring path = filePath.wstring();
+
+    const bool ok = OEMPA_ReadFileWriteHW(
+        hw,
+        path.c_str()
+    );
+
+    const bool unlockOk = hw->UnlockDevice(eAcqContinue);
+
+    if (!ok || !unlockOk) {
+        return std::unexpected(ConfigFileErrorKind::LoadFailed);
+    }
+
+    return {};
+}
+
+} // namespace scanlab::config

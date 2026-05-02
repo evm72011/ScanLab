@@ -18,6 +18,7 @@ Backend::Backend(QObject* parent)
         this,
         [this]() {
             if (connectionFacade_.connectionState() == ConnectionState::State::Connected) {
+                configFileFacade_.loadSelectedConfigFile();
                 acquisitionConfigurationFacade_.refresh();
             }
         });
@@ -41,6 +42,11 @@ AcquisitionConfigurationFacade* Backend::acquisitionConfigurationFacade()
 AScanFacade* Backend::ascanFacade()
 {
     return &ascanFacade_;
+}
+
+ConfigFileFacade* Backend::configFileFacade()
+{
+    return &configFileFacade_;
 }
 
 TemperatureFacade* Backend::temperatureFacade()

@@ -16,7 +16,7 @@ Item {
 
     property var model: []
 
-    property int currentValue: -1
+    property var currentValue: null
 
     readonly property int currentIndex: indexOfValue(currentValue)
     readonly property string currentText:
@@ -24,7 +24,7 @@ Item {
             ? model[currentIndex].text
             : ""
 
-    signal activated(int value)
+    signal activated(var value)
 
     property int fieldWidth: 280
     property int fieldHeight: 36

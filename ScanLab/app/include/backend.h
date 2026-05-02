@@ -8,6 +8,7 @@
 #include "ui/connection/connection_facade.h"
 #include "ui/acquisition/acquisition_configuration_facade.h"
 #include "ui/acquisition/ascan_facade.h"
+#include "ui/config/config_file_facade.h"
 #include "ui/health/temperature_facade.h"
 #include "ui/health/humidity_facade.h"
 
@@ -19,6 +20,7 @@ class Backend : public QObject
     Q_PROPERTY(ConnectionFacade* connectionFacade READ connectionFacade CONSTANT)
     Q_PROPERTY(AcquisitionConfigurationFacade* acquisitionConfigurationFacade READ acquisitionConfigurationFacade CONSTANT)
     Q_PROPERTY(AScanFacade* ascanFacade READ ascanFacade CONSTANT)
+    Q_PROPERTY(ConfigFileFacade* configFileFacade READ configFileFacade CONSTANT)
     Q_PROPERTY(TemperatureFacade* temperatureFacade READ temperatureFacade CONSTANT)
     Q_PROPERTY(HumidityFacade* humidityFacade READ humidityFacade CONSTANT)
 public:
@@ -28,6 +30,7 @@ public:
     ConnectionFacade* connectionFacade();
     AcquisitionConfigurationFacade* acquisitionConfigurationFacade();
     AScanFacade* ascanFacade();
+    ConfigFileFacade* configFileFacade();
     TemperatureFacade* temperatureFacade();
     HumidityFacade* humidityFacade();
 
@@ -37,6 +40,7 @@ private:
     ConnectionFacade connectionFacade_{context_, this};
     AcquisitionConfigurationFacade acquisitionConfigurationFacade_{context_, this};
     AScanFacade ascanFacade_{context_, this};
+    ConfigFileFacade configFileFacade_{context_, this};
     TemperatureFacade temperatureFacade_{context_, this};
     HumidityFacade humidityFacade_{context_, this};
 };

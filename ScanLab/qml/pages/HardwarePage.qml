@@ -7,6 +7,7 @@ Item {
     id: root
 
     readonly property var connectionFacade: backend?.connectionFacade ?? null
+    readonly property var configFileFacade: backend?.configFileFacade ?? null
 
     property int connectionState: connectionFacade?.connectionState ?? SL.ConnectionState.Disconnected
 
@@ -65,7 +66,7 @@ Item {
             enabled: root.disconnected
 
             onValueEdited: function(value) {
-                backend.connectionFacade.address = value;
+                connectionFacade.address = value;
             }
 
             onEditingFinished: function(value) {
@@ -107,8 +108,26 @@ Item {
             }
         }
 
+        SL.DropDown {
+            label: qsTr("Config file")
+            currentValue: configFileFacade?.selectedConfigFile
+
+            model: configFileFacade?.availableConfigFiles.map(function(fileName) {
+                return {
+                    text: fileName,
+                    value: fileName
+                }
+            }) ?? []
+
+            onActivated: function(fileName) {
+                console.log(fileName)
+                backend.configFileFacade.selectedConfigFile = fileName
+                SL.AppSettings.setValue("Hardware/configFile", fileName)
+            }
+        }
+
         Connections {
-            target: backend?.connectionFacade ?? null
+            target: connectionFacade ?? null
 
             function onConnectionFailure() {
                 connectionErrorDialog.open()
@@ -134,14 +153,17 @@ Item {
         Item { Layout.fillHeight: true }
 
         Component.onCompleted: {
-            backend.connectionFacade.address = SL.AppSettings.value(
+            connectionFacade.address = SL.AppSettings.value(
                 "Hardware/address",
                 backend.connectionFacade.address
             )
 
-            backend.connectionFacade.deviceType = Number(
+            connectionFacade.deviceType = Number(
                 SL.AppSettings.value("Hardware/type", backend.connectionFacade.deviceType)
             )
+
+            backend.configFileFacade.refreshConfigFiles()
+            backend.configFileFacade.selectedConfigFile = SL.AppSettings.value("Hardware/configFile", "")
         }
     }
 }

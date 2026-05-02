@@ -58,6 +58,8 @@ qt_add_qml_module(${APP_NAME}
         app/include/runtime/acquisition/acquisition_configuration_worker.h
         app/include/runtime/acquisition/ascan/ascan_service.h
         app/include/runtime/acquisition/ascan/ascan_worker.h
+        app/include/runtime/config/config_file_service.h
+        app/include/runtime/config/config_file_worker.h
         app/include/runtime/device/device_context.h
         app/include/runtime/device/device_type.h
         app/include/runtime/device/device_type_def.h
@@ -76,6 +78,7 @@ qt_add_qml_module(${APP_NAME}
         app/include/ui/app_info.h
         app/include/ui/acquisition/acquisition_configuration_facade.h
         app/include/ui/acquisition/ascan_facade.h
+        app/include/ui/config/config_file_facade.h
         app/include/ui/connection/connection_facade.h
         app/include/ui/connection/connection_state.h
         app/include/ui/device/device_type.h
@@ -96,6 +99,8 @@ qt_add_qml_module(${APP_NAME}
         app/src/runtime/acquisition/acquisition_configuration_worker.cpp
         app/src/runtime/acquisition/ascan/ascan_service.cpp
         app/src/runtime/acquisition/ascan/ascan_worker.cpp
+        app/src/runtime/config/config_file_service.cpp
+        app/src/runtime/config/config_file_worker.cpp
         app/src/runtime/device/device_context.cpp
         app/src/runtime/connection/connection_service.cpp
         app/src/runtime/connection/connection_worker.cpp
@@ -106,6 +111,7 @@ qt_add_qml_module(${APP_NAME}
 
         app/src/ui/acquisition/acquisition_configuration_facade.cpp
         app/src/ui/acquisition/ascan_facade.cpp
+        app/src/ui/config/config_file_facade.cpp
         app/src/ui/connection/connection_facade.cpp
         app/src/ui/health/temperature_facade.cpp
         app/src/ui/health/humidity_facade.cpp
