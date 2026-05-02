@@ -44,6 +44,11 @@ AScanFacade* Backend::ascanFacade()
     return &ascanFacade_;
 }
 
+ConfigCallbackFacade* Backend::configCallbackFacade()
+{
+    return &configCallbackFacade_;
+}
+
 ConfigFileFacade* Backend::configFileFacade()
 {
     return &configFileFacade_;

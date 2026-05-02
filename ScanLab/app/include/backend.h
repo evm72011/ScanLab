@@ -21,6 +21,7 @@ class Backend : public QObject
     Q_PROPERTY(ConnectionFacade* connectionFacade READ connectionFacade CONSTANT)
     Q_PROPERTY(AcquisitionConfigurationFacade* acquisitionConfigurationFacade READ acquisitionConfigurationFacade CONSTANT)
     Q_PROPERTY(AScanFacade* ascanFacade READ ascanFacade CONSTANT)
+    Q_PROPERTY(ConfigCallbackFacade* configCallbackFacade READ configCallbackFacade CONSTANT)
     Q_PROPERTY(ConfigFileFacade* configFileFacade READ configFileFacade CONSTANT)
     Q_PROPERTY(TemperatureFacade* temperatureFacade READ temperatureFacade CONSTANT)
     Q_PROPERTY(HumidityFacade* humidityFacade READ humidityFacade CONSTANT)
@@ -31,6 +32,7 @@ public:
     ConnectionFacade* connectionFacade();
     AcquisitionConfigurationFacade* acquisitionConfigurationFacade();
     AScanFacade* ascanFacade();
+    ConfigCallbackFacade* configCallbackFacade();
     ConfigFileFacade* configFileFacade();
     TemperatureFacade* temperatureFacade();
     HumidityFacade* humidityFacade();
