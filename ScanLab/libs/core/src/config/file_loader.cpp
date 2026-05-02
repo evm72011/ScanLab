@@ -28,20 +28,9 @@ FileLoader::load(const std::filesystem::path& filePath) const
         return std::unexpected(sd::HardwareError::OempaInterfaceUnavailable);
     }
 
-    if (!hw->LockDevice(eAcqContinue)) {
-        return std::unexpected(sd::HardwareError::DeviceLockFailed);
-    }
-
     const std::wstring path = filePath.wstring();
 
-    const bool ok = OEMPA_ReadFileWriteHW(
-        hw,
-        path.c_str()
-    );
-
-    const bool unlockOk = hw->UnlockDevice(eAcqContinue);
-
-    if (!ok || !unlockOk) {
+    if (!OEMPA_ReadFileWriteHW(hw,path.c_str())) {
         return std::unexpected(ConfigFileErrorKind::LoadFailed);
     }
 

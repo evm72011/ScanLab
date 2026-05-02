@@ -11,7 +11,7 @@ namespace sc = scanlab::config;
 
 ConfigFileService::ConfigFileService(DeviceContext& context)
     : context_(context)
-    , configDir_(QCoreApplication::applicationDirPath() + "/config")
+    , configDir_(QCoreApplication::applicationDirPath() + "/OEMPA_config")
 {
 }
 
@@ -72,10 +72,14 @@ ConfigFileService::resolveConfigPath(const QString& fileName) const
     const QString fullPath = dir.absoluteFilePath(fileName);
     const QFileInfo info(fullPath);
 
-    const QString canonical = info.canonicalFilePath();
-    const QString base = dir.canonicalPath();
+    const QString canonical = QDir::cleanPath(info.canonicalFilePath());
+    const QString base = QDir::cleanPath(dir.canonicalPath());
 
-    if (canonical.isEmpty() || !canonical.startsWith(base + QDir::separator())) {
+    if (canonical.isEmpty()) {
+        return std::unexpected(ConfigFileError::InvalidPath);
+    }
+
+    if (canonical != base && !canonical.startsWith(base + "/")) {
         return std::unexpected(ConfigFileError::InvalidPath);
     }
 

@@ -1,12 +1,15 @@
 #include "scanlab/config/callback_dispatcher.h"
 
-#include <Common.h>
+
 #include <myMFC.h>
-#include <UTBasicEnum.h>
-#include <UTBasicType.h>
-#include <UTDriverCommon.h>
-#include <UTDriverTypes.h>
-#include <CustomizedKernelOEMPA.h>
+//#include "UTKernelDriver.h"
+
+//#include "UTKernelDriver.h"
+//#include "UTKernelDriverOEMPA.h"
+//#include "CustomizedDriverAPI.h"
+
+//#include "CustomizedDriverOEMPA1.h"
+#include "CustomizedKernelOEMPA.h"
 
 #include <mutex>
 
@@ -30,12 +33,18 @@ CallbackDispatcher::~CallbackDispatcher()
 
 void CallbackDispatcher::registerCallback()
 {
+    auto* hw = device_.get();
+    if (!hw) {
+        return;
+    }
+
     {
         std::lock_guard lock(g_activeDispatcherMutex);
         g_activeDispatcher = this;
     }
 
-    OEMPA_SetCallbackCustomizedDriverAPI(&CallbackDispatcher::callback);
+    hw->SetAcquisitionParameter(this);
+    auto ok = OEMPA_SetCallbackCustomizedDriverAPI(&CallbackDispatcher::callback);
 
     std::lock_guard lock(mutex_);
     registered_ = true;
@@ -44,6 +53,11 @@ void CallbackDispatcher::registerCallback()
 void CallbackDispatcher::unregisterCallback()
 {
     bool wasRegistered = false;
+
+    auto* hw = device_.get();
+    if (hw) {
+        hw->SetAcquisitionParameter(nullptr);
+    }
 
     {
         std::lock_guard lock(mutex_);

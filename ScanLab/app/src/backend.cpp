@@ -11,6 +11,10 @@
 Backend::Backend(QObject* parent)
     : QObject(parent)
 {
+    qDebug() << "startWatching()";
+    configCallbackFacade_.startWatching();
+
+
     // if there is a lot of connection, pack them in a new class BackendCoordinator / BackendOrchestrator
     connect(
         &connectionFacade_,
@@ -18,8 +22,8 @@ Backend::Backend(QObject* parent)
         this,
         [this]() {
             if (connectionFacade_.connectionState() == ConnectionState::State::Connected) {
-                qDebug() << "startWatching()";
-                configCallbackFacade_.startWatching();
+//                qDebug() << "startWatching()";
+//                configCallbackFacade_.startWatching();
 
                 QTimer::singleShot(1000, this, [this]() {
                     qDebug() << "loadSelectedConfigFile: "  << configFileFacade_.selectedConfigFile();
