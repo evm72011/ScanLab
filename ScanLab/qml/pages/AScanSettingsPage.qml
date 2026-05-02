@@ -103,7 +103,7 @@ Rectangle {
                     enabled: root.connected
 
                     onActivated: function(value) {
-                        backend.acquisitionConfigurationFacade.setCycle(value)
+                        backend.acquisitionConfigurationFacade.requestSetCycleFilter(value)
                     }
                 }
 

@@ -172,8 +172,6 @@ void AcquisitionConfigurationFacade::setCycle(int value)
 
     cycle_ = value;
     emit cycleChanged();
-
-    emit requestReadAscanParameters(cycle_);
 }
 
 void AcquisitionConfigurationFacade::setStart(double value)

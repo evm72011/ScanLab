@@ -1,0 +1,9 @@
+set(OEMPA_CONFIG_DIR "${CMAKE_CURRENT_SOURCE_DIR}/OEMPA_config")
+set(OEMPA_CONFIG_OUT_DIR "$<TARGET_FILE_DIR:${APP_NAME}>/OEMPA_config")
+
+add_custom_command(TARGET ${APP_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E make_directory "${OEMPA_CONFIG_OUT_DIR}"
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${OEMPA_CONFIG_DIR}"
+            "${OEMPA_CONFIG_OUT_DIR}"
+)

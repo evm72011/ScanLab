@@ -1,0 +1,52 @@
+[Root]
+20dBAttenuator=0
+ProbeFrequency=5.000000 MHz
+CycleCount=2
+CycleOrderEnable=1
+CycleOrder.count=2
+CycleOrder=0;1
+GainAnalog=0.000000 dB
+
+[Cycle:0]
+TimeSlot=2000.000000 us
+ReceiverChannel.count=1
+ReceiverChannel=0
+WedgeDelay=0.000000 us
+GainDigital=0.000000 dB
+GainNormalization=0.000000 dB
+Start=0.000000 us
+Range=30.000000 us
+PointCount=3001
+CompressionType=Compression
+Rectification=Signed
+FilterIndex=1
+GateCount=0
+
+[Cycle:0\PulserNegative]
+PulserChannel.count=1
+PulserChannel=0
+WedgeDelay=0.000000 us
+Delay=0.000000 us
+Width=0.500000 us
+
+[Cycle:1]
+TimeSlot=2000.000000 us
+ReceiverChannel.count=1
+ReceiverChannel=1
+WedgeDelay=0.000000 us
+GainDigital=0.000000 dB
+GainNormalization=0.000000 dB
+Start=0.000000 us
+Range=5.000000 us
+PointCount=401
+CompressionType=Compression
+Rectification=Signed
+FilterIndex=1
+GateCount=0
+
+[Cycle:1\PulserNegative]
+PulserChannel.count=1
+PulserChannel=1
+WedgeDelay=0.000000 us
+Delay=0.000000 us
+Width=0.100000 us

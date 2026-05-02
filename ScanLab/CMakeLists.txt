@@ -128,6 +128,7 @@ install(TARGETS ${APP_NAME}
 
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/")
 include(OEMPA)
+include(OEMPA_config)
 include(Warnings)
 include(LTO)
 include(Sanitizer)
