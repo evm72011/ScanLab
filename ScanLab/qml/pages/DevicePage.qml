@@ -108,22 +108,36 @@ Item {
             }
         }
 
-        SL.DropDown {
-            label: qsTr("Config file")
-            labelWidth: 140
-            fieldWidth: 260
-            currentValue: configFileFacade?.selectedConfigFile
+        RowLayout {
+            spacing: 8
 
-            model: configFileFacade?.availableConfigFiles.map(function(fileName) {
-                return {
-                    text: fileName,
-                    value: fileName
+            SL.DropDown {
+                label: qsTr("Config file")
+                labelWidth: 140
+                fieldWidth: 260
+                currentValue: configFileFacade?.selectedConfigFile
+
+                model: configFileFacade?.availableConfigFiles.map(function(fileName) {
+                    return {
+                        text: fileName,
+                        value: fileName
+                    }
+                }) ?? []
+
+                onActivated: function(fileName) {
+                    backend.configFileFacade.selectedConfigFile = fileName
+                    SL.AppSettings.setValue("Hardware/configFile", fileName)
                 }
-            }) ?? []
+            }
 
-            onActivated: function(fileName) {
-                backend.configFileFacade.selectedConfigFile = fileName
-                SL.AppSettings.setValue("Hardware/configFile", fileName)
+            SL.Button {
+                text: qsTr("Load")
+                width: 100
+                enabled: connected
+
+                onClicked: {
+                    backend.configFileFacade.loadSelectedConfigFile()
+                }
             }
         }
 

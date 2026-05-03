@@ -4,7 +4,6 @@
 
 #include <cstring>
 #include <utility>
-#include <iostream>
 
 namespace sd = scanlab::device;
 
@@ -30,7 +29,6 @@ void AcquisitionSource::setFrameHandler(FrameHandler handler)
 void AcquisitionSource::setCycleFilter(int cycle)
 {
     std::lock_guard lock(mutex_);
-    std::cout << cycle << '\n';
     cycleFilter_ = cycle;
 }
 

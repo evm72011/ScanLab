@@ -130,6 +130,11 @@ void AScanFacade::setCropMargins(qreal leftFraction, qreal rightFraction)
     emit requestSetCropMargins(leftFraction, rightFraction);
 }
 
+void AScanFacade::setCycleFilter(int cycle)
+{
+    emit requestSetCycleFilter(cycle);
+}
+
 QVector<EnvelopePoint> AScanFacade::samplesSnapshot() const
 {
     QMutexLocker lock(&samplesMutex_);

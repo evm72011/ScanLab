@@ -103,29 +103,8 @@ Rectangle {
                     enabled: root.connected
 
                     onActivated: function(value) {
-                        backend.acquisitionConfigurationFacade.requestSetCycleFilter(value)
+                        backend.ascanFacade.setCycleFilter(value)
                     }
-                }
-
-                Text {
-                    text: qsTr("Config cycles: %1")
-                        .arg(backend?.configCallbackFacade?.configSnapshot?.cycleCount ?? "-")
-
-                    color: SL.Theme.colors.textPrimary
-                    font.pixelSize: SL.Theme.typography.fontSizeMd
-
-                    Layout.fillWidth: true
-                }
-
-                Text {
-                    text: qsTr("Config file: %1")
-                        .arg(backend?.configCallbackFacade?.configSnapshot?.fileName ?? "-")
-
-                    color: SL.Theme.colors.textSecondary
-                    font.pixelSize: SL.Theme.typography.fontSizeSm
-                    elide: Text.ElideRight
-
-                    Layout.fillWidth: true
                 }
 
                 Item {

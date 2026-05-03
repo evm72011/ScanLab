@@ -25,6 +25,7 @@ public:
     bool running() const;
     void setCropMargins(qreal leftFraction, qreal rightFraction);
 
+    Q_INVOKABLE void setCycleFilter(int cycle);
     Q_INVOKABLE void start();
     Q_INVOKABLE void stop();
 

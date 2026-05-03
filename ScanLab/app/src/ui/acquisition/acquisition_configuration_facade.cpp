@@ -74,7 +74,7 @@ AcquisitionConfigurationFacade::AcquisitionConfigurationFacade(
         [this]() {
             setUnavailable(false);
             emit writeSucceeded();
-            refresh();
+            //refresh();
         },
         Qt::QueuedConnection);
 
@@ -147,10 +147,9 @@ QString AcquisitionConfigurationFacade::errorCode() const
     return errorCode_;
 }
 
-void AcquisitionConfigurationFacade::refresh()
+void AcquisitionConfigurationFacade::readCycleCount()
 {
     emit requestReadCycleCount();
-    //emit requestReadAscanParameters(cycle_);
 }
 
 void AcquisitionConfigurationFacade::apply()

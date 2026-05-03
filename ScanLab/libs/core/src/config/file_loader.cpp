@@ -30,7 +30,9 @@ FileLoader::load(const std::filesystem::path& filePath) const
 
     const std::wstring path = filePath.wstring();
 
-    if (!OEMPA_ReadFileWriteHW(hw,path.c_str())) {
+    if (!OEMPA_ReadFileWriteHW(hw, path.c_str())) {
+        printf("OEMPA_ReadFileWriteHW: Failure\n");
+        fflush(stdout);
         return std::unexpected(ConfigFileErrorKind::LoadFailed);
     }
 

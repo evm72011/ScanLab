@@ -34,6 +34,8 @@ Item {
     property int maxPopupHeight: 240
 
     implicitHeight: fieldHeight
+    implicitWidth: labelWidth + fieldWidth + 10
+                   + (infoText.length > 0 ? infoIconSize + 8 + 10 : 0)
 
     function indexOfValue(value) {
         for (let i = 0; i < model.length; ++i) {

@@ -32,7 +32,7 @@ set(QML_MODULE_FILES
 
     pages/AScanPage.qml
     pages/AScanSettingsPage.qml
-    pages/HardwarePage.qml
+    pages/DevicePage.qml
     pages/LoadPage.qml
     pages/MainPage.qml
     pages/ScanBPage.qml

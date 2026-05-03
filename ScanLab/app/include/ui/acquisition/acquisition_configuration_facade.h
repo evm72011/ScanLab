@@ -43,7 +43,8 @@ public:
     QString errorCode() const;
 
 public slots:
-    void refresh();
+    //void refresh();
+    void readCycleCount();
     void apply();
 
     void setCycle(int value);

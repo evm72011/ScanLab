@@ -13,7 +13,7 @@ Rectangle {
     signal clicked()
 
     width: 120
-    height: 40
+    height: 36
     radius: cornerRadius
 
     color: !root.enabled

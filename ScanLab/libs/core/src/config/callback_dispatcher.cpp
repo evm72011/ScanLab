@@ -45,6 +45,11 @@ void CallbackDispatcher::registerCallback()
 
     hw->SetAcquisitionParameter(this);
     auto ok = OEMPA_SetCallbackCustomizedDriverAPI(&CallbackDispatcher::callback);
+    if (ok)
+        printf("OEMPA_SetCallbackCustomizedDriverAPI: SUCCESS\n");
+    else
+        printf("OEMPA_SetCallbackCustomizedDriverAPI: FAILURE\n");
+    fflush(stdout);
 
     std::lock_guard lock(mutex_);
     registered_ = true;
@@ -102,7 +107,6 @@ structCorrectionOEMPA* WINAPI CallbackDispatcher::callback(
 {
 
     printf("CALLBACK FIRED\n");
-    return nullptr;
 
     CallbackDispatcher* dispatcher = nullptr;
 

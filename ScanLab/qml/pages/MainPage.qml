@@ -56,18 +56,6 @@ RowLayout {
             Item {
                 Layout.fillHeight: true
             }
-
-            /*
-            SL.IconTabButton {
-                Layout.fillWidth: true
-                text: qsTr("Settings")
-                iconSource: "qrc:/icons/cog.svg"
-                onClicked: {
-                    // например:
-                    console.log("Settings clicked")
-                }
-            }
-            */
         }
 
         Rectangle {
@@ -89,7 +77,7 @@ RowLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            SL.HardwarePage {}
+            SL.DevicePage {}
 
             SL.AScanPage {
                 active: navigation.currentIndex === 1
