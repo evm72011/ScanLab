@@ -35,6 +35,8 @@ FileLoader::load(const std::filesystem::path& filePath) const
         fflush(stdout);
         return std::unexpected(ConfigFileErrorKind::LoadFailed);
     }
+    printf("OEMPA_ReadFileWriteHW: SUCCESS\n");
+    fflush(stdout);
 
     return {};
 }

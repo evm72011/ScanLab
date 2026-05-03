@@ -2,13 +2,6 @@
 
 
 #include <myMFC.h>
-//#include "UTKernelDriver.h"
-
-//#include "UTKernelDriver.h"
-//#include "UTKernelDriverOEMPA.h"
-//#include "CustomizedDriverAPI.h"
-
-//#include "CustomizedDriverOEMPA1.h"
 #include "CustomizedKernelOEMPA.h"
 
 #include <mutex>
@@ -43,7 +36,7 @@ void CallbackDispatcher::registerCallback()
         g_activeDispatcher = this;
     }
 
-    hw->SetAcquisitionParameter(this);
+    //hw->SetAcquisitionParameter(this);
     auto ok = OEMPA_SetCallbackCustomizedDriverAPI(&CallbackDispatcher::callback);
     if (ok)
         printf("OEMPA_SetCallbackCustomizedDriverAPI: SUCCESS\n");
@@ -107,6 +100,7 @@ structCorrectionOEMPA* WINAPI CallbackDispatcher::callback(
 {
 
     printf("CALLBACK FIRED\n");
+    fflush(stdout);
 
     CallbackDispatcher* dispatcher = nullptr;
 

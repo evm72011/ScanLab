@@ -19,10 +19,8 @@ Rectangle {
 
     Rectangle {
         id: pulseGlow
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.horizontalCenter: parent.horizontalCenter
-        width: row.width + 10
-        height: parent.height - 8
+        anchors.fill: parent
+
         radius: 3
         color: Qt.rgba(1, 1, 1, 0.16)
         opacity: 0
@@ -75,7 +73,7 @@ Rectangle {
         id: hoverHandler
     }
 
-    StyledToolTip {
+    SL.StyledToolTip {
         text: root.tooltip
         visible: hoverHandler.hovered && root.tooltip != ""
     }
