@@ -38,6 +38,7 @@ Item {
             text: root.label
             font.pixelSize: SL.Theme.typography.fontSizeMd
             color: SL.Theme.colors.textPrimary
+            opacity: root.enabled ? 1.0 : 0.6
 
             Layout.preferredWidth: root.labelWidth
             Layout.alignment: Qt.AlignVCenter

@@ -56,6 +56,7 @@ Item {
             color: SL.Theme.colors.textPrimary
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
+            opacity: root.enabled ? 1.0 : 0.6
 
             Layout.preferredWidth: root.labelWidth
             Layout.alignment: Qt.AlignVCenter

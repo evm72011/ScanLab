@@ -113,6 +113,7 @@ Item {
 
             SL.DropDown {
                 label: qsTr("Config file")
+                enabled: connected
                 labelWidth: 140
                 fieldWidth: 260
                 currentValue: configFileFacade?.selectedConfigFile
@@ -124,6 +125,7 @@ Item {
                     }
                 }) ?? []
 
+
                 onActivated: function(fileName) {
                     backend.configFileFacade.selectedConfigFile = fileName
                     SL.AppSettings.setValue("Hardware/configFile", fileName)
@@ -131,8 +133,8 @@ Item {
             }
 
             SL.Button {
-                text: qsTr("Load")
-                width: 100
+                text: qsTr("Load to device")
+                width: 140
                 enabled: connected
 
                 onClicked: {
