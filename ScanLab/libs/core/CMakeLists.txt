@@ -31,7 +31,7 @@ set(IMPL_VARIANT "")
 
 if(MOCK_DEVICE)
     set(IMPL_VARIANT "mock/")
-    target_compile_definitions(${LIB_NAME} PRIVATE MOCK_DEVICE=1)
+    target_compile_definitions(${LIB_NAME} PUBLIC MOCK_DEVICE=1)
 endif()
 
 target_sources(${LIB_NAME} PRIVATE

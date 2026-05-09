@@ -31,3 +31,5 @@ set_target_properties(${APP_NAME} PROPERTIES
 add_subdirectory(config)
 
 target_add_oempa(TARGET ${APP_NAME})
+
+#add_sanitizer_flags(TARGET ${APP_NAME})
