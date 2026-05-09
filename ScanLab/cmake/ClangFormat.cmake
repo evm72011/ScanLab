@@ -40,7 +40,7 @@ function(add_clang_format_target)
             run_clang_format
             COMMAND
                 ${Python3_EXECUTABLE}
-                ${CMAKE_SOURCE_DIR}/tools/run-clang-format.py --in-place
+                ${CMAKE_SOURCE_DIR}/scripts/run-clang-format.py --in-place
                 ${CPP_FILES}
             WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
             USES_TERMINAL)
