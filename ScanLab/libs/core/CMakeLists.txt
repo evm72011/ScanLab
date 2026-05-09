@@ -44,6 +44,10 @@ target_sources(${LIB_NAME} PRIVATE
 target_include_directories(${LIB_NAME}
                            PUBLIC ${CMAKE_CURRENT_LIST_DIR}/include)
 
+target_link_libraries(${LIB_NAME}
+    PUBLIC ${LICENSE_LIB_NAME}
+)
+
 target_add_oempa(TARGET ${LIB_NAME})
 
 target_set_warnings(

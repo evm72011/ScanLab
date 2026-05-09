@@ -2,6 +2,7 @@
 
 #include <variant>
 #include "scanlab/device/hardware_error.h"
+#include "license/status.h"
 
 namespace scanlab::device {
 
@@ -13,7 +14,10 @@ enum class ConnectionErrorKind {
     SerialNumberUnavailable
 };
 
-using ConnectionError = std::variant<HardwareError,ConnectionErrorKind>;
+using ConnectionError = std::variant<
+    HardwareError,
+    ConnectionErrorKind,
+    license::Status>;
 
 } // namespace scanlab::device
 
