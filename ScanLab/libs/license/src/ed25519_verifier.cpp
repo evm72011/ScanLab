@@ -1,9 +1,10 @@
-#include <nlohmann/json.hpp>
-#include <sodium.h>
-
 #include "license/ed25519_verifier.h"
 
-namespace license {
+#include <sodium.h>
+
+#include <utility>
+
+namespace scanlab::license {
 
 namespace {
 
@@ -28,42 +29,42 @@ bool decodeBase64(
 
     return result == 0 && actualSize == expectedSize;
 }
-} // namespace
 
-Ed25519Verifier::Ed25519Verifier(std::string publicKeyBase64)
-    : publicKeyBase64_(std::move(publicKeyBase64)) {
+std::expected<void, LicenseError> validatePublicKey(
+    std::string_view publicKeyBase64
+    ) {
     if (sodium_init() < 0) {
-        status_ = Status::CryptoInitFailed;
-        return;
+        return std::unexpected(LicenseError::CryptoInitFailed);
     }
 
     unsigned char publicKey[crypto_sign_PUBLICKEYBYTES];
 
     if (!decodeBase64(
-            publicKeyBase64_,
+            publicKeyBase64,
             publicKey,
             sizeof(publicKey),
             crypto_sign_PUBLICKEYBYTES
-        )) {
-        status_ = Status::InvalidPublicKey;
-        return;
+            )) {
+        return std::unexpected(LicenseError::InvalidPublicKey);
     }
 
-    status_ = Status::Valid;
+    return {};
 }
 
-bool Ed25519Verifier::isReady() const noexcept {
-    return status_ == Status::Valid;
-}
+} // namespace
 
-Status Ed25519Verifier::status() const noexcept {
-    return status_;
-}
+Ed25519Verifier::Ed25519Verifier(std::string publicKeyBase64)
+    : publicKeyBase64_(std::move(publicKeyBase64)),
+    initResult_(validatePublicKey(publicKeyBase64_)) {}
 
-bool Ed25519Verifier::verify(
+std::expected<void, LicenseError> Ed25519Verifier::verify(
     std::string_view payload,
     std::string_view signatureBase64
-) const {
+    ) const {
+    if (!initResult_) {
+        return std::unexpected(initResult_.error());
+    }
+
     unsigned char publicKey[crypto_sign_PUBLICKEYBYTES];
     unsigned char signature[crypto_sign_BYTES];
 
@@ -72,8 +73,8 @@ bool Ed25519Verifier::verify(
             publicKey,
             sizeof(publicKey),
             crypto_sign_PUBLICKEYBYTES
-        )) {
-        return false;
+            )) {
+        return std::unexpected(LicenseError::InvalidPublicKey);
     }
 
     if (!decodeBase64(
@@ -81,8 +82,8 @@ bool Ed25519Verifier::verify(
             signature,
             sizeof(signature),
             crypto_sign_BYTES
-        )) {
-        return false;
+            )) {
+        return std::unexpected(LicenseError::InvalidSignature);
     }
 
     const auto result = crypto_sign_verify_detached(
@@ -90,8 +91,13 @@ bool Ed25519Verifier::verify(
         reinterpret_cast<const unsigned char*>(payload.data()),
         payload.size(),
         publicKey
-    );
+        );
 
-    return result == 0;
+    if (result != 0) {
+        return std::unexpected(LicenseError::InvalidSignature);
+    }
+
+    return {};
 }
-}
+
+} // namespace scanlab::license

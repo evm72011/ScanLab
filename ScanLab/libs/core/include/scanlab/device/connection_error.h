@@ -2,7 +2,7 @@
 
 #include <variant>
 #include "scanlab/device/hardware_error.h"
-#include "license/status.h"
+#include "license/license_error.h"
 
 namespace scanlab::device {
 
@@ -17,7 +17,7 @@ enum class ConnectionErrorKind {
 using ConnectionError = std::variant<
     HardwareError,
     ConnectionErrorKind,
-    license::Status>;
+    scanlab::license::LicenseError>;
 
 } // namespace scanlab::device
 

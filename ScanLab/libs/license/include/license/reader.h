@@ -1,15 +1,18 @@
 #pragma once
 
+#include <expected>
 #include <filesystem>
 
-#include "read_result.h"
+#include "license/data.h"
+#include "license/license_error.h"
 
-namespace license {
+namespace scanlab::license {
 
 class Reader {
 public:
     [[nodiscard]]
-    ReadResult read(const std::filesystem::path& path) const;
+    std::expected<Data, LicenseError>
+    read(const std::filesystem::path& path) const;
 };
 
-} // namespace license
+} // namespace scanlab::license

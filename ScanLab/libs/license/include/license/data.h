@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 
-namespace license {
+namespace scanlab::license {
 
 struct Data {
     std::vector<std::string> devices;

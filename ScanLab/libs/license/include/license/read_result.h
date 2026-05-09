@@ -5,7 +5,7 @@
 #include "data.h"
 #include "status.h"
 
-namespace license {
+namespace scanlab::license {
 
 struct ReadResult {
     std::optional<Data> data;

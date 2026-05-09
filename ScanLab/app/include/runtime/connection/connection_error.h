@@ -16,7 +16,8 @@ enum class ConnectionLocalError
 using ConnectionError = std::variant<
     ConnectionLocalError,
     scanlab::device::HardwareError,
-    scanlab::device::ConnectionErrorKind>;
+    scanlab::device::ConnectionErrorKind,
+    scanlab::license::LicenseError>;
 
 inline ConnectionError fromHardware(const scanlab::device::ConnectionError& error)
 {

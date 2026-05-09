@@ -1,6 +1,6 @@
 #include "license/payload.h"
 
-namespace license {
+namespace scanlab::license {
 
 std::string Payload::fromDevices(
     const std::vector<std::string>& devices

@@ -1,30 +1,26 @@
 #pragma once
 
+#include <expected>
 #include <string>
+#include <string_view>
 
-#include "status.h"
+#include "license/license_error.h"
 
-namespace license {
+namespace scanlab::license {
 
 class Ed25519Verifier {
 public:
     explicit Ed25519Verifier(std::string publicKeyBase64);
 
     [[nodiscard]]
-    bool isReady() const noexcept;
-
-    [[nodiscard]]
-    Status status() const noexcept;
-
-    [[nodiscard]]
-    bool verify(
+    std::expected<void, LicenseError> verify(
         std::string_view payload,
         std::string_view signatureBase64
         ) const;
 
 private:
     std::string publicKeyBase64_;
-    Status status_ = Status::Valid;
+    std::expected<void, LicenseError> initResult_;
 };
 
-} // namespace license
+} // namespace scanlab::license

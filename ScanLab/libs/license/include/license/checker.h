@@ -1,12 +1,13 @@
 #pragma once
 
 #include <filesystem>
+#include <expected>
 
-#include "check_result.h"
-#include "payload.h"
-#include "reader.h"
+#include "license/license_error.h"
+#include "license/payload.h"
+#include "license/reader.h"
 
-namespace license {
+namespace scanlab::license {
 
 template<typename TVerifier>
 class Checker {
@@ -15,30 +16,29 @@ public:
         : verifier_(std::move(verifier)) {}
 
     [[nodiscard]]
-    CheckResult check(
-        const std::filesystem::path& path,
-        std::string_view serialNumber
-        ) const {
-        if (!verifier_.isReady()) {
-            return { false, verifier_.status() };
+    std::expected<void, LicenseError> check(const std::filesystem::path& path, std::string_view serialNumber) const {
+
+        auto dataResult = reader_.read(path);
+
+        if (!dataResult.has_value()) {
+            return std::unexpected(dataResult.error());
         }
 
-        const auto readResult = reader_.read(path);
-
-        if (!readResult.data.has_value()) {
-            return { false, readResult.status };
-        }
-
-        const auto& data = *readResult.data;
+        const auto& data = dataResult.value();
 
         if (!std::is_sorted(data.devices.begin(), data.devices.end())) {
-            return { false, Status::DevicesNotSorted };
+            return std::unexpected(
+                LicenseError::DevicesNotSorted
+                );
         }
 
-        const auto payload = Payload::fromDevices(data.devices);
+        const auto payload =
+            Payload::fromDevices(data.devices);
 
         if (!verifier_.verify(payload, data.signatureBase64)) {
-            return { false, Status::InvalidSignature };
+            return std::unexpected(
+                LicenseError::InvalidSignature
+                );
         }
 
         const auto found = std::binary_search(
@@ -48,10 +48,12 @@ public:
             );
 
         if (!found) {
-            return { false, Status::DeviceNotLicensed };
+            return std::unexpected(
+                LicenseError::DeviceNotLicensed
+                );
         }
 
-        return { true, Status::Valid };
+        return {};
     }
 
 private:

@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 
-namespace license {
+namespace scanlab::license {
 
 class PayloadBuilder {
 public:

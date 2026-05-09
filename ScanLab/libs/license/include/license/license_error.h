@@ -1,9 +1,8 @@
 #pragma once
 
-namespace license {
+namespace scanlab::license {
 
-enum class Status {
-    Valid,
+enum class LicenseError {
     FileNotFound,
     InvalidJson,
     InvalidDevices,
