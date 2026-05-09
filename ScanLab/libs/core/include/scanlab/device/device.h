@@ -1,7 +1,7 @@
 #pragma once
+#include <Windows.h>
 
 #include <UTDriverOEMPA.h>
-#include <Windows.h>
 #include <expected>
 #include <filesystem>
 #include <memory>

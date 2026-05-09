@@ -49,8 +49,8 @@ option(ENABLE_SANITIZE_THREAD "Enable thread sanitize (Gcc/Clang only)." OFF)
 
 option(ENABLE_TESTING "Enable testing." OFF)
 
-option(ENABLE_CLANG_TIDY "Enable to add clang tidy." OFF)
-option(ENABLE_CLANG_FORMAT "Enable to add clang-format." OFF)
+option(ENABLE_CLANG_TIDY "Enable to add clang tidy." ON)
+option(ENABLE_CLANG_FORMAT "Enable to add clang-format." ON)
 option(ENABLE_CMAKE_FORMAT "Enable to add cmake-format." ON)
 
 qt_add_executable(${APP_NAME} app/main.cpp)
@@ -152,7 +152,7 @@ include(Warnings)
 include(LTO)
 include(Sanitizer)
 
-#include(ClangTidy)
+include(ClangTidy)
 include(ClangFormat)
 include(CMakeFormat)
 add_clang_format_target()

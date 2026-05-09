@@ -1,7 +1,8 @@
 #include "scanlab/health/temperature_topology_api.h"
 
-#include <UTDriverOEMPA.h>
 #include <Windows.h>
+#include <UTDriverOEMPA.h>
+
 
 namespace scanlab::health
 {

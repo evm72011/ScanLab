@@ -3,8 +3,9 @@
 #include <span>
 #include <vector>
 
-#include <UTDriverOEMPA.h>
 #include <Windows.h>
+#include <UTDriverOEMPA.h>
+
 
 #include "scanlab/device/device.h"
 #include "scanlab/health/health_error.h"
