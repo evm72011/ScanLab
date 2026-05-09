@@ -1,6 +1,5 @@
 #include "scanlab/device/device.h"
 
-#include <array>
 #include <memory>
 
 #include <UTDriverOEMPA1.h>
@@ -12,12 +11,19 @@
 #include <UTDriverOEMPAmicro.h>
 
 #include "scanlab/device/hardware_error.h"
+#include "scanlab/license/ed25519_verifier.h"
 
 namespace scanlab::device {
 
+using Ed25519Verifier = scanlab::license::Ed25519Verifier;
 
-Device::Device() = default;
-Device::~Device() = default;
+Device::Device(std::filesystem::path licensePath, std::string licensePublicKeyBase64):
+    licenseChecker_(
+        std::move(licensePath),
+        Ed25519Verifier(std::move(licensePublicKeyBase64))
+        )
+{
+}
 
 Device::Device(Device&&) noexcept = default;
 Device& Device::operator=(Device&&) noexcept = default;

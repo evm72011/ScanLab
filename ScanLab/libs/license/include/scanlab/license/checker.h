@@ -12,13 +12,14 @@ namespace scanlab::license {
 template<typename TVerifier>
 class Checker {
 public:
-    explicit Checker(TVerifier verifier)
-        : verifier_(std::move(verifier)) {}
+    explicit Checker(std::filesystem::path path, TVerifier verifier):
+        reader_(std::move(path)),
+        verifier_(std::move(verifier)) {}
 
     [[nodiscard]]
-    std::expected<void, LicenseError> check(const std::filesystem::path& path, std::string_view serialNumber) const {
+    std::expected<void, LicenseError> check(std::string_view serialNumber) const {
 
-        auto dataResult = reader_.read(path);
+        auto dataResult = reader_.read();
 
         if (!dataResult.has_value()) {
             return std::unexpected(dataResult.error());

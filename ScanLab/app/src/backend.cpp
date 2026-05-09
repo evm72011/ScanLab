@@ -5,11 +5,16 @@
 #include <UTDriverOEMPAmax.h>
 
 #include "backend.h"
+#include "configured/app_info.h"
 
 #include <QDebug>
 
 Backend::Backend(QObject* parent)
     : QObject(parent)
+    , context_(
+          std::filesystem::path{license_file},
+          std::string{license_public_key}
+          )
 {
     // if there is a lot of connection, pack them in a new class BackendCoordinator / BackendOrchestrator
     connect(

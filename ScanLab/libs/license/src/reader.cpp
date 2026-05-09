@@ -12,9 +12,14 @@ using Json = nlohmann::json;
 
 } // namespace
 
-std::expected<Data, LicenseError>
-Reader::read(const std::filesystem::path& path) const {
-    std::ifstream file(path);
+Reader::Reader(std::filesystem::path path)
+    :path_{ path }
+{
+}
+
+std::expected<Data, LicenseError> Reader::read() const
+{
+    std::ifstream file(path_);
 
     if (!file.is_open()) {
         return std::unexpected(

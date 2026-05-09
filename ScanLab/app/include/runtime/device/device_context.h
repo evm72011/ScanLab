@@ -1,6 +1,8 @@
 #pragma once
 
 #include <memory>
+#include <filesystem>
+#include <string>
 
 namespace scanlab::device {
 class Device;
@@ -9,7 +11,10 @@ class Device;
 class DeviceContext
 {
 public:
-    DeviceContext();
+    DeviceContext(
+        std::filesystem::path licensePath,
+        std::string licensePublicKeyBase64
+        );
 
     DeviceContext(const DeviceContext&) = delete;
     DeviceContext& operator=(const DeviceContext&) = delete;

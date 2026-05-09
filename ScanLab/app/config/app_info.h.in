@@ -13,3 +13,5 @@ static constexpr std::int32_t project_version_minor{@PROJECT_VERSION_MINOR@};
 static constexpr std::int32_t project_version_patch{@PROJECT_VERSION_PATCH@};
 
 static constexpr bool is_mock_device = MOCK_DEVICE;
+static constexpr std::string_view license_file = "@SCANLAB_LICENSE_FILE@";
+static constexpr std::string_view license_public_key = "@SCANLAB_LICENSE_PUBLIC_KEY@";

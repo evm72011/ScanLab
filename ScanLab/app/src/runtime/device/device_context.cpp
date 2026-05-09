@@ -4,8 +4,13 @@
 
 namespace sd = scanlab::device;
 
-DeviceContext::DeviceContext()
-    : device_(std::make_unique<sd::Device>())
+DeviceContext::DeviceContext(
+    std::filesystem::path licensePath,
+    std::string licensePublicKeyBase64
+)
+    : device_(std::make_unique<sd::Device>(
+          std::move(licensePath),
+          std::move(licensePublicKeyBase64)))
 {
 }
 

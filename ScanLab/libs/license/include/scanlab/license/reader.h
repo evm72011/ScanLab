@@ -10,9 +10,12 @@ namespace scanlab::license {
 
 class Reader {
 public:
+    explicit Reader(std::filesystem::path path);
+
     [[nodiscard]]
-    std::expected<Data, LicenseError>
-    read(const std::filesystem::path& path) const;
+    std::expected<Data, LicenseError> read() const;
+private:
+    std::filesystem::path path_;
 };
 
 } // namespace scanlab::license
