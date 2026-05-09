@@ -50,7 +50,6 @@ Item {
 
             onActivated: function(value) {
                 connectionFacade.deviceType = value
-                connectionFacade.resetDevice();
                 SL.AppSettings.setValue("Hardware/type", value)
             }
         }

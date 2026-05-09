@@ -6,6 +6,7 @@
 
 #include "scanlab/device/hardware_error.h"
 #include "scanlab/device/connection_error.h"
+#include "scanlab/license/license_error.h"
 
 
 inline ErrorInfo describeError(scanlab::device::HardwareError error)
@@ -35,4 +36,23 @@ inline ErrorInfo describeError(scanlab::device::ConnectionErrorKind error)
     };
 
     return describeErrorImpl(error, connectionErrorKindMap);
+}
+
+inline ErrorInfo describeError(scanlab::license::LicenseError error)
+{
+    using LicenseError = scanlab::license::LicenseError;
+
+    static const QHash<LicenseError, const char*> licenseErrorKindMap = {
+        {LicenseError::LicensePathNotSet, QT_TR_NOOP("License file path is not set.")},
+        {LicenseError::FileNotFound, QT_TR_NOOP("License file was not found.")},
+        {LicenseError::InvalidJson, QT_TR_NOOP("License file contains invalid JSON.")},
+        {LicenseError::InvalidDevices, QT_TR_NOOP("License file contains invalid device data.")},
+        {LicenseError::DevicesNotSorted, QT_TR_NOOP("Licensed devices list is not sorted.")},
+        {LicenseError::InvalidPublicKey, QT_TR_NOOP("License public key is invalid.")},
+        {LicenseError::InvalidSignature, QT_TR_NOOP("License signature verification failed.")},
+        {LicenseError::DeviceNotLicensed, QT_TR_NOOP("This device is not covered by the license.")},
+        {LicenseError::CryptoInitFailed, QT_TR_NOOP("Cryptographic subsystem initialization failed.")},
+    };
+
+    return describeErrorImpl(error, licenseErrorKindMap);
 }

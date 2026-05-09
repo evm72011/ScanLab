@@ -64,8 +64,19 @@ std::expected<ConnectionResult,ConnectionError> Device::connect(const std::wstri
         return std::unexpected(ConnectionErrorKind::SerialNumberUnavailable);
     }
 
+    const std::wstring serial(serialBuffer.data());
+
+    const auto licenseResult = licenseChecker_.check(
+        std::string(serial.begin(), serial.end())
+    );
+
+    if (!licenseResult) {
+        disconnect();
+        return std::unexpected(licenseResult.error());
+    }
+
     return ConnectionResult{
-        std::wstring(serialBuffer.data())
+        serial
     };
 }
 

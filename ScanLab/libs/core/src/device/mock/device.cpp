@@ -28,7 +28,8 @@ Device::Device(std::filesystem::path licensePath, std::string licensePublicKeyBa
 Device::Device(Device&&) noexcept = default;
 Device& Device::operator=(Device&&) noexcept = default;
 
-std::expected<ConnectionResult,ConnectionError> Device::connect(const std::wstring& address)
+std::expected<ConnectionResult,ConnectionError> Device::connect(
+    [[maybe_unused]] const std::wstring& address)
 {
     if (!device_) {
         return std::unexpected(HardwareError::HardwareNotSet);
@@ -38,9 +39,17 @@ std::expected<ConnectionResult,ConnectionError> Device::connect(const std::wstri
         return std::unexpected(ConnectionErrorKind::AlreadyConnected);
     }
 
+    const auto serial = std::string("MOCK_12345");
+
+    const auto licenseResult = licenseChecker_.check(serial);
+    if (!licenseResult) {
+        disconnect();
+        return std::unexpected(licenseResult.error());
+    }
+
     connected_ = true;
     return ConnectionResult{
-        L"MOCK:" + address
+        std::wstring(serial.begin(), serial.end())
     };
 }
 

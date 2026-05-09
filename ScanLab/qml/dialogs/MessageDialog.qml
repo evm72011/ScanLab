@@ -177,7 +177,7 @@ Dialog {
                             anchors.fill: parent
                             radius: 6
                             color: closeButton.hovered
-                                   ? SL.Theme.colors.hover
+                                   ? SL.Theme.colors.controlHovered
                                    : "transparent"
                         }
 

@@ -5,9 +5,7 @@
 #include "runtime/errors/error_info.h"
 
 template <typename T>
-ErrorInfo describeErrorImpl(
-    T error,
-    const QHash<T, const char*>& map)
+ErrorInfo describeErrorImpl(T error, const QHash<T, const char*>& map)
 {
     const auto code = magic_enum::enum_name(error);
     const auto technicalCode =

@@ -3,6 +3,7 @@
 namespace scanlab::license {
 
 enum class LicenseError {
+    LicensePathNotSet,
     FileNotFound,
     InvalidJson,
     InvalidDevices,
