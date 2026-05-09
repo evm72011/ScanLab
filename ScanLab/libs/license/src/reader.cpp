@@ -1,4 +1,4 @@
-#include "license/reader.h"
+#include "scanlab/license/reader.h"
 
 #include <fstream>
 

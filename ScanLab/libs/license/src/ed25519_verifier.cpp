@@ -1,4 +1,4 @@
-#include "license/ed25519_verifier.h"
+#include "scanlab/license/ed25519_verifier.h"
 
 #include <sodium.h>
 

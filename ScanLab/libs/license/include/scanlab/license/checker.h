@@ -3,9 +3,9 @@
 #include <filesystem>
 #include <expected>
 
-#include "license/license_error.h"
-#include "license/payload.h"
-#include "license/reader.h"
+#include "scanlab/license/license_error.h"
+#include "scanlab/license/payload.h"
+#include "scanlab/license/reader.h"
 
 namespace scanlab::license {
 

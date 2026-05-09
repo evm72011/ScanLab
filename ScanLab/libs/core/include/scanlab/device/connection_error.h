@@ -2,7 +2,7 @@
 
 #include <variant>
 #include "scanlab/device/hardware_error.h"
-#include "license/license_error.h"
+#include "scanlab/license/license_error.h"
 
 namespace scanlab::device {
 

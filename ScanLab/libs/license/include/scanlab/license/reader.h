@@ -3,8 +3,8 @@
 #include <expected>
 #include <filesystem>
 
-#include "license/data.h"
-#include "license/license_error.h"
+#include "scanlab/license/data.h"
+#include "scanlab/license/license_error.h"
 
 namespace scanlab::license {
 

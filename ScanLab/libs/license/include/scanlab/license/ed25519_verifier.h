@@ -4,7 +4,7 @@
 #include <string>
 #include <string_view>
 
-#include "license/license_error.h"
+#include "scanlab/license/license_error.h"
 
 namespace scanlab::license {
 
