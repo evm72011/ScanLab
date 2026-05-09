@@ -1,12 +1,14 @@
 #pragma once
 
-#include <variant>
 #include "scanlab/device/hardware_error.h"
 #include "scanlab/license/license_error.h"
+#include <variant>
 
-namespace scanlab::device {
+namespace scanlab::device
+{
 
-enum class ConnectionErrorKind {
+enum class ConnectionErrorKind
+{
     AlreadyConnected,
     SetAddressFailure,
     BaseInterfaceUnavailable,
@@ -14,10 +16,7 @@ enum class ConnectionErrorKind {
     SerialNumberUnavailable
 };
 
-using ConnectionError = std::variant<
-    HardwareError,
-    ConnectionErrorKind,
-    scanlab::license::LicenseError>;
+using ConnectionError = std::
+    variant<HardwareError, ConnectionErrorKind, scanlab::license::LicenseError>;
 
 } // namespace scanlab::device
-

@@ -1,11 +1,13 @@
 #pragma once
 
-#include <variant>
 #include "scanlab/device/hardware_error.h"
+#include <variant>
 
-namespace scanlab::health {
+namespace scanlab::health
+{
 
-enum class HealthErrorKind {
+enum class HealthErrorKind
+{
     BoardToppologyUnavailable,
     BoardTopologyErrors,
     SensorTopologyUnavailable,
@@ -13,6 +15,7 @@ enum class HealthErrorKind {
     SensorDataUnavailable
 };
 
-using HealthError = std::variant<scanlab::device::HardwareError,HealthErrorKind>;
+using HealthError =
+    std::variant<scanlab::device::HardwareError, HealthErrorKind>;
 
-}// namespace scanlab::health
+} // namespace scanlab::health

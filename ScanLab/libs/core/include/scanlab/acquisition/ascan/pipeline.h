@@ -8,18 +8,19 @@
 #include <mutex>
 #include <vector>
 
-namespace scanlab::acquisition::ascan {
+namespace scanlab::acquisition::ascan
+{
 
 class Pipeline
 {
 public:
-    Frame process(const RawFrame& raw) const;
+    Frame process(const RawFrame &raw) const;
 
-    RawDecoder& decoder();
-    const RawDecoder& decoder() const;
+    RawDecoder &decoder();
+    const RawDecoder &decoder() const;
 
-    EnvelopeDownsampler& envelope();
-    const EnvelopeDownsampler& envelope() const;
+    EnvelopeDownsampler &envelope();
+    const EnvelopeDownsampler &envelope() const;
 
     void setTransformers(std::vector<Transformer> transformers);
     void clearTransformers();

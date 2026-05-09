@@ -4,9 +4,11 @@
 
 #include <vector>
 
-namespace scanlab::acquisition::ascan {
+namespace scanlab::acquisition::ascan
+{
 
-struct Frame {
+struct Frame
+{
     std::vector<EnvelopePoint> samples;
     int cycle = 0;
     int dataSize = 0;

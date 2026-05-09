@@ -1,13 +1,15 @@
 #pragma once
 
-#include <vector>
 #include <string>
+#include <vector>
 
-namespace scanlab::license {
+namespace scanlab::license
+{
 
-struct Data {
+struct Data
+{
     std::vector<std::string> devices;
     std::string signatureBase64;
 };
 
-} // namespace license
+} // namespace scanlab::license

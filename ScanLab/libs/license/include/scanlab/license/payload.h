@@ -1,14 +1,16 @@
 #pragma once
 
-#include <vector>
 #include <string>
+#include <vector>
 
-namespace scanlab::license {
+namespace scanlab::license
+{
 
-class Payload {
+class Payload
+{
 public:
     [[nodiscard]]
-    static std::string fromDevices(const std::vector<std::string>& devices);
+    static std::string fromDevices(const std::vector<std::string> &devices);
 };
 
-} // namespace license
+} // namespace scanlab::license

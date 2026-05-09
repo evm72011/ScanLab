@@ -2,24 +2,25 @@
 
 #include <utility>
 
-namespace scanlab::acquisition::ascan {
+namespace scanlab::acquisition::ascan
+{
 
-RawDecoder& Pipeline::decoder()
+RawDecoder &Pipeline::decoder()
 {
     return decoder_;
 }
 
-const RawDecoder& Pipeline::decoder() const
+const RawDecoder &Pipeline::decoder() const
 {
     return decoder_;
 }
 
-EnvelopeDownsampler& Pipeline::envelope()
+EnvelopeDownsampler &Pipeline::envelope()
 {
     return envelope_;
 }
 
-const EnvelopeDownsampler& Pipeline::envelope() const
+const EnvelopeDownsampler &Pipeline::envelope() const
 {
     return envelope_;
 }
@@ -36,7 +37,7 @@ void Pipeline::clearTransformers()
     transformers_.clear();
 }
 
-Frame Pipeline::process(const RawFrame& raw) const
+Frame Pipeline::process(const RawFrame &raw) const
 {
     auto samples = decoder_.decode(raw);
 
@@ -46,7 +47,8 @@ Frame Pipeline::process(const RawFrame& raw) const
         transformersCopy = transformers_;
     }
 
-    for (const auto& transformer : transformersCopy) {
+    for (const auto &transformer : transformersCopy)
+    {
         transformer.transform(samples);
     }
 
@@ -55,15 +57,13 @@ Frame Pipeline::process(const RawFrame& raw) const
     const auto displayCount = static_cast<int>(envelopeSamples.size());
     const auto sourceCount = static_cast<int>(samples.size());
 
-    return Frame{
-        .samples = std::move(envelopeSamples),
-        .cycle = raw.cycle,
-        .dataSize = raw.dataSize,
-        .dataCount = displayCount,
-        .sourceDataCount = sourceCount,
-        .bitSize = raw.bitSize,
-        .sign = raw.sign
-    };
+    return Frame{.samples = std::move(envelopeSamples),
+                 .cycle = raw.cycle,
+                 .dataSize = raw.dataSize,
+                 .dataCount = displayCount,
+                 .sourceDataCount = sourceCount,
+                 .bitSize = raw.bitSize,
+                 .sign = raw.sign};
 }
 
 } // namespace scanlab::acquisition::ascan

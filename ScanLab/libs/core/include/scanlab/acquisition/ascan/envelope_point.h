@@ -1,8 +1,10 @@
 #pragma once
 
-namespace scanlab::acquisition::ascan {
+namespace scanlab::acquisition::ascan
+{
 
-struct EnvelopePoint {
+struct EnvelopePoint
+{
     float min = 0.0f;
     float max = 0.0f;
 };

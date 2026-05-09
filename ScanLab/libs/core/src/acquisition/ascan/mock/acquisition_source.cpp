@@ -18,8 +18,10 @@
 
 namespace sd = scanlab::device;
 
-namespace scanlab::acquisition::ascan {
-namespace {
+namespace scanlab::acquisition::ascan
+{
+namespace
+{
 
 struct MockState
 {
@@ -29,30 +31,33 @@ struct MockState
 };
 
 std::mutex g_statesMutex;
-std::unordered_map<const AcquisitionSource*, std::unique_ptr<MockState>> g_states;
+std::unordered_map<const AcquisitionSource *, std::unique_ptr<MockState>>
+    g_states;
 
-MockState* findState(const AcquisitionSource* source)
+MockState *findState(const AcquisitionSource *source)
 {
     std::lock_guard lock(g_statesMutex);
     const auto it = g_states.find(source);
     return it != g_states.end() ? it->second.get() : nullptr;
 }
 
-MockState& ensureState(const AcquisitionSource* source)
+MockState &ensureState(const AcquisitionSource *source)
 {
     std::lock_guard lock(g_statesMutex);
-    auto& state = g_states[source];
-    if (!state) {
+    auto &state = g_states[source];
+    if (!state)
+    {
         state = std::make_unique<MockState>();
     }
     return *state;
 }
 
-std::unique_ptr<MockState> extractState(const AcquisitionSource* source)
+std::unique_ptr<MockState> extractState(const AcquisitionSource *source)
 {
     std::lock_guard lock(g_statesMutex);
     const auto it = g_states.find(source);
-    if (it == g_states.end()) {
+    if (it == g_states.end())
+    {
         return nullptr;
     }
 
@@ -67,15 +72,19 @@ double gaussian(double x, double center, double width)
     return std::exp(-0.5 * z * z);
 }
 
-double dampedSin(double x, double start, double amplitude, double decay, double frequency)
+double dampedSin(double x,
+                 double start,
+                 double amplitude,
+                 double decay,
+                 double frequency)
 {
-    if (x < start) {
+    if (x < start)
+    {
         return 0.0;
     }
 
     const double t = x - start;
-    return amplitude *
-           std::exp(-t / decay) *
+    return amplitude * std::exp(-t / decay) *
            std::sin(2.0 * 3.14159265358979323846 * frequency * t);
 }
 
@@ -88,16 +97,20 @@ std::vector<std::int16_t> generateSignal(std::size_t sampleCount, int cycle)
 
     const double drift = std::sin(static_cast<double>(cycle) * 0.05);
     const double shift1 = 2.0 * std::sin(static_cast<double>(cycle) * 0.030);
-    const double shift2 = 3.0 * std::sin(static_cast<double>(cycle) * 0.022 + 1.4);
-    const double shift3 = 2.0 * std::sin(static_cast<double>(cycle) * 0.017 + 2.2);
+    const double shift2 =
+        3.0 * std::sin(static_cast<double>(cycle) * 0.022 + 1.4);
+    const double shift3 =
+        2.0 * std::sin(static_cast<double>(cycle) * 0.017 + 2.2);
 
-    for (std::size_t i = 0; i < sampleCount; ++i) {
+    for (std::size_t i = 0; i < sampleCount; ++i)
+    {
         const double x = static_cast<double>(i);
 
         double y = 0.0;
 
         // Слабый фон около нуля.
-        y += 80.0 * std::sin(2.0 * 3.14159265358979323846 * 0.11 * x + cycle * 0.02);
+        y += 80.0 *
+             std::sin(2.0 * 3.14159265358979323846 * 0.11 * x + cycle * 0.02);
         y += 55.0 * std::sin(2.0 * 3.14159265358979323846 * 0.073 * x + 0.8);
 
         // Левый сильный отрицательный провал и восстановление.
@@ -137,10 +150,11 @@ std::vector<std::int16_t> generateSignal(std::size_t sampleCount, int cycle)
     return signal;
 }
 
-std::vector<std::uint8_t> packSignal(const std::vector<std::int16_t>& signal)
+std::vector<std::uint8_t> packSignal(const std::vector<std::int16_t> &signal)
 {
     std::vector<std::uint8_t> data(signal.size() * sizeof(std::int16_t));
-    if (!signal.empty()) {
+    if (!signal.empty())
+    {
         std::memcpy(data.data(), signal.data(), data.size());
     }
     return data;
@@ -148,9 +162,8 @@ std::vector<std::uint8_t> packSignal(const std::vector<std::int16_t>& signal)
 
 } // namespace
 
-AcquisitionSource::AcquisitionSource(sd::Device& device)
-    : device_(device)
-    , control_(device)
+AcquisitionSource::AcquisitionSource(sd::Device &device)
+    : device_(device), control_(device)
 {
 }
 
@@ -173,16 +186,18 @@ void AcquisitionSource::setFrameHandler(FrameHandler handler)
 
 std::expected<void, AcquisitionError> AcquisitionSource::start()
 {
-    auto& state = ensureState(this);
+    auto &state = ensureState(this);
 
     bool expected = false;
-    if (!state.running.compare_exchange_strong(expected, true)) {
+    if (!state.running.compare_exchange_strong(expected, true))
+    {
         return {};
     }
 
     state.stopRequested.store(false);
 
-    if (state.worker.joinable()) {
+    if (state.worker.joinable())
+    {
         state.worker.join();
     }
 
@@ -192,24 +207,25 @@ std::expected<void, AcquisitionError> AcquisitionSource::start()
 
         int cycle = 0;
 
-        while (!state.stopRequested.load()) {
+        while (!state.stopRequested.load())
+        {
             FrameHandler localHandler;
             {
                 std::lock_guard lock(mutex_);
                 localHandler = handler_;
             }
 
-            if (localHandler) {
+            if (localHandler)
+            {
                 const auto signal = generateSignal(sampleCount, cycle);
 
-                RawFrame frame{
-                    .dataSize = static_cast<int>(sizeof(std::int16_t)),
-                    .dataCount = static_cast<int>(sampleCount),
-                    .cycle = cycle,
-                    .bitSize = static_cast<int>(e16Bits),
-                    .sign = true,
-                    .data = packSignal(signal)
-                };
+                RawFrame frame{.dataSize =
+                                   static_cast<int>(sizeof(std::int16_t)),
+                               .dataCount = static_cast<int>(sampleCount),
+                               .cycle = cycle,
+                               .bitSize = static_cast<int>(e16Bits),
+                               .sign = true,
+                               .data = packSignal(signal)};
 
                 localHandler(std::move(frame));
             }
@@ -227,13 +243,15 @@ std::expected<void, AcquisitionError> AcquisitionSource::start()
 void AcquisitionSource::stop()
 {
     auto state = extractState(this);
-    if (!state) {
+    if (!state)
+    {
         return;
     }
 
     state->stopRequested.store(true);
 
-    if (state->worker.joinable()) {
+    if (state->worker.joinable())
+    {
         state->worker.join();
     }
 
@@ -242,7 +260,7 @@ void AcquisitionSource::stop()
 
 bool AcquisitionSource::isRunning() const
 {
-    const auto* state = findState(this);
+    const auto *state = findState(this);
     return state && state->running.load();
 }
 
@@ -254,19 +272,18 @@ void AcquisitionSource::unregisterCallbacks()
 {
 }
 
-UINT WINAPI AcquisitionSource::callback(
-    void*,
-    structAcqInfoEx&,
-    const CStream_0x0001*,
-    const CSubStreamAscan_0x0103*,
-    const void*,
-    const void*,
-    const void*)
+UINT WINAPI AcquisitionSource::callback(void *,
+                                        structAcqInfoEx &,
+                                        const CStream_0x0001 *,
+                                        const CSubStreamAscan_0x0103 *,
+                                        const void *,
+                                        const void *,
+                                        const void *)
 {
     return 0;
 }
 
-void AcquisitionSource::handle(const CSubStreamAscan_0x0103*, const void*)
+void AcquisitionSource::handle(const CSubStreamAscan_0x0103 *, const void *)
 {
 }
 

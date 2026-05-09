@@ -6,88 +6,96 @@
 #include <UTDriverOEMPA1.h>
 #include <UTDriverOEMPA2.h>
 
+#include <UTDriverOEMMC.h>
 #include <UTDriverOEMPA.h>
 #include <UTDriverOEMPAmax.h>
-#include <UTDriverOEMMC.h>
 #include <UTDriverOEMPAmicro.h>
 
 #include "scanlab/device/hardware_error.h"
 
 #include "scanlab/license/ed25519_verifier.h"
 
-namespace scanlab::device {
+namespace scanlab::device
+{
 
 using Ed25519Verifier = scanlab::license::Ed25519Verifier;
 
-Device::Device(std::filesystem::path licensePath, std::string licensePublicKeyBase64):
-    licenseChecker_(
-        std::move(licensePath),
-        Ed25519Verifier(std::move(licensePublicKeyBase64))
-    )
+Device::Device(std::filesystem::path licensePath,
+               std::string licensePublicKeyBase64)
+    : licenseChecker_(std::move(licensePath),
+                      Ed25519Verifier(std::move(licensePublicKeyBase64)))
 {
 }
 
-Device::Device(Device&&) noexcept = default;
-Device& Device::operator=(Device&&) noexcept = default;
+Device::Device(Device &&) noexcept = default;
+Device &Device::operator=(Device &&) noexcept = default;
 
-std::expected<ConnectionResult,ConnectionError> Device::connect(const std::wstring& address)
+std::expected<ConnectionResult, ConnectionError> Device::connect(
+    const std::wstring &address)
 {
-    if (!device_) {
+    if (!device_)
+    {
         return std::unexpected(HardwareError::HardwareNotSet);
     }
 
-    if (isConnected()) {
+    if (isConnected())
+    {
         return std::unexpected(ConnectionErrorKind::AlreadyConnected);
     }
 
-    auto* swOempa = device_->GetSWDeviceOEMPA();
-    if (!swOempa) {
+    auto *swOempa = device_->GetSWDeviceOEMPA();
+    if (!swOempa)
+    {
         return std::unexpected(HardwareError::OempaInterfaceUnavailable);
     }
 
-    if (!swOempa->SetAddress(address.c_str())) {
+    if (!swOempa->SetAddress(address.c_str()))
+    {
         return std::unexpected(ConnectionErrorKind::SetAddressFailure);
     }
 
-    auto* swBase = device_->GetSWDevice();
-    if (!swBase) {
+    auto *swBase = device_->GetSWDevice();
+    if (!swBase)
+    {
         return std::unexpected(ConnectionErrorKind::BaseInterfaceUnavailable);
     }
 
-    if (!swBase->SetConnectionState(eConnected, true)) {
+    if (!swBase->SetConnectionState(eConnected, true))
+    {
         return std::unexpected(ConnectionErrorKind::ConnectionFailure);
     }
 
     std::array<wchar_t, 64> serialBuffer{};
     if (!swOempa->GetSerialNumber(serialBuffer.data(),
-                                 static_cast<int>(serialBuffer.size()))) {
+                                  static_cast<int>(serialBuffer.size())))
+    {
         return std::unexpected(ConnectionErrorKind::SerialNumberUnavailable);
     }
 
     const std::wstring serial(serialBuffer.data());
 
-    const auto licenseResult = licenseChecker_.check(
-        std::string(serial.begin(), serial.end())
-    );
+    const auto licenseResult =
+        licenseChecker_.check(std::string(serial.begin(), serial.end()));
 
-    if (!licenseResult) {
+    if (!licenseResult)
+    {
         disconnect();
         return std::unexpected(licenseResult.error());
     }
 
-    return ConnectionResult{
-        serial
-    };
+    return ConnectionResult{serial};
 }
 
 bool Device::disconnect()
 {
-    if(!isConnected()) {
+    if (!isConnected())
+    {
         return true;
     }
 
-    auto* swBase = device_->GetSWDevice();
-    if (!swBase) {
+    auto *swBase = device_->GetSWDevice();
+    if (!swBase)
+    {
         return false;
     }
 
@@ -95,18 +103,22 @@ bool Device::disconnect()
     return result;
 }
 
-bool Device::ensureDevice(DeviceType type) {
-    if (device_ && type_ == type) {
+bool Device::ensureDevice(DeviceType type)
+{
+    if (device_ && type_ == type)
+    {
         return true;
     }
 
-    if (isConnected()) {
+    if (isConnected())
+    {
         disconnect();
     }
 
     device_.reset();
 
-    switch (type) {
+    switch (type)
+    {
     case DeviceType::OEMPA_1:
         device_ = std::make_unique<CHWDeviceOEMPA1>();
         break;
@@ -151,20 +163,21 @@ bool Device::hasDevice() const
 
 bool Device::isConnected() const
 {
-    if (!device_) {
+    if (!device_)
+    {
         return false;
     }
 
-    auto* swBase = device_->GetSWDevice();
+    auto *swBase = device_->GetSWDevice();
     return swBase && swBase->IsConnected();
 }
 
-CHWDeviceOEMPA* Device::get()
+CHWDeviceOEMPA *Device::get()
 {
     return device_.get();
 }
 
-const CHWDeviceOEMPA* Device::get() const
+const CHWDeviceOEMPA *Device::get() const
 {
     return device_.get();
 }

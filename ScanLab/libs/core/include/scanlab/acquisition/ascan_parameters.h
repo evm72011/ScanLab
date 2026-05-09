@@ -1,8 +1,10 @@
 #pragma once
 
-namespace scanlab::acquisition {
+namespace scanlab::acquisition
+{
 
-struct AscanParameters {
+struct AscanParameters
+{
     int cycle = 0;
 
     double start = 0.0;

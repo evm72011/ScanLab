@@ -1,9 +1,10 @@
 #pragma once
 #include <cstdint>
 
-namespace scanlab::device {
+namespace scanlab::device
+{
 
-enum class DeviceType: uint8_t
+enum class DeviceType : uint8_t
 {
     Unknown = 0,
     OEMPA_1,

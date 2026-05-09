@@ -1,8 +1,10 @@
 #pragma once
 
-namespace scanlab::license {
+namespace scanlab::license
+{
 
-enum class LicenseError {
+enum class LicenseError
+{
     LicensePathNotSet,
     FileNotFound,
     InvalidJson,
@@ -15,4 +17,4 @@ enum class LicenseError {
     CryptoInitFailed
 };
 
-} // namespace license
+} // namespace scanlab::license

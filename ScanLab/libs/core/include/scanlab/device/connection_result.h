@@ -2,7 +2,8 @@
 
 #include <string>
 
-namespace scanlab::device {
+namespace scanlab::device
+{
 
 struct ConnectionResult
 {

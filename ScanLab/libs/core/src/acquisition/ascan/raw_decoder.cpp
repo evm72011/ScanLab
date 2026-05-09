@@ -3,34 +3,38 @@
 #include <algorithm>
 #include <limits>
 
-namespace scanlab::acquisition::ascan {
-
-std::vector<float> RawDecoder::decode(const RawFrame& frame) const
+namespace scanlab::acquisition::ascan
 {
-    if (frame.data.empty()) {
+
+std::vector<float> RawDecoder::decode(const RawFrame &frame) const
+{
+    if (frame.data.empty())
+    {
         return {};
     }
 
-    return decodeBuffer(
-        frame.data.data(),
-        frame.dataSize,
-        frame.dataCount,
-        frame.bitSize,
-        frame.sign);
+    return decodeBuffer(frame.data.data(),
+                        frame.dataSize,
+                        frame.dataCount,
+                        frame.bitSize,
+                        frame.sign);
 }
 
 int RawDecoder::effectiveBitWidth(int bitSize, int dataSize)
 {
-    switch (bitSize) {
+    switch (bitSize)
+    {
     case eLog8Bits:
     case e8Bits:
         return 8;
 
     case e12Bits:
-        if (dataSize == 4) {
+        if (dataSize == 4)
+        {
             return 27; // OEMPA special packed format
         }
-        if (dataSize == 2) {
+        if (dataSize == 2)
+        {
             return 16;
         }
         return 12;
@@ -50,13 +54,15 @@ int RawDecoder::effectiveBitWidth(int bitSize, int dataSize)
 
 float RawDecoder::normalizeSigned(std::int64_t value, int bits)
 {
-    if (bits <= 1) {
+    if (bits <= 1)
+    {
         return 0.0f;
     }
 
     const std::int64_t maxPositive = (std::int64_t{1} << (bits - 1)) - 1;
 
-    if (maxPositive <= 0) {
+    if (maxPositive <= 0)
+    {
         return 0.0f;
     }
 
@@ -68,16 +74,17 @@ float RawDecoder::normalizeSigned(std::int64_t value, int bits)
 
 float RawDecoder::normalizeUnsigned(std::uint64_t value, int bits)
 {
-    if (bits <= 0) {
+    if (bits <= 0)
+    {
         return 0.0f;
     }
 
     const std::uint64_t maxValue =
-        (bits >= 64)
-            ? std::numeric_limits<std::uint64_t>::max()
-            : ((std::uint64_t{1} << bits) - 1);
+        (bits >= 64) ? std::numeric_limits<std::uint64_t>::max()
+                     : ((std::uint64_t{1} << bits) - 1);
 
-    if (maxValue == 0) {
+    if (maxValue == 0)
+    {
         return 0.0f;
     }
 
@@ -87,16 +94,16 @@ float RawDecoder::normalizeUnsigned(std::uint64_t value, int bits)
     return static_cast<float>(v);
 }
 
-std::vector<float> RawDecoder::decodeBuffer(
-    const std::uint8_t* data,
-    int dataSize,
-    int dataCount,
-    int bitSize,
-    bool sign)
+std::vector<float> RawDecoder::decodeBuffer(const std::uint8_t *data,
+                                            int dataSize,
+                                            int dataCount,
+                                            int bitSize,
+                                            bool sign)
 {
     std::vector<float> result;
 
-    if (!data || dataSize <= 0 || dataCount <= 0) {
+    if (!data || dataSize <= 0 || dataCount <= 0)
+    {
         return result;
     }
 
@@ -104,45 +111,61 @@ std::vector<float> RawDecoder::decodeBuffer(
 
     const int bits = effectiveBitWidth(bitSize, dataSize);
 
-    switch (dataSize) {
+    switch (dataSize)
+    {
 
     case 1:
-        if (sign) {
-            const auto* src = reinterpret_cast<const std::int8_t*>(data);
-            for (int i = 0; i < dataCount; ++i) {
+        if (sign)
+        {
+            const auto *src = reinterpret_cast<const std::int8_t *>(data);
+            for (int i = 0; i < dataCount; ++i)
+            {
                 result.push_back(normalizeSigned(src[i], 8));
             }
-        } else {
-            const auto* src = reinterpret_cast<const std::uint8_t*>(data);
-            for (int i = 0; i < dataCount; ++i) {
+        }
+        else
+        {
+            const auto *src = reinterpret_cast<const std::uint8_t *>(data);
+            for (int i = 0; i < dataCount; ++i)
+            {
                 result.push_back(normalizeUnsigned(src[i], 8));
             }
         }
         break;
 
     case 2:
-        if (sign) {
-            const auto* src = reinterpret_cast<const std::int16_t*>(data);
-            for (int i = 0; i < dataCount; ++i) {
+        if (sign)
+        {
+            const auto *src = reinterpret_cast<const std::int16_t *>(data);
+            for (int i = 0; i < dataCount; ++i)
+            {
                 result.push_back(normalizeSigned(src[i], bits));
             }
-        } else {
-            const auto* src = reinterpret_cast<const std::uint16_t*>(data);
-            for (int i = 0; i < dataCount; ++i) {
+        }
+        else
+        {
+            const auto *src = reinterpret_cast<const std::uint16_t *>(data);
+            for (int i = 0; i < dataCount; ++i)
+            {
                 result.push_back(normalizeUnsigned(src[i], bits));
             }
         }
         break;
 
     case 4:
-        if (sign) {
-            const auto* src = reinterpret_cast<const std::int32_t*>(data);
-            for (int i = 0; i < dataCount; ++i) {
+        if (sign)
+        {
+            const auto *src = reinterpret_cast<const std::int32_t *>(data);
+            for (int i = 0; i < dataCount; ++i)
+            {
                 result.push_back(normalizeSigned(src[i], bits));
             }
-        } else {
-            const auto* src = reinterpret_cast<const std::uint32_t*>(data);
-            for (int i = 0; i < dataCount; ++i) {
+        }
+        else
+        {
+            const auto *src = reinterpret_cast<const std::uint32_t *>(data);
+            for (int i = 0; i < dataCount; ++i)
+            {
                 result.push_back(normalizeUnsigned(src[i], bits));
             }
         }

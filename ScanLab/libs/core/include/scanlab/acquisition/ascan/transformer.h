@@ -7,54 +7,55 @@
 #include <utility>
 #include <vector>
 
-namespace scanlab::acquisition::ascan {
+namespace scanlab::acquisition::ascan
+{
 
-template<typename T>
+template <typename T>
 concept VectorTransformer =
-    requires(T& transformer, std::vector<float>& samples) {
+    requires(T &transformer, std::vector<float> &samples) {
         { transformer.transform(samples) } -> std::same_as<void>;
     };
 
-template<typename T>
-concept SpanTransformer =
-    requires(T& transformer, std::span<float> samples) {
-        { transformer.transform(samples) } -> std::same_as<void>;
-    };
+template <typename T>
+concept SpanTransformer = requires(T &transformer, std::span<float> samples) {
+    { transformer.transform(samples) } -> std::same_as<void>;
+};
 
 class Transformer
 {
 public:
     Transformer() = default;
 
-    template<typename T>
+    template <typename T>
         requires VectorTransformer<T>
     static Transformer fromShared(std::shared_ptr<T> transformer)
     {
         Transformer result;
-        result.transform_ =
-            [transformer = std::move(transformer)](std::vector<float>& samples) {
-                transformer->transform(samples);
-            };
+        result.transform_ = [transformer = std::move(transformer)](
+                                std::vector<float> &samples) {
+            transformer->transform(samples);
+        };
 
         return result;
     }
 
-    template<typename T>
-        requires (!VectorTransformer<T> && SpanTransformer<T>)
+    template <typename T>
+        requires(!VectorTransformer<T> && SpanTransformer<T>)
     static Transformer fromShared(std::shared_ptr<T> transformer)
     {
         Transformer result;
-        result.transform_ =
-            [transformer = std::move(transformer)](std::vector<float>& samples) {
-                transformer->transform(std::span<float>{samples});
-            };
+        result.transform_ = [transformer = std::move(transformer)](
+                                std::vector<float> &samples) {
+            transformer->transform(std::span<float>{samples});
+        };
 
         return result;
     }
 
-    void transform(std::vector<float>& samples) const
+    void transform(std::vector<float> &samples) const
     {
-        if (!transform_) {
+        if (!transform_)
+        {
             return;
         }
 
@@ -68,7 +69,7 @@ public:
     }
 
 private:
-    std::function<void(std::vector<float>&)> transform_;
+    std::function<void(std::vector<float> &)> transform_;
 };
 
 } // namespace scanlab::acquisition::ascan

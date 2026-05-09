@@ -1,6 +1,7 @@
 #pragma once
 
-namespace scanlab::device {
+namespace scanlab::device
+{
 
 enum class HardwareError
 {

@@ -1,26 +1,29 @@
-#include "scanlab/device/device_lock_guard.h"
 #include "scanlab/acquisition/acquisition_configurator.h"
+#include "scanlab/device/device_lock_guard.h"
 
 #include <UTDriverOEMPA.h>
 
 namespace sd = scanlab::device;
 
-namespace scanlab::acquisition {
+namespace scanlab::acquisition
+{
 
-AcquisitionConfigurator::AcquisitionConfigurator(sd::Device& device)
+AcquisitionConfigurator::AcquisitionConfigurator(sd::Device &device)
     : device_(device)
 {
 }
 
-std::expected<int, AcquisitionError>
-AcquisitionConfigurator::getCycleCount() const
+std::expected<int, AcquisitionError> AcquisitionConfigurator::getCycleCount()
+    const
 {
-    auto* hw = device_.get();
-    if (!hw) {
+    auto *hw = device_.get();
+    if (!hw)
+    {
         return std::unexpected(sd::HardwareError::HardwareNotSet);
     }
 
-    if (!hw->LockDevice()) {
+    if (!hw->LockDevice())
+    {
         return std::unexpected(sd::HardwareError::DeviceLockFailed);
     }
 
@@ -29,70 +32,77 @@ AcquisitionConfigurator::getCycleCount() const
 
     const bool unlocked = hw->UnlockDevice();
 
-    if (!unlocked) {
+    if (!unlocked)
+    {
         return std::unexpected(sd::HardwareError::DeviceUnlockFailed);
     }
 
-    if (!ok) {
+    if (!ok)
+    {
         return std::unexpected(AcquisitionErrorKind::ReadParameterFailed);
     }
 
     return static_cast<int>(cycleCount);
 }
 
-std::expected<AscanParameters, AcquisitionError>
-AcquisitionConfigurator::getAscanParameters(int cycle) const
+std::expected<AscanParameters, AcquisitionError> AcquisitionConfigurator::
+    getAscanParameters(int cycle) const
 {
-    auto* hw = device_.get();
-    if (!hw) {
+    auto *hw = device_.get();
+    if (!hw)
+    {
         return std::unexpected(sd::HardwareError::HardwareNotSet);
     }
 
     DeviceLockGuard lock(*hw);
-    if (!lock.locked()) {
+    if (!lock.locked())
+    {
         return std::unexpected(sd::HardwareError::DeviceLockFailed);
     }
 
     AscanParameters parameters;
     parameters.cycle = cycle;
 
-    enumCompressionType compressionType {};
+    enumCompressionType compressionType{};
     long pointFactor = 0;
     long pointCount = 0;
 
-    if (!hw->GetAscanStart(cycle, &parameters.start)) {
+    if (!hw->GetAscanStart(cycle, &parameters.start))
+    {
         return std::unexpected(AcquisitionErrorKind::ReadParameterFailed);
     }
 
-    if (!hw->GetAscanRange(
-            cycle,
-            &parameters.range,
-            &compressionType,
-            &pointFactor,
-            &pointCount)) {
+    if (!hw->GetAscanRange(cycle,
+                           &parameters.range,
+                           &compressionType,
+                           &pointFactor,
+                           &pointCount))
+    {
         return std::unexpected(AcquisitionErrorKind::ReadParameterFailed);
     }
 
     parameters.pointCount = static_cast<int>(pointCount);
 
-    if (!lock.release()) {
+    if (!lock.release())
+    {
         return std::unexpected(sd::HardwareError::DeviceUnlockFailed);
     }
 
     return parameters;
 }
 
-std::expected<AscanParameters, AcquisitionError>
-AcquisitionConfigurator::getAscanParameters_(int cycle) const
+std::expected<AscanParameters, AcquisitionError> AcquisitionConfigurator::
+    getAscanParameters_(int cycle) const
 {
-    auto* hw = device_.get();  // hw is CHWDeviceOEMPA* here
-    if (!hw) {
+    auto *hw = device_.get(); // hw is CHWDeviceOEMPA* here
+    if (!hw)
+    {
         return std::unexpected(sd::HardwareError::HardwareNotSet);
     }
 
 
-
-    if (!hw->LockDevice()) {
+    if (!hw->LockDevice())
+    {
         return std::unexpected(sd::HardwareError::DeviceLockFailed);
     }
 
@@ -107,7 +117,7 @@ AcquisitionConfigurator::getAscanParameters_(int cycle) const
     };
     */
 
-    enumCompressionType compressionType {};
+    enumCompressionType compressionType{};
     long pointFactor = 0;
     long pointCount = 0;
     //double dGain = 5.55;
@@ -115,16 +125,17 @@ AcquisitionConfigurator::getAscanParameters_(int cycle) const
     bool ok = true; // hw->GetGainDigital(cycle, &dGain); - works fine
 
     // as GetAscanStart as GetAscanRange return false - why ???
-    if (!hw->GetAscanStart(cycle, &parameters.start)) {
+    if (!hw->GetAscanStart(cycle, &parameters.start))
+    {
         ok = false;
     }
 
-    if (ok && !hw->GetAscanRange(
-            cycle,
-            &parameters.range,
-            &compressionType,
-            &pointFactor,
-            &pointCount)) {
+    if (ok && !hw->GetAscanRange(cycle,
+                                 &parameters.range,
+                                 &compressionType,
+                                 &pointFactor,
+                                 &pointCount))
+    {
         ok = false;
     }
 
@@ -132,11 +143,13 @@ AcquisitionConfigurator::getAscanParameters_(int cycle) const
 
     const bool unlocked = hw->UnlockDevice();
 
-    if (!unlocked) {
+    if (!unlocked)
+    {
         return std::unexpected(sd::HardwareError::DeviceUnlockFailed);
     }
 
-    if (!ok) {
+    if (!ok)
+    {
         return std::unexpected(AcquisitionErrorKind::ReadParameterFailed);
     }
 
@@ -144,17 +157,19 @@ AcquisitionConfigurator::getAscanParameters_(int cycle) const
 }
 
 
-std::expected<void, AcquisitionError>
-AcquisitionConfigurator::setAscanParameters(const AscanParameters& parameters)
+std::expected<void, AcquisitionError> AcquisitionConfigurator::
+    setAscanParameters(const AscanParameters &parameters)
 {
-    auto* hw = device_.get();
-    if (!hw) {
+    auto *hw = device_.get();
+    if (!hw)
+    {
         return std::unexpected(sd::HardwareError::HardwareNotSet);
     }
 
     DeviceLockGuard lock(*hw);
 
-    if (!lock.locked()) {
+    if (!lock.locked())
+    {
         return std::unexpected(sd::HardwareError::DeviceLockFailed);
     }
 
@@ -166,20 +181,22 @@ AcquisitionConfigurator::setAscanParameters(const AscanParameters& parameters)
     // Better than SetAscanRange() here, because PointCount is explicit.
     enumCompressionType compressionType = eCompression;
 
-    if (!hw->SetAscanStart(parameters.cycle, start)) {
-         return std::unexpected(AcquisitionErrorKind::WriteParameterFailed);
-    }
-
-    if (!hw->SetAscanRangeWithCount(
-            parameters.cycle,
-            range,
-            compressionType,
-            pointCount,
-            pointFactor)) {
+    if (!hw->SetAscanStart(parameters.cycle, start))
+    {
         return std::unexpected(AcquisitionErrorKind::WriteParameterFailed);
     }
 
-    if (!lock.release()) {
+    if (!hw->SetAscanRangeWithCount(parameters.cycle,
+                                    range,
+                                    compressionType,
+                                    pointCount,
+                                    pointFactor))
+    {
+        return std::unexpected(AcquisitionErrorKind::WriteParameterFailed);
+    }
+
+    if (!lock.release())
+    {
         return std::unexpected(sd::HardwareError::DeviceUnlockFailed);
     }
 

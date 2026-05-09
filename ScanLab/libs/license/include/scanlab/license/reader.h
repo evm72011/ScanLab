@@ -6,14 +6,17 @@
 #include "scanlab/license/data.h"
 #include "scanlab/license/license_error.h"
 
-namespace scanlab::license {
+namespace scanlab::license
+{
 
-class Reader {
+class Reader
+{
 public:
     explicit Reader(std::filesystem::path path);
 
     [[nodiscard]]
     std::expected<Data, LicenseError> read() const;
+
 private:
     std::filesystem::path path_;
 };

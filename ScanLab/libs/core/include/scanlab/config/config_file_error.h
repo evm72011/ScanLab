@@ -1,11 +1,13 @@
 #pragma once
 
-#include <variant>
 #include "scanlab/device/hardware_error.h"
+#include <variant>
 
-namespace scanlab::config {
+namespace scanlab::config
+{
 
-enum class ConfigFileErrorKind {
+enum class ConfigFileErrorKind
+{
     FileNotFound,
     LoadFailed,
     FileCreationFailed,
