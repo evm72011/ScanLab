@@ -13,7 +13,7 @@ set(QML_MODULE_FILES
     components/StatusBar/StatusChip.qml
     components/StatusBar/HumidityStatusChip.qml
     components/StatusBar/TemperatureStatusChip.qml
-#
+    #
     components/Button.qml
     components/DropDown.qml
     components/HorizontalResizeHandle.qml
@@ -24,9 +24,9 @@ set(QML_MODULE_FILES
     components/StyledToolTip.qml
     components/TabButton.qml
     components/TextField.qml
-#
+    #
     dialogs/MessageDialog.qml
-#
+    #
     pages/AScanPage.qml
     pages/AScanSettingsPage.qml
     pages/DevicePage.qml
@@ -35,7 +35,7 @@ set(QML_MODULE_FILES
     pages/ScanBPage.qml
     pages/ScanCPage.qml
     pages/SettingsPage.qml
-#
+    #
     Main.qml
     themes/tokens/ColorTokens.qml)
 

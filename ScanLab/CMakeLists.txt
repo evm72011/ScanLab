@@ -84,7 +84,7 @@ qt_add_qml_module(
     app/include/runtime/health/humidity_worker.h
     app/include/runtime/health/temperature_service.h
     app/include/runtime/health/temperature_worker.h
-#
+    #
     app/include/ui/app_info.h
     app/include/ui/acquisition/acquisition_configuration_facade.h
     app/include/ui/acquisition/ascan_facade.h
@@ -96,10 +96,10 @@ qt_add_qml_module(
     app/include/ui/health/temperature_facade.h
     app/include/ui/health/humidity_facade.h
     app/include/ui/view/ascan_view.h
-#
+    #
     app/include/app_settings.h
     app/include/backend.h
-#
+    #
     app/include/b_scan_view.h
     app/include/b_scan_worker.h
     app/include/c_scan_view.h
@@ -120,7 +120,7 @@ qt_add_qml_module(
     app/src/runtime/health/humidity_worker.cpp
     app/src/runtime/health/temperature_service.cpp
     app/src/runtime/health/temperature_worker.cpp
-#
+    #
     app/src/ui/acquisition/acquisition_configuration_facade.cpp
     app/src/ui/acquisition/ascan_facade.cpp
     app/src/ui/config/config_callback_facade.cpp
@@ -129,9 +129,9 @@ qt_add_qml_module(
     app/src/ui/health/temperature_facade.cpp
     app/src/ui/health/humidity_facade.cpp
     app/src/ui/view/ascan_view.cpp
-#
+    #
     app/src/backend.cpp
-#
+    #
     app/src/b_scan_view.cpp
     app/src/b_scan_worker.cpp
     app/src/c_scan_view.cpp

@@ -9,17 +9,16 @@ add_library(
     src/acquisition/ascan/cropper.cpp
     src/acquisition/ascan/envelope_downsampler.cpp
     src/acquisition/ascan/pipeline.cpp
-#
+    #
     src/config/callback_dispatcher.cpp
     src/config/file_loader.cpp
     src/config/file_saver.cpp
-#
+    #
     src/device/device_lock_guard.cpp
-#
+    #
     src/health/health_topology.cpp
     src/health/humidity_topology_api.cpp
-    src/health/temperature_topology_api.cpp
-)
+    src/health/temperature_topology_api.cpp)
 
 # TODO: Replace WINDOWS_EXPORT_ALL_SYMBOLS with explicit export macros (e.g. SL_CORE_API).
 # Currently all symbols are exported automatically, which is not suitable for a stable/public API.

@@ -4,5 +4,7 @@ pwsh -ExecutionPolicy Bypass -File .\scripts\conan-install.ps1
 add to project configuration (additional CMake options)
 -DCMAKE_TOOLCHAIN_FILE:FILEPATH=${CMAKE_BINARY_DIR}/conan_toolchain.cmake
 
+cmake --build build\Desktop_Qt_6_11_0_MSVC2022_64bit-Debug --target run_cmake_format --config Debug
+
 
 keep actual buid dir in ./scripts/conan-install.ps1
