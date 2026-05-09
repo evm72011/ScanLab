@@ -30,9 +30,11 @@ bool decodeBase64(
     return result == 0 && actualSize == expectedSize;
 }
 
-std::expected<void, LicenseError> validatePublicKey(
-    std::string_view publicKeyBase64
-    ) {
+std::expected<void, LicenseError> validatePublicKey(std::string_view publicKeyBase64) {
+    if (publicKeyBase64.empty()) {
+        return std::unexpected(LicenseError::PublicKeyNotConfigured);
+    }
+
     if (sodium_init() < 0) {
         return std::unexpected(LicenseError::CryptoInitFailed);
     }
@@ -67,10 +69,6 @@ std::expected<void, LicenseError> Ed25519Verifier::verify(
 
     unsigned char publicKey[crypto_sign_PUBLICKEYBYTES];
     unsigned char signature[crypto_sign_BYTES];
-
-    if (publicKeyBase64_.empty()) {
-        return std::unexpected(LicenseError::PublicKeyNotConfigured);
-    }
 
     if (!decodeBase64(
             publicKeyBase64_,
