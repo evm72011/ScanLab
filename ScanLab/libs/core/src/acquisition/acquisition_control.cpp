@@ -7,15 +7,16 @@ namespace sd = scanlab::device;
 namespace scanlab::acquisition
 {
 
-AcquisitionControl::AcquisitionControl(sd::Device &device) : device_(device)
+AcquisitionControl::AcquisitionControl(sd::Device& device)
+    : device_(device)
 {
 }
 
-std::expected<void, AcquisitionError> AcquisitionControl::start(
-    const std::function<void()> &registerCallbacks,
-    const std::function<void()> &unregisterCallbacks)
+std::expected<void, AcquisitionError> AcquisitionControl::start(const std::function<void()>&
+                                                                    registerCallbacks,
+    const std::function<void()>& unregisterCallbacks)
 {
-    auto *hw = device_.get();
+    auto* hw = device_.get();
     if (!hw)
     {
         return std::unexpected(sd::HardwareError::HardwareNotSet);
@@ -55,7 +56,7 @@ std::expected<void, AcquisitionError> AcquisitionControl::start(
     return {};
 }
 
-void AcquisitionControl::stop(const std::function<void()> &unregisterCallbacks)
+void AcquisitionControl::stop(const std::function<void()>& unregisterCallbacks)
 {
     bool wasRunning = false;
 
@@ -65,7 +66,7 @@ void AcquisitionControl::stop(const std::function<void()> &unregisterCallbacks)
         running_ = false;
     }
 
-    auto *hw = device_.get();
+    auto* hw = device_.get();
 
     if (wasRunning && hw && hw->LockDevice())
     {

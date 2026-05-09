@@ -5,20 +5,19 @@
 
 class DeviceContext;
 
-class AcquisitionConfigurationService {
+class AcquisitionConfigurationService
+{
 public:
     explicit AcquisitionConfigurationService(DeviceContext& context);
     ~AcquisitionConfigurationService();
 
-    std::expected<int, scanlab::acquisition::AcquisitionError>
-    readCycleCount() const;
+    std::expected<int, scanlab::acquisition::AcquisitionError> readCycleCount() const;
 
-    std::expected<scanlab::acquisition::AscanParameters,
-                  scanlab::acquisition::AcquisitionError>
+    std::expected<scanlab::acquisition::AscanParameters, scanlab::acquisition::AcquisitionError>
     readAscanParameters(int cycle) const;
 
-    std::expected<void, scanlab::acquisition::AcquisitionError>
-    writeAscanParameters(const scanlab::acquisition::AscanParameters& parameters);
+    std::expected<void, scanlab::acquisition::AcquisitionError> writeAscanParameters(
+        const scanlab::acquisition::AscanParameters& parameters);
 
 private:
     DeviceContext& context_;

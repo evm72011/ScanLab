@@ -16,7 +16,7 @@ enum class ConnectionErrorKind
     SerialNumberUnavailable
 };
 
-using ConnectionError = std::
-    variant<HardwareError, ConnectionErrorKind, scanlab::license::LicenseError>;
+using ConnectionError =
+    std::variant<HardwareError, ConnectionErrorKind, scanlab::license::LicenseError>;
 
 } // namespace scanlab::device

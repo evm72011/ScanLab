@@ -7,7 +7,8 @@
 
 class DeviceContext;
 
-class ConfigCallbackWorker : public QObject {
+class ConfigCallbackWorker : public QObject
+{
     Q_OBJECT
 
 public:

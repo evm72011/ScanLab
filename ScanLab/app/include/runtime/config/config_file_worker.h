@@ -8,7 +8,8 @@
 
 class DeviceContext;
 
-class ConfigFileWorker : public QObject {
+class ConfigFileWorker : public QObject
+{
     Q_OBJECT
 
 public:

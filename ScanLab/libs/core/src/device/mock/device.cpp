@@ -10,18 +10,16 @@ namespace scanlab::device
 
 using Ed25519Verifier = scanlab::license::Ed25519Verifier;
 
-Device::Device(std::filesystem::path licensePath,
-               std::string licensePublicKeyBase64)
-    : licenseChecker_(std::move(licensePath),
-                      Ed25519Verifier(std::move(licensePublicKeyBase64)))
+Device::Device(std::filesystem::path licensePath, std::string licensePublicKeyBase64)
+    : licenseChecker_(std::move(licensePath), Ed25519Verifier(std::move(licensePublicKeyBase64)))
 {
 }
 
-Device::Device(Device &&) noexcept = default;
-Device &Device::operator=(Device &&) noexcept = default;
+Device::Device(Device&&) noexcept = default;
+Device& Device::operator=(Device&&) noexcept = default;
 
 std::expected<ConnectionResult, ConnectionError> Device::connect(
-    [[maybe_unused]] const std::wstring &address)
+    [[maybe_unused]] const std::wstring& address)
 {
     if (!type_)
     {
@@ -43,7 +41,7 @@ std::expected<ConnectionResult, ConnectionError> Device::connect(
     }
 
     connected_ = true;
-    return ConnectionResult{std::wstring(serial.begin(), serial.end())};
+    return ConnectionResult{ std::wstring(serial.begin(), serial.end()) };
 }
 
 bool Device::ensureDevice(DeviceType type)
@@ -80,12 +78,12 @@ bool Device::isConnected() const
     return connected_;
 }
 
-CHWDeviceOEMPA *Device::get()
+CHWDeviceOEMPA* Device::get()
 {
     return nullptr;
 }
 
-const CHWDeviceOEMPA *Device::get() const
+const CHWDeviceOEMPA* Device::get() const
 {
     return device_.get();
 }

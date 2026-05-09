@@ -1,20 +1,18 @@
 #pragma once
 
-#include <memory>
 #include <filesystem>
+#include <memory>
 #include <string>
 
-namespace scanlab::device {
+namespace scanlab::device
+{
 class Device;
 }
 
 class DeviceContext
 {
 public:
-    DeviceContext(
-        std::filesystem::path licensePath,
-        std::string licensePublicKeyBase64
-        );
+    DeviceContext(std::filesystem::path licensePath, std::string licensePublicKeyBase64);
 
     DeviceContext(const DeviceContext&) = delete;
     DeviceContext& operator=(const DeviceContext&) = delete;

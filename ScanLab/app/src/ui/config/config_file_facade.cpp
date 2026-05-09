@@ -9,21 +9,15 @@ ConfigFileFacade::ConfigFileFacade(DeviceContext& context, QObject* parent)
     worker_ = new ConfigFileWorker(context);
     worker_->moveToThread(&workerThread_);
 
-    connect(
-        &workerThread_,
-        &QThread::finished,
-        worker_,
-        &QObject::deleteLater);
+    connect(&workerThread_, &QThread::finished, worker_, &QObject::deleteLater);
 
-    connect(
-        this,
+    connect(this,
         &ConfigFileFacade::requestRefreshConfigFiles,
         worker_,
         &ConfigFileWorker::refreshConfigFiles,
         Qt::QueuedConnection);
 
-    connect(
-        this,
+    connect(this,
         &ConfigFileFacade::requestLoadConfigFile,
         worker_,
         &ConfigFileWorker::loadConfigFile,
@@ -43,9 +37,7 @@ ConfigFileFacade::ConfigFileFacade(DeviceContext& context, QObject* parent)
         worker_,
         &ConfigFileWorker::configFilesErrorCode,
         this,
-        [this](const QString& value) {
-            setErrorCode(value);
-        },
+        [this](const QString& value) { setErrorCode(value); },
         Qt::QueuedConnection);
 
     connect(
@@ -77,7 +69,8 @@ ConfigFileFacade::ConfigFileFacade(DeviceContext& context, QObject* parent)
 
 ConfigFileFacade::~ConfigFileFacade()
 {
-    if (workerThread_.isRunning()) {
+    if (workerThread_.isRunning())
+    {
         workerThread_.quit();
         workerThread_.wait();
     }
@@ -95,7 +88,8 @@ QString ConfigFileFacade::selectedConfigFile() const
 
 void ConfigFileFacade::setSelectedConfigFile(const QString& value)
 {
-    if (selectedConfigFile_ == value) {
+    if (selectedConfigFile_ == value)
+    {
         return;
     }
 
@@ -120,7 +114,8 @@ void ConfigFileFacade::refreshConfigFiles()
 
 void ConfigFileFacade::loadSelectedConfigFile()
 {
-    if (loading_) {
+    if (loading_)
+    {
         return;
     }
 
@@ -132,7 +127,8 @@ void ConfigFileFacade::loadSelectedConfigFile()
 
 void ConfigFileFacade::setAvailableConfigFiles(const QStringList& value)
 {
-    if (availableConfigFiles_ == value) {
+    if (availableConfigFiles_ == value)
+    {
         return;
     }
 
@@ -142,7 +138,8 @@ void ConfigFileFacade::setAvailableConfigFiles(const QStringList& value)
 
 void ConfigFileFacade::setLoading(bool value)
 {
-    if (loading_ == value) {
+    if (loading_ == value)
+    {
         return;
     }
 
@@ -152,7 +149,8 @@ void ConfigFileFacade::setLoading(bool value)
 
 void ConfigFileFacade::setErrorCode(const QString& value)
 {
-    if (errorCode_ == value) {
+    if (errorCode_ == value)
+    {
         return;
     }
 

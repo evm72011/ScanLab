@@ -3,7 +3,7 @@
 namespace scanlab::license
 {
 
-std::string Payload::fromDevices(const std::vector<std::string> &devices)
+std::string Payload::fromDevices(const std::vector<std::string>& devices)
 {
     std::string payload;
 

@@ -1,28 +1,26 @@
 #pragma once
 
 #include <QObject>
-#include <QThread>
 #include <QString>
 #include <QStringList>
+#include <QThread>
 
 class DeviceContext;
 class ConfigFileWorker;
 
-class ConfigFileFacade : public QObject {
+class ConfigFileFacade : public QObject
+{
     Q_OBJECT
 
-    Q_PROPERTY(QStringList availableConfigFiles
-        READ availableConfigFiles
-        NOTIFY availableConfigFilesChanged)
+    Q_PROPERTY(QStringList availableConfigFiles READ availableConfigFiles NOTIFY
+            availableConfigFilesChanged)
 
     Q_PROPERTY(bool loading READ loading NOTIFY loadingChanged)
 
     Q_PROPERTY(QString errorCode READ errorCode NOTIFY errorCodeChanged)
 
-    Q_PROPERTY(QString selectedConfigFile
-        READ selectedConfigFile
-        WRITE setSelectedConfigFile
-        NOTIFY selectedConfigFileChanged)
+    Q_PROPERTY(QString selectedConfigFile READ selectedConfigFile WRITE setSelectedConfigFile NOTIFY
+            selectedConfigFileChanged)
 
 public:
     explicit ConfigFileFacade(DeviceContext& context, QObject* parent = nullptr);

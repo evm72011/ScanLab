@@ -1,13 +1,12 @@
 #include <QGuiApplication>
+#include <QIcon>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include <QIcon>
 #include <QQuickStyle>
 
 #include "backend.h"
 
-
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     QQuickStyle::setStyle("Basic");
     QGuiApplication app(argc, argv);

@@ -13,24 +13,15 @@ TemperatureFacade::TemperatureFacade(DeviceContext& context, QObject* parent)
     worker_ = new TemperatureWorker(context);
     worker_->moveToThread(&workerThread_);
 
-    connect(
-        &workerThread_,
-        &QThread::finished,
-        worker_,
-        &QObject::deleteLater);
+    connect(&workerThread_, &QThread::finished, worker_, &QObject::deleteLater);
 
-    connect(
-        this,
+    connect(this,
         &TemperatureFacade::requestPollMaxTemperature,
         worker_,
         &TemperatureWorker::pollMaxTemperature,
         Qt::QueuedConnection);
 
-    connect(
-        &timer_,
-        &QTimer::timeout,
-        this,
-        &TemperatureFacade::pollMaxTemperature);
+    connect(&timer_, &QTimer::timeout, this, &TemperatureFacade::pollMaxTemperature);
 
     connect(
         worker_,
@@ -46,18 +37,14 @@ TemperatureFacade::TemperatureFacade(DeviceContext& context, QObject* parent)
         worker_,
         &TemperatureWorker::maxTemperatureUnavailable,
         this,
-        [this]() {
-            setMaxTemperatureUnavailable(true);
-        },
+        [this]() { setMaxTemperatureUnavailable(true); },
         Qt::QueuedConnection);
 
     connect(
         worker_,
         &TemperatureWorker::maxTemperatureErrorCode,
         this,
-        [this](QString value) {
-            setMaxTemperatureErrorCode(value);
-        },
+        [this](QString value) { setMaxTemperatureErrorCode(value); },
         Qt::QueuedConnection);
 
     timer_.setSingleShot(false);
@@ -69,7 +56,8 @@ TemperatureFacade::~TemperatureFacade()
 {
     timer_.stop();
 
-    if (workerThread_.isRunning()) {
+    if (workerThread_.isRunning())
+    {
         workerThread_.quit();
         workerThread_.wait();
     }
@@ -92,7 +80,8 @@ QString TemperatureFacade::maxTemperatureErrorCode() const
 
 void TemperatureFacade::startMaxTemperaturePolling()
 {
-    if (timer_.isActive()) {
+    if (timer_.isActive())
+    {
         return;
     }
 
@@ -104,7 +93,8 @@ void TemperatureFacade::startMaxTemperaturePolling()
 
 void TemperatureFacade::stopMaxTemperaturePolling()
 {
-    if (!timer_.isActive()) {
+    if (!timer_.isActive())
+    {
         return;
     }
 
@@ -118,7 +108,8 @@ void TemperatureFacade::pollMaxTemperature()
 
 void TemperatureFacade::setMaxTemperature(int value)
 {
-    if (maxTemperature_ == value) {
+    if (maxTemperature_ == value)
+    {
         return;
     }
     maxTemperature_ = value;
@@ -127,7 +118,8 @@ void TemperatureFacade::setMaxTemperature(int value)
 
 void TemperatureFacade::setMaxTemperatureUnavailable(bool value)
 {
-    if (maxTemperatureUnavailable_ == value) {
+    if (maxTemperatureUnavailable_ == value)
+    {
         return;
     }
 
@@ -137,7 +129,8 @@ void TemperatureFacade::setMaxTemperatureUnavailable(bool value)
 
 void TemperatureFacade::setMaxTemperatureErrorCode(const QString& value)
 {
-    if (maxTemperatureErrorCode_ == value) {
+    if (maxTemperatureErrorCode_ == value)
+    {
         return;
     }
 

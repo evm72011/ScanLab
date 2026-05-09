@@ -6,21 +6,21 @@ namespace sd = scanlab::device;
 namespace scanlab::health
 {
 
-HumidityReader::HumidityReader(sd::Device &device) : device_(device)
+HumidityReader::HumidityReader(sd::Device& device)
+    : device_(device)
 {
 }
 
 std::expected<int, HealthError> HumidityReader::readMax() const
 {
-    const auto topologyResult =
-        topology_.ensure(device_, HumidityTopologyApi{});
+    const auto topologyResult = topology_.ensure(device_, HumidityTopologyApi{});
 
     if (!topologyResult)
     {
         return std::unexpected(topologyResult.error());
     }
 
-    auto *hw = device_.get();
+    auto* hw = device_.get();
     if (hw == nullptr)
     {
         topology_.reset();
@@ -40,9 +40,7 @@ std::expected<int, HealthError> HumidityReader::readMax() const
 
     bool ok = true;
     size_t sensorIdx = 0;
-    std::vector<WORD> values(
-        static_cast<std::size_t>(topology_.totalSensorCount()),
-        0);
+    std::vector<WORD> values(static_cast<std::size_t>(topology_.totalSensorCount()), 0);
     for (int board = 0; board < topology_.boardCount() && ok; ++board)
     {
         const int sensorCount = topology_.sensorCountPerBoard()[board];

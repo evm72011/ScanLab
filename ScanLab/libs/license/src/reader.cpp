@@ -7,7 +7,8 @@
 namespace scanlab::license
 {
 
-Reader::Reader(std::filesystem::path path) : path_{path}
+Reader::Reader(std::filesystem::path path)
+    : path_{ path }
 {
 }
 
@@ -37,16 +38,16 @@ std::expected<Data, LicenseError> Reader::read() const
         return std::unexpected(LicenseError::InvalidJson);
     }
 
-    if (!json.contains("devices") || !json["devices"].is_array() ||
-        !json.contains("signature") || !json["signature"].is_string())
+    if (!json.contains("devices") || !json["devices"].is_array() || !json.contains("signature") ||
+        !json["signature"].is_string())
     {
         return std::unexpected(LicenseError::InvalidJson);
     }
 
     try
     {
-        return Data{.devices = json["devices"].get<std::vector<std::string>>(),
-                    .signatureBase64 = json["signature"].get<std::string>()};
+        return Data{ .devices = json["devices"].get<std::vector<std::string>>(),
+            .signatureBase64 = json["signature"].get<std::string>() };
     }
     catch (...)
     {

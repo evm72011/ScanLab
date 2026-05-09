@@ -1,11 +1,12 @@
 #pragma once
 
 #include <QObject>
-#include <QThread>
 #include <QString>
+#include <QThread>
 #include <QVariantList>
 
-namespace scanlab::acquisition {
+namespace scanlab::acquisition
+{
 struct AscanParameters;
 }
 

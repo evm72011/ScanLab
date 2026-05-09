@@ -1,9 +1,9 @@
 #pragma once
 
 #include "scanlab/acquisition/acquisition_error.h"
+#include "scanlab/acquisition/ascan/cropper.h"
 #include "scanlab/acquisition/ascan/frame.h"
 #include "scanlab/acquisition/ascan/pipeline.h"
-#include "scanlab/acquisition/ascan/cropper.h"
 
 #include <expected>
 #include <functional>
@@ -12,10 +12,11 @@
 
 class DeviceContext;
 
-namespace scanlab::acquisition::ascan {
+namespace scanlab::acquisition::ascan
+{
 class AcquisitionSource;
 class RawFrame;
-}
+} // namespace scanlab::acquisition::ascan
 
 class AScanService
 {
@@ -39,6 +40,7 @@ public:
     void setCycleFilter(int cycle);
     void setCropMargins(double leftFraction, double rightFraction);
     void setEnvelopeTargetPointCount(int value);
+
 private:
     void handleRawFrame(scanlab::acquisition::ascan::RawFrame&& rawFrame);
 

@@ -11,38 +11,27 @@
 
 Backend::Backend(QObject* parent)
     : QObject(parent)
-    , context_(
-          std::filesystem::path{license_file},
-          std::string{license_public_key}
-          )
+    , context_(std::filesystem::path{ license_file }, std::string{ license_public_key })
 {
     // if there is a lot of connection, pack them in a new class BackendCoordinator / BackendOrchestrator
-    connect(
-        &connectionFacade_,
-        &ConnectionFacade::connectionStateChanged,
-        this,
-        [this]() {
-            if (connectionFacade_.connectionState() == ConnectionState::State::Connected) {
-                configCallbackFacade_.startWatching();
+    connect(&connectionFacade_, &ConnectionFacade::connectionStateChanged, this, [this]() {
+        if (connectionFacade_.connectionState() == ConnectionState::State::Connected)
+        {
+            configCallbackFacade_.startWatching();
 
-                //QTimer::singleShot(1000, this, [this]() {
-                //    qDebug() << "loadSelectedConfigFile: "  << configFileFacade_.selectedConfigFile();
-                //    configFileFacade_.loadSelectedConfigFile();
-                //});
+            //QTimer::singleShot(1000, this, [this]() {
+            //    qDebug() << "loadSelectedConfigFile: "  << configFileFacade_.selectedConfigFile();
+            //    configFileFacade_.loadSelectedConfigFile();
+            //});
 
-                //configFileFacade_.loadSelectedConfigFile();
-                acquisitionConfigurationFacade_.readCycleCount();
-            }
-        });
+            //configFileFacade_.loadSelectedConfigFile();
+            acquisitionConfigurationFacade_.readCycleCount();
+        }
+    });
 
-    connect(
-        &configCallbackFacade_,
-        &ConfigCallbackFacade::configSnapshotChanged,
-        this,
-        [this]() {
-            qDebug() << "CONFIG CALLBACK:"
-                     << configCallbackFacade_.configSnapshot();
-        });
+    connect(&configCallbackFacade_, &ConfigCallbackFacade::configSnapshotChanged, this, [this]() {
+        qDebug() << "CONFIG CALLBACK:" << configCallbackFacade_.configSnapshot();
+    });
 }
 
 AppInfo* Backend::appInfo()

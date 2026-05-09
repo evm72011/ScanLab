@@ -8,7 +8,8 @@
 
 class DeviceContext;
 
-class AcquisitionConfigurationWorker : public QObject {
+class AcquisitionConfigurationWorker : public QObject
+{
     Q_OBJECT
 
 public:

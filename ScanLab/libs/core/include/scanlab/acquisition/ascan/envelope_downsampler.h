@@ -13,7 +13,7 @@ class EnvelopeDownsampler
 public:
     void setTargetPointCount(int value);
 
-    std::vector<EnvelopePoint> transform(const std::vector<float> &input) const;
+    std::vector<EnvelopePoint> transform(const std::vector<float>& input) const;
 
 private:
     mutable std::mutex mutex_;

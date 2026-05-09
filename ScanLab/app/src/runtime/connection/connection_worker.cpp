@@ -1,7 +1,7 @@
 #include "runtime/connection/connection_worker.h"
 
-#include "runtime/device/device_context.h"
 #include "runtime/connection/connection_service.h"
+#include "runtime/device/device_context.h"
 #include <magic_enum/magic_enum.hpp>
 
 ConnectionWorker::ConnectionWorker(DeviceContext& context, QObject* parent)
@@ -13,7 +13,8 @@ ConnectionWorker::ConnectionWorker(DeviceContext& context, QObject* parent)
 void ConnectionWorker::connect(DeviceType type, const QString& address)
 {
     const auto connectionResult = service_.connect(type, address.toStdWString());
-    if (!connectionResult.has_value()) {
+    if (!connectionResult.has_value())
+    {
         const auto& error = connectionResult.error();
         const auto errorInfo_ = describeError(error);
         emit errorInfo(errorInfo_);

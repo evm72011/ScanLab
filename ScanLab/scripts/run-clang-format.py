@@ -132,6 +132,7 @@ def run_clang_format_diff(args, file):
         raise DiffError(str(exc))
 
     if args.in_place:
+        print(f"[clang-format] {file}", flush=True)
         invocation = [args.clang_format_executable, '-i', file]
     else:
         invocation = [args.clang_format_executable, file]

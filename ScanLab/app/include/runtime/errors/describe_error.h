@@ -8,16 +8,13 @@ template <typename T>
 ErrorInfo describeErrorImpl(T error, const QHash<T, const char*>& map)
 {
     const auto code = magic_enum::enum_name(error);
-    const auto technicalCode =
-        QString::fromUtf8(code.data(), static_cast<qsizetype>(code.size()));
+    const auto technicalCode = QString::fromUtf8(code.data(), static_cast<qsizetype>(code.size()));
 
     const auto it = map.find(error);
-    if (it != map.end()) {
-        return {technicalCode, it.value()};
+    if (it != map.end())
+    {
+        return { technicalCode, it.value() };
     }
 
-    return {
-        technicalCode,
-        QT_TR_NOOP("Unknown error code")
-    };
+    return { technicalCode, QT_TR_NOOP("Unknown error code") };
 }

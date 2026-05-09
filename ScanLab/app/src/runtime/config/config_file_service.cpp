@@ -15,37 +15,31 @@ ConfigFileService::ConfigFileService(DeviceContext& context)
 {
 }
 
-std::expected<QStringList, ConfigFileError>
-ConfigFileService::availableConfigFiles() const
+std::expected<QStringList, ConfigFileError> ConfigFileService::availableConfigFiles() const
 {
     QDir dir(configDir_);
 
-    if (!dir.exists()) {
+    if (!dir.exists())
+    {
         return std::unexpected(ConfigFileError::ConfigDirNotFound);
     }
 
-    const QStringList filters {
-        "*.txt",
-        "*.bin"
-    };
+    const QStringList filters{ "*.txt", "*.bin" };
 
-    return dir.entryList(
-        filters,
-        QDir::Files | QDir::Readable,
-        QDir::Name
-        );
+    return dir.entryList(filters, QDir::Files | QDir::Readable, QDir::Name);
 }
 
-std::expected<void, ConfigFileError>
-ConfigFileService::loadToHardware(const QString& fileName)
+std::expected<void, ConfigFileError> ConfigFileService::loadToHardware(const QString& fileName)
 {
     const auto path = resolveConfigPath(fileName);
-    if (!path.has_value()) {
+    if (!path.has_value())
+    {
         return std::unexpected(path.error());
     }
 
     auto* device = context_.device();
-    if (!device) {
+    if (!device)
+    {
         return std::unexpected(ConfigFileError::HardwareNotSet);
     }
 
@@ -53,19 +47,21 @@ ConfigFileService::loadToHardware(const QString& fileName)
 
     const auto result = loader.load(path->toStdString());
 
-    if (!result.has_value()) {
+    if (!result.has_value())
+    {
         return std::unexpected(ConfigFileError::LoadFailed);
     }
 
     return {};
 }
 
-std::expected<QString, ConfigFileError>
-ConfigFileService::resolveConfigPath(const QString& fileName) const
+std::expected<QString, ConfigFileError> ConfigFileService::resolveConfigPath(
+    const QString& fileName) const
 {
     const QDir dir(configDir_);
 
-    if (!dir.exists()) {
+    if (!dir.exists())
+    {
         return std::unexpected(ConfigFileError::ConfigDirNotFound);
     }
 
@@ -75,11 +71,13 @@ ConfigFileService::resolveConfigPath(const QString& fileName) const
     const QString canonical = QDir::cleanPath(info.canonicalFilePath());
     const QString base = QDir::cleanPath(dir.canonicalPath());
 
-    if (canonical.isEmpty()) {
+    if (canonical.isEmpty())
+    {
         return std::unexpected(ConfigFileError::InvalidPath);
     }
 
-    if (canonical != base && !canonical.startsWith(base + "/")) {
+    if (canonical != base && !canonical.startsWith(base + "/"))
+    {
         return std::unexpected(ConfigFileError::InvalidPath);
     }
 

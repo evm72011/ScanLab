@@ -1,7 +1,7 @@
 #pragma once
 
-#include <QObject>
 #include "configured/app_info.h"
+#include <QObject>
 
 class AppInfo : public QObject
 {
@@ -11,17 +11,23 @@ class AppInfo : public QObject
     Q_PROPERTY(bool isMockDevice READ isMockDevice CONSTANT)
 
 public:
-    explicit AppInfo(QObject* parent = nullptr) : QObject(parent) {}
+    explicit AppInfo(QObject* parent = nullptr)
+        : QObject(parent)
+    {
+    }
 
-    QString name() const {
+    QString name() const
+    {
         return QString::fromUtf8(project_name.data(), project_name.size());
     }
 
-    QString version() const {
+    QString version() const
+    {
         return QString::fromUtf8(project_version.data(), project_version.size());
     }
 
-    bool isMockDevice() const {
+    bool isMockDevice() const
+    {
         return is_mock_device;
     }
 };

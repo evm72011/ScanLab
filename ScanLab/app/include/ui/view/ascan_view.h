@@ -20,10 +20,14 @@ class AScanView : public QQuickPaintedItem
     Q_PROPERTY(QColor lineColor READ lineColor WRITE setLineColor NOTIFY lineColorChanged)
     Q_PROPERTY(QColor gridColor READ gridColor WRITE setGridColor NOTIFY gridColorChanged)
     Q_PROPERTY(QColor markerColor READ markerColor WRITE setMarkerColor NOTIFY markerColorChanged)
-    Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setBackgroundColor NOTIFY backgroundColorChanged)
-    Q_PROPERTY(QColor axisTextColor READ axisTextColor WRITE setAxisTextColor NOTIFY axisTextColorChanged)
-    Q_PROPERTY(qreal minThicknessMm READ minThicknessMm WRITE setMinThicknessMm NOTIFY minThicknessMmChanged)
-    Q_PROPERTY(qreal maxThicknessMm READ maxThicknessMm WRITE setMaxThicknessMm NOTIFY maxThicknessMmChanged)
+    Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setBackgroundColor NOTIFY
+            backgroundColorChanged)
+    Q_PROPERTY(
+        QColor axisTextColor READ axisTextColor WRITE setAxisTextColor NOTIFY axisTextColorChanged)
+    Q_PROPERTY(qreal minThicknessMm READ minThicknessMm WRITE setMinThicknessMm NOTIFY
+            minThicknessMmChanged)
+    Q_PROPERTY(qreal maxThicknessMm READ maxThicknessMm WRITE setMaxThicknessMm NOTIFY
+            maxThicknessMmChanged)
 
 public:
     explicit AScanView(QQuickItem* parent = nullptr);

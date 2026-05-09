@@ -13,24 +13,15 @@ HumidityFacade::HumidityFacade(DeviceContext& context, QObject* parent)
     worker_ = new HumidityWorker(context);
     worker_->moveToThread(&workerThread_);
 
-    connect(
-        &workerThread_,
-        &QThread::finished,
-        worker_,
-        &QObject::deleteLater);
+    connect(&workerThread_, &QThread::finished, worker_, &QObject::deleteLater);
 
-    connect(
-        this,
+    connect(this,
         &HumidityFacade::requestPollMaxHumidity,
         worker_,
         &HumidityWorker::pollMaxHumidity,
         Qt::QueuedConnection);
 
-    connect(
-        &timer_,
-        &QTimer::timeout,
-        this,
-        &HumidityFacade::pollMaxHumidity);
+    connect(&timer_, &QTimer::timeout, this, &HumidityFacade::pollMaxHumidity);
 
     connect(
         worker_,
@@ -46,18 +37,14 @@ HumidityFacade::HumidityFacade(DeviceContext& context, QObject* parent)
         worker_,
         &HumidityWorker::maxHumidityUnavailable,
         this,
-        [this]() {
-            setMaxHumidityUnavailable(true);
-        },
+        [this]() { setMaxHumidityUnavailable(true); },
         Qt::QueuedConnection);
 
     connect(
         worker_,
         &HumidityWorker::maxHumidityErrorCode,
         this,
-        [this](QString value) {
-            setMaxHumidityErrorCode(value);
-        },
+        [this](QString value) { setMaxHumidityErrorCode(value); },
         Qt::QueuedConnection);
 
     timer_.setSingleShot(false);
@@ -69,7 +56,8 @@ HumidityFacade::~HumidityFacade()
 {
     timer_.stop();
 
-    if (workerThread_.isRunning()) {
+    if (workerThread_.isRunning())
+    {
         workerThread_.quit();
         workerThread_.wait();
     }
@@ -92,7 +80,8 @@ QString HumidityFacade::maxHumidityErrorCode() const
 
 void HumidityFacade::startMaxHumidityPolling()
 {
-    if (timer_.isActive()) {
+    if (timer_.isActive())
+    {
         return;
     }
 
@@ -104,7 +93,8 @@ void HumidityFacade::startMaxHumidityPolling()
 
 void HumidityFacade::stopMaxHumidityPolling()
 {
-    if (!timer_.isActive()) {
+    if (!timer_.isActive())
+    {
         return;
     }
 
@@ -118,7 +108,8 @@ void HumidityFacade::pollMaxHumidity()
 
 void HumidityFacade::setMaxHumidity(int value)
 {
-    if (maxHumidity_ == value) {
+    if (maxHumidity_ == value)
+    {
         return;
     }
     maxHumidity_ = value;
@@ -127,7 +118,8 @@ void HumidityFacade::setMaxHumidity(int value)
 
 void HumidityFacade::setMaxHumidityUnavailable(bool value)
 {
-    if (maxHumidityUnavailable_ == value) {
+    if (maxHumidityUnavailable_ == value)
+    {
         return;
     }
 
@@ -137,7 +129,8 @@ void HumidityFacade::setMaxHumidityUnavailable(bool value)
 
 void HumidityFacade::setMaxHumidityErrorCode(const QString& value)
 {
-    if (maxHumidityErrorCode_ == value) {
+    if (maxHumidityErrorCode_ == value)
+    {
         return;
     }
 

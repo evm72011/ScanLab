@@ -17,9 +17,11 @@ BScanView::BScanView(QQuickItem* parent)
     connect(this, &BScanView::requestStop, worker_, &BScanWorker::stop, Qt::QueuedConnection);
     connect(this, &BScanView::requestResize, worker_, &BScanWorker::setSize, Qt::QueuedConnection);
 
-    connect(worker_, &BScanWorker::frameReady,
-            this, &BScanView::onFrameReady,
-            Qt::QueuedConnection);
+    connect(worker_,
+        &BScanWorker::frameReady,
+        this,
+        &BScanView::onFrameReady,
+        Qt::QueuedConnection);
 
     connect(this, &QQuickItem::widthChanged, this, [this]() {
         emit requestResize(static_cast<int>(width()), static_cast<int>(height()));
@@ -47,15 +49,19 @@ bool BScanView::active() const
 
 void BScanView::setActive(bool value)
 {
-    if (active_ == value) {
+    if (active_ == value)
+    {
         return;
     }
 
     active_ = value;
 
-    if (active_) {
+    if (active_)
+    {
         emit requestStart();
-    } else {
+    }
+    else
+    {
         emit requestStop();
     }
 
@@ -81,7 +87,8 @@ void BScanView::paint(QPainter* painter)
         imageCopy = image_;
     }
 
-    if (imageCopy.isNull()) {
+    if (imageCopy.isNull())
+    {
         return;
     }
 

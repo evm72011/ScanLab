@@ -13,7 +13,7 @@ void Resampler::setTargetSampleCount(int value)
     targetSampleCount_ = value;
 }
 
-void Resampler::transform(std::vector<float> &input) const
+void Resampler::transform(std::vector<float>& input) const
 {
     int targetSampleCount = 0;
 
@@ -51,17 +51,16 @@ void Resampler::transform(std::vector<float> &input) const
 
     for (int i = 0; i < targetSampleCount; ++i)
     {
-        const double position = static_cast<double>(i) *
-                                static_cast<double>(sourceLastIndex) /
+        const double position = static_cast<double>(i) * static_cast<double>(sourceLastIndex) /
                                 static_cast<double>(targetLastIndex);
 
         const int leftIndex = static_cast<int>(position);
         const int rightIndex = std::min(leftIndex + 1, sourceLastIndex);
         const double factor = position - static_cast<double>(leftIndex);
 
-        output[static_cast<std::size_t>(i)] = static_cast<float>(
-            input[static_cast<std::size_t>(leftIndex)] * (1.0 - factor) +
-            input[static_cast<std::size_t>(rightIndex)] * factor);
+        output[static_cast<std::size_t>(i)] =
+            static_cast<float>(input[static_cast<std::size_t>(leftIndex)] * (1.0 - factor) +
+                               input[static_cast<std::size_t>(rightIndex)] * factor);
     }
 
     input = std::move(output);

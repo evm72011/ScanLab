@@ -13,10 +13,7 @@ ConfigCallbackWorker::~ConfigCallbackWorker()
 
 void ConfigCallbackWorker::startWatching()
 {
-    service_.startWatching(
-        [this](QVariantMap snapshot) {
-            emit configSnapshotUpdated(snapshot);
-        });
+    service_.startWatching([this](QVariantMap snapshot) { emit configSnapshotUpdated(snapshot); });
 }
 
 void ConfigCallbackWorker::stopWatching()

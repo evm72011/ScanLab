@@ -25,11 +25,11 @@ class CallbackDispatcher
 public:
     using Handler = std::function<void(ConfigSnapshot)>;
 
-    explicit CallbackDispatcher(scanlab::device::Device &device);
+    explicit CallbackDispatcher(scanlab::device::Device& device);
     ~CallbackDispatcher();
 
-    CallbackDispatcher(const CallbackDispatcher &) = delete;
-    CallbackDispatcher &operator=(const CallbackDispatcher &) = delete;
+    CallbackDispatcher(const CallbackDispatcher&) = delete;
+    CallbackDispatcher& operator=(const CallbackDispatcher&) = delete;
 
     void registerCallback();
     void unregisterCallback();
@@ -38,24 +38,24 @@ public:
     void clearHandler();
 
 private:
-    static structCorrectionOEMPA *WINAPI callback(CHWDeviceOEMPA *hw,
-                                                  const wchar_t *fileName,
-                                                  enumStepCustomizedAPI step,
-                                                  structRoot *root,
-                                                  structCycle *cycle,
-                                                  CFocalLaw *emission,
-                                                  CFocalLaw *reception);
+    static structCorrectionOEMPA* WINAPI callback(CHWDeviceOEMPA* hw,
+        const wchar_t* fileName,
+        enumStepCustomizedAPI step,
+        structRoot* root,
+        structCycle* cycle,
+        CFocalLaw* emission,
+        CFocalLaw* reception);
 
-    void handle(CHWDeviceOEMPA *hw,
-                const wchar_t *fileName,
-                enumStepCustomizedAPI step,
-                structRoot *root,
-                structCycle *cycle,
-                CFocalLaw *emission,
-                CFocalLaw *reception);
+    void handle(CHWDeviceOEMPA* hw,
+        const wchar_t* fileName,
+        enumStepCustomizedAPI step,
+        structRoot* root,
+        structCycle* cycle,
+        CFocalLaw* emission,
+        CFocalLaw* reception);
 
 private:
-    scanlab::device::Device &device_;
+    scanlab::device::Device& device_;
 
     std::mutex mutex_;
     Handler handler_;

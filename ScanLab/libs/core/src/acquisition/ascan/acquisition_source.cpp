@@ -10,8 +10,9 @@ namespace sd = scanlab::device;
 namespace scanlab::acquisition::ascan
 {
 
-AcquisitionSource::AcquisitionSource(sd::Device &device)
-    : device_(device), control_(device)
+AcquisitionSource::AcquisitionSource(sd::Device& device)
+    : device_(device)
+    , control_(device)
 {
 }
 
@@ -40,8 +41,7 @@ void AcquisitionSource::clearCycleFilter()
 
 std::expected<void, AcquisitionError> AcquisitionSource::start()
 {
-    return control_.start([this]() { registerCallbacks(); },
-                          [this]() { unregisterCallbacks(); });
+    return control_.start([this]() { registerCallbacks(); }, [this]() { unregisterCallbacks(); });
 }
 
 void AcquisitionSource::stop()
@@ -56,7 +56,7 @@ bool AcquisitionSource::isRunning() const
 
 void AcquisitionSource::registerCallbacks()
 {
-    auto *hw = device_.get();
+    auto* hw = device_.get();
     if (!hw)
     {
         return;
@@ -69,7 +69,7 @@ void AcquisitionSource::registerCallbacks()
 
 void AcquisitionSource::unregisterCallbacks()
 {
-    auto *hw = device_.get();
+    auto* hw = device_.get();
     if (!hw)
     {
         return;
@@ -80,15 +80,15 @@ void AcquisitionSource::unregisterCallbacks()
     hw->SetAcquisitionParameter(nullptr);
 }
 
-UINT WINAPI AcquisitionSource::callback(void *p,
-                                        structAcqInfoEx &,
-                                        const CStream_0x0001 *,
-                                        const CSubStreamAscan_0x0103 *hdr,
-                                        const void *bufferMax,
-                                        const void *,
-                                        const void *)
+UINT WINAPI AcquisitionSource::callback(void* p,
+    structAcqInfoEx&,
+    const CStream_0x0001*,
+    const CSubStreamAscan_0x0103* hdr,
+    const void* bufferMax,
+    const void*,
+    const void*)
 {
-    auto *self = static_cast<AcquisitionSource *>(p);
+    auto* self = static_cast<AcquisitionSource*>(p);
     if (!self || !hdr || !bufferMax)
     {
         return 0;
@@ -98,8 +98,7 @@ UINT WINAPI AcquisitionSource::callback(void *p,
     return 0;
 }
 
-void AcquisitionSource::handle(const CSubStreamAscan_0x0103 *hdr,
-                               const void *buffer)
+void AcquisitionSource::handle(const CSubStreamAscan_0x0103* hdr, const void* buffer)
 {
     FrameHandler localHandler;
     bool running = false;
@@ -123,15 +122,15 @@ void AcquisitionSource::handle(const CSubStreamAscan_0x0103 *hdr,
         return;
     }
 
-    const auto byteCount = static_cast<std::size_t>(hdr->dataSize) *
-                           static_cast<std::size_t>(hdr->dataCount);
+    const auto byteCount =
+        static_cast<std::size_t>(hdr->dataSize) * static_cast<std::size_t>(hdr->dataCount);
 
-    RawFrame frame{.dataSize = static_cast<int>(hdr->dataSize),
-                   .dataCount = static_cast<int>(hdr->dataCount),
-                   .cycle = static_cast<int>(hdr->cycle),
-                   .bitSize = static_cast<int>(hdr->bitSize),
-                   .sign = hdr->sign != 0,
-                   .data = std::vector<uint8_t>(byteCount)};
+    RawFrame frame{ .dataSize = static_cast<int>(hdr->dataSize),
+        .dataCount = static_cast<int>(hdr->dataCount),
+        .cycle = static_cast<int>(hdr->cycle),
+        .bitSize = static_cast<int>(hdr->bitSize),
+        .sign = hdr->sign != 0,
+        .data = std::vector<uint8_t>(byteCount) };
 
     if (byteCount != 0)
     {

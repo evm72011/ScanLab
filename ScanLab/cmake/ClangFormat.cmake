@@ -14,7 +14,7 @@ function(add_clang_format_target)
         return()
     endif()
 
-    set(CLANG_FORMAT_ROOTS apps libs)
+    set(CLANG_FORMAT_ROOTS app libs)
     set(CLANG_FORMAT_EXTS
         cc
         cpp

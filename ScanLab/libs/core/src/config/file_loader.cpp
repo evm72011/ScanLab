@@ -2,25 +2,24 @@
 
 #include <CustomizedDriverOEMPA.h>
 
-
 namespace sd = scanlab::device;
 
 namespace scanlab::config
 {
 
-FileLoader::FileLoader(sd::Device &device) : device_(device)
+FileLoader::FileLoader(sd::Device& device)
+    : device_(device)
 {
 }
 
-std::expected<void, ConfigFileError> FileLoader::load(
-    const std::filesystem::path &filePath) const
+std::expected<void, ConfigFileError> FileLoader::load(const std::filesystem::path& filePath) const
 {
     if (!std::filesystem::exists(filePath))
     {
         return std::unexpected(ConfigFileErrorKind::FileNotFound);
     }
 
-    auto *hw = device_.get();
+    auto* hw = device_.get();
     if (hw == nullptr)
     {
         return std::unexpected(sd::HardwareError::HardwareNotSet);

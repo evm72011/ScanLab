@@ -13,11 +13,13 @@ HumidityWorker::HumidityWorker(DeviceContext& context, QObject* parent)
 void HumidityWorker::pollMaxHumidity()
 {
     const auto maxHumidity = service_.readMax();
-    if (!maxHumidity.has_value()) {
+    if (!maxHumidity.has_value())
+    {
         const auto error = maxHumidity.error();
-        const auto errorCode = std::visit([](const auto value) {
-            return QString::fromUtf8(magic_enum::enum_name(value).data());
-        }, error);
+        const auto errorCode = std::
+            visit([](const auto
+                          value) { return QString::fromUtf8(magic_enum::enum_name(value).data()); },
+                error);
         emit maxHumidityErrorCode(errorCode);
         emit maxHumidityUnavailable();
         return;

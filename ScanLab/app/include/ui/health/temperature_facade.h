@@ -1,10 +1,10 @@
 #pragma once
 
 #include <QObject>
+#include <QString>
 #include <QThread>
 #include <QTimer>
 #include <QVariantList>
-#include <QString>
 #include <qqmlintegration.h>
 
 class DeviceContext;
@@ -15,8 +15,10 @@ class TemperatureFacade : public QObject
     Q_OBJECT
 
     Q_PROPERTY(int maxTemperature READ maxTemperature NOTIFY maxTemperatureChanged)
-    Q_PROPERTY(bool maxTemperatureUnavailable READ maxTemperatureUnavailable NOTIFY maxTemperatureUnavailableChanged)
-    Q_PROPERTY(QString maxTemperatureErrorCode READ maxTemperatureErrorCode NOTIFY maxTemperatureErrorCodeChanged)
+    Q_PROPERTY(bool maxTemperatureUnavailable READ maxTemperatureUnavailable NOTIFY
+            maxTemperatureUnavailableChanged)
+    Q_PROPERTY(QString maxTemperatureErrorCode READ maxTemperatureErrorCode NOTIFY
+            maxTemperatureErrorCodeChanged)
 
 public:
     explicit TemperatureFacade(DeviceContext& context, QObject* parent = nullptr);

@@ -3,7 +3,7 @@
 namespace scanlab::health
 {
 
-HumidityReader::HumidityReader(scanlab::device::Device &device)
+HumidityReader::HumidityReader(scanlab::device::Device& device)
     : device_(device)
 {
 }

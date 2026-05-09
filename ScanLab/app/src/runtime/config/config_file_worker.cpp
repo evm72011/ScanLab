@@ -12,9 +12,9 @@ void ConfigFileWorker::refreshConfigFiles()
 {
     const auto files = service_.availableConfigFiles();
 
-    if (!files.has_value()) {
-        const auto errorCode = QString::fromUtf8(
-            magic_enum::enum_name(files.error()).data());
+    if (!files.has_value())
+    {
+        const auto errorCode = QString::fromUtf8(magic_enum::enum_name(files.error()).data());
 
         emit configFilesErrorCode(errorCode);
         return;
@@ -27,9 +27,9 @@ void ConfigFileWorker::loadConfigFile(QString fileName)
 {
     const auto result = service_.loadToHardware(fileName);
 
-    if (!result.has_value()) {
-        const auto errorCode = QString::fromUtf8(
-            magic_enum::enum_name(result.error()).data());
+    if (!result.has_value())
+    {
+        const auto errorCode = QString::fromUtf8(magic_enum::enum_name(result.error()).data());
 
         emit configFileLoadFailed(fileName, errorCode);
         return;

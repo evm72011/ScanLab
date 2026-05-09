@@ -7,39 +7,30 @@
 
 namespace sa = scanlab::acquisition;
 
-AcquisitionConfigurationFacade::AcquisitionConfigurationFacade(
-    DeviceContext& context,
+AcquisitionConfigurationFacade::AcquisitionConfigurationFacade(DeviceContext& context,
     QObject* parent)
     : QObject(parent)
 {
-    qRegisterMetaType<sa::AscanParameters>(
-        "scanlab::acquisition::AscanParameters");
+    qRegisterMetaType<sa::AscanParameters>("scanlab::acquisition::AscanParameters");
 
     worker_ = new AcquisitionConfigurationWorker(context);
     worker_->moveToThread(&workerThread_);
 
-    connect(
-        &workerThread_,
-        &QThread::finished,
-        worker_,
-        &QObject::deleteLater);
+    connect(&workerThread_, &QThread::finished, worker_, &QObject::deleteLater);
 
-    connect(
-        this,
+    connect(this,
         &AcquisitionConfigurationFacade::requestReadCycleCount,
         worker_,
         &AcquisitionConfigurationWorker::readCycleCount,
         Qt::QueuedConnection);
 
-    connect(
-        this,
+    connect(this,
         &AcquisitionConfigurationFacade::requestReadAscanParameters,
         worker_,
         &AcquisitionConfigurationWorker::readAscanParameters,
         Qt::QueuedConnection);
 
-    connect(
-        this,
+    connect(this,
         &AcquisitionConfigurationFacade::requestWriteAscanParameters,
         worker_,
         &AcquisitionConfigurationWorker::writeAscanParameters,
@@ -49,9 +40,7 @@ AcquisitionConfigurationFacade::AcquisitionConfigurationFacade(
         worker_,
         &AcquisitionConfigurationWorker::cycleCountUpdated,
         this,
-        [this](int value) {
-            setCycleCount(value);
-        },
+        [this](int value) { setCycleCount(value); },
         Qt::QueuedConnection);
 
     connect(
@@ -82,18 +71,14 @@ AcquisitionConfigurationFacade::AcquisitionConfigurationFacade(
         worker_,
         &AcquisitionConfigurationWorker::acquisitionConfigurationUnavailable,
         this,
-        [this]() {
-            setUnavailable(true);
-        },
+        [this]() { setUnavailable(true); },
         Qt::QueuedConnection);
 
     connect(
         worker_,
         &AcquisitionConfigurationWorker::acquisitionConfigurationErrorCode,
         this,
-        [this](const QString& value) {
-            setErrorCode(value);
-        },
+        [this](const QString& value) { setErrorCode(value); },
         Qt::QueuedConnection);
 
     workerThread_.start();
@@ -101,7 +86,8 @@ AcquisitionConfigurationFacade::AcquisitionConfigurationFacade(
 
 AcquisitionConfigurationFacade::~AcquisitionConfigurationFacade()
 {
-    if (workerThread_.isRunning()) {
+    if (workerThread_.isRunning())
+    {
         workerThread_.quit();
         workerThread_.wait();
     }
@@ -165,7 +151,8 @@ void AcquisitionConfigurationFacade::apply()
 
 void AcquisitionConfigurationFacade::setCycle(int value)
 {
-    if (cycle_ == value) {
+    if (cycle_ == value)
+    {
         return;
     }
 
@@ -175,7 +162,8 @@ void AcquisitionConfigurationFacade::setCycle(int value)
 
 void AcquisitionConfigurationFacade::setStart(double value)
 {
-    if (qFuzzyCompare(start_, value)) {
+    if (qFuzzyCompare(start_, value))
+    {
         return;
     }
 
@@ -185,7 +173,8 @@ void AcquisitionConfigurationFacade::setStart(double value)
 
 void AcquisitionConfigurationFacade::setRange(double value)
 {
-    if (qFuzzyCompare(range_, value)) {
+    if (qFuzzyCompare(range_, value))
+    {
         return;
     }
 
@@ -195,7 +184,8 @@ void AcquisitionConfigurationFacade::setRange(double value)
 
 void AcquisitionConfigurationFacade::setPointCount(int value)
 {
-    if (pointCount_ == value) {
+    if (pointCount_ == value)
+    {
         return;
     }
 
@@ -205,7 +195,8 @@ void AcquisitionConfigurationFacade::setPointCount(int value)
 
 void AcquisitionConfigurationFacade::setCycleCount(int value)
 {
-    if (cycleCount_ == value) {
+    if (cycleCount_ == value)
+    {
         return;
     }
 
@@ -214,7 +205,8 @@ void AcquisitionConfigurationFacade::setCycleCount(int value)
     QVariantList cycles;
     cycles.reserve(cycleCount_);
 
-    for (int i = 0; i < cycleCount_; ++i) {
+    for (int i = 0; i < cycleCount_; ++i)
+    {
         QVariantMap item;
         item["text"] = QString::number(i);
         item["value"] = i;
@@ -229,7 +221,8 @@ void AcquisitionConfigurationFacade::setCycleCount(int value)
 
 void AcquisitionConfigurationFacade::setUnavailable(bool value)
 {
-    if (unavailable_ == value) {
+    if (unavailable_ == value)
+    {
         return;
     }
 
@@ -239,7 +232,8 @@ void AcquisitionConfigurationFacade::setUnavailable(bool value)
 
 void AcquisitionConfigurationFacade::setErrorCode(const QString& value)
 {
-    if (errorCode_ == value) {
+    if (errorCode_ == value)
+    {
         return;
     }
 

@@ -3,15 +3,16 @@
 #include <UTDriverOEMPA.h>
 #include <Windows.h>
 
-DeviceLockGuard::DeviceLockGuard(CHWDeviceOEMPA &hw)
+DeviceLockGuard::DeviceLockGuard(CHWDeviceOEMPA& hw)
     : DeviceLockGuard(hw, eAcqDefault, eAcqDefault)
 {
 }
 
-DeviceLockGuard::DeviceLockGuard(CHWDeviceOEMPA &hw,
-                                 enumAcquisitionState eAcqLockState,
-                                 enumAcquisitionState eAcqUnlockState)
-    : hw_(hw), eAcqUnlockState_(eAcqUnlockState)
+DeviceLockGuard::DeviceLockGuard(CHWDeviceOEMPA& hw,
+    enumAcquisitionState eAcqLockState,
+    enumAcquisitionState eAcqUnlockState)
+    : hw_(hw)
+    , eAcqUnlockState_(eAcqUnlockState)
 {
     locked_ = hw_.LockDevice(eAcqLockState);
 }

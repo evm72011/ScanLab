@@ -6,16 +6,14 @@
 namespace scanlab::health
 {
 
-bool TemperatureTopologyApi::getBoardCount(CSWDeviceOEMPA *sw,
-                                           int &boardCount,
-                                           int &sensorCountMax) const
+bool TemperatureTopologyApi::getBoardCount(CSWDeviceOEMPA* sw,
+    int& boardCount,
+    int& sensorCountMax) const
 {
     return sw->GetTemperatureCount(boardCount, sensorCountMax);
 }
 
-bool TemperatureTopologyApi::getSensorCount(CSWDeviceOEMPA *sw,
-                                            int board,
-                                            int &sensorCount) const
+bool TemperatureTopologyApi::getSensorCount(CSWDeviceOEMPA* sw, int board, int& sensorCount) const
 {
     return sw->GetTemperatureSensorCount(board, sensorCount);
 }

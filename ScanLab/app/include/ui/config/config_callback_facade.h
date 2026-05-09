@@ -7,12 +7,11 @@
 class DeviceContext;
 class ConfigCallbackWorker;
 
-class ConfigCallbackFacade : public QObject {
+class ConfigCallbackFacade : public QObject
+{
     Q_OBJECT
 
-    Q_PROPERTY(QVariantMap configSnapshot
-                   READ configSnapshot
-                       NOTIFY configSnapshotChanged)
+    Q_PROPERTY(QVariantMap configSnapshot READ configSnapshot NOTIFY configSnapshotChanged)
 
 public:
     explicit ConfigCallbackFacade(DeviceContext& context, QObject* parent = nullptr);

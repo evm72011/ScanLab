@@ -27,13 +27,13 @@ struct RawFrame
 class AcquisitionSource
 {
 public:
-    using FrameHandler = std::function<void(RawFrame &&)>;
+    using FrameHandler = std::function<void(RawFrame&&)>;
 
-    explicit AcquisitionSource(scanlab::device::Device &device);
+    explicit AcquisitionSource(scanlab::device::Device& device);
     ~AcquisitionSource();
 
-    AcquisitionSource(const AcquisitionSource &) = delete;
-    AcquisitionSource &operator=(const AcquisitionSource &) = delete;
+    AcquisitionSource(const AcquisitionSource&) = delete;
+    AcquisitionSource& operator=(const AcquisitionSource&) = delete;
 
     void setFrameHandler(FrameHandler handler);
     void setCycleFilter(int cycle);
@@ -47,21 +47,21 @@ private:
     void registerCallbacks();
     void unregisterCallbacks();
 
-    static UINT WINAPI callback(void *p,
-                                structAcqInfoEx &,
-                                const CStream_0x0001 *,
-                                const CSubStreamAscan_0x0103 *hdr,
-                                const void *bufferMax,
-                                const void *,
-                                const void *);
+    static UINT WINAPI callback(void* p,
+        structAcqInfoEx&,
+        const CStream_0x0001*,
+        const CSubStreamAscan_0x0103* hdr,
+        const void* bufferMax,
+        const void*,
+        const void*);
 
-    void handle(const CSubStreamAscan_0x0103 *hdr, const void *buffer);
+    void handle(const CSubStreamAscan_0x0103* hdr, const void* buffer);
 
 private:
-    scanlab::device::Device &device_;
+    scanlab::device::Device& device_;
     AcquisitionControl control_;
 
-    std::optional<int> cycleFilter_{0};
+    std::optional<int> cycleFilter_{ 0 };
 
     FrameHandler handler_;
     mutable std::mutex mutex_;

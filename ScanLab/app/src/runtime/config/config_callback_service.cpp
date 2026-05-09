@@ -1,5 +1,5 @@
-#include "runtime/device/device_context.h"
 #include "runtime/config/config_callback_service.h"
+#include "runtime/device/device_context.h"
 
 #include "scanlab/config/callback_dispatcher.h"
 #include "scanlab/config/config_snapshot.h"
@@ -21,21 +21,21 @@ ConfigCallbackService::~ConfigCallbackService()
 
 void ConfigCallbackService::startWatching(SnapshotHandler handler)
 {
-    if (!dispatcher_) {
+    if (!dispatcher_)
+    {
         return;
     }
 
-    dispatcher_->setHandler(
-        [handler = std::move(handler)](sc::ConfigSnapshot snapshot) {
-            handler(toVariantMap(snapshot));
-        });
+    dispatcher_->setHandler([handler = std::move(handler)](
+                                sc::ConfigSnapshot snapshot) { handler(toVariantMap(snapshot)); });
 
     dispatcher_->registerCallback();
 }
 
 void ConfigCallbackService::stopWatching()
 {
-    if (!dispatcher_) {
+    if (!dispatcher_)
+    {
         return;
     }
 
@@ -43,12 +43,12 @@ void ConfigCallbackService::stopWatching()
     dispatcher_->unregisterCallback();
 }
 
-QVariantMap ConfigCallbackService::toVariantMap(
-    const sc::ConfigSnapshot& snapshot)
+QVariantMap ConfigCallbackService::toVariantMap(const sc::ConfigSnapshot& snapshot)
 {
     QVariantList cycles;
 
-    for (const auto& c : snapshot.cycles) {
+    for (const auto& c : snapshot.cycles)
+    {
         QVariantMap item;
         item["cycle"] = c.cycle;
         item["start"] = c.start;

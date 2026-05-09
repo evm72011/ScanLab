@@ -9,21 +9,15 @@ ConfigCallbackFacade::ConfigCallbackFacade(DeviceContext& context, QObject* pare
     worker_ = new ConfigCallbackWorker(context);
     worker_->moveToThread(&workerThread_);
 
-    connect(
-        &workerThread_,
-        &QThread::finished,
-        worker_,
-        &QObject::deleteLater);
+    connect(&workerThread_, &QThread::finished, worker_, &QObject::deleteLater);
 
-    connect(
-        this,
+    connect(this,
         &ConfigCallbackFacade::requestStartWatching,
         worker_,
         &ConfigCallbackWorker::startWatching,
         Qt::QueuedConnection);
 
-    connect(
-        this,
+    connect(this,
         &ConfigCallbackFacade::requestStopWatching,
         worker_,
         &ConfigCallbackWorker::stopWatching,
@@ -33,9 +27,7 @@ ConfigCallbackFacade::ConfigCallbackFacade(DeviceContext& context, QObject* pare
         worker_,
         &ConfigCallbackWorker::configSnapshotUpdated,
         this,
-        [this](const QVariantMap& snapshot) {
-            setConfigSnapshot(snapshot);
-        },
+        [this](const QVariantMap& snapshot) { setConfigSnapshot(snapshot); },
         Qt::QueuedConnection);
 
     workerThread_.start();
@@ -45,7 +37,8 @@ ConfigCallbackFacade::~ConfigCallbackFacade()
 {
     emit requestStopWatching();
 
-    if (workerThread_.isRunning()) {
+    if (workerThread_.isRunning())
+    {
         workerThread_.quit();
         workerThread_.wait();
     }

@@ -1,7 +1,7 @@
 #pragma once
 
-#include <QString>
 #include <QCoreApplication>
+#include <QString>
 
 struct ErrorInfo
 {
@@ -10,7 +10,8 @@ struct ErrorInfo
 
     QString message() const
     {
-        if (textKey != nullptr) {
+        if (textKey != nullptr)
+        {
             return QCoreApplication::translate("Errors", textKey);
         }
 

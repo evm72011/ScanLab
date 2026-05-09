@@ -1,9 +1,9 @@
 #pragma once
 
+#include <QImage>
 #include <QObject>
 #include <QTimer>
 #include <QVector>
-#include <QImage>
 
 class CScanWorker : public QObject
 {

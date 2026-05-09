@@ -14,8 +14,7 @@ void EnvelopeDownsampler::setTargetPointCount(int value)
     targetPointCount_ = std::max(0, value);
 }
 
-std::vector<EnvelopePoint> EnvelopeDownsampler::transform(
-    const std::vector<float> &input) const
+std::vector<EnvelopePoint> EnvelopeDownsampler::transform(const std::vector<float>& input) const
 {
     int targetPointCount = 0;
 
@@ -29,15 +28,14 @@ std::vector<EnvelopePoint> EnvelopeDownsampler::transform(
         return {};
     }
 
-    if (targetPointCount <= 0 ||
-        static_cast<int>(input.size()) <= targetPointCount)
+    if (targetPointCount <= 0 || static_cast<int>(input.size()) <= targetPointCount)
     {
         std::vector<EnvelopePoint> output;
         output.reserve(input.size());
 
         for (float value : input)
         {
-            output.push_back(EnvelopePoint{.min = value, .max = value});
+            output.push_back(EnvelopePoint{ .min = value, .max = value });
         }
 
         return output;
@@ -50,13 +48,13 @@ std::vector<EnvelopePoint> EnvelopeDownsampler::transform(
 
     for (int i = 0; i < targetPointCount; ++i)
     {
-        const int beginIndex = static_cast<int>(std::floor(
-            static_cast<double>(i) * static_cast<double>(sourceCount) /
-            static_cast<double>(targetPointCount)));
+        const int beginIndex =
+            static_cast<int>(std::floor(static_cast<double>(i) * static_cast<double>(sourceCount) /
+                                        static_cast<double>(targetPointCount)));
 
-        const int endIndex = static_cast<int>(std::ceil(
-            static_cast<double>(i + 1) * static_cast<double>(sourceCount) /
-            static_cast<double>(targetPointCount)));
+        const int endIndex = static_cast<int>(
+            std::ceil(static_cast<double>(i + 1) * static_cast<double>(sourceCount) /
+                      static_cast<double>(targetPointCount)));
 
         const int begin = std::clamp(beginIndex, 0, sourceCount);
         const int end = std::clamp(endIndex, begin + 1, sourceCount);
@@ -71,7 +69,7 @@ std::vector<EnvelopePoint> EnvelopeDownsampler::transform(
             maxValue = std::max(maxValue, value);
         }
 
-        output.push_back(EnvelopePoint{.min = minValue, .max = maxValue});
+        output.push_back(EnvelopePoint{ .min = minValue, .max = maxValue });
     }
 
     return output;

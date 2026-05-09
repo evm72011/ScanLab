@@ -10,7 +10,8 @@ class ConnectionState : public QObject
     QML_UNCREATABLE("Enum only")
 
 public:
-    enum State {
+    enum State
+    {
         Disconnected = 0,
         Connecting,
         Connected,

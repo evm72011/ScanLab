@@ -15,7 +15,6 @@ enum class HealthErrorKind
     SensorDataUnavailable
 };
 
-using HealthError =
-    std::variant<scanlab::device::HardwareError, HealthErrorKind>;
+using HealthError = std::variant<scanlab::device::HardwareError, HealthErrorKind>;
 
 } // namespace scanlab::health

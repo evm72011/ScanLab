@@ -11,13 +11,12 @@ namespace scanlab::acquisition::ascan
 {
 
 template <typename T>
-concept VectorTransformer =
-    requires(T &transformer, std::vector<float> &samples) {
-        { transformer.transform(samples) } -> std::same_as<void>;
-    };
+concept VectorTransformer = requires(T& transformer, std::vector<float>& samples) {
+    { transformer.transform(samples) } -> std::same_as<void>;
+};
 
 template <typename T>
-concept SpanTransformer = requires(T &transformer, std::span<float> samples) {
+concept SpanTransformer = requires(T& transformer, std::span<float> samples) {
     { transformer.transform(samples) } -> std::same_as<void>;
 };
 
@@ -32,9 +31,7 @@ public:
     {
         Transformer result;
         result.transform_ = [transformer = std::move(transformer)](
-                                std::vector<float> &samples) {
-            transformer->transform(samples);
-        };
+                                std::vector<float>& samples) { transformer->transform(samples); };
 
         return result;
     }
@@ -44,15 +41,14 @@ public:
     static Transformer fromShared(std::shared_ptr<T> transformer)
     {
         Transformer result;
-        result.transform_ = [transformer = std::move(transformer)](
-                                std::vector<float> &samples) {
-            transformer->transform(std::span<float>{samples});
+        result.transform_ = [transformer = std::move(transformer)](std::vector<float>& samples) {
+            transformer->transform(std::span<float>{ samples });
         };
 
         return result;
     }
 
-    void transform(std::vector<float> &samples) const
+    void transform(std::vector<float>& samples) const
     {
         if (!transform_)
         {
@@ -69,7 +65,7 @@ public:
     }
 
 private:
-    std::function<void(std::vector<float> &)> transform_;
+    std::function<void(std::vector<float>&)> transform_;
 };
 
 } // namespace scanlab::acquisition::ascan

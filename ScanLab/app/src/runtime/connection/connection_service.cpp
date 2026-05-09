@@ -4,41 +4,45 @@
 #include "runtime/device/device_type_mapper.h"
 
 #include "scanlab/device/device.h"
-#include <qcontainerfwd.h>
 #include <magic_enum/magic_enum.hpp>
+#include <qcontainerfwd.h>
 
 ConnectionService::ConnectionService(DeviceContext& context)
     : context_(context)
 {
 }
 
-std::expected<ConnectionResult, ConnectionError> ConnectionService::connect(DeviceType type, const std::wstring& address)
+std::expected<ConnectionResult, ConnectionError> ConnectionService::connect(DeviceType type,
+    const std::wstring& address)
 {
     auto* device = context_.device();
-    if (!device) {
+    if (!device)
+    {
         return std::unexpected(ConnectionLocalError::DeviceContextNotSet);
     }
 
-    if (!device->ensureDevice(toHardware(type))) {
+    if (!device->ensureDevice(toHardware(type)))
+    {
         return std::unexpected(ConnectionLocalError::CreateDeviceFailed);
     }
 
     const auto connectionResult = device->connect(address);
 
-    if (!connectionResult.has_value()) {
+    if (!connectionResult.has_value())
+    {
         const auto error = fromHardware(connectionResult.error());
         return std::unexpected(error);
     }
 
-    return ConnectionResult {
-        .serialNumber = QString::fromStdWString(connectionResult->serialNumber)
-    };
+    return ConnectionResult{ .serialNumber =
+                                 QString::fromStdWString(connectionResult->serialNumber) };
 }
 
 void ConnectionService::disconnect()
 {
     auto* device = context_.device();
-    if (!device) {
+    if (!device)
+    {
         return;
     }
 

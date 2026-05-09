@@ -9,12 +9,12 @@ namespace sd = scanlab::device;
 namespace scanlab::config
 {
 
-FileSaver::FileSaver(sd::Device &device) : device_(device)
+FileSaver::FileSaver(sd::Device& device)
+    : device_(device)
 {
 }
 
-std::expected<void, ConfigFileError> FileSaver::save(
-    const std::filesystem::path &filePath) const
+std::expected<void, ConfigFileError> FileSaver::save(const std::filesystem::path& filePath) const
 {
     {
         std::ofstream test(filePath);
@@ -24,7 +24,7 @@ std::expected<void, ConfigFileError> FileSaver::save(
         }
     }
 
-    auto *hw = device_.get();
+    auto* hw = device_.get();
     if (hw == nullptr)
     {
         return std::unexpected(sd::HardwareError::HardwareNotSet);

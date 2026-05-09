@@ -5,12 +5,14 @@
 
 class DeviceContext;
 
-namespace scanlab::config {
+namespace scanlab::config
+{
 struct ConfigSnapshot;
 class CallbackDispatcher;
-}
+} // namespace scanlab::config
 
-class ConfigCallbackService {
+class ConfigCallbackService
+{
 public:
     using SnapshotHandler = std::function<void(QVariantMap)>;
 
@@ -23,6 +25,5 @@ public:
 private:
     std::unique_ptr<scanlab::config::CallbackDispatcher> dispatcher_;
 
-    static QVariantMap toVariantMap(
-        const scanlab::config::ConfigSnapshot& snapshot);
+    static QVariantMap toVariantMap(const scanlab::config::ConfigSnapshot& snapshot);
 };

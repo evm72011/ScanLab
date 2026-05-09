@@ -1,8 +1,8 @@
 #pragma once
 
+#include "runtime/device/device_type_def.h"
 #include <QObject>
 #include <qqmlintegration.h>
-#include "runtime/device/device_type_def.h"
 
 class DeviceTypeQml : public QObject
 {
@@ -11,7 +11,8 @@ class DeviceTypeQml : public QObject
     QML_UNCREATABLE("Enum only")
 
 public:
-    enum Type {
+    enum Type
+    {
 #define X(name) name,
         DEVICE_TYPE_LIST(X)
 #undef X

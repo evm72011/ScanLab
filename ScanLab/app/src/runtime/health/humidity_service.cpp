@@ -11,7 +11,8 @@ HumidityService::HumidityService(DeviceContext& context)
 {
 }
 
-std::expected<int, sh::HealthError> HumidityService::readMax() const {
+std::expected<int, sh::HealthError> HumidityService::readMax() const
+{
     return humidityReader_->readMax();
 }
 

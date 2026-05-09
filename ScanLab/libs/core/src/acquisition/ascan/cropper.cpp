@@ -15,7 +15,7 @@ void Cropper::setMargins(double leftFraction, double rightFraction)
     rightFraction_ = std::clamp(rightFraction, 0.0, 1.0);
 }
 
-void Cropper::transform(std::vector<float> &samples) const
+void Cropper::transform(std::vector<float>& samples) const
 {
     double leftFraction = 0.0;
     double rightFraction = 0.0;
@@ -44,16 +44,13 @@ void Cropper::transform(std::vector<float> &samples) const
 
     const int size = static_cast<int>(samples.size());
 
-    const int startIndex = std::clamp(
-        static_cast<int>(std::floor(leftFraction * static_cast<double>(size))),
-        0,
-        size);
+    const int startIndex =
+        std::clamp(static_cast<int>(std::floor(leftFraction * static_cast<double>(size))), 0, size);
 
     const int endIndex =
-        std::clamp(static_cast<int>(std::ceil((1.0 - rightFraction) *
-                                              static_cast<double>(size))),
-                   0,
-                   size);
+        std::clamp(static_cast<int>(std::ceil((1.0 - rightFraction) * static_cast<double>(size))),
+            0,
+            size);
 
     if (startIndex >= endIndex)
     {

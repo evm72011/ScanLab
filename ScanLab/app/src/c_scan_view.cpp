@@ -18,9 +18,11 @@ CScanView::CScanView(QQuickItem* parent)
     connect(this, &CScanView::requestStop, worker_, &CScanWorker::stop, Qt::QueuedConnection);
     connect(this, &CScanView::requestResize, worker_, &CScanWorker::setSize, Qt::QueuedConnection);
 
-    connect(worker_, &CScanWorker::frameReady,
-            this, &CScanView::onFrameReady,
-            Qt::QueuedConnection);
+    connect(worker_,
+        &CScanWorker::frameReady,
+        this,
+        &CScanView::onFrameReady,
+        Qt::QueuedConnection);
 
     connect(this, &QQuickItem::widthChanged, this, [this]() {
         emit requestResize(static_cast<int>(width()), static_cast<int>(height()));
@@ -48,15 +50,19 @@ bool CScanView::active() const
 
 void CScanView::setActive(bool value)
 {
-    if (active_ == value) {
+    if (active_ == value)
+    {
         return;
     }
 
     active_ = value;
 
-    if (active_) {
+    if (active_)
+    {
         emit requestStart();
-    } else {
+    }
+    else
+    {
         emit requestStop();
     }
 
@@ -82,7 +88,8 @@ void CScanView::paint(QPainter* painter)
         imageCopy = image_;
     }
 
-    if (imageCopy.isNull()) {
+    if (imageCopy.isNull())
+    {
         return;
     }
 

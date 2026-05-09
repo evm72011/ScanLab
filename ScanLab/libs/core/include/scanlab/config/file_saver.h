@@ -16,19 +16,17 @@ enum class ConfigFileErrorKind
     SaveFailed
 };
 
-using ConfigFileError =
-    std::variant<scanlab::device::HardwareError, ConfigFileErrorKind>;
+using ConfigFileError = std::variant<scanlab::device::HardwareError, ConfigFileErrorKind>;
 
 class FileSaver
 {
 public:
-    explicit FileSaver(scanlab::device::Device &device);
+    explicit FileSaver(scanlab::device::Device& device);
 
-    std::expected<void, ConfigFileError> save(
-        const std::filesystem::path &filePath) const;
+    std::expected<void, ConfigFileError> save(const std::filesystem::path& filePath) const;
 
 private:
-    scanlab::device::Device &device_;
+    scanlab::device::Device& device_;
 };
 
 } // namespace scanlab::config

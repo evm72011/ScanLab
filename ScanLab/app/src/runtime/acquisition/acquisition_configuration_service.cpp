@@ -11,20 +11,18 @@ AcquisitionConfigurationService::AcquisitionConfigurationService(DeviceContext& 
 
 AcquisitionConfigurationService::~AcquisitionConfigurationService() = default;
 
-std::expected<int, sa::AcquisitionError>
-AcquisitionConfigurationService::readCycleCount() const
+std::expected<int, sa::AcquisitionError> AcquisitionConfigurationService::readCycleCount() const
 {
     return configurator_->getCycleCount();
 }
 
-std::expected<sa::AscanParameters, sa::AcquisitionError>
-AcquisitionConfigurationService::readAscanParameters(int cycle) const
+std::expected<sa::AscanParameters, sa::AcquisitionError> AcquisitionConfigurationService::
+    readAscanParameters(int cycle) const
 {
     return configurator_->getAscanParameters(cycle);
 }
 
-std::expected<void, sa::AcquisitionError>
-AcquisitionConfigurationService::writeAscanParameters(
+std::expected<void, sa::AcquisitionError> AcquisitionConfigurationService::writeAscanParameters(
     const sa::AscanParameters& parameters)
 {
     return configurator_->setAscanParameters(parameters);

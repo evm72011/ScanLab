@@ -20,18 +20,15 @@ namespace scanlab::device
 
 using Ed25519Verifier = scanlab::license::Ed25519Verifier;
 
-Device::Device(std::filesystem::path licensePath,
-               std::string licensePublicKeyBase64)
-    : licenseChecker_(std::move(licensePath),
-                      Ed25519Verifier(std::move(licensePublicKeyBase64)))
+Device::Device(std::filesystem::path licensePath, std::string licensePublicKeyBase64)
+    : licenseChecker_(std::move(licensePath), Ed25519Verifier(std::move(licensePublicKeyBase64)))
 {
 }
 
-Device::Device(Device &&) noexcept = default;
-Device &Device::operator=(Device &&) noexcept = default;
+Device::Device(Device&&) noexcept = default;
+Device& Device::operator=(Device&&) noexcept = default;
 
-std::expected<ConnectionResult, ConnectionError> Device::connect(
-    const std::wstring &address)
+std::expected<ConnectionResult, ConnectionError> Device::connect(const std::wstring& address)
 {
     if (!device_)
     {
@@ -43,7 +40,7 @@ std::expected<ConnectionResult, ConnectionError> Device::connect(
         return std::unexpected(ConnectionErrorKind::AlreadyConnected);
     }
 
-    auto *swOempa = device_->GetSWDeviceOEMPA();
+    auto* swOempa = device_->GetSWDeviceOEMPA();
     if (!swOempa)
     {
         return std::unexpected(HardwareError::OempaInterfaceUnavailable);
@@ -54,7 +51,7 @@ std::expected<ConnectionResult, ConnectionError> Device::connect(
         return std::unexpected(ConnectionErrorKind::SetAddressFailure);
     }
 
-    auto *swBase = device_->GetSWDevice();
+    auto* swBase = device_->GetSWDevice();
     if (!swBase)
     {
         return std::unexpected(ConnectionErrorKind::BaseInterfaceUnavailable);
@@ -66,16 +63,14 @@ std::expected<ConnectionResult, ConnectionError> Device::connect(
     }
 
     std::array<wchar_t, 64> serialBuffer{};
-    if (!swOempa->GetSerialNumber(serialBuffer.data(),
-                                  static_cast<int>(serialBuffer.size())))
+    if (!swOempa->GetSerialNumber(serialBuffer.data(), static_cast<int>(serialBuffer.size())))
     {
         return std::unexpected(ConnectionErrorKind::SerialNumberUnavailable);
     }
 
     const std::wstring serial(serialBuffer.data());
 
-    const auto licenseResult =
-        licenseChecker_.check(std::string(serial.begin(), serial.end()));
+    const auto licenseResult = licenseChecker_.check(std::string(serial.begin(), serial.end()));
 
     if (!licenseResult)
     {
@@ -83,7 +78,7 @@ std::expected<ConnectionResult, ConnectionError> Device::connect(
         return std::unexpected(licenseResult.error());
     }
 
-    return ConnectionResult{serial};
+    return ConnectionResult{ serial };
 }
 
 bool Device::disconnect()
@@ -93,7 +88,7 @@ bool Device::disconnect()
         return true;
     }
 
-    auto *swBase = device_->GetSWDevice();
+    auto* swBase = device_->GetSWDevice();
     if (!swBase)
     {
         return false;
@@ -168,16 +163,16 @@ bool Device::isConnected() const
         return false;
     }
 
-    auto *swBase = device_->GetSWDevice();
+    auto* swBase = device_->GetSWDevice();
     return swBase && swBase->IsConnected();
 }
 
-CHWDeviceOEMPA *Device::get()
+CHWDeviceOEMPA* Device::get()
 {
     return device_.get();
 }
 
-const CHWDeviceOEMPA *Device::get() const
+const CHWDeviceOEMPA* Device::get() const
 {
     return device_.get();
 }

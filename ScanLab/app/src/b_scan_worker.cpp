@@ -13,7 +13,8 @@ BScanWorker::BScanWorker(QObject* parent)
 
 void BScanWorker::start()
 {
-    if (timer_ != nullptr) {
+    if (timer_ != nullptr)
+    {
         return;
     }
 
@@ -34,7 +35,8 @@ void BScanWorker::start()
 
 void BScanWorker::stop()
 {
-    if (timer_ == nullptr) {
+    if (timer_ == nullptr)
+    {
         return;
     }
 
@@ -45,11 +47,13 @@ void BScanWorker::stop()
 
 void BScanWorker::setSize(int width, int height)
 {
-    if (width < 2 || height < 2) {
+    if (width < 2 || height < 2)
+    {
         return;
     }
 
-    if (width_ == width && height_ == height) {
+    if (width_ == width && height_ == height)
+    {
         return;
     }
 
@@ -64,14 +68,14 @@ void BScanWorker::setSize(int width, int height)
 
 void BScanWorker::generate()
 {
-    if (buffer_.isEmpty()) {
+    if (buffer_.isEmpty())
+    {
         return;
     }
 
     phase_ += 0.04f;
 
-    std::memmove(
-        buffer_.data() + width_,
+    std::memmove(buffer_.data() + width_,
         buffer_.data(),
         sizeof(float) * static_cast<size_t>(width_) * static_cast<size_t>(height_ - 1));
 
@@ -82,11 +86,13 @@ void BScanWorker::generate()
 
 void BScanWorker::initializeFrame()
 {
-    if (buffer_.isEmpty()) {
+    if (buffer_.isEmpty())
+    {
         return;
     }
 
-    for (int y = 0; y < height_; ++y) {
+    for (int y = 0; y < height_; ++y)
+    {
         fillLine(buffer_.data() + y * width_, y);
         phase_ += 0.02f;
     }
@@ -96,22 +102,19 @@ void BScanWorker::initializeFrame()
 
 void BScanWorker::fillLine(float* line, int lineIndex)
 {
-    const float scanPos = height_ > 1
-                              ? static_cast<float>(lineIndex) / static_cast<float>(height_ - 1)
-                              : 0.0f;
+    const float scanPos =
+        height_ > 1 ? static_cast<float>(lineIndex) / static_cast<float>(height_ - 1) : 0.0f;
 
     const float entryCenter = 0.05f;
 
-    const float defectCenter =
-        0.38f + 0.025f * std::sin(scanPos * 8.0f + phase_);
+    const float defectCenter = 0.38f + 0.025f * std::sin(scanPos * 8.0f + phase_);
 
-    const float backwallCenter =
-        0.82f + 0.020f * std::sin(scanPos * 5.0f + phase_ * 0.7f);
+    const float backwallCenter = 0.82f + 0.020f * std::sin(scanPos * 5.0f + phase_ * 0.7f);
 
-    const float defectWindow =
-        std::exp(-std::pow((scanPos - 0.45f) / 0.16f, 2.0f));
+    const float defectWindow = std::exp(-std::pow((scanPos - 0.45f) / 0.16f, 2.0f));
 
-    for (int x = 0; x < width_; ++x) {
+    for (int x = 0; x < width_; ++x)
+    {
         const float t = static_cast<float>(x) / static_cast<float>(width_ - 1);
 
         float v = 0.0f;
@@ -147,10 +150,12 @@ QImage BScanWorker::toImage() const
 {
     QImage image(width_, height_, QImage::Format_Grayscale8);
 
-    for (int y = 0; y < height_; ++y) {
+    for (int y = 0; y < height_; ++y)
+    {
         uchar* row = image.scanLine(y);
 
-        for (int x = 0; x < width_; ++x) {
+        for (int x = 0; x < width_; ++x)
+        {
             float v = buffer_[y * width_ + x];
             v = std::clamp(v, 0.0f, 1.0f);
 

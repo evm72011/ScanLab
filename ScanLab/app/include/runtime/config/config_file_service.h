@@ -1,19 +1,21 @@
 #pragma once
 
-#include <expected>
 #include <QString>
 #include <QStringList>
+#include <expected>
 
 class DeviceContext;
 
-enum class ConfigFileError {
+enum class ConfigFileError
+{
     ConfigDirNotFound,
     InvalidPath,
     HardwareNotSet,
     LoadFailed
 };
 
-class ConfigFileService {
+class ConfigFileService
+{
 public:
     using SnapshotHandler = std::function<void(QVariantMap)>;
 

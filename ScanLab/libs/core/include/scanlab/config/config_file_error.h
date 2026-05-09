@@ -14,7 +14,6 @@ enum class ConfigFileErrorKind
     SaveFailed
 };
 
-using ConfigFileError =
-    std::variant<scanlab::device::HardwareError, ConfigFileErrorKind>;
+using ConfigFileError = std::variant<scanlab::device::HardwareError, ConfigFileErrorKind>;
 
 } // namespace scanlab::config

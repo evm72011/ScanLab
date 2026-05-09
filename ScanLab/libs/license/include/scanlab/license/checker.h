@@ -15,7 +15,8 @@ class Checker
 {
 public:
     explicit Checker(std::filesystem::path path, TVerifier verifier)
-        : reader_(std::move(path)), verifier_(std::move(verifier))
+        : reader_(std::move(path))
+        , verifier_(std::move(verifier))
     {
     }
 
@@ -30,7 +31,7 @@ public:
             return std::unexpected(dataResult.error());
         }
 
-        const auto &data = dataResult.value();
+        const auto& data = dataResult.value();
 
         if (!std::is_sorted(data.devices.begin(), data.devices.end()))
         {
@@ -45,9 +46,8 @@ public:
             return std::unexpected(verifyResult.error());
         }
 
-        const auto found = std::binary_search(data.devices.begin(),
-                                              data.devices.end(),
-                                              std::string(serialNumber));
+        const auto found =
+            std::binary_search(data.devices.begin(), data.devices.end(), std::string(serialNumber));
 
         if (!found)
         {

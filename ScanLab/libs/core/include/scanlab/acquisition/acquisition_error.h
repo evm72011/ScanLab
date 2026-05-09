@@ -12,7 +12,6 @@ enum class AcquisitionErrorKind
     WriteParameterFailed,
 };
 
-using AcquisitionError =
-    std::variant<scanlab::device::HardwareError, AcquisitionErrorKind>;
+using AcquisitionError = std::variant<scanlab::device::HardwareError, AcquisitionErrorKind>;
 
 } // namespace scanlab::acquisition

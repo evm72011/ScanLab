@@ -15,8 +15,7 @@ public:
     explicit Ed25519Verifier(std::string publicKeyBase64);
 
     [[nodiscard]]
-    std::expected<void, LicenseError> verify(
-        std::string_view payload,
+    std::expected<void, LicenseError> verify(std::string_view payload,
         std::string_view signatureBase64) const;
 
 private:

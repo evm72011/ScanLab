@@ -15,18 +15,16 @@ AScanService::AScanService(DeviceContext& context)
     , source_(nullptr)
     , cropper_(std::make_shared<saa::Cropper>())
 {
-    pipeline_.setTransformers({
-        saa::Transformer::fromShared(cropper_)
-    });
+    pipeline_.setTransformers({ saa::Transformer::fromShared(cropper_) });
 
     pipeline_.envelope().setTargetPointCount(1024);
 
-    if (auto* device = context_.device()) {
+    if (auto* device = context_.device())
+    {
         source_ = std::make_unique<saa::AcquisitionSource>(*device);
 
-        source_->setFrameHandler([this](saa::RawFrame&& rawFrame) {
-            handleRawFrame(std::move(rawFrame));
-        });
+        source_->setFrameHandler(
+            [this](saa::RawFrame&& rawFrame) { handleRawFrame(std::move(rawFrame)); });
     }
 }
 
@@ -44,19 +42,18 @@ void AScanService::setFrameHandler(FrameHandler handler)
 std::expected<void, sa::AcquisitionError> AScanService::start()
 {
     auto* device = context_.device();
-    if (!device) {
+    if (!device)
+    {
         return std::unexpected(
-            sa::AcquisitionError{
-                scanlab::device::HardwareError::HardwareNotSet
-            });
+            sa::AcquisitionError{ scanlab::device::HardwareError::HardwareNotSet });
     }
 
-    if (!source_) {
+    if (!source_)
+    {
         source_ = std::make_unique<saa::AcquisitionSource>(*device);
 
-        source_->setFrameHandler([this](saa::RawFrame&& rawFrame) {
-            handleRawFrame(std::move(rawFrame));
-        });
+        source_->setFrameHandler(
+            [this](saa::RawFrame&& rawFrame) { handleRawFrame(std::move(rawFrame)); });
     }
 
     return source_->start();
@@ -64,7 +61,8 @@ std::expected<void, sa::AcquisitionError> AScanService::start()
 
 void AScanService::stop()
 {
-    if (!source_) {
+    if (!source_)
+    {
         return;
     }
 
@@ -73,7 +71,8 @@ void AScanService::stop()
 
 bool AScanService::isRunning() const
 {
-    if (!source_) {
+    if (!source_)
+    {
         return false;
     }
 
@@ -105,7 +104,8 @@ void AScanService::handleRawFrame(saa::RawFrame&& rawFrame)
         localHandler = handler_;
     }
 
-    if (!localHandler) {
+    if (!localHandler)
+    {
         return;
     }
 

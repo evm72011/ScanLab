@@ -19,35 +19,19 @@ AScanFacade::AScanFacade(DeviceContext& context, QObject* parent)
     worker_ = new AScanWorker(context);
     worker_->moveToThread(&workerThread_);
 
-    connect(
-        &workerThread_,
-        &QThread::finished,
-        worker_,
-        &QObject::deleteLater);
+    connect(&workerThread_, &QThread::finished, worker_, &QObject::deleteLater);
 
-    connect(
-        this,
-        &AScanFacade::requestStart,
-        worker_,
-        &AScanWorker::start,
-        Qt::QueuedConnection);
+    connect(this, &AScanFacade::requestStart, worker_, &AScanWorker::start, Qt::QueuedConnection);
 
-    connect(
-        this,
-        &AScanFacade::requestStop,
-        worker_,
-        &AScanWorker::stop,
-        Qt::QueuedConnection);
+    connect(this, &AScanFacade::requestStop, worker_, &AScanWorker::stop, Qt::QueuedConnection);
 
-    connect(
-        this,
+    connect(this,
         &AScanFacade::requestSetCycleFilter,
         worker_,
         &AScanWorker::setCycleFilter,
         Qt::QueuedConnection);
 
-    connect(
-        this,
+    connect(this,
         &AScanFacade::requestSetCropMargins,
         worker_,
         &AScanWorker::setCropMargins,
@@ -61,7 +45,8 @@ AScanFacade::AScanFacade(DeviceContext& context, QObject* parent)
             QVector<EnvelopePoint> values;
             values.reserve(static_cast<qsizetype>(frame.samples.size()));
 
-            for (const auto&  sample : frame.samples) {
+            for (const auto& sample : frame.samples)
+            {
                 values.push_back(sample);
             }
 
@@ -74,27 +59,21 @@ AScanFacade::AScanFacade(DeviceContext& context, QObject* parent)
         worker_,
         &AScanWorker::started,
         this,
-        [this]() {
-            setRunning(true);
-        },
+        [this]() { setRunning(true); },
         Qt::QueuedConnection);
 
     connect(
         worker_,
         &AScanWorker::startFailed,
         this,
-        [this]() {
-            setRunning(false);
-        },
+        [this]() { setRunning(false); },
         Qt::QueuedConnection);
 
     connect(
         worker_,
         &AScanWorker::stopped,
         this,
-        [this](bool stillRunning) {
-            setRunning(stillRunning);
-        },
+        [this](bool stillRunning) { setRunning(stillRunning); },
         Qt::QueuedConnection);
 
     workerThread_.start();
@@ -104,7 +83,8 @@ AScanFacade::~AScanFacade()
 {
     emit requestStop();
 
-    if (workerThread_.isRunning()) {
+    if (workerThread_.isRunning())
+    {
         workerThread_.quit();
         workerThread_.wait();
     }
@@ -149,7 +129,8 @@ void AScanFacade::setSamples(QVector<EnvelopePoint> value)
 
 void AScanFacade::setRunning(bool value)
 {
-    if (running_ == value) {
+    if (running_ == value)
+    {
         return;
     }
 

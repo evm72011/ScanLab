@@ -8,15 +8,14 @@ AScanWorker::AScanWorker(DeviceContext& context, QObject* parent)
     : QObject(parent)
     , service_(context)
 {
-    service_.setFrameHandler([this](saa::Frame&& frame) {
-        emit frameUpdated(std::move(frame));
-    });
+    service_.setFrameHandler([this](saa::Frame&& frame) { emit frameUpdated(std::move(frame)); });
 }
 
 void AScanWorker::start()
 {
     const auto result = service_.start();
-    if (!result.has_value()) {
+    if (!result.has_value())
+    {
         emit startFailed();
         return;
     }
@@ -37,7 +36,5 @@ void AScanWorker::setCycleFilter(int cycle)
 
 void AScanWorker::setCropMargins(qreal leftFraction, qreal rightFraction)
 {
-    service_.setCropMargins(
-        static_cast<double>(leftFraction),
-        static_cast<double>(rightFraction));
+    service_.setCropMargins(static_cast<double>(leftFraction), static_cast<double>(rightFraction));
 }

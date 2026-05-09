@@ -1,12 +1,13 @@
 #pragma once
 
-#include <memory>
-#include <expected>
 #include "scanlab/health/health_error.h"
+#include <expected>
+#include <memory>
 
 class DeviceContext;
 
-namespace scanlab::health {
+namespace scanlab::health
+{
 class HumidityReader;
 }
 
@@ -18,6 +19,7 @@ public:
     std::expected<int, scanlab::health::HealthError> readMax() const;
 
     ~HumidityService();
+
 private:
     DeviceContext& context_;
     std::unique_ptr<scanlab::health::HumidityReader> humidityReader_;

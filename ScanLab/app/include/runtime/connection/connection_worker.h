@@ -3,9 +3,9 @@
 #include <QObject>
 #include <QString>
 
+#include "runtime/connection/connection_service.h"
 #include "runtime/device/device_type.h"
 #include "runtime/errors/error_info.h"
-#include "runtime/connection/connection_service.h"
 
 class DeviceContext;
 

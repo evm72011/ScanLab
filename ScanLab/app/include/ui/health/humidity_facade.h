@@ -1,10 +1,10 @@
 #pragma once
 
 #include <QObject>
+#include <QString>
 #include <QThread>
 #include <QTimer>
 #include <QVariantList>
-#include <QString>
 #include <qqmlintegration.h>
 
 class DeviceContext;
@@ -15,8 +15,10 @@ class HumidityFacade : public QObject
     Q_OBJECT
 
     Q_PROPERTY(int maxHumidity READ maxHumidity NOTIFY maxHumidityChanged)
-    Q_PROPERTY(bool maxHumidityUnavailable READ maxHumidityUnavailable NOTIFY maxHumidityUnavailableChanged)
-    Q_PROPERTY(QString maxHumidityErrorCode READ maxHumidityErrorCode NOTIFY maxHumidityErrorCodeChanged)
+    Q_PROPERTY(bool maxHumidityUnavailable READ maxHumidityUnavailable NOTIFY
+            maxHumidityUnavailableChanged)
+    Q_PROPERTY(
+        QString maxHumidityErrorCode READ maxHumidityErrorCode NOTIFY maxHumidityErrorCodeChanged)
 
 public:
     explicit HumidityFacade(DeviceContext& context, QObject* parent = nullptr);
