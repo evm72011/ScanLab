@@ -3,9 +3,9 @@
 #include <span>
 #include <vector>
 
-#include <Windows.h>
-#include <UTDriverOEMPA.h>
-
+//#include <UTDriverOEMPA.h>
+//#include <Windows.h>
+#include "scanlab/oempa/sdk.h"  // IWYU pragma: keep
 
 #include "scanlab/device/device.h"
 #include "scanlab/health/health_error.h"

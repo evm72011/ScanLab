@@ -1,8 +1,8 @@
 #include "scanlab/device/device_lock_guard.h"
 
-#include <Windows.h>
-#include <UTDriverOEMPA.h>
-
+//#include <UTDriverOEMPA.h>
+//#include <Windows.h>
+#include "scanlab/oempa/sdk.h"  // IWYU pragma: keep
 
 DeviceLockGuard::DeviceLockGuard(CHWDeviceOEMPA& hw)
     : DeviceLockGuard(hw, eAcqDefault, eAcqDefault)

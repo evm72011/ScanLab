@@ -1,8 +1,9 @@
 #include "scanlab/config/callback_dispatcher.h"
 
+// clang-format off
 #include <myMFC.h>
+// clang-format on
 #include "CustomizedKernelOEMPA.h"
-
 
 #include <mutex>
 

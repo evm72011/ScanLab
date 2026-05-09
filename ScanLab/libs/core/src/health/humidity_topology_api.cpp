@@ -1,8 +1,9 @@
 #include "scanlab/health/humidity_topology_api.h"
 
-#include <Windows.h>
-#include <UTDriverOEMPA.h>
+//#include <UTDriverOEMPA.h>
+//#include <Windows.h>
 
+#include "scanlab/oempa/sdk.h"  // IWYU pragma: keep
 
 namespace scanlab::health
 {
