@@ -153,9 +153,9 @@ include(LTO)
 include(Sanitizer)
 
 #include(ClangTidy)
-#include(ClangFormat)
+include(ClangFormat)
 include(CMakeFormat)
-#add_clang_format_target()
+add_clang_format_target()
 add_cmake_format_target()
 
 add_subdirectory(resources)
