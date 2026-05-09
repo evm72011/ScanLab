@@ -39,7 +39,7 @@ std::expected<ConnectionResult,ConnectionError> Device::connect(
         return std::unexpected(ConnectionErrorKind::AlreadyConnected);
     }
 
-    const auto serial = std::string("MOCK_12345");
+    const auto serial = std::string("MOCK_12346");
 
     const auto licenseResult = licenseChecker_.check(serial);
     if (!licenseResult) {

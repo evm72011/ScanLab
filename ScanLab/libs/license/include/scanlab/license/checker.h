@@ -28,18 +28,14 @@ public:
         const auto& data = dataResult.value();
 
         if (!std::is_sorted(data.devices.begin(), data.devices.end())) {
-            return std::unexpected(
-                LicenseError::DevicesNotSorted
-                );
+            return std::unexpected(LicenseError::DevicesNotSorted);
         }
 
-        const auto payload =
-            Payload::fromDevices(data.devices);
+        const auto payload = Payload::fromDevices(data.devices);
+        auto verifyResult = verifier_.verify(payload, data.signatureBase64);
 
-        if (!verifier_.verify(payload, data.signatureBase64)) {
-            return std::unexpected(
-                LicenseError::InvalidSignature
-                );
+        if (!verifyResult.has_value()) {
+            return std::unexpected(verifyResult.error());
         }
 
         const auto found = std::binary_search(
@@ -49,9 +45,7 @@ public:
             );
 
         if (!found) {
-            return std::unexpected(
-                LicenseError::DeviceNotLicensed
-                );
+            return std::unexpected(LicenseError::DeviceNotLicensed);
         }
 
         return {};

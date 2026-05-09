@@ -68,6 +68,10 @@ std::expected<void, LicenseError> Ed25519Verifier::verify(
     unsigned char publicKey[crypto_sign_PUBLICKEYBYTES];
     unsigned char signature[crypto_sign_BYTES];
 
+    if (publicKeyBase64_.empty()) {
+        return std::unexpected(LicenseError::PublicKeyNotConfigured);
+    }
+
     if (!decodeBase64(
             publicKeyBase64_,
             publicKey,

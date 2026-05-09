@@ -8,6 +8,7 @@ enum class LicenseError {
     InvalidJson,
     InvalidDevices,
     DevicesNotSorted,
+    PublicKeyNotConfigured,
     InvalidPublicKey,
     InvalidSignature,
     DeviceNotLicensed,

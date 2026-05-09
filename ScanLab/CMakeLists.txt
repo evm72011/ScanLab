@@ -28,8 +28,8 @@ set(OEMPA_ENABLE ON)
 unset(MOCK_DEVICE CACHE)
 option(MOCK_DEVICE "Use mock hardware implementation" ON)
 
-set(SCANLAB_LICENSE_FILE "" CACHE STRING "Path to license file")
-set(SCANLAB_LICENSE_PUBLIC_KEY "" CACHE STRING "Ed25519 public key (base64)")
+set(SCANLAB_LICENSE_FILE "license.json")
+set(SCANLAB_LICENSE_PUBLIC_KEY "au1UA+apb0TTkDj8GDU+yq+dQvkfkM59hqrXlE01818=")
 
 option(ENABLE_WARNINGS "Enable to add warnings to a target." ON)
 option(ENABLE_WARNINGS_AS_ERRORS "Enable compiler warnings as errors" OFF)
@@ -143,6 +143,7 @@ install(TARGETS ${APP_NAME}
 )
 
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/")
+include(License)
 include(OEMPA)
 include(OEMPA_config)
 include(Warnings)
