@@ -7,28 +7,35 @@ if(OEMPA_ENABLE)
     endif()
 
     if(NOT IS_DIRECTORY "${OEMPA_SDK_DIR}")
-        message(FATAL_ERROR "OEMPA SDK directory does not exist: '${OEMPA_SDK_DIR}'")
+        message(
+            FATAL_ERROR "OEMPA SDK directory does not exist: '${OEMPA_SDK_DIR}'"
+        )
     endif()
 
     if(NOT IS_DIRECTORY "${OEMPA_BIN_DIR}")
-        message(FATAL_ERROR "OEMPA bin directory does not exist: '${OEMPA_BIN_DIR}'")
+        message(
+            FATAL_ERROR "OEMPA bin directory does not exist: '${OEMPA_BIN_DIR}'"
+        )
     endif()
 
     # copy dlls
-    file(GLOB OEMPA_DLLS CONFIGURE_DEPENDS
-        "${OEMPA_BIN_DIR}/*.dll"
-    )
+    file(
+        GLOB
+        OEMPA_DLLS
+        CONFIGURE_DEPENDS
+        "${OEMPA_BIN_DIR}/*.dll")
 
     if(NOT OEMPA_DLLS)
         message(FATAL_ERROR "No OEMPA DLLs found in '${OEMPA_BIN_DIR}'")
     endif()
 
-    add_custom_target(oempa_copy_dlls ALL
+    add_custom_target(
+        oempa_copy_dlls ALL
         COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}"
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OEMPA_DLLS} "${CMAKE_BINARY_DIR}"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OEMPA_DLLS}
+                "${CMAKE_BINARY_DIR}"
         COMMENT "Copying OEMPA DLLs to ${CMAKE_BINARY_DIR}"
-        VERBATIM
-    )
+        VERBATIM)
 endif()
 
 function(target_add_oempa)
@@ -39,7 +46,7 @@ function(target_add_oempa)
         "${oneValueArgs}"
         ""
         ${ARGN})
-    
+
     if(NOT TARGET ${TAO_TARGET})
         message(
             FATAL_ERROR
@@ -51,17 +58,14 @@ function(target_add_oempa)
         message(WARNING "OEMPA is disabled")
         return()
     endif()
-    
-    target_include_directories(${TAO_TARGET} SYSTEM PRIVATE
-        ${OEMPA_SDK_DIR}/Common
-        ${OEMPA_SDK_DIR}/UserHeaders/x64
-    )
- 
+
+    target_include_directories(
+        ${TAO_TARGET} SYSTEM PRIVATE ${OEMPA_SDK_DIR}/Common
+                                     ${OEMPA_SDK_DIR}/UserHeaders/x64)
+
     set(OEMPA_BIN_DIR "${OEMPA_SDK_DIR}/UTKernel/x64/Release")
 
-    file(GLOB OEMPA_LIBS
-        "${OEMPA_BIN_DIR}/*.lib"
-    )
+    file(GLOB OEMPA_LIBS "${OEMPA_BIN_DIR}/*.lib")
     target_link_directories(${TAO_TARGET} PRIVATE "${OEMPA_BIN_DIR}")
     target_link_libraries(${TAO_TARGET} PRIVATE ${OEMPA_LIBS})
 endfunction(target_add_oempa)

@@ -1,6 +1,7 @@
 set(LIB_NAME ${CORE_LIB_NAME})
 
-add_library(${LIB_NAME} SHARED
+add_library(
+    ${LIB_NAME} SHARED
     src/acquisition/acquisition_configurator.cpp
     src/acquisition/acquisition_control.cpp
     src/acquisition/ascan/raw_decoder.cpp
@@ -8,13 +9,13 @@ add_library(${LIB_NAME} SHARED
     src/acquisition/ascan/cropper.cpp
     src/acquisition/ascan/envelope_downsampler.cpp
     src/acquisition/ascan/pipeline.cpp
-
+#
     src/config/callback_dispatcher.cpp
     src/config/file_loader.cpp
     src/config/file_saver.cpp
-
+#
     src/device/device_lock_guard.cpp
-
+#
     src/health/health_topology.cpp
     src/health/humidity_topology_api.cpp
     src/health/temperature_topology_api.cpp
@@ -23,9 +24,7 @@ add_library(${LIB_NAME} SHARED
 # TODO: Replace WINDOWS_EXPORT_ALL_SYMBOLS with explicit export macros (e.g. SL_CORE_API).
 # Currently all symbols are exported automatically, which is not suitable for a stable/public API.
 # Introduce export header and mark only intended public classes/functions.
-set_target_properties(${LIB_NAME} PROPERTIES
-    WINDOWS_EXPORT_ALL_SYMBOLS ON
-)
+set_target_properties(${LIB_NAME} PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
 set(IMPL_VARIANT "")
 
@@ -34,19 +33,16 @@ if(MOCK_DEVICE)
     target_compile_definitions(${LIB_NAME} PUBLIC MOCK_DEVICE=1)
 endif()
 
-target_sources(${LIB_NAME} PRIVATE
-    src/device/${IMPL_VARIANT}device.cpp
-    src/health/${IMPL_VARIANT}humidity_reader.cpp
-    src/health/${IMPL_VARIANT}temperature_reader.cpp
-    src/acquisition/ascan/${IMPL_VARIANT}acquisition_source.cpp
-)
+target_sources(
+    ${LIB_NAME}
+    PRIVATE src/device/${IMPL_VARIANT}device.cpp
+            src/health/${IMPL_VARIANT}humidity_reader.cpp
+            src/health/${IMPL_VARIANT}temperature_reader.cpp
+            src/acquisition/ascan/${IMPL_VARIANT}acquisition_source.cpp)
 
-target_include_directories(${LIB_NAME}
-                           PUBLIC ${CMAKE_CURRENT_LIST_DIR}/include)
+target_include_directories(${LIB_NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/include)
 
-target_link_libraries(${LIB_NAME}
-    PUBLIC ${LICENSE_LIB_NAME}
-)
+target_link_libraries(${LIB_NAME} PUBLIC ${LICENSE_LIB_NAME})
 
 target_add_oempa(TARGET ${LIB_NAME})
 

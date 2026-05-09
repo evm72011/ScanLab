@@ -99,7 +99,6 @@ function(target_set_warnings)
     endif()
 
     target_compile_options(${TSW_TARGET} ${_scope}
-    $<$<COMPILE_LANGUAGE:CXX>:${WARNINGS}>
-    )
+                           $<$<COMPILE_LANGUAGE:CXX>:${WARNINGS}>)
 
 endfunction(target_set_warnings)

@@ -49,7 +49,9 @@ $files = Get-ChildItem $Root -Recurse -File |
         $full = $_.FullName
 
         foreach ($dir in $excludeDirs) {
-            if ($full -match "[\\/]\Q$dir\E[\\/]") {
+            $escapedDir = [regex]::Escape($dir)
+
+            if ($full -match "[\\/]$escapedDir[\\/]") {
                 return $false
             }
         }

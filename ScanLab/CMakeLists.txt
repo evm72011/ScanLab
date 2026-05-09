@@ -1,13 +1,15 @@
 cmake_minimum_required(VERSION 3.16)
 
-set(QT_CREATOR_SKIP_CONAN_SETUP ON CACHE BOOL "" FORCE)
+set(QT_CREATOR_SKIP_CONAN_SETUP
+    ON
+    CACHE BOOL "" FORCE)
 
-project(ScanLab VERSION 0.1.0 LANGUAGES CXX)
+project(
+    ScanLab
+    VERSION 0.1.0
+    LANGUAGES CXX)
 
-add_compile_definitions(
-    NOMINMAX
-    WIN32_LEAN_AND_MEAN
-)
+add_compile_definitions(NOMINMAX WIN32_LEAN_AND_MEAN)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -18,7 +20,9 @@ find_package(magic_enum REQUIRED)
 
 qt_standard_project_setup(REQUIRES 6.8)
 
-set(VENV_DIR "${CMAKE_SOURCE_DIR}/.venv" CACHE PATH "Path to Python virtual environment")
+set(VENV_DIR
+    "${CMAKE_SOURCE_DIR}/.venv"
+    CACHE PATH "Path to Python virtual environment")
 
 set(CORE_LIB_NAME "scanlab-core")
 set(LICENSE_LIB_NAME "scanlab-license")
@@ -49,97 +53,96 @@ option(ENABLE_CLANG_TIDY "Enable to add clang tidy." OFF)
 option(ENABLE_CLANG_FORMAT "Enable to add clang-format." OFF)
 option(ENABLE_CMAKE_FORMAT "Enable to add cmake-format." ON)
 
-qt_add_executable(${APP_NAME}
-    app/main.cpp
-)
+qt_add_executable(${APP_NAME} app/main.cpp)
 
-qt_add_qml_module(${APP_NAME}
-    URI ScanLab
-    VERSION 1.0
+qt_add_qml_module(
+    ${APP_NAME}
+    URI
+    ScanLab
+    VERSION
+    1.0
     SOURCES
-        app/include/runtime/acquisition/acquisition_configuration_service.h
-        app/include/runtime/acquisition/acquisition_configuration_worker.h
-        app/include/runtime/acquisition/ascan/ascan_service.h
-        app/include/runtime/acquisition/ascan/ascan_worker.h
-        app/include/runtime/config/config_callback_service.h
-        app/include/runtime/config/config_callback_worker.h
-        app/include/runtime/config/config_file_service.h
-        app/include/runtime/config/config_file_worker.h
-        app/include/runtime/device/device_context.h
-        app/include/runtime/device/device_type.h
-        app/include/runtime/device/device_type_def.h
-        app/include/runtime/device/device_type_mapper.h
-        app/include/runtime/errors/error_info.h
-        app/include/runtime/errors/describe_error.h
-        app/include/runtime/errors/describe_error_hw.h
-        app/include/runtime/connection/connection_error.h
-        app/include/runtime/connection/connection_service.h
-        app/include/runtime/connection/connection_worker.h
-        app/include/runtime/health/humidity_service.h
-        app/include/runtime/health/humidity_worker.h
-        app/include/runtime/health/temperature_service.h
-        app/include/runtime/health/temperature_worker.h
-
-        app/include/ui/app_info.h
-        app/include/ui/acquisition/acquisition_configuration_facade.h
-        app/include/ui/acquisition/ascan_facade.h
-        app/include/ui/config/config_callback_facade.h
-        app/include/ui/config/config_file_facade.h
-        app/include/ui/connection/connection_facade.h
-        app/include/ui/connection/connection_state.h
-        app/include/ui/device/device_type.h
-        app/include/ui/health/temperature_facade.h
-        app/include/ui/health/humidity_facade.h
-        app/include/ui/view/ascan_view.h
-
-        app/include/app_settings.h
-        app/include/backend.h
-
-        app/include/b_scan_view.h
-        app/include/b_scan_worker.h
-        app/include/c_scan_view.h
-        app/include/c_scan_worker.h
-
-#-----------
-        app/src/runtime/acquisition/acquisition_configuration_service.cpp
-        app/src/runtime/acquisition/acquisition_configuration_worker.cpp
-        app/src/runtime/acquisition/ascan/ascan_service.cpp
-        app/src/runtime/acquisition/ascan/ascan_worker.cpp
-        app/src/runtime/config/config_callback_service.cpp
-        app/src/runtime/config/config_callback_worker.cpp
-        app/src/runtime/config/config_file_service.cpp
-        app/src/runtime/config/config_file_worker.cpp
-        app/src/runtime/device/device_context.cpp
-        app/src/runtime/connection/connection_service.cpp
-        app/src/runtime/connection/connection_worker.cpp
-        app/src/runtime/health/humidity_service.cpp
-        app/src/runtime/health/humidity_worker.cpp
-        app/src/runtime/health/temperature_service.cpp
-        app/src/runtime/health/temperature_worker.cpp
-
-        app/src/ui/acquisition/acquisition_configuration_facade.cpp
-        app/src/ui/acquisition/ascan_facade.cpp
-        app/src/ui/config/config_callback_facade.cpp
-        app/src/ui/config/config_file_facade.cpp
-        app/src/ui/connection/connection_facade.cpp
-        app/src/ui/health/temperature_facade.cpp
-        app/src/ui/health/humidity_facade.cpp
-        app/src/ui/view/ascan_view.cpp
-
-        app/src/backend.cpp
-
-        app/src/b_scan_view.cpp
-        app/src/b_scan_worker.cpp
-        app/src/c_scan_view.cpp
-        app/src/c_scan_worker.cpp
-)
+    app/include/runtime/acquisition/acquisition_configuration_service.h
+    app/include/runtime/acquisition/acquisition_configuration_worker.h
+    app/include/runtime/acquisition/ascan/ascan_service.h
+    app/include/runtime/acquisition/ascan/ascan_worker.h
+    app/include/runtime/config/config_callback_service.h
+    app/include/runtime/config/config_callback_worker.h
+    app/include/runtime/config/config_file_service.h
+    app/include/runtime/config/config_file_worker.h
+    app/include/runtime/device/device_context.h
+    app/include/runtime/device/device_type.h
+    app/include/runtime/device/device_type_def.h
+    app/include/runtime/device/device_type_mapper.h
+    app/include/runtime/errors/error_info.h
+    app/include/runtime/errors/describe_error.h
+    app/include/runtime/errors/describe_error_hw.h
+    app/include/runtime/connection/connection_error.h
+    app/include/runtime/connection/connection_service.h
+    app/include/runtime/connection/connection_worker.h
+    app/include/runtime/health/humidity_service.h
+    app/include/runtime/health/humidity_worker.h
+    app/include/runtime/health/temperature_service.h
+    app/include/runtime/health/temperature_worker.h
+#
+    app/include/ui/app_info.h
+    app/include/ui/acquisition/acquisition_configuration_facade.h
+    app/include/ui/acquisition/ascan_facade.h
+    app/include/ui/config/config_callback_facade.h
+    app/include/ui/config/config_file_facade.h
+    app/include/ui/connection/connection_facade.h
+    app/include/ui/connection/connection_state.h
+    app/include/ui/device/device_type.h
+    app/include/ui/health/temperature_facade.h
+    app/include/ui/health/humidity_facade.h
+    app/include/ui/view/ascan_view.h
+#
+    app/include/app_settings.h
+    app/include/backend.h
+#
+    app/include/b_scan_view.h
+    app/include/b_scan_worker.h
+    app/include/c_scan_view.h
+    app/include/c_scan_worker.h
+    #-----------
+    app/src/runtime/acquisition/acquisition_configuration_service.cpp
+    app/src/runtime/acquisition/acquisition_configuration_worker.cpp
+    app/src/runtime/acquisition/ascan/ascan_service.cpp
+    app/src/runtime/acquisition/ascan/ascan_worker.cpp
+    app/src/runtime/config/config_callback_service.cpp
+    app/src/runtime/config/config_callback_worker.cpp
+    app/src/runtime/config/config_file_service.cpp
+    app/src/runtime/config/config_file_worker.cpp
+    app/src/runtime/device/device_context.cpp
+    app/src/runtime/connection/connection_service.cpp
+    app/src/runtime/connection/connection_worker.cpp
+    app/src/runtime/health/humidity_service.cpp
+    app/src/runtime/health/humidity_worker.cpp
+    app/src/runtime/health/temperature_service.cpp
+    app/src/runtime/health/temperature_worker.cpp
+#
+    app/src/ui/acquisition/acquisition_configuration_facade.cpp
+    app/src/ui/acquisition/ascan_facade.cpp
+    app/src/ui/config/config_callback_facade.cpp
+    app/src/ui/config/config_file_facade.cpp
+    app/src/ui/connection/connection_facade.cpp
+    app/src/ui/health/temperature_facade.cpp
+    app/src/ui/health/humidity_facade.cpp
+    app/src/ui/view/ascan_view.cpp
+#
+    app/src/backend.cpp
+#
+    app/src/b_scan_view.cpp
+    app/src/b_scan_worker.cpp
+    app/src/c_scan_view.cpp
+    app/src/c_scan_worker.cpp)
 
 include(GNUInstallDirs)
-install(TARGETS ${APP_NAME}
+install(
+    TARGETS ${APP_NAME}
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-)
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/")
 include(License)

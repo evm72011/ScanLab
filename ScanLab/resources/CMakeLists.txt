@@ -1,26 +1,28 @@
-qt_add_resources(${APP_NAME} app_resources
-    PREFIX "/"
+qt_add_resources(
+    ${APP_NAME}
+    app_resources
+    PREFIX
+    "/"
     FILES
-        icons/app.svg
-        icons/ascan.svg
-        icons/bscan.svg
-        icons/close.svg
-        icons/cog.svg
-        icons/connected.svg
-        icons/cscan.svg
-        icons/device.svg
-        icons/disconnected.svg
-        icons/double-right.svg
-        icons/error.svg
-        icons/humidity.svg
-        icons/info.svg
-        icons/information.svg
-        icons/pulsing.svg
-        icons/scan.svg
-        icons/service.svg
-        icons/temperature-high.svg
-        icons/temperature-low.svg
-        icons/temperature-medium.svg
-        icons/update.svg
-        icons/warning.svg
-)
+    icons/app.svg
+    icons/ascan.svg
+    icons/bscan.svg
+    icons/close.svg
+    icons/cog.svg
+    icons/connected.svg
+    icons/cscan.svg
+    icons/device.svg
+    icons/disconnected.svg
+    icons/double-right.svg
+    icons/error.svg
+    icons/humidity.svg
+    icons/info.svg
+    icons/information.svg
+    icons/pulsing.svg
+    icons/scan.svg
+    icons/service.svg
+    icons/temperature-high.svg
+    icons/temperature-low.svg
+    icons/temperature-medium.svg
+    icons/update.svg
+    icons/warning.svg)
