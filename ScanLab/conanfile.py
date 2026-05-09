@@ -8,6 +8,8 @@ class CompressorRecipe(ConanFile):
 
     def requirements(self):
         self.requires("magic_enum/0.9.7")
+        self.requires("nlohmann_json/3.12.0")
+        self.requires("libsodium/1.0.21")
 
     def generate(self):
         tc = CMakeToolchain(self, generator="Ninja")

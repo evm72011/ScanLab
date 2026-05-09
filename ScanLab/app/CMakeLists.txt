@@ -1,4 +1,5 @@
 find_package(Qt6 REQUIRED COMPONENTS Quick QuickControls2 Svg)
+find_package(magic_enum REQUIRED)
 
 set_target_properties(${APP_NAME} PROPERTIES
     OUTPUT_NAME ScanLab

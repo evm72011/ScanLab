@@ -154,6 +154,12 @@ AcquisitionSource::AcquisitionSource(sd::Device& device)
 {
 }
 
+void AcquisitionSource::setCycleFilter(int cycle)
+{
+    std::lock_guard lock(mutex_);
+    cycleFilter_ = cycle;
+}
+
 AcquisitionSource::~AcquisitionSource()
 {
     stop();

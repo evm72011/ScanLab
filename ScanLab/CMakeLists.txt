@@ -19,13 +19,14 @@ find_package(magic_enum REQUIRED)
 qt_standard_project_setup(REQUIRES 6.8)
 
 set(CORE_LIB_NAME "scanlab-core")
+set(LICENSE_LIB_NAME "scanlab-license")
 set(APP_NAME appScanLab)
 
 set(OEMPA_SDK_DIR "C:/ProgramData/AOS/OEMPA 1.3.0.2/Sources")
 set(OEMPA_ENABLE ON)
 
 unset(MOCK_DEVICE CACHE)
-option(MOCK_DEVICE "Use mock hardware implementation" OFF)
+option(MOCK_DEVICE "Use mock hardware implementation" ON)
 
 option(ENABLE_WARNINGS "Enable to add warnings to a target." ON)
 option(ENABLE_WARNINGS_AS_ERRORS "Enable compiler warnings as errors" OFF)
