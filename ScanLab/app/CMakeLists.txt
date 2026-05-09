@@ -17,7 +17,11 @@ target_include_directories(${APP_NAME} PRIVATE
 )
 
 target_link_libraries(${APP_NAME}
-    PRIVATE Qt6::Quick ${CORE_LIB_NAME}
+    PRIVATE
+        Qt6::Quick
+        Qt6::QuickControls2
+        magic_enum::magic_enum
+        ${CORE_LIB_NAME}
 )
 
 set_target_properties(${APP_NAME} PROPERTIES
@@ -28,4 +32,4 @@ add_subdirectory(config)
 
 target_add_oempa(TARGET ${APP_NAME})
 
-#add_sanitizer_flags(TARGET ${APP_NAME})
+add_sanitizer_flags(TARGET ${APP_NAME})

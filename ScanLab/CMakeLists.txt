@@ -18,6 +18,8 @@ find_package(magic_enum REQUIRED)
 
 qt_standard_project_setup(REQUIRES 6.8)
 
+set(VENV_DIR "${CMAKE_SOURCE_DIR}/.venv" CACHE PATH "Path to Python virtual environment")
+
 set(CORE_LIB_NAME "scanlab-core")
 set(LICENSE_LIB_NAME "scanlab-license")
 set(APP_NAME appScanLab)
@@ -41,15 +43,14 @@ option(ENABLE_SANITIZE_UNDEF "Enable undefined sanitize." OFF)
 option(ENABLE_SANITIZE_LEAK "Enable leak sanitize (Gcc/Clang only)." OFF)
 option(ENABLE_SANITIZE_THREAD "Enable thread sanitize (Gcc/Clang only)." OFF)
 
+option(ENABLE_TESTING "Enable testing." OFF)
+
+option(ENABLE_CLANG_TIDY "Enable to add clang tidy." OFF)
+option(ENABLE_CLANG_FORMAT "Enable to add clang-format." OFF)
+option(ENABLE_CMAKE_FORMAT "Enable to add cmake-format." ON)
+
 qt_add_executable(${APP_NAME}
     app/main.cpp
-)
-
-target_link_libraries(${APP_NAME}
-    PRIVATE
-        Qt6::Quick
-        Qt6::QuickControls2
-        magic_enum::magic_enum
 )
 
 qt_add_qml_module(${APP_NAME}
@@ -147,6 +148,12 @@ include(OEMPA_config)
 include(Warnings)
 include(LTO)
 include(Sanitizer)
+
+#include(ClangTidy)
+#include(ClangFormat)
+include(CMakeFormat)
+#add_clang_format_target()
+add_cmake_format_target()
 
 add_subdirectory(resources)
 add_subdirectory(libs)
