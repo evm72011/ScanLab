@@ -63,8 +63,66 @@ Rectangle {
             }
         }
     }
+    HoverHandler {
+        id: hoverHandler
 
-    Button {
+        onHoveredChanged: {
+            if (root.durationMs <= 0 || root.closing) {
+                return
+            }
+
+            if (hovered) {
+                autoCloseTimer.stop()
+            } else {
+                autoCloseTimer.restart()
+            }
+        }
+    }
+
+    Timer {
+        id: autoCloseTimer
+
+        interval: root.durationMs
+        running: root.durationMs > 0
+        repeat: false
+
+        onTriggered: {
+            fadeOut.start()
+        }
+    }
+
+    NumberAnimation {
+        id: fadeIn
+
+        target: root
+        property: "opacity"
+        from: 0
+        to: 1
+        duration: 180
+        running: true
+    }
+
+    SequentialAnimation {
+        id: fadeOut
+
+        ScriptAction {
+            script: root.closing = true
+        }
+
+        NumberAnimation {
+            target: root
+            property: "opacity"
+            from: root.opacity
+            to: 0
+            duration: 1000
+        }
+
+        ScriptAction {
+            script: root.expired()
+        }
+    }
+
+    Rectangle {
         id: closeButton
 
         anchors.top: parent.top
@@ -74,52 +132,37 @@ Rectangle {
 
         width: 28
         height: 28
-        text: "×"
 
-        onClicked: {
-            fadeOut.start()
-        }
-    }
+        radius: 0
+        color: mouseArea.containsMouse
+               ? Qt.rgba(1, 1, 1, 0.08)
+               : "transparent"
 
-    SequentialAnimation {
-        id: fadeIn
+        Image {
+            anchors.centerIn: parent
 
-        running: true
+            source: "qrc:/icons/close.svg"
 
-        NumberAnimation {
-            target: root
-            property: "opacity"
-            from: 0
-            to: 1
-            duration: 180
-        }
+            width: 14
+            height: 14
 
-        PauseAnimation {
-            duration: root.durationMs
+            sourceSize.width: 14
+            sourceSize.height: 14
+
+            opacity: mouseArea.containsMouse ? 1.0 : 0.75
         }
 
-        ScriptAction {
-            script: {
-                if (root.durationMs > 0) {
-                    fadeOut.start()
-                }
+        MouseArea {
+            id: mouseArea
+
+            anchors.fill: parent
+            hoverEnabled: true
+            cursorShape: Qt.PointingHandCursor
+
+            onClicked: {
+                autoCloseTimer.stop()
+                fadeOut.start()
             }
-        }
-    }
-
-    SequentialAnimation {
-        id: fadeOut
-
-        NumberAnimation {
-            target: root
-            property: "opacity"
-            from: 1
-            to: 0
-            duration: 250
-        }
-
-        ScriptAction {
-            script: root.expired()
         }
     }
 }
