@@ -11,7 +11,7 @@ namespace scanlab::device
 using Ed25519Verifier = scanlab::license::Ed25519Verifier;
 
 Device::Device(std::filesystem::path licensePath, std::string licensePublicKeyBase64)
-    : licenseChecker_(std::move(licensePath), Ed25519Verifier(std::move(licensePublicKeyBase64)))
+    : licenseChecker_(std::move(licensePath), std::move(licensePublicKeyBase64))
 {
 }
 

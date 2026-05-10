@@ -13,7 +13,6 @@
 #include "scanlab/device/device_type.h"
 
 #include "scanlab/license/checker.h"
-#include "scanlab/license/ed25519_verifier.h"
 
 namespace scanlab::device
 {
@@ -45,7 +44,7 @@ public:
 private:
     std::unique_ptr<CHWDeviceOEMPA> device_;
     std::optional<DeviceType> type_;
-    scanlab::license::Checker<scanlab::license::Ed25519Verifier> licenseChecker_;
+    scanlab::license::Checker licenseChecker_;
 #ifdef MOCK_DEVICE
     bool connected_ = false;
 #endif
