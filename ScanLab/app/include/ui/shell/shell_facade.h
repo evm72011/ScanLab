@@ -19,5 +19,5 @@ public:
 
 private:
     ShellServices shellServices_;
-    ToastFacade toastFacade_ { shellServices_.toastService(), this};
+    ToastFacade toastFacade_{ shellServices_.toastService(), this };
 };

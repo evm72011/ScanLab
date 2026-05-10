@@ -5,12 +5,10 @@ ToastFacade::ToastFacade(ToastService& service, QObject* parent)
     , service_(service)
 {
     service_.subscribe([this](const ToastService::Toast& toast) {
-        emit toastRequested(
-            QString::fromStdString(toast.title),
-            QString::fromStdString(toast.text),
-            toFacadeIcon(toast.icon),
-            toast.durationMs
-            );
+        auto title = QString::fromStdString(toast.title);
+        auto text = QString::fromStdString(toast.text);
+        auto icon = toFacadeIcon(toast.icon);
+        emit toastRequested(title, text, icon, toast.durationMs);
     });
 }
 
