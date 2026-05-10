@@ -25,7 +25,10 @@ public:
 
     using Handler = std::function<void(const Toast&)>;
 
-    void show(std::string title, std::string text, Icon icon = Icon::Info, int durationMs = 3000);
+    void show(std::string title, std::string text, Icon icon, int durationMs);
+    void showInfo(std::string title, std::string text);
+    void showWarning(std::string title, std::string text);
+    void showError(std::string title, std::string text);
 
     void subscribe(Handler handler);
 

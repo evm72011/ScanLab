@@ -60,7 +60,7 @@ BreakInheritanceList: BeforeColon
 
 Cpp11BracedListStyle: false
 
-PenaltyBreakBeforeFirstCallParameter: 1000
+PenaltyBreakBeforeFirstCallParameter: 1
 PenaltyReturnTypeOnItsOwnLine: 1000
 PenaltyExcessCharacter: 1000000
 PenaltyBreakComment: 300

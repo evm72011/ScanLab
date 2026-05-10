@@ -16,10 +16,9 @@ void HumidityWorker::pollMaxHumidity()
     if (!maxHumidity.has_value())
     {
         const auto error = maxHumidity.error();
-        const auto errorCode = std::
-            visit([](const auto
-                          value) { return QString::fromUtf8(magic_enum::enum_name(value).data()); },
-                error);
+        const auto errorCode = std::visit(
+            [](const auto value) { return QString::fromUtf8(magic_enum::enum_name(value).data()); },
+            error);
         emit maxHumidityErrorCode(errorCode);
         emit maxHumidityUnavailable();
         return;

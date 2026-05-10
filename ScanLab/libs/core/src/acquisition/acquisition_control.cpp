@@ -12,8 +12,8 @@ AcquisitionControl::AcquisitionControl(sd::Device& device)
 {
 }
 
-std::expected<void, AcquisitionError> AcquisitionControl::start(const std::function<void()>&
-                                                                    registerCallbacks,
+std::expected<void, AcquisitionError> AcquisitionControl::start(
+    const std::function<void()>& registerCallbacks,
     const std::function<void()>& unregisterCallbacks)
 {
     auto* hw = device_.get();

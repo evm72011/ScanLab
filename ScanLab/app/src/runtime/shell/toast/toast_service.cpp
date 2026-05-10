@@ -15,6 +15,21 @@ void ToastService::show(std::string title, std::string text, Icon icon, int dura
     }
 }
 
+void ToastService::showInfo(std::string title, std::string text)
+{
+    show(std::move(title), std::move(text), Icon::Info, 3000);
+}
+
+void ToastService::showWarning(std::string title, std::string text)
+{
+    show(std::move(title), std::move(text), Icon::Warning, 5000);
+}
+
+void ToastService::showError(std::string title, std::string text)
+{
+    show(std::move(title), std::move(text), Icon::Error, 0);
+}
+
 void ToastService::subscribe(Handler handler)
 {
     handlers_.push_back(std::move(handler));

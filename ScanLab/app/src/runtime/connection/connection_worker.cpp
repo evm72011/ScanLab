@@ -19,7 +19,10 @@ void ConnectionWorker::connect(DeviceType type, const QString& address)
     if (connectionResult.has_value())
     {
         emit connectionSucces(*connectionResult);
-        toastService_.show("Connection", "Succsessfully connected");
+
+        auto title = tr("Device").toStdString();
+        auto text = tr("Successfully connected").toStdString();
+        toastService_.showInfo(title, text);
         return;
     }
 
@@ -27,8 +30,6 @@ void ConnectionWorker::connect(DeviceType type, const QString& address)
     const auto errorInfo_ = describeError(error);
     emit errorInfo(errorInfo_);
     emit connectionFailure();
-    return;
-    emit connectionSucces(*connectionResult);
 }
 
 void ConnectionWorker::disconnect()

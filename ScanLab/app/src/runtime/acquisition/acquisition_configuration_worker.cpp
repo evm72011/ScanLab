@@ -20,10 +20,9 @@ void AcquisitionConfigurationWorker::readCycleCount()
     if (!cycleCount.has_value())
     {
         const auto error = cycleCount.error();
-        const auto errorCode = std::
-            visit([](const auto
-                          value) { return QString::fromUtf8(magic_enum::enum_name(value).data()); },
-                error);
+        const auto errorCode = std::visit(
+            [](const auto value) { return QString::fromUtf8(magic_enum::enum_name(value).data()); },
+            error);
 
         emit acquisitionConfigurationErrorCode(errorCode);
         emit acquisitionConfigurationUnavailable();
@@ -40,10 +39,9 @@ void AcquisitionConfigurationWorker::readAscanParameters(int cycle)
     if (!parameters.has_value())
     {
         const auto error = parameters.error();
-        const auto errorCode = std::
-            visit([](const auto
-                          value) { return QString::fromUtf8(magic_enum::enum_name(value).data()); },
-                error);
+        const auto errorCode = std::visit(
+            [](const auto value) { return QString::fromUtf8(magic_enum::enum_name(value).data()); },
+            error);
 
         emit acquisitionConfigurationErrorCode(errorCode);
         emit acquisitionConfigurationUnavailable();
@@ -60,10 +58,9 @@ void AcquisitionConfigurationWorker::writeAscanParameters(sa::AscanParameters pa
     if (!result.has_value())
     {
         const auto error = result.error();
-        const auto errorCode = std::
-            visit([](const auto
-                          value) { return QString::fromUtf8(magic_enum::enum_name(value).data()); },
-                error);
+        const auto errorCode = std::visit(
+            [](const auto value) { return QString::fromUtf8(magic_enum::enum_name(value).data()); },
+            error);
 
         emit acquisitionConfigurationErrorCode(errorCode);
         emit acquisitionConfigurationUnavailable();

@@ -16,10 +16,9 @@ void TemperatureWorker::pollMaxTemperature()
     if (!maxTemperature.has_value())
     {
         const auto error = maxTemperature.error();
-        const auto errorCode = std::
-            visit([](const auto
-                          value) { return QString::fromUtf8(magic_enum::enum_name(value).data()); },
-                error);
+        const auto errorCode = std::visit(
+            [](const auto value) { return QString::fromUtf8(magic_enum::enum_name(value).data()); },
+            error);
         emit maxTemperatureErrorCode(errorCode);
         emit maxTemperatureUnavailable();
         return;
