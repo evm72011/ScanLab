@@ -13,7 +13,7 @@ ConnectionFacade::ConnectionFacade(DeviceContext& context,
     : shellFacade_{ shellFacade }
     , QObject(parent)
 {
-    worker_ = new ConnectionWorker(context, shellFacade.toastService());
+    worker_ = new ConnectionWorker(context, shellFacade.shellServices());
     worker_->moveToThread(&workerThread_);
 
     connect(&workerThread_, &QThread::finished, worker_, &QObject::deleteLater);

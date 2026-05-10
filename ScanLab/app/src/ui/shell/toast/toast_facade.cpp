@@ -1,19 +1,17 @@
 #include "ui/shell/toast/toast_facade.h"
 
-ToastFacade::ToastFacade(QObject* parent)
+ToastFacade::ToastFacade(ToastService& service, QObject* parent)
     : QObject(parent)
+    , service_(service)
 {
     service_.subscribe([this](const ToastService::Toast& toast) {
-        emit toastRequested(QString::fromStdString(toast.title),
+        emit toastRequested(
+            QString::fromStdString(toast.title),
             QString::fromStdString(toast.text),
             toFacadeIcon(toast.icon),
-            toast.durationMs);
+            toast.durationMs
+            );
     });
-}
-
-ToastService& ToastFacade::toastService()
-{
-    return service_;
 }
 
 QString ToastFacade::toFacadeIcon(ToastService::Icon icon)

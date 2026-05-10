@@ -1,8 +1,6 @@
 #include "ui/shell/shell_facade.h"
 
-ShellFacade::ShellFacade(QObject* parent)
-    : QObject(parent)
-    , toastFacade_(this)
+ShellFacade::ShellFacade(QObject* parent) : QObject(parent)
 {
 }
 
@@ -11,7 +9,6 @@ ToastFacade* ShellFacade::toastFacade()
     return &toastFacade_;
 }
 
-ToastService& ShellFacade::toastService()
-{
-    return toastFacade_.toastService();
+ShellServices& ShellFacade::shellServices() {
+    return shellServices_;
 }

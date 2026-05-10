@@ -85,6 +85,7 @@ qt_add_qml_module(
     app/include/runtime/health/humidity_worker.h
     app/include/runtime/health/temperature_service.h
     app/include/runtime/health/temperature_worker.h
+    app/include/runtime/shell/shell_services.h
     app/include/runtime/shell/toast/toast_service.h
     #
     app/include/ui/app_info.h
@@ -124,6 +125,7 @@ qt_add_qml_module(
     app/src/runtime/health/humidity_worker.cpp
     app/src/runtime/health/temperature_service.cpp
     app/src/runtime/health/temperature_worker.cpp
+    app/src/runtime/shell/shell_services.cpp
     app/src/runtime/shell/toast/toast_service.cpp
     #
     app/src/ui/acquisition/acquisition_configuration_facade.cpp

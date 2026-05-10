@@ -20,8 +20,7 @@ public:
 
     Q_ENUM(Icon)
 
-    explicit ToastFacade(QObject* parent = nullptr);
-    ToastService& toastService();
+    explicit ToastFacade(ToastService& service, QObject* parent = nullptr);
 
 signals:
     void toastRequested(QString title, QString text, QString iconSource, int durationMs);
@@ -29,5 +28,5 @@ signals:
 private:
     static QString toFacadeIcon(ToastService::Icon icon);
 
-    ToastService service_;
+    ToastService& service_;
 };

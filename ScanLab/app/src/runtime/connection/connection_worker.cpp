@@ -4,11 +4,9 @@
 #include "runtime/device/device_context.h"
 #include <magic_enum/magic_enum.hpp>
 
-ConnectionWorker::ConnectionWorker(DeviceContext& context,
-    ToastService& toastService,
-    QObject* parent)
+ConnectionWorker::ConnectionWorker(DeviceContext& context, ShellServices& shellServices, QObject* parent)
     : QObject(parent)
-    , toastService_(toastService)
+    , toastService_(shellServices.toastService())
     , service_(context)
 {
 }
