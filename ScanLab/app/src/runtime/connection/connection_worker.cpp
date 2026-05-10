@@ -4,7 +4,9 @@
 #include "runtime/device/device_context.h"
 #include <magic_enum/magic_enum.hpp>
 
-ConnectionWorker::ConnectionWorker(DeviceContext& context, ToastService& toastService, QObject* parent)
+ConnectionWorker::ConnectionWorker(DeviceContext& context,
+    ToastService& toastService,
+    QObject* parent)
     : QObject(parent)
     , toastService_(toastService)
     , service_(context)
@@ -14,7 +16,8 @@ ConnectionWorker::ConnectionWorker(DeviceContext& context, ToastService& toastSe
 void ConnectionWorker::connect(DeviceType type, const QString& address)
 {
     const auto connectionResult = service_.connect(type, address.toStdWString());
-    if (connectionResult.has_value()) {
+    if (connectionResult.has_value())
+    {
         emit connectionSucces(*connectionResult);
         toastService_.show("Connection", "Succsessfully connected");
         return;

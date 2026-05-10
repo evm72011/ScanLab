@@ -15,7 +15,9 @@ class ConnectionWorker : public QObject
     Q_OBJECT
 
 public:
-    explicit ConnectionWorker(DeviceContext& context, ToastService& toastService, QObject* parent = nullptr);
+    explicit ConnectionWorker(DeviceContext& context,
+        ToastService& toastService,
+        QObject* parent = nullptr);
 
 public slots:
     void connect(DeviceType type, const QString& address);

@@ -25,7 +25,9 @@ class ConnectionFacade : public QObject
     Q_PROPERTY(QString serialNumber READ serialNumber NOTIFY serialNumberChanged)
 
 public:
-    explicit ConnectionFacade(DeviceContext& context, ToastFacade& toastFacade, QObject* parent = nullptr);
+    explicit ConnectionFacade(DeviceContext& context,
+        ToastFacade& toastFacade,
+        QObject* parent = nullptr);
     ~ConnectionFacade() override;
 
     DeviceType deviceType() const;

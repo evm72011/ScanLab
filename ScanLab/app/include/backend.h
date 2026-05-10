@@ -42,7 +42,7 @@ public:
     HumidityFacade* humidityFacade();
 
 private:
-    ToastFacade toastFacade_{this};
+    ToastFacade toastFacade_{ this };
 
     DeviceContext context_;
     AppInfo appInfo_;

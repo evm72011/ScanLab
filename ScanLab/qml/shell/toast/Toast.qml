@@ -48,7 +48,7 @@ Rectangle {
                 Layout.fillWidth: true
                 text: root.titleText
                 font.bold: true
-                font.pixelSize: 16
+                font.pixelSize: SL.Theme.typography.fontSizeMd
                 color: SL.Theme.colors.textPrimary
                 wrapMode: Text.Wrap
             }
@@ -56,7 +56,7 @@ Rectangle {
             Text {
                 Layout.fillWidth: true
                 text: root.bodyText
-                font.pixelSize: 14
+                font.pixelSize: SL.Theme.typography.fontSizeSm
                 color: SL.Theme.colors.textSecondary
                 wrapMode: Text.Wrap
                 visible: root.bodyText.length > 0
@@ -114,7 +114,7 @@ Rectangle {
             property: "opacity"
             from: root.opacity
             to: 0
-            duration: 1000
+            duration: 700
         }
 
         ScriptAction {

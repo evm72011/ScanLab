@@ -7,8 +7,10 @@
 #include <QDebug>
 #include <QMetaObject>
 
-ConnectionFacade::ConnectionFacade(DeviceContext& context, ToastFacade& toastFacade, QObject* parent)
-    : toastFacade_ {toastFacade}
+ConnectionFacade::ConnectionFacade(DeviceContext& context,
+    ToastFacade& toastFacade,
+    QObject* parent)
+    : toastFacade_{ toastFacade }
     , QObject(parent)
 {
     worker_ = new ConnectionWorker(context, toastFacade.toastService());

@@ -24,12 +24,7 @@ public:
     ToastService& toastService();
 
 signals:
-    void toastRequested(
-        QString title,
-        QString text,
-        QString iconSource,
-        int durationMs
-        );
+    void toastRequested(QString title, QString text, QString iconSource, int durationMs);
 
 private:
     static QString toFacadeIcon(ToastService::Icon icon);

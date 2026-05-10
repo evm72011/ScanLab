@@ -2,19 +2,12 @@
 
 #include <utility>
 
-void ToastService::show(
-    std::string title,
-    std::string text,
-    Icon icon,
-    int durationMs
-    )
+void ToastService::show(std::string title, std::string text, Icon icon, int durationMs)
 {
-    const Toast toast{
-        .title = std::move(title),
+    const Toast toast{ .title = std::move(title),
         .text = std::move(text),
         .icon = icon,
-        .durationMs = durationMs
-    };
+        .durationMs = durationMs };
 
     for (const auto& handler : handlers_)
     {
