@@ -59,6 +59,10 @@ ApplicationWindow {
         }
     }
 
+    SL.ToastOverlay {
+        anchors.fill: parent
+    }
+
     Timer {
         id: loadDelayTimer
         interval: 1000

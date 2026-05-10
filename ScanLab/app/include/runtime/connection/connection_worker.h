@@ -6,6 +6,7 @@
 #include "runtime/connection/connection_service.h"
 #include "runtime/device/device_type.h"
 #include "runtime/errors/error_info.h"
+#include "runtime/shell/toast/toast_service.h"
 
 class DeviceContext;
 
@@ -14,7 +15,7 @@ class ConnectionWorker : public QObject
     Q_OBJECT
 
 public:
-    explicit ConnectionWorker(DeviceContext& context, QObject* parent = nullptr);
+    explicit ConnectionWorker(DeviceContext& context, ToastService& toastService, QObject* parent = nullptr);
 
 public slots:
     void connect(DeviceType type, const QString& address);
@@ -27,5 +28,6 @@ signals:
     void disconnectCompleted(bool stillConnected);
 
 private:
+    ToastService& toastService_;
     ConnectionService service_;
 };

@@ -7,6 +7,7 @@
 #include "runtime/device/device_type.h"
 #include "runtime/errors/error_info.h"
 #include "ui/connection/connection_state.h"
+#include "ui/shell/toast/toast_facade.h"
 
 class DeviceContext;
 class ConnectionWorker;
@@ -24,7 +25,7 @@ class ConnectionFacade : public QObject
     Q_PROPERTY(QString serialNumber READ serialNumber NOTIFY serialNumberChanged)
 
 public:
-    explicit ConnectionFacade(DeviceContext& context, QObject* parent = nullptr);
+    explicit ConnectionFacade(DeviceContext& context, ToastFacade& toastFacade, QObject* parent = nullptr);
     ~ConnectionFacade() override;
 
     DeviceType deviceType() const;
@@ -60,6 +61,7 @@ private:
     void setSerialNumber(const QString& value);
 
 private:
+    ToastFacade& toastFacade_;
     ConnectionWorker* worker_ = nullptr;
     QThread workerThread_;
 

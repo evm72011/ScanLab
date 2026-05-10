@@ -85,6 +85,7 @@ qt_add_qml_module(
     app/include/runtime/health/humidity_worker.h
     app/include/runtime/health/temperature_service.h
     app/include/runtime/health/temperature_worker.h
+    app/include/runtime/shell/toast/toast_service.h
     #
     app/include/ui/app_info.h
     app/include/ui/acquisition/acquisition_configuration_facade.h
@@ -96,6 +97,7 @@ qt_add_qml_module(
     app/include/ui/device/device_type.h
     app/include/ui/health/temperature_facade.h
     app/include/ui/health/humidity_facade.h
+    app/include/ui/shell/toast/toast_facade.h
     app/include/ui/view/ascan_view.h
     #
     app/include/app_settings.h
@@ -121,6 +123,7 @@ qt_add_qml_module(
     app/src/runtime/health/humidity_worker.cpp
     app/src/runtime/health/temperature_service.cpp
     app/src/runtime/health/temperature_worker.cpp
+    app/src/runtime/shell/toast/toast_service.cpp
     #
     app/src/ui/acquisition/acquisition_configuration_facade.cpp
     app/src/ui/acquisition/ascan_facade.cpp
@@ -129,6 +132,7 @@ qt_add_qml_module(
     app/src/ui/connection/connection_facade.cpp
     app/src/ui/health/temperature_facade.cpp
     app/src/ui/health/humidity_facade.cpp
+    app/src/ui/shell/toast/toast_facade.cpp
     app/src/ui/view/ascan_view.cpp
     #
     app/src/backend.cpp

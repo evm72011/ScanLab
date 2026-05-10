@@ -12,11 +12,13 @@
 #include "ui/connection/connection_facade.h"
 #include "ui/health/humidity_facade.h"
 #include "ui/health/temperature_facade.h"
+#include "ui/shell/toast/toast_facade.h"
 
 class Backend : public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(ToastFacade* toastFacade READ toastFacade CONSTANT)
     Q_PROPERTY(AppInfo* appInfo READ appInfo CONSTANT)
     Q_PROPERTY(ConnectionFacade* connectionFacade READ connectionFacade CONSTANT)
     Q_PROPERTY(AcquisitionConfigurationFacade* acquisitionConfigurationFacade READ
@@ -29,6 +31,7 @@ class Backend : public QObject
 public:
     explicit Backend(QObject* parent = nullptr);
 
+    ToastFacade* toastFacade();
     AppInfo* appInfo();
     ConnectionFacade* connectionFacade();
     AcquisitionConfigurationFacade* acquisitionConfigurationFacade();
@@ -39,9 +42,11 @@ public:
     HumidityFacade* humidityFacade();
 
 private:
+    ToastFacade toastFacade_{this};
+
     DeviceContext context_;
     AppInfo appInfo_;
-    ConnectionFacade connectionFacade_{ context_, this };
+    ConnectionFacade connectionFacade_{ context_, toastFacade_, this };
     AcquisitionConfigurationFacade acquisitionConfigurationFacade_{ context_, this };
     AScanFacade ascanFacade_{ context_, this };
     ConfigCallbackFacade configCallbackFacade_{ context_, this };

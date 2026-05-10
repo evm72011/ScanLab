@@ -36,8 +36,11 @@ set(QML_MODULE_FILES
     pages/ScanCPage.qml
     pages/SettingsPage.qml
     #
-    Main.qml
-    themes/tokens/ColorTokens.qml)
+    shell/toast/Toast.qml
+    shell/toast/ToastOverlay.qml
+    #
+    themes/tokens/ColorTokens.qml
+    Main.qml)
 
 qt_target_qml_sources(
     ${APP_NAME}
