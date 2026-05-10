@@ -5,7 +5,7 @@ import ScanLab as SL
 
 ToolBar {
     id: root
-    implicitHeight: 30
+    implicitHeight: SL.Theme.layout.statusBarHeight
 
     property int connectionState: backend?.connectionFacade?.connectionState ??
                                   SL.ConnectionState.Disconnected

@@ -32,7 +32,7 @@ signals:
         );
 
 private:
-    static Icon toFacadeIcon(ToastService::Icon icon);
+    static QString toFacadeIcon(ToastService::Icon icon);
 
     ToastService service_;
 };

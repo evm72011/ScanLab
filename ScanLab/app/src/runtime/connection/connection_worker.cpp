@@ -16,7 +16,7 @@ void ConnectionWorker::connect(DeviceType type, const QString& address)
     const auto connectionResult = service_.connect(type, address.toStdWString());
     if (connectionResult.has_value()) {
         emit connectionSucces(*connectionResult);
-        toastService_.show("title", "text");
+        toastService_.show("Connection", "Succsessfully connected");
         return;
     }
 

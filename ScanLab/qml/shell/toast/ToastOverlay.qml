@@ -15,12 +15,12 @@ Item {
     Connections {
         target: backend?.toastFacade ?? null
 
-        function onToastRequested(title, text, iconSource, durationMs) {
+        function onToastRequested(titleText, bodyText, iconSource, durationMs) {
             toastModel.append({
-                titleText: title,
-                bodyText: text,
-                iconSource: iconSource,
-                durationMs: durationMs
+                titleText,
+                bodyText,
+                iconSource,
+                durationMs
             })
         }
     }
@@ -28,8 +28,11 @@ Item {
     Column {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        anchors.margins: 16
-        spacing: 8
+
+        anchors.rightMargin: 10
+        anchors.bottomMargin: SL.Theme.layout.statusBarHeight + 10
+
+        spacing: 10
 
         Repeater {
             model: toastModel

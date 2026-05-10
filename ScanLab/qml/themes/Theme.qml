@@ -8,4 +8,5 @@ QtObject {
 
     readonly property ColorTokens colors: (mode === Theme.Dark) ? SL.ColorTokensDark : SL.ColorTokensLight
     readonly property TypographyTokens typography: SL.TypographyTokens
+    readonly property LayoutTokens layout: SL.LayoutTokens
 }
