@@ -7,7 +7,7 @@
 #include "runtime/device/device_type.h"
 #include "runtime/errors/error_info.h"
 #include "ui/connection/connection_state.h"
-#include "ui/shell/toast/toast_facade.h"
+#include "ui/shell/shell_facade.h"
 
 class DeviceContext;
 class ConnectionWorker;
@@ -26,7 +26,7 @@ class ConnectionFacade : public QObject
 
 public:
     explicit ConnectionFacade(DeviceContext& context,
-        ToastFacade& toastFacade,
+        ShellFacade& shellFacade,
         QObject* parent = nullptr);
     ~ConnectionFacade() override;
 
@@ -63,7 +63,7 @@ private:
     void setSerialNumber(const QString& value);
 
 private:
-    ToastFacade& toastFacade_;
+    ShellFacade& shellFacade_;
     ConnectionWorker* worker_ = nullptr;
     QThread workerThread_;
 

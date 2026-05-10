@@ -97,6 +97,7 @@ qt_add_qml_module(
     app/include/ui/device/device_type.h
     app/include/ui/health/temperature_facade.h
     app/include/ui/health/humidity_facade.h
+    app/include/ui/shell/shell_facade.h
     app/include/ui/shell/toast/toast_facade.h
     app/include/ui/view/ascan_view.h
     #
@@ -132,6 +133,7 @@ qt_add_qml_module(
     app/src/ui/connection/connection_facade.cpp
     app/src/ui/health/temperature_facade.cpp
     app/src/ui/health/humidity_facade.cpp
+    app/src/ui/shell/shell_facade.cpp
     app/src/ui/shell/toast/toast_facade.cpp
     app/src/ui/view/ascan_view.cpp
     #

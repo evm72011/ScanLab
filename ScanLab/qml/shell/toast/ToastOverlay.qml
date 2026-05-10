@@ -13,7 +13,7 @@ Item {
     }
 
     Connections {
-        target: backend?.toastFacade ?? null
+        target: backend?.shellFacade?.toastFacade ?? null
 
         function onToastRequested(titleText, bodyText, iconSource, durationMs) {
             toastModel.append({

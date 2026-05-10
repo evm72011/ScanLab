@@ -12,6 +12,7 @@ Rectangle {
     property string bodyText: ""
     property string iconSource: ""
     property int durationMs: 3000
+    property bool closing: false
 
     width: 400
     implicitHeight: Math.max(96, content.implicitHeight + 28)
@@ -63,6 +64,7 @@ Rectangle {
             }
         }
     }
+
     HoverHandler {
         id: hoverHandler
 

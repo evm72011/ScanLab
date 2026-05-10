@@ -8,12 +8,12 @@
 #include <QMetaObject>
 
 ConnectionFacade::ConnectionFacade(DeviceContext& context,
-    ToastFacade& toastFacade,
+    ShellFacade& shellFacade,
     QObject* parent)
-    : toastFacade_{ toastFacade }
+    : shellFacade_{ shellFacade }
     , QObject(parent)
 {
-    worker_ = new ConnectionWorker(context, toastFacade.toastService());
+    worker_ = new ConnectionWorker(context, shellFacade.toastService());
     worker_->moveToThread(&workerThread_);
 
     connect(&workerThread_, &QThread::finished, worker_, &QObject::deleteLater);

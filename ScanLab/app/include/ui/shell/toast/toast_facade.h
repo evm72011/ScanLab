@@ -10,7 +10,7 @@ class ToastFacade : public QObject
     Q_OBJECT
 
 public:
-    enum class Icon
+    enum class Icon : std::uint8_t
     {
         Info,
         Success,

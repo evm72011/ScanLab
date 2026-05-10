@@ -34,9 +34,9 @@ Backend::Backend(QObject* parent)
     });
 }
 
-ToastFacade* Backend::toastFacade()
+ShellFacade* Backend::shellFacade()
 {
-    return &toastFacade_;
+    return &shellFacade_;
 }
 
 AppInfo* Backend::appInfo()
