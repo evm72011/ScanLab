@@ -1,6 +1,7 @@
 #pragma once
 
 #include "runtime/config/config_file_service.h"
+#include "runtime/shell/shell_services.h"
 
 #include <QObject>
 #include <QString>
@@ -13,11 +14,13 @@ class ConfigFileWorker : public QObject
     Q_OBJECT
 
 public:
-    explicit ConfigFileWorker(DeviceContext& context, QObject* parent = nullptr);
+    explicit ConfigFileWorker(DeviceContext& context,
+        ShellServices& shellServices
+        ,QObject* parent = nullptr);
 
 public slots:
     void refreshConfigFiles();
-    void loadConfigFile(QString fileName);
+    void loadConfigFile(const QString& fileName);
 
 signals:
     void configFilesUpdated(QStringList files);
@@ -27,5 +30,6 @@ signals:
     void configFileLoadFailed(QString fileName, QString errorCode);
 
 private:
+    ToastService& toastService_;
     ConfigFileService service_;
 };

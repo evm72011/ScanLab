@@ -5,6 +5,8 @@
 #include <QStringList>
 #include <QThread>
 
+#include "ui/shell/shell_facade.h"
+
 class DeviceContext;
 class ConfigFileWorker;
 
@@ -23,7 +25,7 @@ class ConfigFileFacade : public QObject
             selectedConfigFileChanged)
 
 public:
-    explicit ConfigFileFacade(DeviceContext& context, QObject* parent = nullptr);
+    explicit ConfigFileFacade(DeviceContext& context, ShellFacade& shellFacade, QObject* parent = nullptr);
     ~ConfigFileFacade() override;
 
     QStringList availableConfigFiles() const;
@@ -53,6 +55,7 @@ private:
     void setLoading(bool value);
     void setErrorCode(const QString& value);
 
+    ShellFacade& shellFacade_;
     QThread workerThread_;
     ConfigFileWorker* worker_ = nullptr;
 

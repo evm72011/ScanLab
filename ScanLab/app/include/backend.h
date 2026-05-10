@@ -50,7 +50,7 @@ private:
     AcquisitionConfigurationFacade acquisitionConfigurationFacade_{ context_, this };
     AScanFacade ascanFacade_{ context_, this };
     ConfigCallbackFacade configCallbackFacade_{ context_, this };
-    ConfigFileFacade configFileFacade_{ context_, this };
+    ConfigFileFacade configFileFacade_{ context_, shellFacade_, this };
     TemperatureFacade temperatureFacade_{ context_, this };
     HumidityFacade humidityFacade_{ context_, this };
 };

@@ -3,10 +3,11 @@
 #include "runtime/config/config_file_worker.h"
 #include "runtime/device/device_context.h"
 
-ConfigFileFacade::ConfigFileFacade(DeviceContext& context, QObject* parent)
-    : QObject(parent)
+ConfigFileFacade::ConfigFileFacade(DeviceContext& context, ShellFacade& shellFacade, QObject* parent)
+    : shellFacade_{ shellFacade }
+    , QObject(parent)
 {
-    worker_ = new ConfigFileWorker(context);
+    worker_ = new ConfigFileWorker(context, shellFacade.shellServices());
     worker_->moveToThread(&workerThread_);
 
     connect(&workerThread_, &QThread::finished, worker_, &QObject::deleteLater);
