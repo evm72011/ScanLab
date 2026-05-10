@@ -3,7 +3,12 @@ set(LIB_NAME ${LICENSE_LIB_NAME})
 find_package(nlohmann_json REQUIRED)
 find_package(libsodium REQUIRED)
 
-add_library(${LIB_NAME} src/checker.cpp src/payload.cpp src/reader.cpp src/ed25519_verifier.cpp)
+add_library(
+    ${LIB_NAME}
+    src/checker.cpp
+    src/payload.cpp
+    src/reader.cpp
+    src/ed25519_verifier.cpp)
 
 target_include_directories(${LIB_NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/include)
 

@@ -1,6 +1,5 @@
 #include "scanlab/health/temperature_topology_api.h"
 
-
 #include "scanlab/oempa/sdk.h" // IWYU pragma: keep
 
 namespace scanlab::health

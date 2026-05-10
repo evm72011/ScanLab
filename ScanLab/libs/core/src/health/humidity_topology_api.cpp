@@ -1,6 +1,5 @@
 #include "scanlab/health/humidity_topology_api.h"
 
-
 #include "scanlab/oempa/sdk.h" // IWYU pragma: keep
 
 namespace scanlab::health

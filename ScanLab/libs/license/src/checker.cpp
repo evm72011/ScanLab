@@ -3,9 +3,9 @@
 
 namespace scanlab::license
 {
-Checker::Checker(std::filesystem::path path, std::string licensePublicKeyBase64):
-    reader_(std::move(path)),
-    verifier_(std::move(licensePublicKeyBase64))
+Checker::Checker(std::filesystem::path path, std::string licensePublicKeyBase64)
+    : reader_(std::move(path))
+    , verifier_(std::move(licensePublicKeyBase64))
 {
 }
 

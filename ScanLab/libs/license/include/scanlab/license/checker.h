@@ -3,9 +3,9 @@
 #include <expected>
 #include <filesystem>
 
+#include "scanlab/license/ed25519_verifier.h"
 #include "scanlab/license/license_error.h"
 #include "scanlab/license/reader.h"
-#include "scanlab/license/ed25519_verifier.h"
 
 namespace scanlab::license
 {

@@ -6,11 +6,12 @@ function(add_clang_tidy)
         ""
         "${oneValueArgs}"
         ""
-        ${ARGN}
-    )
+        ${ARGN})
 
     if(NOT TARGET ${ACLT_TARGET})
-        message(FATAL_ERROR "add_clang_tidy: Target '${ACLT_TARGET}' does not exist.")
+        message(
+            FATAL_ERROR
+                "add_clang_tidy: Target '${ACLT_TARGET}' does not exist.")
         return()
     endif()
 
@@ -31,8 +32,7 @@ function(add_clang_tidy)
         TARGET_SOURCES
         INCLUDE
         REGEX
-        ".*\\.(cc|cxx|cpp|h|hpp)$"
-    )
+        ".*\\.(cc|cxx|cpp|h|hpp)$")
 
     list(
         FILTER
@@ -66,8 +66,7 @@ function(add_clang_tidy)
     find_package(
         Python3
         COMPONENTS Interpreter
-        REQUIRED
-    )
+        REQUIRED)
 
     find_program(CLANGTIDY clang-tidy)
 
@@ -79,21 +78,14 @@ function(add_clang_tidy)
     add_custom_target(
         ${ACLT_TARGET}_clangtidy
         COMMAND
-            ${Python3_EXECUTABLE}
-            ${CMAKE_SOURCE_DIR}/scripts/run-clang-tidy.py
-            ${ABS_TARGET_SOURCES}
-            -p ${CMAKE_BINARY_DIR}
-            -config-file ${CMAKE_SOURCE_DIR}/.clang-tidy
-            -extra-arg=-Wno-everything
-            -extra-arg=-Wunused-variable
-            -extra-arg=-Wunused-variable
-            -extra-arg=-Wno-c++98-compat
-            -extra-arg=-Wno-c++98-compat-pedantic
-            -extra-arg=-Wno-pre-c++17-compat
-            -quiet
+            ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/scripts/run-clang-tidy.py
+            ${ABS_TARGET_SOURCES} -p ${CMAKE_BINARY_DIR} -config-file
+            ${CMAKE_SOURCE_DIR}/.clang-tidy -extra-arg=-Wno-everything
+            -extra-arg=-Wunused-variable -extra-arg=-Wunused-variable
+            -extra-arg=-Wno-c++98-compat -extra-arg=-Wno-c++98-compat-pedantic
+            -extra-arg=-Wno-pre-c++17-compat -quiet
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        USES_TERMINAL
-    )
+        USES_TERMINAL)
 
     message(STATUS "Added Clang Tidy for Target: ${ACLT_TARGET}")
 endfunction()
