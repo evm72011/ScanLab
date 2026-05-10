@@ -9,4 +9,6 @@ cmake --build build\Desktop_Qt_6_11_0_MSVC2022_64bit-Debug --target run_clang_fo
 
 cmake --build build\Desktop_Qt_6_11_0_MSVC2022_64bit-Debug --target appScanLab_clangtidy --config Debug
 
+cmake --build build\Desktop_Qt_6_11_0_MSVC2022_64bit-Debug --target scanlab-license_clangtidy
+
 keep actual buid dir in ./scripts/conan-install.ps1

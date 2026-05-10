@@ -8,7 +8,7 @@ namespace scanlab::license
 {
 
 Reader::Reader(std::filesystem::path path)
-    : path_{ path }
+    : path_{ std::move(path) }
 {
 }
 

@@ -26,11 +26,11 @@ target_enable_lto(
     ENABLE
     ${ENABLE_LTO})
 
-#add_clang_tidy(
-#    TARGET
-#    ${LIB_NAME}
-#    ENABLE
-#    ${ENABLE_CLANG_TIDY})
+add_clang_tidy(
+    TARGET
+    ${LIB_NAME}
+    ENABLE
+    ${ENABLE_CLANG_TIDY})
 
 if(ENABLE_TESTING)
     add_subdirectory(tests)

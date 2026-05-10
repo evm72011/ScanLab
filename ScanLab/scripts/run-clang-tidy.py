@@ -422,8 +422,10 @@ def main():
     if max_task == 0:
         max_task = multiprocessing.cpu_count()
 
-    # Build up a big regexy filter from all command line arguments.
-    file_name_re = re.compile("|".join(args.files))
+        # Build up a regex filter from all command line arguments.
+        # Escape paths because Windows paths contain '\' which break regex matching.
+        escaped_files = [re.escape(os.path.normpath(f)) for f in args.files]
+        file_name_re = re.compile("|".join(escaped_files))
 
     return_code = 0
     try:
@@ -450,7 +452,9 @@ def main():
 
         # Fill the queue with files.
         for name in files:
-            if file_name_re.search(name):
+            normalized_name = os.path.normpath(name)
+
+            if file_name_re.search(normalized_name):
                 task_queue.put(name)
 
         # Wait for all threads to be done.
