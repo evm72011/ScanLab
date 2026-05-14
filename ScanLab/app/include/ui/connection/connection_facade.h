@@ -5,7 +5,6 @@
 #include <QThread>
 
 #include "runtime/device/device_type.h"
-#include "runtime/errors/error_info.h"
 #include "ui/connection/connection_state.h"
 #include "ui/shell/shell_facade.h"
 
@@ -18,10 +17,7 @@ class ConnectionFacade : public QObject
 
     Q_PROPERTY(DeviceType deviceType READ deviceType WRITE setDeviceType NOTIFY deviceTypeChanged)
     Q_PROPERTY(QString address READ address WRITE setAddress NOTIFY addressChanged)
-    Q_PROPERTY(
-        ConnectionState::State connectionState READ connectionState NOTIFY connectionStateChanged)
-    Q_PROPERTY(QString errorCode READ errorCode NOTIFY errorCodeChanged)
-    Q_PROPERTY(QString errorText READ errorText NOTIFY errorTextChanged)
+    Q_PROPERTY(ConnectionState::State connectionState READ connectionState NOTIFY connectionStateChanged)
     Q_PROPERTY(QString serialNumber READ serialNumber NOTIFY serialNumberChanged)
 
 public:
@@ -59,7 +55,6 @@ signals:
 
 private:
     void setConnectionState(ConnectionState::State value);
-    void setErrorInfo(const ErrorInfo& value);
     void setSerialNumber(const QString& value);
 
 private:
@@ -70,6 +65,5 @@ private:
     DeviceType deviceType_ = DeviceType::None;
     QString address_;
     ConnectionState::State connectionState_ = ConnectionState::State::Disconnected;
-    ErrorInfo errorInfo_;
     QString serialNumber_;
 };

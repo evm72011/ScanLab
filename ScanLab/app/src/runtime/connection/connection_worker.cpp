@@ -26,19 +26,14 @@ void ConnectionWorker::connect(DeviceType type, const QString& address)
         toastService_.showInfo(title, text);
         return;
     }
-    const auto& error = connectionResult.error();
-    const auto errorInfo_ = describeError(error);
 
     auto title = tr("Connection falure");
-    const auto message = errorInfo_.message();
-    const auto code = errorInfo_.technicalCode;
+    const auto shortText = tr("Unable to connect");;
+    const auto& error = connectionResult.error();
+    const auto errorInfo = describeError(error);
+    messageService_.showError(title, shortText, errorInfo);
+
     emit connectionFailure();
-
-    messageService_.showError(title, message, code);
-    return;
-
-    //emit errorInfo(errorInfo_);
-    //emit connectionFailure();
 }
 
 void ConnectionWorker::disconnect()

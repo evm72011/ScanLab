@@ -4,6 +4,7 @@
 #include <QString>
 #include <vector>
 
+#include "runtime/errors/error_info.h"
 #include "runtime/shell/icon.h"
 
 class MessageService
@@ -25,6 +26,7 @@ public:
     void showSuccess(QString title, QString shortText, QString detailsText = {},QString errorCode = {});
     void showWarning(QString title, QString shortText,QString detailsText = {},QString errorCode = {});
     void showError(QString title, QString shortText, QString detailsText = {}, QString errorCode = {});
+    void showError(QString title, QString shortText, const ErrorInfo& errorInfo);
     void subscribe(Handler handler);
 
 private:

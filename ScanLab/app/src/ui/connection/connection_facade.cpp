@@ -53,15 +53,6 @@ ConnectionFacade::ConnectionFacade(DeviceContext& context,
 
     connect(
         worker_,
-        &ConnectionWorker::errorInfo,
-        this,
-        [this](const ErrorInfo& errorInfo) {
-            setErrorInfo(errorInfo); // bug if already connected error
-        },
-        Qt::QueuedConnection);
-
-    connect(
-        worker_,
         &ConnectionWorker::disconnectCompleted,
         this,
         [this](bool stillConnected) {
@@ -125,16 +116,6 @@ ConnectionState::State ConnectionFacade::connectionState() const
     return connectionState_;
 }
 
-QString ConnectionFacade::errorCode() const
-{
-    return errorInfo_.technicalCode;
-}
-
-QString ConnectionFacade::errorText() const
-{
-    return errorInfo_.message();
-}
-
 QString ConnectionFacade::serialNumber() const
 {
     return serialNumber_;
@@ -171,25 +152,6 @@ void ConnectionFacade::setConnectionState(ConnectionState::State value)
 
     connectionState_ = value;
     emit connectionStateChanged();
-}
-
-void ConnectionFacade::setErrorInfo(const ErrorInfo& value)
-{
-    //if (connectionErrorCode_ == value) { TODO
-    //    return;
-    //}
-    auto old = errorInfo_;
-    errorInfo_ = value;
-
-    if (old.technicalCode != value.technicalCode)
-    {
-        emit errorCodeChanged();
-    }
-
-    if (old.textKey != value.textKey)
-    {
-        emit errorTextChanged();
-    }
 }
 
 void ConnectionFacade::setSerialNumber(const QString& value)

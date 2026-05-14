@@ -78,6 +78,19 @@ void MessageService::showError(QString title
         );
 }
 
+void MessageService::showError(QString title
+    , QString shortText
+    , const ErrorInfo& errorInfo)
+{
+    show(
+        std::move(title),
+        std::move(shortText),
+        errorInfo.message(),
+        errorInfo.technicalCode,
+        Icon::Error
+        );
+}
+
 void MessageService::subscribe(Handler handler)
 {
     handlers_.push_back(std::move(handler));
