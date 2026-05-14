@@ -15,8 +15,8 @@ class ConfigFileWorker : public QObject
 
 public:
     explicit ConfigFileWorker(DeviceContext& context,
-        ShellServices& shellServices
-        ,QObject* parent = nullptr);
+        ShellServices& shellServices,
+        QObject* parent = nullptr);
 
 public slots:
     void refreshConfigFiles();

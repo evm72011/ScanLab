@@ -2,13 +2,13 @@
 
 #include <utility>
 
-void MessageService::show(QString title
-    , QString shortText
-    , QString detailsText
-    , QString errorCode
-    , Icon icon)
+void MessageService::show(QString title,
+    QString shortText,
+    QString detailsText,
+    QString errorCode,
+    Icon icon)
 {
-    const Message message{
+    const Message message{ //
         .title = std::move(title),
         .shortText = std::move(shortText),
         .detailsText = std::move(detailsText),
@@ -22,73 +22,61 @@ void MessageService::show(QString title
     }
 }
 
-void MessageService::showInfo(QString title
-    , QString shortText
-    , QString detailsText
-    , QString errorCode)
+void MessageService::showInfo(QString title,
+    QString shortText,
+    QString detailsText,
+    QString errorCode)
 {
-    show(
-        std::move(title),
+    show(std::move(title),
         std::move(shortText),
         std::move(detailsText),
         std::move(errorCode),
-        Icon::Info
-        );
+        Icon::Info);
 }
 
-void MessageService::showSuccess(QString title
-    , QString shortText
-    , QString detailsText
-    , QString errorCode)
+void MessageService::showSuccess(QString title,
+    QString shortText,
+    QString detailsText,
+    QString errorCode)
 {
-    show(
-        std::move(title),
+    show(std::move(title),
         std::move(shortText),
         std::move(detailsText),
         std::move(errorCode),
-        Icon::Success
-        );
+        Icon::Success);
 }
 
-void MessageService::showWarning(QString title
-    , QString shortText
-    , QString detailsText
-    , QString errorCode)
+void MessageService::showWarning(QString title,
+    QString shortText,
+    QString detailsText,
+    QString errorCode)
 {
-    show(
-        std::move(title),
+    show(std::move(title),
         std::move(shortText),
         std::move(detailsText),
         std::move(errorCode),
-        Icon::Warning
-        );
+        Icon::Warning);
 }
 
-void MessageService::showError(QString title
-    , QString shortText
-    , QString detailsText
-    , QString errorCode)
+void MessageService::showError(QString title,
+    QString shortText,
+    QString detailsText,
+    QString errorCode)
 {
-    show(
-        std::move(title),
+    show(std::move(title),
         std::move(shortText),
         std::move(detailsText),
         std::move(errorCode),
-        Icon::Error
-        );
+        Icon::Error);
 }
 
-void MessageService::showError(QString title
-    , QString shortText
-    , const ErrorInfo& errorInfo)
+void MessageService::showError(QString title, QString shortText, const ErrorInfo& errorInfo)
 {
-    show(
-        std::move(title),
+    show(std::move(title),
         std::move(shortText),
         errorInfo.message(),
         errorInfo.technicalCode,
-        Icon::Error
-        );
+        Icon::Error);
 }
 
 void MessageService::subscribe(Handler handler)

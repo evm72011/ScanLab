@@ -1,7 +1,7 @@
 #pragma once
 
-#include <cstdint>
 #include <QString>
+#include <cstdint>
 
 enum class Icon : std::uint8_t
 {

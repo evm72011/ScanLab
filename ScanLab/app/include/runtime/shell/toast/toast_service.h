@@ -1,8 +1,8 @@
 #pragma once
 
+#include <QString>
 #include <functional>
 #include <vector>
-#include <QString>
 
 #include "runtime/shell/icon.h"
 

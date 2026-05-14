@@ -3,7 +3,6 @@
 #include "runtime/shell/dialogs/message_service.h"
 #include "runtime/shell/toast/toast_service.h"
 
-
 class ShellServices
 {
 public:

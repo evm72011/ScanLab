@@ -3,7 +3,9 @@
 #include "runtime/config/config_file_worker.h"
 #include "runtime/device/device_context.h"
 
-ConfigFileFacade::ConfigFileFacade(DeviceContext& context, ShellFacade& shellFacade, QObject* parent)
+ConfigFileFacade::ConfigFileFacade(DeviceContext& context,
+    ShellFacade& shellFacade,
+    QObject* parent)
     : shellFacade_{ shellFacade }
     , QObject(parent)
 {

@@ -10,19 +10,14 @@ class MessageFacade : public QObject
     Q_OBJECT
 
 public:
-    explicit MessageFacade(
-        MessageService& service,
-        QObject* parent = nullptr
-        );
+    explicit MessageFacade(MessageService& service, QObject* parent = nullptr);
 
 signals:
-    void messageRequested(
-        QString title,
+    void messageRequested(QString title,
         QString shortText,
         QString detailsText,
         QString errorCode,
-        QString iconSource
-        );
+        QString iconSource);
 
 private:
     MessageService& service_;

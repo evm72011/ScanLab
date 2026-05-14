@@ -10,7 +10,6 @@ class ToastFacade : public QObject
     Q_OBJECT
 
 public:
-
     explicit ToastFacade(ToastService& service, QObject* parent = nullptr);
 
 signals:

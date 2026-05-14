@@ -2,7 +2,6 @@
 
 ShellServices::ShellServices() = default;
 
-
 MessageService& ShellServices::messageService()
 {
     return messageService_;

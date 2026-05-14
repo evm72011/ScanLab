@@ -28,7 +28,7 @@ void ConnectionWorker::connect(DeviceType type, const QString& address)
     }
 
     auto title = tr("Connection falure");
-    const auto shortText = tr("Unable to connect");;
+    const auto shortText = tr("Unable to connect");
     const auto& error = connectionResult.error();
     const auto errorInfo = describeError(error);
     messageService_.showError(title, shortText, errorInfo);

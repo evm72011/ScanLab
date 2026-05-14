@@ -25,7 +25,9 @@ class ConfigFileFacade : public QObject
             selectedConfigFileChanged)
 
 public:
-    explicit ConfigFileFacade(DeviceContext& context, ShellFacade& shellFacade, QObject* parent = nullptr);
+    explicit ConfigFileFacade(DeviceContext& context,
+        ShellFacade& shellFacade,
+        QObject* parent = nullptr);
     ~ConfigFileFacade() override;
 
     QStringList availableConfigFiles() const;
