@@ -63,6 +63,10 @@ ApplicationWindow {
         anchors.fill: parent
     }
 
+    SL.MessageDialogHost {
+        anchors.fill: parent
+    }
+
     Timer {
         id: loadDelayTimer
         interval: 1000

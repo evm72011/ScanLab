@@ -37,6 +37,8 @@ set(QML_MODULE_FILES
     pages/ScanCPage.qml
     pages/SettingsPage.qml
     #
+    shell/dialogs/MessageDialogHost.qml
+    shell/dialogs/MessageDialogNew.qml
     shell/toast/Toast.qml
     shell/toast/ToastOverlay.qml
     #
