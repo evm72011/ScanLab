@@ -2,7 +2,7 @@
 
 #include <utility>
 
-void ToastService::show(std::string title, std::string text, Icon icon, int durationMs)
+void ToastService::show(QString title, QString text, Icon icon, int durationMs)
 {
     const Toast toast{ .title = std::move(title),
         .text = std::move(text),
@@ -15,17 +15,17 @@ void ToastService::show(std::string title, std::string text, Icon icon, int dura
     }
 }
 
-void ToastService::showInfo(std::string title, std::string text)
+void ToastService::showInfo(QString title, QString text)
 {
     show(std::move(title), std::move(text), Icon::Info, 3000);
 }
 
-void ToastService::showWarning(std::string title, std::string text)
+void ToastService::showWarning(QString title, QString text)
 {
     show(std::move(title), std::move(text), Icon::Warning, 5000);
 }
 
-void ToastService::showError(std::string title, std::string text)
+void ToastService::showError(QString title, QString text)
 {
     show(std::move(title), std::move(text), Icon::Error, 0);
 }

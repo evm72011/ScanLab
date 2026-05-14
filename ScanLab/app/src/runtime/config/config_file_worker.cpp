@@ -34,8 +34,8 @@ void ConfigFileWorker::loadConfigFile(const QString& fileName)
     {
         emit configFileLoaded(fileName);
 
-        auto title = tr("Device").toStdString();
-        auto text = tr("Config file successfully loaded").toStdString();
+        auto title = tr("Device");
+        auto text = tr("Config file successfully loaded");
         toastService_.showInfo(title, text);
         return;
     }
@@ -43,11 +43,8 @@ void ConfigFileWorker::loadConfigFile(const QString& fileName)
     // TODO dialog
     const auto errorCode = QString::fromUtf8(magic_enum::enum_name(result.error()).data());
 
-    auto title = tr("Device").toStdString();
-    const auto text =
-        tr("Config file load failure (%1)")
-            .arg(errorCode)
-            .toStdString();
+    auto title = tr("Device");
+    const auto text = tr("Config file load failure (%1)").arg(errorCode);
     toastService_.showError(title, text);
     emit configFileLoadFailed(fileName, errorCode);
 }

@@ -9,33 +9,13 @@ MessageFacade::MessageFacade(
 {
     service_.subscribe(
         [this](const MessageService::Message& message) {
-            emit messageRequested(
-                QString::fromStdString(message.title),
-                QString::fromStdString(message.shortText),
-                QString::fromStdString(message.detailsText),
-                QString::fromStdString(message.errorCode),
-                toIconSource(message.icon)
-                );
+            const auto title = QString::fromStdString(message.title);
+            const auto shortText =  QString::fromStdString(message.shortText);
+            const auto detailsText = QString::fromStdString(message.detailsText);
+            const auto errorCode = QString::fromStdString(message.errorCode);
+            const auto iconSource = getIconSource(message.icon);
+
+            emit messageRequested(title, shortText, detailsText, errorCode, iconSource);
         }
-        );
-}
-
-QString MessageFacade::toIconSource(MessageService::Icon icon)
-{
-    switch (icon)
-    {
-    case MessageService::Icon::Info:
-        return "qrc:/icons/information.svg";
-
-    case MessageService::Icon::Success:
-        return "qrc:/icons/success.svg";
-
-    case MessageService::Icon::Warning:
-        return "qrc:/icons/warning.svg";
-
-    case MessageService::Icon::Error:
-        return "qrc:/icons/error.svg";
-    }
-
-    return "qrc:/icons/information.svg";
+    );
 }

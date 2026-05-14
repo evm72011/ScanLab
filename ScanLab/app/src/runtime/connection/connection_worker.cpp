@@ -21,8 +21,8 @@ void ConnectionWorker::connect(DeviceType type, const QString& address)
     if (connectionResult.has_value())
     {
         emit connectionSucces(*connectionResult);
-        auto title = tr("Device").toStdString();
-        auto text = tr("Successfully connected").toStdString();
+        auto title = tr("Device");
+        auto text = tr("Successfully connected");
         toastService_.showInfo(title, text);
         return;
     }

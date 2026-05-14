@@ -4,17 +4,11 @@
 #include <string>
 #include <vector>
 
+#include "runtime/shell/icon.h"
+
 class MessageService
 {
 public:
-    enum class Icon
-    {
-        Info,
-        Success,
-        Warning,
-        Error
-    };
-
     struct Message
     {
         std::string title;

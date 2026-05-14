@@ -25,7 +25,5 @@ signals:
         );
 
 private:
-    static QString toIconSource(MessageService::Icon icon);
-
     MessageService& service_;
 };

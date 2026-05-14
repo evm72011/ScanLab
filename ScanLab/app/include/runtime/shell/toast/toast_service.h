@@ -1,34 +1,28 @@
 #pragma once
 
 #include <functional>
-#include <string>
 #include <vector>
+#include <QString>
+
+#include "runtime/shell/icon.h"
 
 class ToastService
 {
 public:
-    enum class Icon
-    {
-        Info,
-        Success,
-        Warning,
-        Error
-    };
-
     struct Toast
     {
-        std::string title;
-        std::string text;
+        QString title;
+        QString text;
         Icon icon = Icon::Info;
         int durationMs = 3000;
     };
 
     using Handler = std::function<void(const Toast&)>;
 
-    void show(std::string title, std::string text, Icon icon, int durationMs);
-    void showInfo(std::string title, std::string text);
-    void showWarning(std::string title, std::string text);
-    void showError(std::string title, std::string text);
+    void show(QString title, QString text, Icon icon, int durationMs);
+    void showInfo(QString title, QString text);
+    void showWarning(QString title, QString text);
+    void showError(QString title, QString text);
 
     void subscribe(Handler handler);
 

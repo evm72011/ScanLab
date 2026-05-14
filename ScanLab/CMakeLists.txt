@@ -85,6 +85,7 @@ qt_add_qml_module(
     app/include/runtime/health/humidity_worker.h
     app/include/runtime/health/temperature_service.h
     app/include/runtime/health/temperature_worker.h
+    app/include/runtime/shell/icon.h
     app/include/runtime/shell/shell_services.h
     app/include/runtime/shell/dialogs/message_service.h
     app/include/runtime/shell/toast/toast_service.h
