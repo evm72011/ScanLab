@@ -21,7 +21,7 @@ Item {
         }
     }
 
-    SL.MessageDialogNew {
+    SL.MessageDialog {
         id: messageDialog
     }
 }

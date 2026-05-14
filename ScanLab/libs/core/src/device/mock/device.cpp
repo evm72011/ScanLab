@@ -21,6 +21,9 @@ Device& Device::operator=(Device&&) noexcept = default;
 std::expected<ConnectionResult, ConnectionError> Device::connect(
     [[maybe_unused]] const std::wstring& address)
 {
+
+    return std::unexpected(HardwareError::HardwareNotSet);
+
     if (!type_)
     {
         return std::unexpected(HardwareError::HardwareNotSet);

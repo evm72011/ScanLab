@@ -26,8 +26,6 @@ set(QML_MODULE_FILES
     components/TabButton.qml
     components/TextField.qml
     #
-    dialogs/MessageDialog.qml
-    #
     pages/AScanPage.qml
     pages/AScanSettingsPage.qml
     pages/DevicePage.qml
@@ -38,7 +36,7 @@ set(QML_MODULE_FILES
     pages/SettingsPage.qml
     #
     shell/dialogs/MessageDialogHost.qml
-    shell/dialogs/MessageDialogNew.qml
+    shell/dialogs/MessageDialog.qml
     shell/toast/Toast.qml
     shell/toast/ToastOverlay.qml
     #

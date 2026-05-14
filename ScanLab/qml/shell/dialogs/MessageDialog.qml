@@ -75,9 +75,14 @@ Dialog {
 
                     Image {
                         Layout.alignment: Qt.AlignVCenter
-                        width: 20
-                        height: 20
+                        Layout.preferredWidth: 20
+                        Layout.preferredHeight: 20
+                        Layout.maximumWidth: 20
+                        Layout.maximumHeight: 20
+
                         source: root.iconSource
+                        sourceSize.width: 20
+                        sourceSize.height: 20
                         fillMode: Image.PreserveAspectFit
                         visible: root.iconSource.toString().length > 0
                     }

@@ -74,15 +74,6 @@ Item {
         }
 
         SL.Button {
-            text: qsTr("Ping")
-            width: 150
-
-            onClicked: {
-                notImplementedDialog.open();
-            }
-        }
-
-        SL.Button {
             text: root.connecting
                     ? qsTr("Connecting...")
                     : root.connected
@@ -140,30 +131,6 @@ Item {
                     backend.configFileFacade.loadSelectedConfigFile()
                 }
             }
-        }
-
-        Connections {
-            target: connectionFacade ?? null
-
-            function onConnectionFailure() {
-                connectionErrorDialog.open()
-            }
-        }
-
-        SL.MessageDialog {
-            id: connectionErrorDialog
-            messageType: MessageDialog.Type.Error
-            dialogTitle: qsTr("Unable to connect")
-            shortText: connectionFacade?.errorText ?? ""
-            //detailsText: qsTr("Check the address and make sure the device is powered on.")
-            errorCode: connectionFacade?.errorCode ?? ""
-        }
-
-        SL.MessageDialog {
-            id: notImplementedDialog
-            messageType: MessageDialog.Type.Info
-            dialogTitle: qsTr("Not implemented")
-            shortText: qsTr("The feature is under the construction")
         }
 
         Item { Layout.fillHeight: true }

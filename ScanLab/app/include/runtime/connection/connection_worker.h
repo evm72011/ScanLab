@@ -30,6 +30,7 @@ signals:
     void disconnectCompleted(bool stillConnected);
 
 private:
+    MessageService& messageService_;
     ToastService& toastService_;
     ConnectionService service_;
 };
