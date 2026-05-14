@@ -2,13 +2,11 @@
 
 #include <utility>
 
-void MessageService::show(
-    std::string title,
-    std::string shortText,
-    std::string detailsText,
-    std::string errorCode,
-    Icon icon
-    )
+void MessageService::show(QString title
+    , QString shortText
+    , QString detailsText
+    , QString errorCode
+    , Icon icon)
 {
     const Message message{
         .title = std::move(title),
@@ -24,12 +22,10 @@ void MessageService::show(
     }
 }
 
-void MessageService::showInfo(
-    std::string title,
-    std::string shortText,
-    std::string detailsText,
-    std::string errorCode
-    )
+void MessageService::showInfo(QString title
+    , QString shortText
+    , QString detailsText
+    , QString errorCode)
 {
     show(
         std::move(title),
@@ -40,12 +36,10 @@ void MessageService::showInfo(
         );
 }
 
-void MessageService::showSuccess(
-    std::string title,
-    std::string shortText,
-    std::string detailsText,
-    std::string errorCode
-    )
+void MessageService::showSuccess(QString title
+    , QString shortText
+    , QString detailsText
+    , QString errorCode)
 {
     show(
         std::move(title),
@@ -56,12 +50,10 @@ void MessageService::showSuccess(
         );
 }
 
-void MessageService::showWarning(
-    std::string title,
-    std::string shortText,
-    std::string detailsText,
-    std::string errorCode
-    )
+void MessageService::showWarning(QString title
+    , QString shortText
+    , QString detailsText
+    , QString errorCode)
 {
     show(
         std::move(title),
@@ -72,12 +64,10 @@ void MessageService::showWarning(
         );
 }
 
-void MessageService::showError(
-    std::string title,
-    std::string shortText,
-    std::string detailsText,
-    std::string errorCode
-    )
+void MessageService::showError(QString title
+    , QString shortText
+    , QString detailsText
+    , QString errorCode)
 {
     show(
         std::move(title),

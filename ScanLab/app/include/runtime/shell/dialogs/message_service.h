@@ -1,7 +1,7 @@
 #pragma once
 
 #include <functional>
-#include <string>
+#include <QString>
 #include <vector>
 
 #include "runtime/shell/icon.h"
@@ -11,51 +11,20 @@ class MessageService
 public:
     struct Message
     {
-        std::string title;
-        std::string shortText;
-        std::string detailsText;
-        std::string errorCode;
+        QString title;
+        QString shortText;
+        QString detailsText;
+        QString errorCode;
         Icon icon = Icon::Info;
     };
 
     using Handler = std::function<void(const Message&)>;
 
-    void show(
-        std::string title,
-        std::string shortText,
-        std::string detailsText,
-        std::string errorCode,
-        Icon icon
-        );
-
-    void showInfo(
-        std::string title,
-        std::string shortText,
-        std::string detailsText = {},
-        std::string errorCode = {}
-        );
-
-    void showSuccess(
-        std::string title,
-        std::string shortText,
-        std::string detailsText = {},
-        std::string errorCode = {}
-        );
-
-    void showWarning(
-        std::string title,
-        std::string shortText,
-        std::string detailsText = {},
-        std::string errorCode = {}
-        );
-
-    void showError(
-        std::string title,
-        std::string shortText,
-        std::string detailsText = {},
-        std::string errorCode = {}
-        );
-
+    void show(QString title, QString shortText, QString detailsText, QString errorCode, Icon icon);
+    void showInfo(QString title, QString shortText, QString detailsText = {}, QString errorCode = {} );
+    void showSuccess(QString title, QString shortText, QString detailsText = {},QString errorCode = {});
+    void showWarning(QString title, QString shortText,QString detailsText = {},QString errorCode = {});
+    void showError(QString title, QString shortText, QString detailsText = {}, QString errorCode = {});
     void subscribe(Handler handler);
 
 private:

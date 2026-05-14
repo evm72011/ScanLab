@@ -5,7 +5,6 @@ ToastFacade::ToastFacade(ToastService& service, QObject* parent)
     , service_(service)
 {
     service_.subscribe([this](const ToastService::Toast& toast) {
-        auto iconSource = getIconSource(toast.icon);
-        emit toastRequested(toast.title, toast.text, iconSource, toast.durationMs);
+        emit toastRequested(toast.title, toast.text, getIconSource(toast.icon), toast.durationMs);
     });
 }

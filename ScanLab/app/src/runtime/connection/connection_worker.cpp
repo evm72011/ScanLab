@@ -29,9 +29,9 @@ void ConnectionWorker::connect(DeviceType type, const QString& address)
     const auto& error = connectionResult.error();
     const auto errorInfo_ = describeError(error);
 
-    auto title = tr("Connection falure").toStdString();
-    const auto message = errorInfo_.message().toStdString();
-    const auto code = errorInfo_.technicalCode.toStdString();
+    auto title = tr("Connection falure");
+    const auto message = errorInfo_.message();
+    const auto code = errorInfo_.technicalCode;
     emit connectionFailure();
 
     messageService_.showError(title, message, code);
