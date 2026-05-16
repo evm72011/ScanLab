@@ -25,7 +25,7 @@ std::expected<void, ConfigError> ConfigFileService::loadToHardware(const QString
     auto* device = context_.device();
     if (!device)
     {
-        return std::unexpected(ConfigFileShellError::DeviceContextEmpty);
+        return std::unexpected(ConfigFileShellError::DeviceContextNotSet);
     }
 
     sc::FileLoader loader(*device);
@@ -46,7 +46,7 @@ std::expected<void, ConfigError> ConfigFileService::saveFromHardware(const QStri
     auto* device = context_.device();
     if (!device)
     {
-        return std::unexpected(ConfigFileShellError::DeviceContextEmpty);
+        return std::unexpected(ConfigFileShellError::DeviceContextNotSet);
     }
 
     sc::FileSaver saver(*device);

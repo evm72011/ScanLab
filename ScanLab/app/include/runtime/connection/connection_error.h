@@ -7,13 +7,13 @@
 #include "runtime/errors/describe_error.h"
 #include "runtime/errors/describe_error_hw.h"
 
-enum class ConnectionLocalError
+enum class ConnectionShellError : uint8_t
 {
     DeviceContextNotSet,
     CreateDeviceFailed,
 };
 
-using ConnectionError = std::variant<ConnectionLocalError,
+using ConnectionError = std::variant<ConnectionShellError,
     scanlab::device::HardwareError,
     scanlab::device::ConnectionErrorKind,
     scanlab::license::LicenseError>;
@@ -23,11 +23,11 @@ inline ConnectionError fromHardware(const scanlab::device::ConnectionError& erro
     return std::visit([](const auto& value) -> ConnectionError { return value; }, error);
 }
 
-inline ErrorInfo describeError(ConnectionLocalError error)
+inline ErrorInfo describeError(ConnectionShellError error)
 {
-    static const QHash<ConnectionLocalError, const char*> mp = {
-        { ConnectionLocalError::DeviceContextNotSet, QT_TR_NOOP("Device context is not set") },
-        { ConnectionLocalError::CreateDeviceFailed, QT_TR_NOOP("Failed to create the device") }
+    static const QHash<ConnectionShellError, const char*> mp = {
+        { ConnectionShellError::DeviceContextNotSet, QT_TR_NOOP("Device context is not set") },
+        { ConnectionShellError::CreateDeviceFailed, QT_TR_NOOP("Failed to create the device") }
     };
 
     return describeErrorImpl(error, mp);

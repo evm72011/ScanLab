@@ -18,12 +18,12 @@ std::expected<ConnectionResult, ConnectionError> ConnectionService::connect(Devi
     auto* device = context_.device();
     if (!device)
     {
-        return std::unexpected(ConnectionLocalError::DeviceContextNotSet);
+        return std::unexpected(ConnectionShellError::DeviceContextNotSet);
     }
 
     if (!device->ensureDevice(toHardware(type)))
     {
-        return std::unexpected(ConnectionLocalError::CreateDeviceFailed);
+        return std::unexpected(ConnectionShellError::CreateDeviceFailed);
     }
 
     const auto connectionResult = device->connect(address);
@@ -34,8 +34,9 @@ std::expected<ConnectionResult, ConnectionError> ConnectionService::connect(Devi
         return std::unexpected(error);
     }
 
-    return ConnectionResult{ .serialNumber =
-                                 QString::fromStdWString(connectionResult->serialNumber) };
+    return ConnectionResult { //
+        .serialNumber = QString::fromStdWString(connectionResult->serialNumber)
+    };
 }
 
 void ConnectionService::disconnect()

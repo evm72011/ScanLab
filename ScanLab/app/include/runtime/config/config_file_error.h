@@ -9,7 +9,7 @@
 enum class ConfigFileShellError : uint8_t
 {
     InvalidPath,
-    DeviceContextEmpty
+    DeviceContextNotSet
 };
 
 using ConfigError = std::variant<ConfigFileShellError,
@@ -21,7 +21,7 @@ inline ErrorInfo describeError(ConfigFileShellError error)
     // clang-format off
     static const QHash<ConfigFileShellError, const char*> descriptions = {
         {ConfigFileShellError::InvalidPath, QT_TR_NOOP("The selected configuration file does not exist or cannot be accessed.")},
-        {ConfigFileShellError::DeviceContextEmpty, QT_TR_NOOP("Device context empty")}
+        {ConfigFileShellError::DeviceContextNotSet, QT_TR_NOOP("Device context not set")}
     };
     // clang-format on
 
