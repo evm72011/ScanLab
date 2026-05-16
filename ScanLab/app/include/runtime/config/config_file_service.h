@@ -15,8 +15,8 @@ public:
 
     explicit ConfigFileService(DeviceContext& context);
 
-    std::expected<void, ConfigFileError> loadToHardware(const QString& fileName);
-    std::expected<void, ConfigFileError> saveFromHardware(const QString& fileName);
+    std::expected<void, ConfigError> loadToHardware(const QString& fileName);
+    std::expected<void, ConfigError> saveFromHardware(const QString& fileName);
 
 private:
     DeviceContext& context_;

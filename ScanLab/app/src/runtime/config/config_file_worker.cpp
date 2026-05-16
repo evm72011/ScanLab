@@ -34,6 +34,20 @@ void ConfigFileWorker::loadConfigFile(const QString& fileName)
 
 void ConfigFileWorker::saveConfigFile(const QString& fileName)
 {
+    const auto result = service_.saveFromHardware(fileName);
     emit loadCompleted();
-    // TODO implement
+
+    auto title = tr("Device configuration");
+
+    if (result.has_value())
+    {
+        auto text = tr("Config file successfully saved");
+        toastService_.showInfo(title, text);
+        return;
+    }
+
+    const auto shortText = tr("Config file save failure");
+    const auto& error = result.error();
+    const auto errorInfo = describeError(error);
+    messageService_.showError(title, shortText, errorInfo);
 }

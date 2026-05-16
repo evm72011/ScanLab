@@ -103,7 +103,7 @@ Item {
             spacing: 8
 
             SL.TextField {
-                label: qsTr("Config file")
+                label: qsTr("Load config file")
                 labelWidth: 140
                 fieldWidth: 260
 
@@ -126,12 +126,12 @@ Item {
                 enabled: root.connected && !configFileFacade?.busy
 
                 onClicked: {
-                    configFileDialog.open()
+                    loadConfigFileDialog.open()
                 }
             }
 
             SL.Button {
-                text: qsTr("Load to device")
+                text: qsTr("Load")
                 width: 140
                 enabled: root.connected
                          && !configFileFacade?.busy
@@ -141,6 +141,55 @@ Item {
 
                 onClicked: {
                     configFileFacade.loadConfigFile()
+                }
+            }
+        }
+
+        RowLayout {
+            spacing: 8
+
+            SL.TextField {
+                label: qsTr("Save config file")
+                labelWidth: 140
+                fieldWidth: 260
+
+                value: configFileFacade?.savePath ?? ""
+                toolTipText: value
+
+                enabled: root.connected && !configFileFacade?.busy
+
+                onValueEdited: function(value) {
+                    configFileFacade.savePath = value
+                }
+
+                onEditingFinished: function(value) {
+                    SL.AppSettings.setValue("Hardware/saveConfigFile", value)
+                }
+            }
+
+            SL.Button {
+                text: qsTr("...")
+                width: 40
+
+                enabled: root.connected && !configFileFacade?.busy
+
+                onClicked: {
+                    saveConfigFileDialog.open()
+                }
+            }
+
+            SL.Button {
+                text: qsTr("Save")
+                width: 140
+
+                enabled: root.connected
+                         && !configFileFacade?.busy
+                         && (configFileFacade?.savePath ?? "") !== ""
+
+                busy: configFileFacade?.busy ?? false
+
+                onClicked: {
+                    configFileFacade.saveConfigFile()
                 }
             }
         }
@@ -162,7 +211,7 @@ Item {
     }
 
     FileDialog {
-        id: configFileDialog
+        id: loadConfigFileDialog
 
         title: qsTr("Open config file")
         nameFilters: [
@@ -176,6 +225,27 @@ Item {
 
             configFileFacade.loadPath = path
             SL.AppSettings.setValue("Hardware/configFile", path)
+        }
+    }
+
+    FileDialog {
+        id: saveConfigFileDialog
+
+        title: qsTr("Save config file")
+
+        fileMode: FileDialog.SaveFile
+
+        nameFilters: [
+            qsTr("OEMPA config files (*.txt *.bin)"),
+            qsTr("All files (*)")
+        ]
+
+        onAccepted: {
+            const path = selectedFile.toString().replace("file:///", "")
+
+            configFileFacade.savePath = path
+
+            SL.AppSettings.setValue("Hardware/saveConfigFile", path)
         }
     }
 }

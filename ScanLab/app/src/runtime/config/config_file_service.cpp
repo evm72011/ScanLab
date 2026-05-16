@@ -4,6 +4,7 @@
 #include <QFileInfo>
 
 #include "scanlab/config/file_loader.h"
+#include "scanlab/config/file_saver.h"
 
 namespace sc = scanlab::config;
 
@@ -12,36 +13,50 @@ ConfigFileService::ConfigFileService(DeviceContext& context)
 {
 }
 
-
-std::expected<void, ConfigFileError> ConfigFileService::loadToHardware(const QString& fileName)
+std::expected<void, ConfigError> ConfigFileService::loadToHardware(const QString& fileName)
 {
     QFileInfo info(fileName);
 
     if (!info.exists() || !info.isFile() || !info.isReadable())
     {
-        return std::unexpected(ConfigFileError::InvalidPath);
+        return std::unexpected(ConfigFileShellError::InvalidPath);
     }
 
     auto* device = context_.device();
     if (!device)
     {
-        return std::unexpected(ConfigFileError::HardwareNotSet);
+        return std::unexpected(ConfigFileShellError::DeviceContextEmpty);
     }
 
     sc::FileLoader loader(*device);
-
-    const auto result =
-        loader.load(info.canonicalFilePath().toStdString());
+    const auto filePath = info.canonicalFilePath().toStdString();
+    const auto result = loader.load(filePath);
 
     if (!result.has_value())
     {
-        return std::unexpected(ConfigFileError::LoadFailed);
+        return std::unexpected(result.error());
     }
 
     return {};
 }
 
-std::expected<void, ConfigFileError> ConfigFileService::saveFromHardware(const QString& fileName)
+std::expected<void, ConfigError> ConfigFileService::saveFromHardware(const QString& fileName)
 {
+    QFileInfo info(fileName);
+    auto* device = context_.device();
+    if (!device)
+    {
+        return std::unexpected(ConfigFileShellError::DeviceContextEmpty);
+    }
+
+    sc::FileSaver saver(*device);
+    const auto filePath = info.canonicalFilePath().toStdString();
+    const auto result = saver.save(filePath);
+
+    if (!result.has_value())
+    {
+        return std::unexpected(result.error());
+    }
+
     return {};
 }
