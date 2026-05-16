@@ -14,37 +14,32 @@ ConfigFileFacade::ConfigFileFacade(DeviceContext& context,
 
     connect(&workerThread_, &QThread::finished, worker_, &QObject::deleteLater);
 
-    connect(this,
+    connect(
+        this,
         &ConfigFileFacade::requestLoad,
         worker_,
-        [this]() {
-            worker_->loadConfigFile(loadPath_);
-        },
+        [this]() { worker_->loadConfigFile(loadPath_); },
         Qt::QueuedConnection);
 
-    connect(this,
+    connect(
+        this,
         &ConfigFileFacade::requestSave,
         worker_,
-        [this]() {
-            worker_->saveConfigFile(savePath_);
-        },
+        [this]() { worker_->saveConfigFile(savePath_); },
         Qt::QueuedConnection);
 
-    connect(worker_,
+    connect(
+        worker_,
         &ConfigFileWorker::loadCompleted,
         this,
-        [this]() {
-            setBusy(false);
-        },
+        [this]() { setBusy(false); },
         Qt::QueuedConnection);
 
-
-    connect(worker_,
+    connect(
+        worker_,
         &ConfigFileWorker::saveCompleted,
         this,
-        [this]() {
-            setBusy(false);
-        },
+        [this]() { setBusy(false); },
         Qt::QueuedConnection);
 
     workerThread_.start();

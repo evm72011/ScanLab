@@ -34,7 +34,7 @@ std::expected<ConnectionResult, ConnectionError> ConnectionService::connect(Devi
         return std::unexpected(error);
     }
 
-    return ConnectionResult { //
+    return ConnectionResult{ //
         .serialNumber = QString::fromStdWString(connectionResult->serialNumber)
     };
 }

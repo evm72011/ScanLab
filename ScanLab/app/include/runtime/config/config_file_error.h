@@ -1,8 +1,8 @@
 #pragma once
 
-#include <QHash>
 #include "runtime/errors/describe_error.h"
 #include "runtime/errors/describe_error_hw.h"
+#include <QHash>
 
 #include "scanlab/config/config_file_error.h"
 
@@ -12,9 +12,7 @@ enum class ConfigFileShellError : uint8_t
     DeviceContextNotSet
 };
 
-using ConfigError = std::variant<ConfigFileShellError,
-    scanlab::config::ConfigFileError>;
-
+using ConfigError = std::variant<ConfigFileShellError, scanlab::config::ConfigFileError>;
 
 inline ErrorInfo describeError(ConfigFileShellError error)
 {
@@ -46,14 +44,10 @@ inline ErrorInfo describeError(scanlab::config::ConfigFileErrorKind error)
 
 inline ErrorInfo describeError(const scanlab::config::ConfigFileError& error)
 {
-    return std::visit([](const auto& value) {
-        return describeError(value);
-    }, error);
+    return std::visit([](const auto& value) { return describeError(value); }, error);
 }
 
 inline ErrorInfo describeError(const ConfigError& error)
 {
-    return std::visit([](const auto& value) {
-        return describeError(value);
-    }, error);
+    return std::visit([](const auto& value) { return describeError(value); }, error);
 }

@@ -31,7 +31,6 @@ void ConfigFileWorker::loadConfigFile(const QString& fileName)
     messageService_.showError(title, shortText, errorInfo);
 }
 
-
 void ConfigFileWorker::saveConfigFile(const QString& fileName)
 {
     const auto result = service_.saveFromHardware(fileName);

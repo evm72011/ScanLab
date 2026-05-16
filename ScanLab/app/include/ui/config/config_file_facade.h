@@ -30,7 +30,6 @@ public:
     void setLoadPath(const QString& value);
     void setSavePath(const QString& value);
 
-
     Q_INVOKABLE void loadConfigFile();
     Q_INVOKABLE void saveConfigFile();
 
