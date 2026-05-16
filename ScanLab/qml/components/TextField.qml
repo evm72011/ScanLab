@@ -12,8 +12,8 @@ Item {
     property string infoText: ""
     property alias infoIconSource: infoIcon.iconSource
     property alias infoIconSize: infoIcon.size
+    property string toolTipText: ""
 
-    // Главное bindable свойство
     property string value: ""
 
     property string placeholderText: ""
@@ -27,6 +27,9 @@ Item {
     signal accepted(string value)
     signal editingFinished(string value)
 
+    implicitWidth: labelWidth + fieldWidth
+                   + (infoText.length > 0 ? infoIconSize + 8 : 0)
+                   + 20
     implicitHeight: fieldHeight
 
     RowLayout {
@@ -90,6 +93,11 @@ Item {
             leftPadding: 12
             rightPadding: 12
             verticalAlignment: Text.AlignVCenter
+
+            SL.StyledToolTip {
+                visible: field.hovered && root.toolTipText.length > 0
+                text: root.toolTipText
+            }
         }
 
         SL.InfoIcon {

@@ -69,6 +69,7 @@ qt_add_qml_module(
     app/include/runtime/acquisition/ascan/ascan_worker.h
     app/include/runtime/config/config_callback_service.h
     app/include/runtime/config/config_callback_worker.h
+    app/include/runtime/config/config_file_error.h
     app/include/runtime/config/config_file_service.h
     app/include/runtime/config/config_file_worker.h
     app/include/runtime/device/device_context.h

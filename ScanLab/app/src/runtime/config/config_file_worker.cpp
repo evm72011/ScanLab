@@ -1,50 +1,39 @@
 #include "runtime/config/config_file_worker.h"
-
-#include <magic_enum/magic_enum.hpp>
+#include "runtime/config/config_file_error.h"
 
 ConfigFileWorker::ConfigFileWorker(DeviceContext& context,
     ShellServices& shellServices,
     QObject* parent)
     : QObject(parent)
+    , messageService_(shellServices.messageService())
     , toastService_(shellServices.toastService())
     , service_(context)
 {
 }
 
-void ConfigFileWorker::refreshConfigFiles()
-{
-    const auto files = service_.availableConfigFiles();
-
-    if (!files.has_value())
-    {
-        const auto errorCode = QString::fromUtf8(magic_enum::enum_name(files.error()).data());
-
-        emit configFilesErrorCode(errorCode);
-        return;
-    }
-
-    emit configFilesUpdated(*files);
-}
-
 void ConfigFileWorker::loadConfigFile(const QString& fileName)
 {
     const auto result = service_.loadToHardware(fileName);
+    emit loadCompleted();
+
+    auto title = tr("Device configuration");
 
     if (result.has_value())
     {
-        emit configFileLoaded(fileName);
-
-        auto title = tr("Device");
         auto text = tr("Config file successfully loaded");
         toastService_.showInfo(title, text);
         return;
     }
 
-    // TODO dialog
-    const auto errorCode = QString::fromUtf8(magic_enum::enum_name(result.error()).data());
+    const auto shortText = tr("Config file load failure");
+    const auto& error = result.error();
+    const auto errorInfo = describeError(error);
+    messageService_.showError(title, shortText, errorInfo);
+}
 
-    auto title = tr("Device");
-    const auto text = tr("Config file load failure (%1)").arg(errorCode);
-    toastService_.showError(title, text);
-    emit configFileLoadFailed(fileName, errorCode);
+
+void ConfigFileWorker::saveConfigFile(const QString& fileName)
+{
+    emit loadCompleted();
+    // TODO implement
 }

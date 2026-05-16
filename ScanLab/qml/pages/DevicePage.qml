@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Dialogs
 import ScanLab as SL
 
 Item {
@@ -101,34 +102,45 @@ Item {
         RowLayout {
             spacing: 8
 
-            SL.DropDown {
+            SL.TextField {
                 label: qsTr("Config file")
-                enabled: connected
                 labelWidth: 140
                 fieldWidth: 260
-                currentValue: configFileFacade?.selectedConfigFile
 
-                model: configFileFacade?.availableConfigFiles.map(function(fileName) {
-                    return {
-                        text: fileName,
-                        value: fileName
-                    }
-                }) ?? []
+                value: configFileFacade?.loadPath ?? ""
+                toolTipText: value
+                enabled: root.connected && !configFileFacade?.busy
 
+                onValueEdited: function(value) {
+                    configFileFacade.loadPath = value
+                }
 
-                onActivated: function(fileName) {
-                    backend.configFileFacade.selectedConfigFile = fileName
-                    SL.AppSettings.setValue("Hardware/configFile", fileName)
+                onEditingFinished: function(value) {
+                    SL.AppSettings.setValue("Hardware/configFile", value)
+                }
+            }
+
+            SL.Button {
+                text: qsTr("...")
+                width: 40
+                enabled: root.connected && !configFileFacade?.busy
+
+                onClicked: {
+                    configFileDialog.open()
                 }
             }
 
             SL.Button {
                 text: qsTr("Load to device")
                 width: 140
-                enabled: connected
+                enabled: root.connected
+                         && !configFileFacade?.busy
+                         && (configFileFacade?.loadPath ?? "") !== ""
+
+                busy: configFileFacade?.busy ?? false
 
                 onClicked: {
-                    backend.configFileFacade.loadSelectedConfigFile()
+                    configFileFacade.loadConfigFile()
                 }
             }
         }
@@ -145,8 +157,25 @@ Item {
                 SL.AppSettings.value("Hardware/type", backend.connectionFacade.deviceType)
             )
 
-            backend.configFileFacade.refreshConfigFiles()
-            backend.configFileFacade.selectedConfigFile = SL.AppSettings.value("Hardware/configFile", "")
+            configFileFacade.loadPath = SL.AppSettings.value("Hardware/configFile", "")
+        }
+    }
+
+    FileDialog {
+        id: configFileDialog
+
+        title: qsTr("Open config file")
+        nameFilters: [
+            qsTr("OEMPA config files (*.txt *.bin)"),
+            qsTr("All files (*)")
+        ]
+
+        onAccepted: {
+            const path = selectedFile.toString().replace("file:///", "")
+            console.log(path);
+
+            configFileFacade.loadPath = path
+            SL.AppSettings.setValue("Hardware/configFile", path)
         }
     }
 }

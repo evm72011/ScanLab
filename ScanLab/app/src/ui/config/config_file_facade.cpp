@@ -15,59 +15,39 @@ ConfigFileFacade::ConfigFileFacade(DeviceContext& context,
     connect(&workerThread_, &QThread::finished, worker_, &QObject::deleteLater);
 
     connect(this,
-        &ConfigFileFacade::requestRefreshConfigFiles,
+        &ConfigFileFacade::requestLoad,
         worker_,
-        &ConfigFileWorker::refreshConfigFiles,
+        [this]() {
+            worker_->loadConfigFile(loadPath_);
+        },
         Qt::QueuedConnection);
 
     connect(this,
-        &ConfigFileFacade::requestLoadConfigFile,
+        &ConfigFileFacade::requestSave,
         worker_,
-        &ConfigFileWorker::loadConfigFile,
-        Qt::QueuedConnection);
-
-    connect(
-        worker_,
-        &ConfigFileWorker::configFilesUpdated,
-        this,
-        [this](const QStringList& files) {
-            setAvailableConfigFiles(files);
-            setErrorCode({});
+        [this]() {
+            worker_->saveConfigFile(savePath_);
         },
         Qt::QueuedConnection);
 
-    connect(
-        worker_,
-        &ConfigFileWorker::configFilesErrorCode,
+    connect(worker_,
+        &ConfigFileWorker::loadCompleted,
         this,
-        [this](const QString& value) { setErrorCode(value); },
-        Qt::QueuedConnection);
-
-    connect(
-        worker_,
-        &ConfigFileWorker::configFileLoaded,
-        this,
-        [this](const QString& fileName) {
-            setLoading(false);
-            setErrorCode({});
-            emit configFileLoaded(fileName);
+        [this]() {
+            setBusy(false);
         },
         Qt::QueuedConnection);
 
-    connect(
-        worker_,
-        &ConfigFileWorker::configFileLoadFailed,
+
+    connect(worker_,
+        &ConfigFileWorker::saveCompleted,
         this,
-        [this](const QString& fileName, const QString& errorCode) {
-            setLoading(false);
-            setErrorCode(errorCode);
-            emit configFileLoadFailed(fileName, errorCode);
+        [this]() {
+            setBusy(false);
         },
         Qt::QueuedConnection);
 
     workerThread_.start();
-
-    refreshConfigFiles();
 }
 
 ConfigFileFacade::~ConfigFileFacade()
@@ -79,84 +59,72 @@ ConfigFileFacade::~ConfigFileFacade()
     }
 }
 
-QStringList ConfigFileFacade::availableConfigFiles() const
+QString ConfigFileFacade::loadPath() const
 {
-    return availableConfigFiles_;
+    return loadPath_;
 }
 
-QString ConfigFileFacade::selectedConfigFile() const
+QString ConfigFileFacade::savePath() const
 {
-    return selectedConfigFile_;
+    return savePath_;
 }
 
-void ConfigFileFacade::setSelectedConfigFile(const QString& value)
+bool ConfigFileFacade::busy() const
 {
-    if (selectedConfigFile_ == value)
+    return busy_;
+}
+
+void ConfigFileFacade::setLoadPath(const QString& value)
+{
+    if (loadPath_ == value)
     {
         return;
     }
 
-    selectedConfigFile_ = value;
-    emit selectedConfigFileChanged();
+    loadPath_ = value;
+    emit loadPathChanged();
 }
 
-bool ConfigFileFacade::loading() const
+void ConfigFileFacade::setSavePath(const QString& value)
 {
-    return loading_;
-}
-
-QString ConfigFileFacade::errorCode() const
-{
-    return errorCode_;
-}
-
-void ConfigFileFacade::refreshConfigFiles()
-{
-    emit requestRefreshConfigFiles();
-}
-
-void ConfigFileFacade::loadSelectedConfigFile()
-{
-    if (loading_)
+    if (savePath_ == value)
     {
         return;
     }
 
-    setLoading(true);
-    setErrorCode({});
-
-    emit requestLoadConfigFile(selectedConfigFile_);
+    savePath_ = value;
+    emit savePathChanged();
 }
 
-void ConfigFileFacade::setAvailableConfigFiles(const QStringList& value)
+void ConfigFileFacade::loadConfigFile()
 {
-    if (availableConfigFiles_ == value)
+    if (busy_)
     {
         return;
     }
 
-    availableConfigFiles_ = value;
-    emit availableConfigFilesChanged();
+    setBusy(true);
+    emit requestLoad();
 }
 
-void ConfigFileFacade::setLoading(bool value)
+void ConfigFileFacade::saveConfigFile()
 {
-    if (loading_ == value)
+    if (busy_)
     {
         return;
     }
 
-    loading_ = value;
-    emit loadingChanged();
+    setBusy(true);
+    emit requestSave();
 }
 
-void ConfigFileFacade::setErrorCode(const QString& value)
+void ConfigFileFacade::setBusy(bool value)
 {
-    if (errorCode_ == value)
+    if (busy_ == value)
     {
         return;
     }
 
-    errorCode_ = value;
-    emit errorCodeChanged();
+    busy_ = value;
+    emit busyChanged();
 }

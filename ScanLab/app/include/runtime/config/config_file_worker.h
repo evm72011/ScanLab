@@ -19,17 +19,15 @@ public:
         QObject* parent = nullptr);
 
 public slots:
-    void refreshConfigFiles();
     void loadConfigFile(const QString& fileName);
+    void saveConfigFile(const QString& fileName);
 
 signals:
-    void configFilesUpdated(QStringList files);
-    void configFilesErrorCode(QString errorCode);
-
-    void configFileLoaded(QString fileName);
-    void configFileLoadFailed(QString fileName, QString errorCode);
+    void loadCompleted();
+    void saveCompleted();
 
 private:
+    MessageService& messageService_;
     ToastService& toastService_;
     ConfigFileService service_;
 };

@@ -4,15 +4,9 @@
 #include <QStringList>
 #include <expected>
 
-class DeviceContext;
+#include "runtime/config/config_file_error.h"
 
-enum class ConfigFileError
-{
-    ConfigDirNotFound,
-    InvalidPath,
-    HardwareNotSet,
-    LoadFailed
-};
+class DeviceContext;
 
 class ConfigFileService
 {
@@ -21,12 +15,9 @@ public:
 
     explicit ConfigFileService(DeviceContext& context);
 
-    std::expected<QStringList, ConfigFileError> availableConfigFiles() const;
     std::expected<void, ConfigFileError> loadToHardware(const QString& fileName);
+    std::expected<void, ConfigFileError> saveFromHardware(const QString& fileName);
 
 private:
-    std::expected<QString, ConfigFileError> resolveConfigPath(const QString& fileName) const;
-
     DeviceContext& context_;
-    QString configDir_;
 };

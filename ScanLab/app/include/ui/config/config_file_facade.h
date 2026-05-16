@@ -2,7 +2,6 @@
 
 #include <QObject>
 #include <QString>
-#include <QStringList>
 #include <QThread>
 
 #include "ui/shell/shell_facade.h"
@@ -14,15 +13,9 @@ class ConfigFileFacade : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QStringList availableConfigFiles READ availableConfigFiles NOTIFY
-            availableConfigFilesChanged)
-
-    Q_PROPERTY(bool loading READ loading NOTIFY loadingChanged)
-
-    Q_PROPERTY(QString errorCode READ errorCode NOTIFY errorCodeChanged)
-
-    Q_PROPERTY(QString selectedConfigFile READ selectedConfigFile WRITE setSelectedConfigFile NOTIFY
-            selectedConfigFileChanged)
+    Q_PROPERTY(bool busy READ busy NOTIFY busyChanged)
+    Q_PROPERTY(QString loadPath READ loadPath WRITE setLoadPath NOTIFY loadPathChanged)
+    Q_PROPERTY(QString savePath READ savePath WRITE setSavePath NOTIFY savePathChanged)
 
 public:
     explicit ConfigFileFacade(DeviceContext& context,
@@ -30,39 +23,34 @@ public:
         QObject* parent = nullptr);
     ~ConfigFileFacade() override;
 
-    QStringList availableConfigFiles() const;
-    QString selectedConfigFile() const;
-    void setSelectedConfigFile(const QString& value);
-    bool loading() const;
-    QString errorCode() const;
+    QString loadPath() const;
+    QString savePath() const;
+    bool busy() const;
 
-    Q_INVOKABLE void refreshConfigFiles();
-    Q_INVOKABLE void loadSelectedConfigFile();
+    void setLoadPath(const QString& value);
+    void setSavePath(const QString& value);
 
-signals:
-    void availableConfigFilesChanged();
-    void selectedConfigFileChanged();
-    void loadingChanged();
-    void errorCodeChanged();
 
-    void configFileLoaded(QString fileName);
-    void configFileLoadFailed(QString fileName, QString errorCode);
+    Q_INVOKABLE void loadConfigFile();
+    Q_INVOKABLE void saveConfigFile();
 
 signals:
-    void requestRefreshConfigFiles();
-    void requestLoadConfigFile(QString fileName);
+    void busyChanged();
+    void loadPathChanged();
+    void savePathChanged();
+
+signals:
+    void requestLoad();
+    void requestSave();
 
 private:
-    void setAvailableConfigFiles(const QStringList& value);
-    void setLoading(bool value);
-    void setErrorCode(const QString& value);
+    void setBusy(bool value);
 
     ShellFacade& shellFacade_;
     QThread workerThread_;
     ConfigFileWorker* worker_ = nullptr;
 
-    QStringList availableConfigFiles_;
-    QString selectedConfigFile_;
-    bool loading_ = false;
-    QString errorCode_;
+    QString loadPath_;
+    QString savePath_;
+    bool busy_ = false;
 };
