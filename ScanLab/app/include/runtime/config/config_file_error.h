@@ -12,9 +12,9 @@ enum class ConfigFileShellError : uint8_t
     DeviceContextNotSet
 };
 
-using ConfigError = std::variant<ConfigFileShellError
-    , scanlab::device::HardwareError
-    , scanlab::config::ConfigFileErrorKind>;
+using ConfigError = std::variant<ConfigFileShellError,
+    scanlab::device::HardwareError,
+    scanlab::config::ConfigFileErrorKind>;
 
 inline ErrorInfo describeError(ConfigFileShellError error)
 {

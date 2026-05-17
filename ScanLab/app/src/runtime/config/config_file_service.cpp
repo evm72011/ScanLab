@@ -38,12 +38,10 @@ std::expected<void, ConfigError> ConfigFileService::loadToHardware(const QString
     }
 
     return std::visit(
-        [](const auto& error) -> std::expected<void, ConfigError>
-        {
+        [](const auto& error) -> std::expected<void, ConfigError> {
             return std::unexpected(ConfigError{ error });
         },
-        result.error()
-    );
+        result.error());
 }
 
 std::expected<void, ConfigError> ConfigFileService::saveFromHardware(const QString& fileName)
@@ -65,10 +63,8 @@ std::expected<void, ConfigError> ConfigFileService::saveFromHardware(const QStri
     }
 
     return std::visit(
-        [](const auto& error) -> std::expected<void, ConfigError>
-        {
+        [](const auto& error) -> std::expected<void, ConfigError> {
             return std::unexpected(ConfigError{ error });
         },
-        result.error()
-        );
+        result.error());
 }
