@@ -32,12 +32,18 @@ std::expected<void, ConfigError> ConfigFileService::loadToHardware(const QString
     const auto filePath = info.canonicalFilePath().toStdString();
     const auto result = loader.load(filePath);
 
-    if (!result.has_value())
+    if (result.has_value())
     {
-        return std::unexpected(result.error());
+        return {};
     }
 
-    return {};
+    return std::visit(
+        [](const auto& error) -> std::expected<void, ConfigError>
+        {
+            return std::unexpected(ConfigError{ error });
+        },
+        result.error()
+    );
 }
 
 std::expected<void, ConfigError> ConfigFileService::saveFromHardware(const QString& fileName)
@@ -53,10 +59,16 @@ std::expected<void, ConfigError> ConfigFileService::saveFromHardware(const QStri
     const auto filePath = info.canonicalFilePath().toStdString();
     const auto result = saver.save(filePath);
 
-    if (!result.has_value())
+    if (result.has_value())
     {
-        return std::unexpected(result.error());
+        return {};
     }
 
-    return {};
+    return std::visit(
+        [](const auto& error) -> std::expected<void, ConfigError>
+        {
+            return std::unexpected(ConfigError{ error });
+        },
+        result.error()
+        );
 }
