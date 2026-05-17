@@ -14,13 +14,13 @@ ConfigFileWorker::ConfigFileWorker(DeviceContext& context,
 void ConfigFileWorker::loadConfigFile(const QString& fileName)
 {
     const auto result = service_.loadToHardware(fileName);
-    emit loadCompleted();
 
     auto title = tr("Device configuration");
 
     if (result.has_value())
     {
         auto text = tr("Config file successfully loaded");
+        emit loadSuccess();
         toastService_.showInfo(title, text);
         return;
     }
@@ -28,13 +28,14 @@ void ConfigFileWorker::loadConfigFile(const QString& fileName)
     const auto shortText = tr("Config file load failure");
     const auto& error = result.error();
     const auto errorInfo = describeError(error);
+    emit loadFalure();
     messageService_.showError(title, shortText, errorInfo);
 }
 
 void ConfigFileWorker::saveConfigFile(const QString& fileName)
 {
     const auto result = service_.saveFromHardware(fileName);
-    emit loadCompleted();
+    emit saveCompleted();
 
     auto title = tr("Device configuration");
 

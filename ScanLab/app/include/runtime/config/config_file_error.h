@@ -3,6 +3,7 @@
 #include "runtime/errors/describe_error.h"
 #include "runtime/errors/describe_error_hw.h"
 #include <QHash>
+#include <variant>
 
 #include "scanlab/config/config_file_error.h"
 
@@ -47,4 +48,9 @@ inline ErrorInfo describeError(scanlab::config::ConfigFileErrorKind error)
 inline ErrorInfo describeError(const ConfigError& error)
 {
     return std::visit([](const auto& value) { return describeError(value); }, error);
+}
+
+inline ConfigError fromScanlabError(scanlab::config::ConfigFileError error)
+{
+    return std::visit([](const auto& value) -> ConfigError { return value; }, error);
 }

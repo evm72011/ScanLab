@@ -30,7 +30,14 @@ ConfigFileFacade::ConfigFileFacade(DeviceContext& context,
 
     connect(
         worker_,
-        &ConfigFileWorker::loadCompleted,
+        &ConfigFileWorker::loadSuccess,
+        this,
+        [this]() { setBusy(false); },
+        Qt::QueuedConnection);
+
+    connect(
+        worker_,
+        &ConfigFileWorker::loadFalure,
         this,
         [this]() { setBusy(false); },
         Qt::QueuedConnection);

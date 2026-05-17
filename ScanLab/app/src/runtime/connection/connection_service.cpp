@@ -26,16 +26,16 @@ std::expected<ConnectionResult, ConnectionError> ConnectionService::connect(Devi
         return std::unexpected(ConnectionShellError::CreateDeviceFailed);
     }
 
-    const auto connectionResult = device->connect(address);
+    const auto result = device->connect(address);
 
-    if (!connectionResult.has_value())
+    if (!result.has_value())
     {
-        const auto error = fromHardware(connectionResult.error());
+        const auto error = fromScanlabError(result.error());
         return std::unexpected(error);
     }
 
     return ConnectionResult{ //
-        .serialNumber = QString::fromStdWString(connectionResult->serialNumber)
+        .serialNumber = QString::fromStdWString(result->serialNumber)
     };
 }
 

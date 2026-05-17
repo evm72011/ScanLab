@@ -18,7 +18,7 @@ using ConnectionError = std::variant<ConnectionShellError,
     scanlab::device::ConnectionErrorKind,
     scanlab::license::LicenseError>;
 
-inline ConnectionError fromHardware(const scanlab::device::ConnectionError& error)
+inline ConnectionError fromScanlabError(const scanlab::device::ConnectionError& error)
 {
     return std::visit([](const auto& value) -> ConnectionError { return value; }, error);
 }

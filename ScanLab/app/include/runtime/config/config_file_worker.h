@@ -23,7 +23,8 @@ public slots:
     void saveConfigFile(const QString& fileName);
 
 signals:
-    void loadCompleted();
+    void loadSuccess();
+    void loadFalure();
     void saveCompleted();
 
 private:
