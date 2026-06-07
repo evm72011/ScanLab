@@ -33,7 +33,7 @@ set(OEMPA_SDK_DIR "C:/ProgramData/AOS/OEMPA 1.3.0.2/Sources")
 set(OEMPA_ENABLE ON)
 
 unset(MOCK_DEVICE CACHE)
-option(MOCK_DEVICE "Use mock hardware implementation" ON)
+option(MOCK_DEVICE "Use mock hardware implementation" OFF)
 
 set(SCANLAB_LICENSE_FILE "license.json")
 set(SCANLAB_LICENSE_PUBLIC_KEY "au1UA+apb0TTkDj8GDU+yq+dQvkfkM59hqrXlE01818=")

@@ -74,7 +74,7 @@ Rectangle {
 
         Image {
             source: (maxTemperature >= 50)
-                        ? "qrc:/icons/temperature-hight.svg"
+                        ? "qrc:/icons/temperature-high.svg"
                         : (maxTemperature >= 40)
                             ? "qrc:/icons/temperature-medium.svg"
                             : "qrc:/icons/temperature-low.svg"

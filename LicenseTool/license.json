@@ -1,7 +1,8 @@
 {
   "devices": [
+    "AA5239",
     "MOCK_12345",
     "MOCK_61890"
   ],
-  "signature": "cmQWvWp5D7qJED+MCUC6lC5RDQJjTmVzowzR9H8OALXhmRNkg49PHSYUqoQcdMbWfSwCMWZZVKhejI9qW8TWBQ=="
+  "signature": "Iiq5OTD0UgqxzqfZwZZGCsmIBFWH0ETwnpoIOzP+GfnnHozlUsYF94281AVzG1SK2eKGOy2PIDYfu3vPNCo3Cg=="
 }

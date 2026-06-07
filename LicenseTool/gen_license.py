@@ -39,6 +39,7 @@ if __name__ == "__main__":
     private_key_base64 = "KpKbCPOLSq4UUAbJB1nUO3IzTO9gDgV/5AUBWC8MGq0="
 
     devices = [
+        "AA5239",
         "MOCK_12345",
         "MOCK_61890"
     ]
